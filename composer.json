@@ -1,21 +1,39 @@
 {
     "name": "plausible/analytics-wp",
     "description": "Simple and privacy-friendly alternative to Google Analytics.",
-	"authors": [
-		{
-			"name": "PlausibleHQ",
-			"email": "hello@plausible.io"
+    "authors": [
+        {
+            "name": "PlausibleHQ",
+            "email": "hello@plausible.io"
         },
         {
-			"name": "Mehul Gohil",
-			"email": "hello@mehulgohil.com"
-		}
-	],
-	"require": {},
-	"scripts": {},
-	"autoload": {
-		"psr-4": {
-			"Plausible\\Analytics\\WP\\": "src/"
-		}
-	}
+            "name": "Mehul Gohil",
+            "email": "hello@mehulgohil.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6",
+        "phpcompatibility/php-compatibility": "^9.3",
+        "phpcompatibility/phpcompatibility-wp": "*",
+        "wp-coding-standards/wpcs": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true",
+            "@install-codestandards"
+        ],
+        "post-update-cmd": [
+            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true"
+        ],
+        "install-codestandards": [
+            "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Plausible\\Analytics\\WP\\": "src/"
+        }
+    }
 }
