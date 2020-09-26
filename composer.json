@@ -1,0 +1,21 @@
+{
+    "name": "plausible/analytics-wp",
+    "description": "Simple and privacy-friendly alternative to Google Analytics.",
+	"authors": [
+		{
+			"name": "PlausibleHQ",
+			"email": "hello@plausible.io"
+        },
+        {
+			"name": "Mehul Gohil",
+			"email": "hello@mehulgohil.com"
+		}
+	],
+	"require": {},
+	"scripts": {},
+	"autoload": {
+		"psr-4": {
+			"Plausible\\Analytics\\WP\\": "src/"
+		}
+	}
+}
