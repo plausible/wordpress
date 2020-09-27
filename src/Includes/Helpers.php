@@ -61,4 +61,23 @@ class Helpers {
 
 		return "https://plausible.io/{$domain}";
 	}
+
+	/**
+	 * Toggle Switch HTML Markup.
+	 *
+	 * @param string $name Name of the toggle switch.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public static function display_toggle_switch( $name ) {
+		?>
+		<label class="plausible-analytics-switch">
+			<input class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox" />
+			<span class="plausible-analytics-switch-slider"></span>
+		</label>
+		<?php
+	}
 }
