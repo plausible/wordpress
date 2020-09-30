@@ -1,4 +1,7 @@
 {
     "extends": ["stylelint-config-wordpress", "stylelint-prettier/recommended"],
-    "rules": {}
+    "rules": {
+        "at-rule-no-unknown": null,
+        "scss/at-rule-no-unknown": true
+    }
 }
