@@ -3,6 +3,7 @@
 	height: 20px;
 	position: relative;
 	margin: 0 0 0 15px;
+	display: none;
 
 	&--bounce-1 {
 		@include bounce-loading-effect;
