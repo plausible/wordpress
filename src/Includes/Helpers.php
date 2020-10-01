@@ -57,7 +57,8 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_dashboard_url() {
-		$domain = self::get_domain();
+		$settings = self::get_settings();
+		$domain   = $settings['domain_name'];
 
 		return "https://plausible.io/{$domain}";
 	}
