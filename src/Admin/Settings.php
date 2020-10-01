@@ -58,7 +58,9 @@ class Settings {
 	 * @return void
 	 */
 	public function plausible_analytics_settings_page() {
-		$domain = Helpers::get_domain();
+		$settings             = Helpers::get_settings();
+		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
@@ -77,14 +79,16 @@ class Settings {
 			</div>
 		</div>
 		<div class="wrap plausible-analytics-wrap">
-			<form id="plausible-analytics-settings-form" class="plausible-analytics-form" method="POST">
+			<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">
 						<label for="domain-connected">
-							<?php esc_html_e( 'Domain', 'plausible-analytics' ); ?>
+							<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
+							<span class="plausible-analytics-admin-field-input">
+								<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php echo $domain; ?>"/>
+							</span>
 						</label>
 						<div>
-							<?php echo $domain; ?>
 							<a class="plausible-analytics-link" href="<?php echo Helpers::get_analytics_dashboard_url(); ?>" target="_blank">
 								<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
 							</a>
@@ -98,6 +102,10 @@ class Settings {
 					<div class="plausible-analytics-admin-field-header">
 						<label for="custom-domain">
 							<?php esc_html_e( 'Custom Domain', 'plausible-analytics' ); ?>
+							<span class="plausible-analytics-admin-field-input">
+								<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php echo $custom_domain_prefix; ?>"/>
+								<?php echo ".{$domain}"; ?>
+							</span>
 						</label>
 						<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
 					</div>
@@ -125,6 +133,23 @@ class Settings {
 					<p class="plausible-analytics-description">
 						<?php esc_html_e( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ); ?>
 					</p>
+				</div>
+				<div class="plausible-analytics-admin-field">
+					<div class="plausible-analytics-admin-field-header">
+						<button
+							id="plausible-analytics-save-btn"
+							class="plausible-analytics-btn plausible-analytics-save-btn"
+							data-default-text="<?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?>"
+							data-saved-text="<?php esc_html_e( 'Saved!', 'plausible-analytics' ); ?>"
+						>
+							<span><?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?></span>
+							<span class="plausible-analytics-spinner">
+								<div class="plausible-analytics-spinner--bounce-1"></div>
+								<div class="plausible-analytics-spinner--bounce-2"></div>
+							</span>
+						</button>
+						<input class="plausible-analytics-admin-settings-roadblock" type="hidden" name="plausible_analytics_settings[roadblock]" value="<?php echo wp_create_nonce( 'plausible-analytics-settings-roadblock' ); ?>"/>
+					</div>
 				</div>
 			</form>
 		</div>
