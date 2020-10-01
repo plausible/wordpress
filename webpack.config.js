@@ -13,7 +13,7 @@ const config = {
 	mode,
 
 	entry: {
-		'plausible-admin': [ './assets/src/css/admin/main.scss' ],
+		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
 	},
 	output: {
 		path: path.join( __dirname, './assets/dist/' ),
