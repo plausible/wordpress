@@ -19,7 +19,10 @@
         "wpApiSettings": true,
         "window": true,
         "document": true,
-        "giveApiSettings": true
+        "giveApiSettings": true,
+        "fetch": false,
+        "FormData": false,
+        "ajaxurl": false
     },
     "plugins": ["react"],
     "settings": {
