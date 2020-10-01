@@ -41,9 +41,14 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$url = 'https://plausible.io/js/plausible.js';
+		$settings = self::get_settings();
+		$domain   = $settings['domain_name'];
+		$url      = 'https://plausible.io/js/plausible.js';
 
-		// @todo Add condition for custom domain.
+		if ( 'true' === $settings['custom_domain'] ) {
+			$custom_domain_prefix = $settings['custom_domain_prefix'];
+			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/index.js";
+		}
 
 		return $url;
 	}
