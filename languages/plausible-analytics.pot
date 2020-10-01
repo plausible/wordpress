@@ -1,0 +1,93 @@
+# Copyright (C) 2020 Plausible Analytics
+# This file is distributed under the same license as the Plausible Analytics package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plausible Analytics\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
+"Report-Msgid-Bugs-To: https://github.com/mehul0810/plausible-analytics-wp/issues/new\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/Admin/Actions.php:64
+msgid "Settings saved successfully."
+msgstr ""
+
+#. translators: %s: Link to 5 star rating
+#: src/Admin/Filters.php:47
+msgid "If you like <strong>Plausible Analytics</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!"
+msgstr ""
+
+#: src/Admin/Filters.php:48
+msgid "Thanks :)"
+msgstr ""
+
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:70
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/Filters.php:76
+msgid "Support"
+msgstr ""
+
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:67
+msgid "Plausible Analytics"
+msgstr ""
+
+#: src/Admin/Settings.php:74
+msgid "Report a bug"
+msgstr ""
+
+#: src/Admin/Settings.php:77
+msgid "Documentation"
+msgstr ""
+
+#: src/Admin/Settings.php:86
+msgid "Domain Name"
+msgstr ""
+
+#: src/Admin/Settings.php:93
+msgid "Open Analytics"
+msgstr ""
+
+#: src/Admin/Settings.php:98
+msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
+msgstr ""
+
+#: src/Admin/Settings.php:104
+msgid "Custom Domain"
+msgstr ""
+
+#: src/Admin/Settings.php:116
+msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
+msgstr ""
+
+#: src/Admin/Settings.php:117
+msgid "For example,"
+msgstr ""
+
+#: src/Admin/Settings.php:119
+msgid "or"
+msgstr ""
+
+#: src/Admin/Settings.php:129
+msgid "Track analytics for administrator"
+msgstr ""
+
+#: src/Admin/Settings.php:134
+msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
+msgstr ""
+
+#: src/Admin/Settings.php:142, src/Admin/Settings.php:145
+msgid "Save Changes"
+msgstr ""
+
+#: src/Admin/Settings.php:143
+msgid "Saved!"
+msgstr ""
