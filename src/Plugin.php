@@ -2,6 +2,8 @@
 namespace Plausible\Analytics\WP;
 
 use Plausible\Analytics\WP\Admin;
+use Plausible\Analytics\WP\Includes;
+use Plausible\Analytics\WP\Includes\Helpers;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +46,14 @@ final class Plugin {
 	 * @return void
 	 */
 	public function register_services() {
-		new Admin\Settings();
+		if ( is_admin() ) {
+			new Admin\Settings();
+			new Admin\Filters();
+			new Admin\Actions();
+		}
+
+		new Includes\Actions();
+		new Includes\Filters();
 	}
 
 	/**
@@ -74,7 +83,21 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function activate( $network_wide = false ) {}
+	public function activate( $network_wide = false ) {
+		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
+
+		if ( ! $is_default_settings_saved ) {
+			$default_settings = [
+				'domain_name'          => Helpers::get_domain(),
+				'custom_domain'        => false,
+				'custom_domain_prefix' => 'analytics',
+				'track_administrator'  => false,
+			];
+
+			update_option( 'plausible_analytics_settings', $default_settings );
+			update_option( 'plausible_analytics_is_default_settings_saved', true );
+		}
+	}
 
 	/**
 	 * Handles deactivation procedures.
