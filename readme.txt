@@ -7,7 +7,7 @@ Tested up to: 5.5
 Requires PHP: 5.6
 Stable tag: 1.0.0
 License: Massachusetts Institute of Technology (MIT) license
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License URI: https://opensource.org/licenses/MIT
 
 Plausible Analytics is a simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.
 
