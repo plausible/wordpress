@@ -57,6 +57,24 @@ Keep an eye on your traffic with automated email reports. Email reports can be s
 
 Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them.
 
+== Installation ==
+
+= Minimum Requirements =
+
+* WordPress 4.8 or greater
+* PHP version 5.6 or greater
+* MySQL version 5.5 or greater
+
+= Automatic installation =
+
+Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an automatic install of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New".
+
+In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view details about it such as the point release, rating and description. Most importantly of course, you can install it by simply clicking "Install Now".
+
+= Manual installation =
+
+The manual installation method involves downloading our plugin and uploading it to your server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+
 == Frequently Asked Questions ==
 
 = Why is Plausible not free like Google Analytics?  =
@@ -64,3 +82,12 @@ Your stats are private by default but you can choose to be transparent and make 
 Google Analytics is free because Google has built their company and their wealth by collecting and analyzing huge amounts of personal information from web users and using these personal and behavioral insights to sell advertisements.
 
 With Plausible, you 100% own and control all of your website data. This data is not being shared with or sold to any third-parties. Since we don't make money from targeted advertisement, we must ask for a small fee to keep the servers running.
+
+== Upgrade Notice ==
+
+Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
+
+== Changelog ==
+
+= 1.0.0 =
+Initial plugin release.
