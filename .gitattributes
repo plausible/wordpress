@@ -9,3 +9,4 @@ webpack.config.js export-ignore
 wp-textdomain.js export-ignore
 README.md export-ignore
 tests export-ignore
+node_modules export-ignore
