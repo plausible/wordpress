@@ -19,6 +19,9 @@ jobs:
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
           generate-zip: true
+        environment:
+            - LC_ALL: en_US.UTF-8
+            - LC_CTYPE: en_US.UTF-8
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
