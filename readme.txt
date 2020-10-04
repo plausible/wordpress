@@ -37,7 +37,7 @@ Plausible is simple and it cuts through the noise. No layers of menus, no need f
 
 Plausible script is 45 times smaller than Google Analytics script. Your page weight will be cut down, your site will load faster and you will reduce the carbon footprint for a greener web.
 
-### Doesn’t track nor collect any personal data
+### Doesn't track nor collect any personal data
 
 Plausible respects the privacy of your visitors. Your traffic data is not used for any other purposes. You fully own and control 100% of your data.
 
