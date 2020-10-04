@@ -70,7 +70,7 @@ class Settings {
 				<h1><?php esc_html_e( 'Settings', 'plausible-analytics' ); ?></h1>
 			</div>
 			<div class="plausible-analytics-actions">
-				<a class="plausible-analytics-btn" href="" target="_blank">
+				<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
 					<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
 				</a>
 				<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
