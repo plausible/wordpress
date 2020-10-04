@@ -15,7 +15,7 @@ Plausible Analytics is a simple, open-source, lightweight (< 1 KB) and privacy-f
 
 Plausible Analytics is a simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.
 
-Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU 🇪🇺
+Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU.
 
 Take a look at [the live demo](https://plausible.io/plausible.io).
 
