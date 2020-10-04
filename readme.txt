@@ -83,6 +83,11 @@ Google Analytics is free because Google has built their company and their wealth
 
 With Plausible, you 100% own and control all of your website data. This data is not being shared with or sold to any third-parties. Since we don't make money from targeted advertisement, we must ask for a small fee to keep the servers running.
 
+== Screenshots ==
+
+1. Plausible.io Analytics Dashboard
+2. Plausible Analytics WordPress Plugin Settings Page
+
 == Upgrade Notice ==
 
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
