@@ -94,5 +94,9 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 1.0.1 =
+- Fixed the broken link for "Report a bug" button
+- Improved the description of the important settings and linked them to some Plausible docs for better explanation.
+
 = 1.0.0 =
-Initial plugin release.
+- Initial plugin release.
