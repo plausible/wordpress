@@ -9,6 +9,7 @@
 	align-items: center;
 	background-color: #fff;
 	padding: 0;
+	padding: 0;
 	margin: 0 0 0 -20px;
 
 	.plausible-analytics-logo {
@@ -68,6 +69,10 @@
 			border-top: 1px dashed #e5e5e5;
 			padding: 10px 0 0 0;
 			margin: 15px 0 0 0;
+
+			ol {
+				margin: 5px 15px;
+			}
 		}
 	}
 }
