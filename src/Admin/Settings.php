@@ -95,7 +95,15 @@ class Settings {
 						</div>
 					</div>
 					<p class="plausible-analytics-description">
-						<?php esc_html_e( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ); ?>
+						<?php
+						echo sprintf(
+							'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
+							esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
+							esc_url( 'https://docs.plausible.io/register-account' ),
+							esc_html__( 'Follow these instructions', 'plausible-analytics' ),
+							esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
+						);
+						?>
 					</p>
 				</div>
 				<div class="plausible-analytics-admin-field">
@@ -109,10 +117,13 @@ class Settings {
 						</label>
 						<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
 					</div>
-					<p class="plausible-analytics-description">
+					<div class="plausible-analytics-description">
 						<?php
 						echo sprintf(
-							'%1$s %2$s %3$s %4$s %5$s',
+							'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
+							esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
+							esc_url( 'https://docs.plausible.io/custom-domain/' ),
+							esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 							esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
 							__( 'For example,', 'plausible-analytics' ),
 							"<code>stats.$domain</code>",
@@ -121,7 +132,7 @@ class Settings {
 						);
 
 						?>
-					</p>
+					</div>
 				</div>
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">
