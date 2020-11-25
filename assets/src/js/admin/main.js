@@ -13,14 +13,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	customDomainElement.addEventListener( 'change', ( e ) => {
 		if ( e.target.checked ) {
 			selfHostedAnalyticsElement.removeAttribute( 'checked' );
-			selfHostedAnalyticsElement.checked ?? selfHostedAnalyticsElement.click();
+			selfHostedAnalyticsElement.checked ? selfHostedAnalyticsElement.click() : '';
 		}
 	} );
 
 	selfHostedAnalyticsElement.addEventListener( 'change', ( e ) => {
 		if ( e.target.checked ) {
 			customDomainElement.removeAttribute( 'checked' );
-			customDomainElement.checked ?? customDomainElement.click();
+			customDomainElement.checked ? customDomainElement.click() : '';
 		}
 	} );
 
