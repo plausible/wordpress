@@ -17,6 +17,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const customDomainPrefix = formElement.querySelector( 'input[name="plausible_analytics_settings[custom_domain_prefix]"]' ).value;
 		const customDomainElement = formElement.querySelector( 'input[name="plausible_analytics_settings[custom_domain]"]:checked' );
 		const isCustomDomain = null !== customDomainElement ? parseInt( customDomainElement.value ) : 0;
+		const selfHostedDomain = formElement.querySelector( 'input[name="plausible_analytics_settings[self_hosted_domain]"]' ).value;
+		const selfHostedAnalyticsElement = formElement.querySelector( 'input[name="plausible_analytics_settings[is_self_hosted_analytics]"]:checked' );
+		const isSelfHostedAnalytics = null !== selfHostedAnalyticsElement ? parseInt( selfHostedAnalyticsElement.value ) : 0;
 		const trackAdminElement = formElement.querySelector( 'input[name="plausible_analytics_settings[track_administrator]"]:checked' );
 		const isTrackAdmin = null !== trackAdminElement ? parseInt( trackAdminElement.value ) : 0;
 		const roadBlock = null !== formElement.querySelector( '.plausible-analytics-admin-settings-roadblock' ) ? document.querySelector( '.plausible-analytics-admin-settings-roadblock' ).value : '';
@@ -29,6 +32,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		formData.append( 'domain_name', domainName );
 		formData.append( 'custom_domain', isCustomDomain === 1 );
 		formData.append( 'custom_domain_prefix', customDomainPrefix );
+		formData.append( 'is_self_hosted_analytics', isSelfHostedAnalytics === 1 );
+		formData.append( 'self_hosted_domain', selfHostedDomain );
 		formData.append( 'track_administrator', isTrackAdmin === 1 );
 
 		fetch(

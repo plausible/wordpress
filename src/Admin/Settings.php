@@ -61,6 +61,7 @@ class Settings {
 		$settings             = Helpers::get_settings();
 		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
+		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
@@ -116,6 +117,33 @@ class Settings {
 							</span>
 						</label>
 						<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
+					</div>
+					<div class="plausible-analytics-description">
+						<?php
+						echo sprintf(
+							'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
+							esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
+							esc_url( 'https://docs.plausible.io/custom-domain/' ),
+							esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+							esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
+							__( 'For example,', 'plausible-analytics' ),
+							"<code>stats.$domain</code>",
+							__( 'or', 'plausible-analytics' ),
+							"<code>analytics.$domain</code>"
+						);
+
+						?>
+					</div>
+				</div>
+				<div class="plausible-analytics-admin-field">
+					<div class="plausible-analytics-admin-field-header">
+						<label for="self-hosted-analytics">
+							<?php esc_html_e( 'Is Self Hosted Analytics?', 'plausible-analytics' ); ?>
+							<span class="plausible-analytics-admin-field-input">
+								<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php echo $self_hosted_domain; ?>"/>
+							</span>
+						</label>
+						<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
 					</div>
 					<div class="plausible-analytics-description">
 						<?php
