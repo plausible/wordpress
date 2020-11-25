@@ -148,15 +148,10 @@ class Settings {
 					<div class="plausible-analytics-description">
 						<?php
 						echo sprintf(
-							'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-							esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-							esc_url( 'https://docs.plausible.io/custom-domain/' ),
-							esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-							esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-							__( 'For example,', 'plausible-analytics' ),
-							"<code>stats.$domain</code>",
-							__( 'or', 'plausible-analytics' ),
-							"<code>analytics.$domain</code>"
+							'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+							esc_html__( 'Enable the self-hosted analytics and enter the domain name you used to host the self-hosted version of Plausible Analytics.', 'plausible-analytics' ),
+							esc_url( 'https://docs.plausible.io/self-hosting/' ),
+							esc_html__( 'See more about self hosting &raquo;', 'plausible-analytics' )
 						);
 
 						?>
