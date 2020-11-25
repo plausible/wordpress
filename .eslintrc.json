@@ -129,12 +129,6 @@
         "no-undef-init": "error",
         "no-unreachable": "error",
         "no-unsafe-negation": "error",
-        "no-unused-expressions": [
-            "error",
-            {
-                "allowTernary": true
-            }
-        ],
         "no-unused-vars": "error",
         "no-useless-computed-key": "error",
         "no-useless-constructor": "error",
