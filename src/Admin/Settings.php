@@ -159,6 +159,17 @@ class Settings {
 				</div>
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">
+						<label for="custom-event-goals">
+							<?php esc_html_e( 'Custom Event Goals', 'plausible-analytics' ); ?>
+						</label>
+						<?php echo Helpers::display_toggle_switch( 'is_custom_event_goals' ); ?>
+					</div>
+					<p class="plausible-analytics-description">
+						<?php esc_html_e( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ); ?>
+					</p>
+				</div>
+				<div class="plausible-analytics-admin-field">
+					<div class="plausible-analytics-admin-field-header">
 						<label for="track-administrator">
 							<?php esc_html_e( 'Track analytics for administrator', 'plausible-analytics' ); ?>
 						</label>

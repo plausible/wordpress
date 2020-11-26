@@ -48,5 +48,10 @@ class Actions {
 		}
 
 		wp_enqueue_script( 'plausible-analytics', Helpers::get_analytics_url(), '', PLAUSIBLE_ANALYTICS_VERSION );
+
+		// Load only when custom event goals are enabled.
+		if ( 'true' === $settings['is_custom_event_goals'] ) {
+			wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
+		}
 	}
 }
