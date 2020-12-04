@@ -1,0 +1,76 @@
+.plausible-analytics-hidden {
+	display: none;
+}
+
+.plausible-analytics-header {
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	padding: 0;
+	padding: 0;
+	margin: 0 0 0 -20px;
+
+	.plausible-analytics-logo {
+		padding: 20px;
+		border-right: 1px solid #f1f1f1;
+
+		img {
+			width: 36px;
+			height: 100%;
+		}
+	}
+
+	.plausible-analytics-title {
+		padding: 20px;
+	}
+
+	.plausible-analytics-actions {
+		display: flex;
+		margin-left: auto;
+		padding: 20px;
+	}
+}
+
+.plausible-analytics-wrap {
+	width: 800px;
+	margin: 0 auto;
+	margin-top: 50px;
+
+	.plausible-analytics-admin-field {
+		background-color: #fff;
+		margin-bottom: 20px;
+		padding: 15px;
+
+		.plausible-analytics-admin-field-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			label {
+				font-weight: 700;
+
+				.plausible-analytics-admin-field-input {
+					font-weight: 400;
+					font-size: 14px;
+
+					input[type='text'] {
+						background-color: #f5f5f5;
+						border: none;
+						border-radius: 5px;
+					}
+				}
+			}
+		}
+		.plausible-analytics-description {
+			font-style: italic;
+			color: #989898;
+			border-top: 1px dashed #e5e5e5;
+			padding: 10px 0 0 0;
+			margin: 15px 0 0 0;
+
+			ol {
+				margin: 5px 15px;
+			}
+		}
+	}
+}
