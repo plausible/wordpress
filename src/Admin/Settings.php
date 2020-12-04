@@ -81,92 +81,111 @@ class Settings {
 		</div>
 		<div class="wrap plausible-analytics-wrap">
 			<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
-				<div class="plausible-analytics-admin-field">
-					<div class="plausible-analytics-admin-field-header">
-						<label for="domain-connected">
-							<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
-							<span class="plausible-analytics-admin-field-input">
-								<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php echo $domain; ?>"/>
-							</span>
-						</label>
-						<div>
-							<a class="plausible-analytics-link" href="<?php echo Helpers::get_analytics_dashboard_url(); ?>" target="_blank">
-								<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
+				<div class="plausible-analytics-admin-field plausible-analytics-admin-menu">
+					<ul>
+						<li>
+							<a href="#" class="active" data-tab="general">
+								<?php esc_html_e( 'General', 'plausible-analytics' ); ?>
 							</a>
+						</li>
+						<li>
+							<a href="#" data-tab="self-hosted">
+								<?php esc_html_e( 'Self Hosted', 'plausible-analytics' ); ?>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div id="plausible-analytics-content-general" class="plausible-analytics-content-general">
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="domain-connected">
+								<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
+								<span class="plausible-analytics-admin-field-input">
+									<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php echo $domain; ?>"/>
+								</span>
+							</label>
+							<div>
+								<a class="plausible-analytics-link" href="<?php echo Helpers::get_analytics_dashboard_url(); ?>" target="_blank">
+									<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
+								</a>
+							</div>
+						</div>
+						<p class="plausible-analytics-description">
+							<?php
+							echo sprintf(
+								'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
+								esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
+								esc_url( 'https://docs.plausible.io/register-account' ),
+								esc_html__( 'Follow these instructions', 'plausible-analytics' ),
+								esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
+							);
+							?>
+						</p>
+					</div>
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="custom-domain">
+								<?php esc_html_e( 'Custom Domain', 'plausible-analytics' ); ?>
+								<span class="plausible-analytics-admin-field-input">
+									<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php echo $custom_domain_prefix; ?>"/>
+									<?php echo ".{$domain}"; ?>
+								</span>
+							</label>
+							<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
+						</div>
+						<div class="plausible-analytics-description">
+							<?php
+							echo sprintf(
+								'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
+								esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
+								esc_url( 'https://docs.plausible.io/custom-domain/' ),
+								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+								esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
+								__( 'For example,', 'plausible-analytics' ),
+								"<code>stats.$domain</code>",
+								__( 'or', 'plausible-analytics' ),
+								"<code>analytics.$domain</code>"
+							);
+
+							?>
 						</div>
 					</div>
-					<p class="plausible-analytics-description">
-						<?php
-						echo sprintf(
-							'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
-							esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
-							esc_url( 'https://docs.plausible.io/register-account' ),
-							esc_html__( 'Follow these instructions', 'plausible-analytics' ),
-							esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
-						);
-						?>
-					</p>
-				</div>
-				<div class="plausible-analytics-admin-field">
-					<div class="plausible-analytics-admin-field-header">
-						<label for="custom-domain">
-							<?php esc_html_e( 'Custom Domain', 'plausible-analytics' ); ?>
-							<span class="plausible-analytics-admin-field-input">
-								<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php echo $custom_domain_prefix; ?>"/>
-								<?php echo ".{$domain}"; ?>
-							</span>
-						</label>
-						<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="track-administrator">
+								<?php esc_html_e( 'Track analytics for administrator', 'plausible-analytics' ); ?>
+							</label>
+							<?php echo Helpers::display_toggle_switch( 'track_administrator' ); ?>
+						</div>
+						<p class="plausible-analytics-description">
+							<?php esc_html_e( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ); ?>
+						</p>
 					</div>
-					<div class="plausible-analytics-description">
-						<?php
-						echo sprintf(
-							'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-							esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-							esc_url( 'https://docs.plausible.io/custom-domain/' ),
-							esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-							esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-							__( 'For example,', 'plausible-analytics' ),
-							"<code>stats.$domain</code>",
-							__( 'or', 'plausible-analytics' ),
-							"<code>analytics.$domain</code>"
-						);
+				</div>
 
-						?>
-					</div>
-				</div>
-				<div class="plausible-analytics-admin-field">
-					<div class="plausible-analytics-admin-field-header">
-						<label for="self-hosted-analytics">
-							<?php esc_html_e( 'Is Self Hosted Analytics?', 'plausible-analytics' ); ?>
-							<span class="plausible-analytics-admin-field-input">
-								<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php echo $self_hosted_domain; ?>"/>
-							</span>
-						</label>
-						<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
-					</div>
-					<div class="plausible-analytics-description">
-						<?php
-						echo sprintf(
-							'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-							esc_html__( 'Enable the self-hosted analytics and enter the domain name you used to host the self-hosted version of Plausible Analytics.', 'plausible-analytics' ),
-							esc_url( 'https://docs.plausible.io/self-hosting/' ),
-							esc_html__( 'See more about self hosting &raquo;', 'plausible-analytics' )
-						);
+				<div id="plausible-analytics-content-self-hosted" class="plausible-analytics-content-self-hosted plausible-analytics-hidden">
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="self-hosted-analytics">
+								<?php esc_html_e( 'Is Self Hosted Analytics?', 'plausible-analytics' ); ?>
+								<span class="plausible-analytics-admin-field-input">
+									<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php echo $self_hosted_domain; ?>"/>
+								</span>
+							</label>
+							<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
+						</div>
+						<div class="plausible-analytics-description">
+							<?php
+							echo sprintf(
+								'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+								esc_html__( 'Enable the self-hosted analytics and enter the domain name you used to host the self-hosted version of Plausible Analytics.', 'plausible-analytics' ),
+								esc_url( 'https://docs.plausible.io/self-hosting/' ),
+								esc_html__( 'See more about self hosting &raquo;', 'plausible-analytics' )
+							);
 
-						?>
+							?>
+						</div>
 					</div>
-				</div>
-				<div class="plausible-analytics-admin-field">
-					<div class="plausible-analytics-admin-field-header">
-						<label for="track-administrator">
-							<?php esc_html_e( 'Track analytics for administrator', 'plausible-analytics' ); ?>
-						</label>
-						<?php echo Helpers::display_toggle_switch( 'track_administrator' ); ?>
-					</div>
-					<p class="plausible-analytics-description">
-						<?php esc_html_e( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ); ?>
-					</p>
 				</div>
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">
