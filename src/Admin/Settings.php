@@ -167,7 +167,7 @@ class Settings {
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="self-hosted-analytics">
-								<?php esc_html_e( 'Is Self Hosted Analytics?', 'plausible-analytics' ); ?>
+								<?php esc_html_e( 'Self-hosted Plausible?', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
 									<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php echo $self_hosted_domain; ?>"/>
 								</span>
@@ -178,9 +178,9 @@ class Settings {
 							<?php
 							echo sprintf(
 								'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-								esc_html__( 'Enable the self-hosted analytics and enter the domain name you used to host the self-hosted version of Plausible Analytics.', 'plausible-analytics' ),
-								esc_url( 'https://docs.plausible.io/self-hosting/' ),
-								esc_html__( 'See more about self hosting &raquo;', 'plausible-analytics' )
+								esc_html__( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more', 'plausible-analytics' ),
+								esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
+								esc_html__( 'about Plausible Self-Hosted.', 'plausible-analytics' )
 							);
 
 							?>
