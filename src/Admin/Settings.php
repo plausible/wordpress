@@ -82,7 +82,7 @@ class Settings {
 		<div class="wrap plausible-analytics-wrap">
 			<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<div class="plausible-analytics-admin-field plausible-analytics-admin-menu">
-					<ul>
+					<ul class="plausible-analytics-admin-tabs">
 						<li>
 							<a href="#" class="active" data-tab="general">
 								<?php esc_html_e( 'General', 'plausible-analytics' ); ?>
@@ -95,7 +95,7 @@ class Settings {
 						</li>
 					</ul>
 				</div>
-				<div id="plausible-analytics-content-general" class="plausible-analytics-content-general">
+				<div id="plausible-analytics-content-general" class="plausible-analytics-content plausible-analytics-show">
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="domain-connected">
@@ -163,7 +163,7 @@ class Settings {
 					</div>
 				</div>
 
-				<div id="plausible-analytics-content-self-hosted" class="plausible-analytics-content-self-hosted plausible-analytics-hidden">
+				<div id="plausible-analytics-content-self-hosted" class="plausible-analytics-content">
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="self-hosted-analytics">

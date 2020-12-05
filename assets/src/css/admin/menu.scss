@@ -15,10 +15,14 @@
 				text-transform: uppercase;
 				color: #333;
 				font-weight: 500;
+				outline: none;
+				box-shadow: none;
 
 				&.active {
 					border-bottom: 3px solid $base-color;
 					color: $base-color;
+					outline: none;
+					box-shadow: none;
 				}
 			}
 		}

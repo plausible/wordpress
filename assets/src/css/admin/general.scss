@@ -2,6 +2,14 @@
 	display: none;
 }
 
+.plausible-analytics-show {
+	display: block;
+}
+
+.plausible-analytics-content {
+	@extend .plausible-analytics-hidden;
+}
+
 .plausible-analytics-header {
 	display: flex;
 	align-items: center;

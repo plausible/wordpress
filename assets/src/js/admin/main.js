@@ -7,22 +7,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return;
 	}
 
+	const tabsWrap = formElement.querySelector( '.plausible-analytics-admin-tabs' );
+	const tabs = Array.from( tabsWrap.querySelectorAll( 'a' ) );
+	const tabContents = Array.from( formElement.querySelectorAll( '.plausible-analytics-content' ) );
+
+	tabs.forEach( ( tab ) => {
+		tab.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+			const tabName = e.target.getAttribute( 'data-tab' );
+
+			tabs.map( ( tabElement ) => tabElement.classList.remove( 'active' ) );
+			tabContents.map( ( tabContent ) => tabContent.classList.remove( 'plausible-analytics-show' ) );
+
+			e.target.classList.add( 'active' );
+			formElement.querySelector( `#plausible-analytics-content-${ tabName }` ).classList.add( 'plausible-analytics-show' );
+		} );
+	} );
+
 	const customDomainElement = formElement.querySelector( 'input[name="plausible_analytics_settings[custom_domain]"]' );
 	const selfHostedAnalyticsElement = formElement.querySelector( 'input[name="plausible_analytics_settings[is_self_hosted_analytics]"]' );
-
-	customDomainElement.addEventListener( 'change', ( e ) => {
-		if ( e.target.checked ) {
-			selfHostedAnalyticsElement.removeAttribute( 'checked' );
-			selfHostedAnalyticsElement.checked ? selfHostedAnalyticsElement.click() : '';
-		}
-	} );
-
-	selfHostedAnalyticsElement.addEventListener( 'change', ( e ) => {
-		if ( e.target.checked ) {
-			customDomainElement.removeAttribute( 'checked' );
-			customDomainElement.checked ? customDomainElement.click() : '';
-		}
-	} );
 
 	saveSettings.addEventListener( 'click', ( e ) => {
 		e.preventDefault();
