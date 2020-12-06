@@ -41,11 +41,25 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$settings = self::get_settings();
-		$domain   = $settings['domain_name'];
-		$url      = 'https://plausible.io/js/plausible.js';
+		$settings       = self::get_settings();
+		$domain         = $settings['domain_name'];
+		$default_domain = 'plausible.io';
 
-		if ( 'true' === $settings['custom_domain'] ) {
+		// Triggered when self hosted analytics is enabled.
+		if (
+			! empty( $settings['is_self_hosted_analytics'] ) &&
+			'true' === $settings['is_self_hosted_analytics']
+		) {
+			$default_domain = $settings['self_hosted_domain'];
+		}
+
+		$url = "https://{$default_domain}/js/plausible.js";
+
+		// Triggered when custom domain is enabled.
+		if (
+			! empty( $settings['custom_domain'] ) &&
+			'true' === $settings['custom_domain']
+		) {
 			$custom_domain_prefix = $settings['custom_domain_prefix'];
 			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/index.js";
 		}
@@ -79,10 +93,11 @@ class Helpers {
 	 * @return void
 	 */
 	public static function display_toggle_switch( $name ) {
-		$settings = Helpers::get_settings();
+		$settings            = Helpers::get_settings();
+		$individual_settings = ! empty( $settings[ $name ] ) ? $settings[ $name ] : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $settings[ $name ], 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox" />
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox" />
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
