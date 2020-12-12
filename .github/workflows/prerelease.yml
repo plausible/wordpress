@@ -37,5 +37,5 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ${{github.workspace}}/plausible-analytics.zip
-          asset_name: ${{ github.event.repository.name }}.zip
+          asset_name: plausible-analytics.zip
           asset_content_type: application/zip
