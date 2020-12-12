@@ -11,11 +11,11 @@
             "email": "hello@mehulgohil.com"
         }
     ],
-    "require": {},
+    "require": {
+        "composer/installers": "*"
+    },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "*",
-        "phpcompatibility/php-compatibility": "*",
         "phpcompatibility/phpcompatibility-wp": "*",
         "wp-coding-standards/wpcs": "*"
     },
