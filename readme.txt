@@ -3,9 +3,9 @@ Contributors: plausible, mehul0810
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -93,6 +93,12 @@ With Plausible, you 100% own and control all of your website data. This data is 
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.1.0 =
+- add support for self-hosted plausible analytics script [#2](https://github.com/plausible/wordpress/issues/2)
+- add support for custom events tracking [#3](https://github.com/plausible/wordpress/issues/3)
+- add support for outbound link click tracking [#4](https://github.com/plausible/wordpress/issues/4)
+- add support for 404 error pages tracking [#6](https://github.com/plausible/wordpress/issues/6)
 
 = 1.0.1 =
 - Fixed the broken link for "Report a bug" button

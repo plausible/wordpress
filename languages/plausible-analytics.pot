@@ -28,7 +28,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings.php:70
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:71
 msgid "Settings"
 msgstr ""
 
@@ -36,74 +36,94 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:67
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:68
 msgid "Plausible Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:74
+#: src/Admin/Settings.php:75
 msgid "Report a bug"
 msgstr ""
 
-#: src/Admin/Settings.php:77
+#: src/Admin/Settings.php:78
 msgid "Documentation"
 msgstr ""
 
-#: src/Admin/Settings.php:86
-msgid "Domain Name"
+#: src/Admin/Settings.php:88
+msgid "General"
 msgstr ""
 
 #: src/Admin/Settings.php:93
+msgid "Self Hosted"
+msgstr ""
+
+#: src/Admin/Settings.php:102
+msgid "Domain Name"
+msgstr ""
+
+#: src/Admin/Settings.php:109
 msgid "Open Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:101
+#: src/Admin/Settings.php:117
 msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
 msgstr ""
 
-#: src/Admin/Settings.php:103
+#: src/Admin/Settings.php:119
 msgid "Follow these instructions"
 msgstr ""
 
-#: src/Admin/Settings.php:104
+#: src/Admin/Settings.php:120
 msgid "to add your site to Plausible."
 msgstr ""
 
-#: src/Admin/Settings.php:112
+#: src/Admin/Settings.php:128
 msgid "Custom Domain"
 msgstr ""
 
-#: src/Admin/Settings.php:124
+#: src/Admin/Settings.php:140
 msgid "Enable the custom domain functionality in your Plausible account."
 msgstr ""
 
-#: src/Admin/Settings.php:126
+#: src/Admin/Settings.php:142
 msgid "See how &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:127
+#: src/Admin/Settings.php:143
 msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
 msgstr ""
 
-#: src/Admin/Settings.php:128
+#: src/Admin/Settings.php:144
 msgid "For example,"
 msgstr ""
 
-#: src/Admin/Settings.php:130
+#: src/Admin/Settings.php:146
 msgid "or"
 msgstr ""
 
-#: src/Admin/Settings.php:140
+#: src/Admin/Settings.php:156
 msgid "Track analytics for administrator"
 msgstr ""
 
-#: src/Admin/Settings.php:145
+#: src/Admin/Settings.php:161
 msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
 msgstr ""
 
-#: src/Admin/Settings.php:153, src/Admin/Settings.php:156
+#: src/Admin/Settings.php:170
+msgid "Self-hosted Plausible?"
+msgstr ""
+
+#: src/Admin/Settings.php:181
+msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
+msgstr ""
+
+#: src/Admin/Settings.php:183
+msgid "about Plausible Self-Hosted."
+msgstr ""
+
+#: src/Admin/Settings.php:195, src/Admin/Settings.php:198
 msgid "Save Changes"
 msgstr ""
 
-#: src/Admin/Settings.php:154
+#: src/Admin/Settings.php:196
 msgid "Saved!"
 msgstr ""

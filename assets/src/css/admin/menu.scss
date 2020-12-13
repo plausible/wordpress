@@ -1,0 +1,30 @@
+.plausible-analytics-admin-menu {
+	// padding: 0 !important;
+
+	ul {
+		display: flex;
+		align-items: center;
+
+		li {
+			list-style: none;
+			margin: 0;
+
+			a {
+				padding: 15px;
+				text-decoration: none;
+				text-transform: uppercase;
+				color: #333;
+				font-weight: 500;
+				outline: none;
+				box-shadow: none;
+
+				&.active {
+					border-bottom: 3px solid $base-color;
+					color: $base-color;
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}
