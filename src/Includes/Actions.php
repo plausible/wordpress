@@ -59,7 +59,7 @@ class Actions {
 
 		// Track Outbound Links.
 		if ( apply_filters( 'plausible_analytics_enable_outbound_links', true ) ) {
-			wp_add_inline_script( 'plausible-analytics', 'document.addEventListener("click",function(e){for(var t=e.target;t&&(void 0===t.tagName||"a"!=t.tagName.toLowerCase()||!t.href);)t=t.parentNode;t&&t.href&&t.host&&t.host!==location.host&&(plausible("Outbound Link: Click",{props:{referrer:document.location.origin,url:t.href}}),t.target&&!t.target.match(/^_(self|parent|top)$/i)||(setTimeout(function(){location.href=t.href},150),e.preventDefault()))});' );
+			wp_add_inline_script( 'plausible-analytics', 'function handleOutbound(t){for(var e=t.target,n="auxclick"==t.type&&2==t.which,a="click"==t.type;e&&(void 0===e.tagName||"a"!=e.tagName.toLowerCase()||!e.href);)e=e.parentNode;e&&e.href&&e.host&&e.host!==location.host&&((n||a)&&plausible("Outbound Link: Click",{props:{url:e.href}}),e.target&&!e.target.match(/^_(self|parent|top)$/i)||t.ctrlKey||t.metaKey||t.shiftKey||!a||(setTimeout(function(){location.href=e.href},150),t.preventDefault()))}function registerOutboundLinkEvents(){document.addEventListener("click",handleOutbound),document.addEventListener("auxclick",handleOutbound)}' );
 		}
 	}
 }
