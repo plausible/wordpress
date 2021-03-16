@@ -56,10 +56,5 @@ class Actions {
 		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
 		}
-
-		// Track Outbound Links.
-		if ( apply_filters( 'plausible_analytics_enable_outbound_links', true ) ) {
-			wp_add_inline_script( 'plausible-analytics', 'function handleOutbound(t){for(var e=t.target,n="auxclick"==t.type&&2==t.which,a="click"==t.type;e&&(void 0===e.tagName||"a"!=e.tagName.toLowerCase()||!e.href);)e=e.parentNode;e&&e.href&&e.host&&e.host!==location.host&&((n||a)&&plausible("Outbound Link: Click",{props:{url:e.href}}),e.target&&!e.target.match(/^_(self|parent|top)$/i)||t.ctrlKey||t.metaKey||t.shiftKey||!a||(setTimeout(function(){location.href=e.href},150),t.preventDefault()))}function registerOutboundLinkEvents(){document.addEventListener("click",handleOutbound),document.addEventListener("auxclick",handleOutbound)}' );
-		}
 	}
 }
