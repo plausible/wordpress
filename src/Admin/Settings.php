@@ -62,6 +62,7 @@ class Settings {
 		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
+		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : 'https://plausible.io/share/{Helpers::get_domain()}?auth=XXXXXXXXXXXX';
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
@@ -149,6 +150,25 @@ class Settings {
 
 							?>
 						</div>
+					</div>
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="embed-analytics">
+								<?php esc_html_e( 'Embed Analytics', 'plausible-analytics' ); ?>
+							</label>
+							<?php echo Helpers::display_toggle_switch( 'embed_analytics' ); ?>
+						</div>
+						<div class="plausible-analytics-admin-field-content">
+							<label>
+								<?php esc_html_e( 'Shared Link:', 'plausible-analytics' ); ?>
+								<span class="plausible-analytics-admin-field-input">
+									<input style="min-width: 550px;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo $shared_link; ?>" />
+								</span>
+							</label>
+						</div>
+						<p class="plausible-analytics-description">
+							<?php esc_html_e( 'Enable and configure this setting to view the analytics within the WP dashboard.', 'plausible-analytics' ); ?>
+						</p>
 					</div>
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
