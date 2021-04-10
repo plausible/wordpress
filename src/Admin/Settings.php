@@ -262,8 +262,10 @@ class Settings {
 	 * @return void
 	 */
 	public function statistics_page() {
-		$settings    = Helpers::get_settings();
-		$shared_link = ! empty( $settings['shared_link'] ) ?
+		$settings            = Helpers::get_settings();
+		$domain              = Helpers::get_domain();
+		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : false;
+		$shared_link         = ! empty( $settings['shared_link'] ) ?
 			add_query_arg(
 				[
 					'embed'      => true,
@@ -276,9 +278,30 @@ class Settings {
 
 		// Display admin header.
 		echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
-		?>
-		<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; margin: -120px 0 0 -10px; z-index: 1;"></iframe>
-		<script async src="https://plausible.io/js/embed.host.js"></script>
-		<?php
+
+		if ( $can_embed_analytics && ! empty( $shared_link ) ) {
+			?>
+			<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; margin: -120px 0 0 -10px; z-index: 1;"></iframe>
+			<script async src="https://plausible.io/js/embed.host.js"></script>
+			<?php
+		} else {
+			?>
+			<div class="plausible-analytics-statistics-not-loaded">
+				<?php
+				echo sprintf(
+					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
+					esc_html( 'Please', 'plausible-analytics' ),
+					esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
+					esc_html( 'click here', 'plausible-analytics' ),
+					esc_html( 'to generate your shared link from your Plausible Analytics dashboard.', 'plausible-analytics' ),
+					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
+					admin_url( 'options-general.php?page=plausible-analytics' ),
+					esc_html( 'paste here', 'plausible-analytics' ),
+					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' ),
+				);
+				?>
+			</p>
+			<?php
+		}
 	}
 }
