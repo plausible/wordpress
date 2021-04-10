@@ -40,6 +40,13 @@ class Settings {
 	 * @return void
 	 */
 	public function register_menu() {
+		add_dashboard_page(
+			esc_html__( 'Analytics', 'plausible-analytics' ),
+			esc_html__( 'Analytics', 'plausible-analytics' ),
+			'manage_options',
+			'plausible-analytics-statistics',
+			[ $this, 'statistics_page' ]
+		);
 		add_options_page(
 			esc_html__( 'Plausible Analytics', 'plausible-analytics' ),
 			esc_html__( 'Plausible Analytics', 'plausible-analytics' ),
@@ -47,6 +54,37 @@ class Settings {
 			'plausible-analytics',
 			[ $this, 'plausible_analytics_settings_page' ]
 		);
+	}
+
+	/**
+	 * Get Admin Header.
+	 *
+	 * @param string $name Header Name.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
+	public function get_header( $name ) {
+		?>
+		<div class="plausible-analytics-header">
+			<div class="plausible-analytics-logo">
+				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
+			</div>
+			<div class="plausible-analytics-title">
+				<h1><?php echo $name; ?></h1>
+			</div>
+			<div class="plausible-analytics-actions">
+				<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
+					<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
+				</a>
+				<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
+					<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
+				</a>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
@@ -63,23 +101,9 @@ class Settings {
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : 'https://plausible.io/share/{Helpers::get_domain()}?auth=XXXXXXXXXXXX';
+
+		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
-		<div class="plausible-analytics-header">
-			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
-			</div>
-			<div class="plausible-analytics-title">
-				<h1><?php esc_html_e( 'Settings', 'plausible-analytics' ); ?></h1>
-			</div>
-			<div class="plausible-analytics-actions">
-				<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
-					<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
-				</a>
-				<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
-					<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
-				</a>
-			</div>
-		</div>
 		<div class="wrap plausible-analytics-wrap">
 			<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<div class="plausible-analytics-admin-field plausible-analytics-admin-menu">
@@ -226,6 +250,35 @@ class Settings {
 				</div>
 			</form>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Statistics Page via Embed feature.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function statistics_page() {
+		$settings    = Helpers::get_settings();
+		$shared_link = ! empty( $settings['shared_link'] ) ?
+			add_query_arg(
+				[
+					'embed'      => true,
+					'theme'      => 'light',
+					'background' => '%23f0f0f1',
+				],
+				$settings['shared_link']
+			) :
+			'';
+
+		// Display admin header.
+		echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
+		?>
+		<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; margin: -120px 0 0 -10px; z-index: 1;"></iframe>
+		<script async src="https://plausible.io/js/embed.host.js"></script>
 		<?php
 	}
 }
