@@ -178,7 +178,7 @@ class Settings {
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="embed-analytics">
-								<?php esc_html_e( 'Embed Analytics', 'plausible-analytics' ); ?>
+								<?php esc_html_e( 'View your stats in your WordPress dashboard', 'plausible-analytics' ); ?>
 							</label>
 							<?php echo Helpers::display_toggle_switch( 'embed_analytics' ); ?>
 						</div>
@@ -190,9 +190,20 @@ class Settings {
 								</span>
 							</label>
 						</div>
-						<p class="plausible-analytics-description">
-							<?php esc_html_e( 'Enable and configure this setting to view the analytics within the WP dashboard.', 'plausible-analytics' ); ?>
-						</p>
+						<div class="plausible-analytics-description">
+							<?php
+							echo sprintf(
+								'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
+								esc_html__( 'Create a secure and private shared link in your Plausible account.', 'plausible-analytics' ),
+								esc_url( 'https://plausible.io/docs/shared-links' ),
+								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+								esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
+								esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
+								admin_url( 'index.php?page=plausible-analytics-statistics' ),
+								esc_html__( 'View Statistics &raquo;', 'plausible-analytics' ),
+							);
+							?>
+						</div>
 					</div>
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
