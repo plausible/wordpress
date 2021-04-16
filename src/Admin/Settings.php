@@ -100,7 +100,7 @@ class Settings {
 		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
-		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : 'https://plausible.io/share/{Helpers::get_domain()}?auth=XXXXXXXXXXXX';
+		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
