@@ -39,7 +39,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const isSelfHostedAnalytics = null !== selfHostedAnalyticsElement ? selfHostedAnalyticsElement.checked : false;
 		const trackAdminElement = formElement.querySelector( 'input[name="plausible_analytics_settings[track_administrator]"]:checked' );
 		const isTrackAdmin = null !== trackAdminElement ? parseInt( trackAdminElement.value ) : 0;
+		const embedAnalyticsElement = formElement.querySelector( 'input[name="plausible_analytics_settings[embed_analytics]"]:checked' );
+		const canEmbedAnalytics = null !== embedAnalyticsElement ? parseInt( embedAnalyticsElement.value ) : 0;
 		const roadBlock = null !== formElement.querySelector( '.plausible-analytics-admin-settings-roadblock' ) ? document.querySelector( '.plausible-analytics-admin-settings-roadblock' ).value : '';
+		const sharedLinkElement = formElement.querySelector( 'input[name="plausible_analytics_settings[shared_link]"]' );
+		const sharedLink = null !== sharedLinkElement ? sharedLinkElement.value : 0;
 
 		spinner.style.display = 'block';
 		saveSettings.setAttribute( 'disabled', 'disabled' );
@@ -51,6 +55,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		formData.append( 'custom_domain_prefix', customDomainPrefix );
 		formData.append( 'is_self_hosted_analytics', isSelfHostedAnalytics === true );
 		formData.append( 'self_hosted_domain', selfHostedDomain );
+		formData.append( 'embed_analytics', canEmbedAnalytics === 1 );
+		formData.append( 'shared_link', sharedLink );
 		formData.append( 'track_administrator', isTrackAdmin === 1 );
 
 		fetch(
