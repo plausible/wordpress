@@ -3,9 +3,9 @@ Contributors: plausible, mehul0810
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -148,6 +148,10 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.2.0 =
+- Stats within WP dashboard [#17](https://github.com/plausible/wordpress/issues/17)
+- Allows middle-click and ctrl+click outbound clicks to properly open as user intended? [#15](https://github.com/plausible/wordpress/issues/15)
 
 = 1.1.0 =
 - add support for self-hosted plausible analytics script [#2](https://github.com/plausible/wordpress/issues/2)
