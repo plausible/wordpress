@@ -292,7 +292,7 @@ class Settings {
 
 		if ( $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
-			<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; margin: -120px 0 0 -10px; z-index: 1;"></iframe>
+			<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {
