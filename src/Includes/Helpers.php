@@ -41,9 +41,11 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$settings       = self::get_settings();
-		$domain         = $settings['domain_name'];
-		$default_domain = 'plausible.io';
+		$settings         = self::get_settings();
+		$domain           = $settings['domain_name'];
+		$default_domain   = 'plausible.io';
+		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
+		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
 
 		// Triggered when self hosted analytics is enabled.
 		if (
@@ -53,7 +55,7 @@ class Helpers {
 			$default_domain = $settings['self_hosted_domain'];
 		}
 
-		$url = "https://{$default_domain}/js/plausible.js";
+		$url = "https://{$default_domain}/js/{$file_name}.js";
 
 		// Triggered when custom domain is enabled.
 		if (
@@ -61,7 +63,7 @@ class Helpers {
 			'true' === $settings['custom_domain']
 		) {
 			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/index.js";
+			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
 		}
 
 		return $url;
