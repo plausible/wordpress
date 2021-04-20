@@ -277,14 +277,7 @@ class Settings {
 		$domain              = Helpers::get_domain();
 		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : false;
 		$shared_link         = ! empty( $settings['shared_link'] ) ?
-			add_query_arg(
-				[
-					'embed'      => true,
-					'theme'      => 'light',
-					'background' => '%23f0f0f1',
-				],
-				$settings['shared_link']
-			) :
+			$settings['shared_link'] :
 			'';
 
 		// Display admin header.
@@ -292,8 +285,8 @@ class Settings {
 
 		if ( $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
-			<iframe plausible-embed src="<?php echo $shared_link; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
-			<script async src="https://plausible.io/js/embed.host.js"></script>
+			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
+			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {
 			?>
