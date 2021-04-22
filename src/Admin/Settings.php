@@ -200,7 +200,7 @@ class Settings {
 								esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
 								esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
 								admin_url( 'index.php?page=plausible-analytics-statistics' ),
-								esc_html__( 'View Statistics &raquo;', 'plausible-analytics' ),
+								esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 							);
 							?>
 						</div>
