@@ -72,16 +72,18 @@ class Settings {
 			<div class="plausible-analytics-logo">
 				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
 			</div>
-			<div class="plausible-analytics-title">
-				<h1><?php echo $name; ?></h1>
-			</div>
-			<div class="plausible-analytics-actions">
-				<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
-					<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
-				</a>
-				<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
-					<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
-				</a>
+			<div class="plausible-analytics-header-content">
+				<div class="plausible-analytics-title">
+					<h1><?php echo $name; ?></h1>
+				</div>
+				<div class="plausible-analytics-actions">
+					<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
+						<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
+					</a>
+					<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
+						<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
+					</a>
+				</div>
 			</div>
 		</div>
 		<?php
@@ -186,7 +188,7 @@ class Settings {
 							<label>
 								<?php esc_html_e( 'Shared Link:', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input style="min-width: 550px;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo $shared_link; ?>" />
+									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo $shared_link; ?>" />
 								</span>
 							</label>
 						</div>

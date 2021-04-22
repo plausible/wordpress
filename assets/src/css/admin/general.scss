@@ -35,14 +35,21 @@
 		}
 	}
 
-	.plausible-analytics-title {
-		padding: 20px;
-	}
+	.plausible-analytics-header-content {
+		display: inline-flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
 
-	.plausible-analytics-actions {
-		display: flex;
-		margin-left: auto;
-		padding: 20px;
+		.plausible-analytics-title {
+			padding: 20px;
+		}
+
+		.plausible-analytics-actions {
+			display: flex;
+			margin-left: auto;
+			padding: 20px;
+		}
 	}
 }
 
