@@ -301,7 +301,7 @@ class Settings {
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
 					admin_url( 'options-general.php?page=plausible-analytics' ),
 					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' ),
+					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
 				?>
 			</p>
