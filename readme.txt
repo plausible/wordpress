@@ -149,6 +149,12 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 1.2.1 =
+- Toggling the setting for the analytics dashboard doesn't work [#29](https://github.com/plausible/wordpress/issues/29)
+- Update to Version 1.2.0 sets wordpress into troubleshooting mode [#31](https://github.com/plausible/wordpress/issues/31)
+- Admin settings page container breaks out of viewport on smaller screens [#28](https://github.com/plausible/wordpress/issues/28) - Props to [Csaba Varszegi](https://github.com/LittleBigThing)
+- Minor Admin UI Improvements
+
 = 1.2.0 =
 - Stats within WP dashboard [#17](https://github.com/plausible/wordpress/issues/17)
 - Allows middle-click and ctrl+click outbound clicks to properly open as user intended? [#15](https://github.com/plausible/wordpress/issues/15)
