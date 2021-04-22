@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -148,6 +148,12 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.2.1 =
+- Toggling the setting for the analytics dashboard doesn't work [#29](https://github.com/plausible/wordpress/issues/29)
+- Update to Version 1.2.0 sets wordpress into troubleshooting mode [#31](https://github.com/plausible/wordpress/issues/31)
+- Admin settings page container breaks out of viewport on smaller screens [#28](https://github.com/plausible/wordpress/issues/28) - Props to [Csaba Varszegi](https://github.com/LittleBigThing)
+- Minor Admin UI Improvements
 
 = 1.2.0 =
 - Stats within WP dashboard [#17](https://github.com/plausible/wordpress/issues/17)
