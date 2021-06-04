@@ -48,6 +48,6 @@ class Filters {
 		$settings    = Helpers::get_settings();
 		$domain_name = $settings['domain_name'];
 
-		return str_replace( ' src', " async defer data-domain='{$domain_name}' src", $tag );
+		return str_replace( ' src', " async defer data-domain='{$domain_name}' data-api='https://plausible.io/api/event' src", $tag );
 	}
 }
