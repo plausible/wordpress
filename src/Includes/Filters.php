@@ -46,8 +46,9 @@ class Filters {
 		}
 
 		$settings    = Helpers::get_settings();
+		$api_url     = Helpers::get_data_api_url();
 		$domain_name = $settings['domain_name'];
 
-		return str_replace( ' src', " async defer data-domain='{$domain_name}' src", $tag );
+		return str_replace( ' src', " async defer data-domain='{$domain_name}' data-api='{$api_url}' src", $tag );
 	}
 }
