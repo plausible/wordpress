@@ -126,7 +126,8 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_data_api_url() {
-		$url = 'https://plausible.io/api/event';
+		$settings = self::get_settings();
+		$url      = 'https://plausible.io/api/event';
 
 		// Triggered when self hosted analytics is enabled.
 		if (
@@ -142,6 +143,7 @@ class Helpers {
 			! empty( $settings['custom_domain'] ) &&
 			'true' === $settings['custom_domain']
 		) {
+			$domain               = $settings['domain_name'];
 			$custom_domain_prefix = $settings['custom_domain_prefix'];
 			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
 		}
