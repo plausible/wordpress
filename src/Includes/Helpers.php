@@ -116,4 +116,38 @@ class Helpers {
 	public static function get_settings() {
 		return get_option( 'plausible_analytics_settings', [] );
 	}
+
+	/**
+	 * Get Data API URL.
+	 *
+	 * @since  1.2.2
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function get_data_api_url() {
+		$settings = self::get_settings();
+		$url      = 'https://plausible.io/api/event';
+
+		// Triggered when self hosted analytics is enabled.
+		if (
+			! empty( $settings['is_self_hosted_analytics'] ) &&
+			'true' === $settings['is_self_hosted_analytics']
+		) {
+			$default_domain = $settings['self_hosted_domain'];
+			$url            = "https://{$default_domain}/api/event";
+		}
+
+		// Triggered when custom domain is enabled.
+		if (
+			! empty( $settings['custom_domain'] ) &&
+			'true' === $settings['custom_domain']
+		) {
+			$domain               = $settings['domain_name'];
+			$custom_domain_prefix = $settings['custom_domain_prefix'];
+			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
+		}
+
+		return $url;
+	}
 }

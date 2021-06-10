@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Plausible Analytics
+# Copyright (C) 2021 Plausible Analytics
 # This file is distributed under the same license as the Plausible Analytics package.
 msgid ""
 msgstr ""
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings.php:71
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:107
 msgid "Settings"
 msgstr ""
 
@@ -36,94 +36,122 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:68
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:286
+msgid "Analytics"
+msgstr ""
+
+#: src/Admin/Settings.php:51, src/Admin/Settings.php:52, src/Admin/Settings.php:73
 msgid "Plausible Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:75
+#: src/Admin/Settings.php:81
 msgid "Report a bug"
 msgstr ""
 
-#: src/Admin/Settings.php:78
+#: src/Admin/Settings.php:84
 msgid "Documentation"
 msgstr ""
 
-#: src/Admin/Settings.php:88
+#: src/Admin/Settings.php:115
 msgid "General"
 msgstr ""
 
-#: src/Admin/Settings.php:93
+#: src/Admin/Settings.php:120
 msgid "Self Hosted"
 msgstr ""
 
-#: src/Admin/Settings.php:102
+#: src/Admin/Settings.php:129
 msgid "Domain Name"
 msgstr ""
 
-#: src/Admin/Settings.php:109
+#: src/Admin/Settings.php:136
 msgid "Open Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:117
+#: src/Admin/Settings.php:144
 msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
 msgstr ""
 
-#: src/Admin/Settings.php:119
+#: src/Admin/Settings.php:146
 msgid "Follow these instructions"
 msgstr ""
 
-#: src/Admin/Settings.php:120
+#: src/Admin/Settings.php:147
 msgid "to add your site to Plausible."
 msgstr ""
 
-#: src/Admin/Settings.php:128
+#: src/Admin/Settings.php:155
 msgid "Custom Domain"
 msgstr ""
 
-#: src/Admin/Settings.php:140
+#: src/Admin/Settings.php:167
 msgid "Enable the custom domain functionality in your Plausible account."
 msgstr ""
 
-#: src/Admin/Settings.php:142
+#: src/Admin/Settings.php:169, src/Admin/Settings.php:201
 msgid "See how &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:143
+#: src/Admin/Settings.php:170
 msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
 msgstr ""
 
-#: src/Admin/Settings.php:144
+#: src/Admin/Settings.php:171
 msgid "For example,"
 msgstr ""
 
-#: src/Admin/Settings.php:146
+#: src/Admin/Settings.php:173
 msgid "or"
 msgstr ""
 
-#: src/Admin/Settings.php:156
+#: src/Admin/Settings.php:183
+msgid "View your stats in your WordPress dashboard"
+msgstr ""
+
+#: src/Admin/Settings.php:189
+msgid "Shared Link:"
+msgstr ""
+
+#: src/Admin/Settings.php:199
+msgid "Create a secure and private shared link in your Plausible account."
+msgstr ""
+
+#: src/Admin/Settings.php:202
+msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
+msgstr ""
+
+#: src/Admin/Settings.php:203
+msgid "View your site statistics within your WordPress Dashboard."
+msgstr ""
+
+#: src/Admin/Settings.php:205
+msgid "View Statistics &raquo;"
+msgstr ""
+
+#: src/Admin/Settings.php:213
 msgid "Track analytics for administrator"
 msgstr ""
 
-#: src/Admin/Settings.php:161
+#: src/Admin/Settings.php:218
 msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
 msgstr ""
 
-#: src/Admin/Settings.php:170
+#: src/Admin/Settings.php:227
 msgid "Self-hosted Plausible?"
 msgstr ""
 
-#: src/Admin/Settings.php:181
+#: src/Admin/Settings.php:238
 msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
 msgstr ""
 
-#: src/Admin/Settings.php:183
+#: src/Admin/Settings.php:240
 msgid "about Plausible Self-Hosted."
 msgstr ""
 
-#: src/Admin/Settings.php:195, src/Admin/Settings.php:198
+#: src/Admin/Settings.php:252, src/Admin/Settings.php:255
 msgid "Save Changes"
 msgstr ""
 
-#: src/Admin/Settings.php:196
+#: src/Admin/Settings.php:253
 msgid "Saved!"
 msgstr ""
