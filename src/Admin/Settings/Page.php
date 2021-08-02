@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Page extends API {
+
 	/**
 	 * Constructor.
 	 *
@@ -27,6 +28,70 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
+		$settings             = Helpers::get_settings();
+		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
+		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
+		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+
+		$this->fields = [
+			'general' => [
+				[
+					'label'  => esc_html__( 'Domain Name', 'plausible-analytics' ),
+					'slug'   => 'domain_name',
+					'type'   => 'text',
+					'desc'   => sprintf(
+						'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
+						esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
+						esc_url( 'https://docs.plausible.io/register-account' ),
+						esc_html__( 'Follow these instructions', 'plausible-analytics' ),
+						esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
+					),
+					'toggle' => false,
+				],
+				[
+					'label'  => esc_html__( 'Custom Domain', 'plausible-analytics' ),
+					'slug'   => 'custom_domain',
+					'type'   => 'text',
+					'desc'   => sprintf(
+						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
+						esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
+						esc_url( 'https://docs.plausible.io/custom-domain/' ),
+						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+						esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
+						__( 'For example,', 'plausible-analytics' ),
+						"<code>stats.$domain</code>",
+						__( 'or', 'plausible-analytics' ),
+						"<code>analytics.$domain</code>"
+					),
+					'toggle' => true,
+				],
+				[
+					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
+					'slug'   => 'custom_domain',
+					'type'   => 'text',
+					'desc'   => sprintf(
+						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
+						esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ),
+						esc_url( 'https://plausible.io/docs/shared-links' ),
+						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+						esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
+						esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
+						admin_url( 'index.php?page=plausible-analytics-statistics' ),
+						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
+					),
+					'toggle' => true,
+				],
+				[
+					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
+					'slug'   => 'track_analytics',
+					'type'   => 'text',
+					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ),
+					'toggle' => true,
+				],
+			],
+		];
+
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
 	}
@@ -145,18 +210,6 @@ class Page extends API {
 			?>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Render Settings Page.
-	 *
-	 * @since  1.3.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function settings_page() {
-
 	}
 
 	/**
