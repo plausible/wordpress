@@ -196,7 +196,7 @@ class Settings {
 							<?php
 							echo sprintf(
 								'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
-								esc_html__( 'Create a secure and private shared link in your Plausible account.', 'plausible-analytics' ),
+								esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ),
 								esc_url( 'https://plausible.io/docs/shared-links' ),
 								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 								esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
@@ -299,7 +299,7 @@ class Settings {
 					esc_html( 'Please', 'plausible-analytics' ),
 					esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
 					esc_html( 'click here', 'plausible-analytics' ),
-					esc_html( 'to generate your shared link from your Plausible Analytics dashboard.', 'plausible-analytics' ),
+					esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
 					admin_url( 'options-general.php?page=plausible-analytics' ),
 					esc_html( 'paste here', 'plausible-analytics' ),
