@@ -59,10 +59,7 @@
 }
 
 .plausible-analytics-wrap {
-	width: 800px;
-	margin: 0 auto;
-	margin-top: 50px;
-	max-width: 100%;
+	display: flex;
 
 	.plausible-analytics-admin-field {
 		background-color: #fff;
