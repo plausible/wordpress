@@ -57,7 +57,7 @@ class API {
 				<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<?php
 				foreach ( $this->fields[ $current_tab ] as $tab => $field ) {
-					call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
+					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
 				}
 				?>
 				</form>
@@ -69,6 +69,14 @@ class API {
 		<?php
 	}
 
+	/**
+	 * Render Text Field.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
 	public function render_text_field( array $field ) {
 		$toggle = ! ! $field['toggle'];
 		ob_start();
@@ -90,6 +98,6 @@ class API {
 			</p>
 		</div>
 		<?php
-		echo ob_get_clean();
+		return ob_get_clean();
 	}
 }
