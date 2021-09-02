@@ -133,4 +133,23 @@ class API {
 		<?php
 		return ob_get_clean();
 	}
+
+	/**
+	 * Render Checkbox Field.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
+	public function render_checkbox_field( array $field ) {
+		ob_start();
+		?>
+		<span class="plausible-checkbox-list">
+			<input type="checkbox" name="<?php echo $field['slug']; ?>" /> <?php echo $field['value']; ?>
+			<?php echo esc_attr( $field['label'] ); ?>
+		</span>
+		<?php
+		return ob_get_clean();
+	}
 }
