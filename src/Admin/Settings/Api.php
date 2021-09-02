@@ -82,23 +82,52 @@ class API {
 	 * @return mixed
 	 */
 	public function render_text_field( array $field ) {
-		$toggle = ! ! $field['toggle'];
+		ob_start();
+		?>
+		<label for="">
+			<?php echo esc_attr( $field['label'] ); ?>
+		</label>
+		<input type="text" name="<?php echo $field['slug']; ?>" value="<?php echo $field['value']; ?>" />
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render Group Field.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
+	public function render_group_field( array $group ) {
+		$toggle = ! ! $group['toggle'];
+		$fields = $group['fields'];
 		ob_start();
 		?>
 		<div class="plausible-analytics-admin-field">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
-					<?php echo esc_attr( $field['label'] ); ?>
+					<?php echo esc_attr( $group['label'] ); ?>
 				</label>
 				<?php if ( $toggle ) { ?>
 				<label class="plausible-analytics-switch">
-					<input checked="checked" class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="1" type="checkbox">
+					<input checked="checked" class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
 				</label>
 				<?php } ?>
 			</div>
+			<div class="plausible-analytics-admin-field-body">
+				<?php
+				if ( ! empty( $fields ) ) {
+					foreach ( $fields as $field ) {
+						echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
+					}
+				}
+				?>
+			</div>
 			<p class="plausible-analytics-description">
-				<?php echo $field['desc']; // Already escaped earlier. ?>
+				<?php echo $group['desc']; // Already escaped earlier. ?>
 			</p>
 		</div>
 		<?php
