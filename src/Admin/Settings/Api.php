@@ -54,6 +54,7 @@ class API {
 		?>
 		<div class="wrap plausible-analytics-wrap">
 			<div class="plausible-analytics-content-left">
+				<?php echo Helpers::render_quick_actions(); ?>
 				<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<?php
 				foreach ( $this->fields[ $current_tab ] as $tab => $field ) {
