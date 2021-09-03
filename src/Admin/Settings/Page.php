@@ -292,9 +292,6 @@ class Page extends API {
 			$settings['shared_link'] :
 			'';
 
-		// Display admin header.
-		// echo $this->render( esc_html__( 'Analytics', 'plausible-analytics' ) );
-
 		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
 			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
