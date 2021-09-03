@@ -192,17 +192,23 @@ class Helpers {
 		<?php
 		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
 			?>
-			<div class="plausible-analytics-badge">
-				<?php esc_html_e( 'Quick Actions', 'plausible-analytics' ); ?>
+			<div class="plausible-analytics-quick-actions-title">
+				<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
 			</div>
+			<ul>
 			<?php
 			foreach ( $quick_actions as $quick_action ) {
 				?>
-				<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
-					<?php echo $quick_action['label']; ?>
-				</a>
+				<li>
+					<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
+						<?php echo $quick_action['label']; ?>
+					</a>
+				</li>
 				<?php
 			}
+			?>
+			</ul>
+			<?php
 		}
 		?>
 		</div>

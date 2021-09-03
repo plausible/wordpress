@@ -2,25 +2,29 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	background-color: $black-color;
-	color: $white-color;
-	padding: 0 15px;
-	margin-bottom: 20px;
+	background-color: $white-color;
+	margin-bottom: 10px;
 	border-radius: 5px;
+	border: 1px solid $base-color;
+
+	.plausible-analytics-quick-actions-title {
+		background-color: $base-color;
+		color: $white-color;
+		padding: 10px;
+		margin-right: 5px;
+	}
 
 	ul {
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		margin: 0;
 
 		li {
 			list-style: none;
 			background-color: $white-color;
-			margin: 0 5px;
+			margin: 0 8px;
 			border-radius: 25px;
-			box-shadow: 0 0 25px -6px rgba(0, 0, 0, 0.49);
-			-webkit-box-shadow: 0 0 25px -6px rgba(0, 0, 0, 0.49);
-			-moz-box-shadow: 0 0 25px -6px rgba(0, 0, 0, 0.49);
 
 			a {
 				text-decoration: none;
@@ -28,8 +32,6 @@
 				text-transform: uppercase;
 				font-weight: 500;
 				font-size: 12px;
-				padding: 3px 8px;
-				display: inline-block;
 			}
 		}
 	}
