@@ -81,7 +81,7 @@ class API {
 		<label for="">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
-		<input type="text" name="<?php echo $field['slug']; ?>" value="<?php echo $field['value']; ?>" />
+		<input type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $field['value']; ?>" />
 		<?php
 		return ob_get_clean();
 	}
@@ -143,7 +143,7 @@ class API {
 		ob_start();
 		?>
 		<span class="plausible-checkbox-list">
-			<input type="checkbox" name="<?php echo $field['slug']; ?>" /> <?php echo $field['value']; ?>
+			<input type="checkbox" name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]" />
 			<?php echo esc_attr( $field['label'] ); ?>
 		</span>
 		<?php
