@@ -150,4 +150,63 @@ class Helpers {
 
 		return $url;
 	}
+
+	/**
+	 * Get Quick Actions.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public static function get_quick_actions() {
+		return [
+			'view-docs'        => [
+				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://docs.plausible.io/' ),
+			],
+			'report-issue'     => [
+				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+			],
+			'translate-plugin' => [
+				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
+			],
+		];
+	}
+
+	/**
+	 * Render Quick Actions
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
+	public static function render_quick_actions() {
+		ob_start();
+		$quick_actions = self::get_quick_actions();
+		?>
+		<div class="plausible-analytics-quick-actions">
+		<?php
+		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
+			?>
+			<div class="plausible-analytics-badge">
+				<?php esc_html_e( 'Quick Actions', 'plausible-analytics' ); ?>
+			</div>
+			<?php
+			foreach ( $quick_actions as $quick_action ) {
+				?>
+				<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
+					<?php echo $quick_action['label']; ?>
+				</a>
+				<?php
+			}
+		}
+		?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
 }
