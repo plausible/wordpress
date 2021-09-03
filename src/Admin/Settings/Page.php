@@ -28,18 +28,27 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
+		$roles                = new \WP_Roles();
 		$settings             = Helpers::get_settings();
 		$domain               = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? $settings['custom_domain_prefix'] : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link          = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 
+		if ( ! empty( $roles->get_names() ) ) {
+			foreach ( $roles->get_names() as $role_slug => $role_name ) {
+				$user_roles_data[ $role_slug ]['label'] = $role_name;
+				$user_roles_data[ $role_slug ]['slug']  = $role_slug;
+				$user_roles_data[ $role_slug ]['type']  = 'checkbox';
+			}
+		}
+
 		$this->fields = [
-			'general' => [
+			'general'     => [
 				[
-					'label'  => esc_html__( 'Domain Name', 'plausible-analytics' ),
-					'slug'   => 'domain_name',
-					'type'   => 'text',
+					'label'  => esc_html__( 'Connect your website with Plausible Analytics', 'plausible-analytics' ),
+					'slug'   => 'connect_to_plausible_analytics',
+					'type'   => 'group',
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
 						esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
@@ -48,11 +57,19 @@ class Page extends API {
 						esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
 					),
 					'toggle' => false,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
+							'slug'  => 'domain_name',
+							'type'  => 'text',
+							'value' => $domain,
+						],
+					],
 				],
 				[
-					'label'  => esc_html__( 'Custom Domain', 'plausible-analytics' ),
+					'label'  => esc_html__( 'Setup custom domain with Plausible Analytics', 'plausible-analytics' ),
 					'slug'   => 'custom_domain',
-					'type'   => 'text',
+					'type'   => 'group',
 					'desc'   => sprintf(
 						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
 						esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
@@ -65,11 +82,19 @@ class Page extends API {
 						"<code>analytics.$domain</code>"
 					),
 					'toggle' => true,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Custom Domain', 'plausible-analytics' ),
+							'slug'  => 'custom_domain',
+							'type'  => 'text',
+							'value' => "{$custom_domain_prefix}.{$domain}",
+						],
+					],
 				],
 				[
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'custom_domain',
-					'type'   => 'text',
+					'type'   => 'group',
 					'desc'   => sprintf(
 						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
 						esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ),
@@ -81,13 +106,43 @@ class Page extends API {
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
 					'toggle' => true,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Shared Link', 'plausible-analytics' ),
+							'slug'  => 'shared_link',
+							'type'  => 'text',
+							'value' => $shared_link,
+						],
+					],
 				],
 				[
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
 					'slug'   => 'track_analytics',
-					'type'   => 'text',
-					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting.', 'plausible-analytics' ),
+					'type'   => 'group',
+					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for any user roles or logged in users. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => true,
+					'fields' => ! empty( $user_roles_data ) ? $user_roles_data : [],
+				],
+			],
+			'self-hosted' => [
+				[
+					'label'  => esc_html__( 'Self-hosted Plausible Analytics?', 'plausible-analytics' ),
+					'slug'   => 'self_hosted_plausible_analytics',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+						esc_html__( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more', 'plausible-analytics' ),
+						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
+						esc_html__( 'about Plausible Self-Hosted.', 'plausible-analytics' )
+					),
+					'toggle' => true,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
+							'slug'  => 'self_hosted_domain',
+							'type'  => 'text',
+						],
+					],
 				],
 			],
 		];
@@ -181,7 +236,7 @@ class Page extends API {
 				],
 				'self-hosted' => [
 					'name'  => esc_html__( 'Self Hosted', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=selfhosted' ),
+					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
 					'class' => 'self-hosted' === $current_tab ? 'active' : '',
 				],
 				'advanced'    => [
