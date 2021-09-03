@@ -191,7 +191,16 @@ class Page extends API {
 		$screen = get_current_screen();
 
 		// Bailout, if screen id doesn't match.
-		if ( 'settings_page_plausible_analytics' !== $screen->id ) {
+		if (
+			! in_array(
+				$screen->id,
+				[
+					'settings_page_plausible_analytics',
+					'dashboard_page_plausible_analytics_statistics',
+				],
+				true
+			)
+		) {
 			return;
 		}
 		?>
@@ -284,7 +293,7 @@ class Page extends API {
 			'';
 
 		// Display admin header.
-		// echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
+		// echo $this->render( esc_html__( 'Analytics', 'plausible-analytics' ) );
 
 		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
