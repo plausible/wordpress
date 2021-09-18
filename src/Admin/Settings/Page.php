@@ -110,7 +110,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
 					'slug'   => 'can_role_track_analytics',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for any user roles or logged in users excluding `Subscriber` role. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => true,
 					'fields' => [
 						'administrator' => [
