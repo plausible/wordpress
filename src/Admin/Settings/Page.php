@@ -28,21 +28,11 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
-		$roles              = new \WP_Roles();
 		$settings           = Helpers::get_settings();
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
-
-		// Prepare user roles data.
-		if ( ! empty( $roles->get_names() ) ) {
-			foreach ( $roles->get_names() as $role_slug => $role_name ) {
-				$user_roles_data[ $role_slug ]['label'] = $role_name;
-				$user_roles_data[ $role_slug ]['slug']  = 'track_analytics';
-				$user_roles_data[ $role_slug ]['type']  = 'checkbox';
-			}
-		}
 
 		$this->fields = [
 			'general'     => [
@@ -120,9 +110,14 @@ class Page extends API {
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
 					'slug'   => 'can_role_track_analytics',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for any user roles or logged in users. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for any user roles or logged in users excluding `Subscriber` role. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => true,
-					'fields' => ! empty( $user_roles_data ) ? $user_roles_data : [],
+					'fields' => [
+						'administrator' => esc_html__( 'Administrator', 'plausible-analytics' ),
+						'editor'        => esc_html__( 'Editor', 'plausible-analytics' ),
+						'author'        => esc_html__( 'Author', 'plausible-analytics' ),
+						'contributor'   => esc_html__( 'Contributor', 'plausible-analytics' ),
+					],
 				],
 			],
 			'self-hosted' => [
