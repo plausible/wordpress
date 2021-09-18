@@ -61,6 +61,9 @@ class API {
 					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
 				}
 				?>
+				<div class="plausible-analytics-settings-action-wrap">
+					<input type="button" id="plausible-analytics-save-btn" class="plausible-analytics-btn" value="<?php esc_html_e( 'Save Settings', 'plausible-analytics' ); ?>"/>
+				</div>
 				</form>
 			</div>
 		</div>
