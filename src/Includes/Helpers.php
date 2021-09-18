@@ -215,4 +215,23 @@ class Helpers {
 		<?php
 		return ob_get_clean();
 	}
+
+	/**
+	 * Clean variables using `sanitize_text_field`.
+	 * Arrays are cleaned recursively. Non-scalar values are ignored.
+	 *
+	 * @param string|array $var Sanitize the variable.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string|array
+	 */
+	public static function clean( $var ) {
+		if ( is_array( $var ) ) {
+			return array_map( [ __CLASS__, __METHOD__ ], $var );
+		} else {
+			return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
+		}
+	}
 }
