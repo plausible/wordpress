@@ -113,10 +113,26 @@ class Page extends API {
 					'desc'   => esc_html__( 'By default, we won\'t be tracking analytics for any user roles or logged in users excluding `Subscriber` role. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => true,
 					'fields' => [
-						'administrator' => esc_html__( 'Administrator', 'plausible-analytics' ),
-						'editor'        => esc_html__( 'Editor', 'plausible-analytics' ),
-						'author'        => esc_html__( 'Author', 'plausible-analytics' ),
-						'contributor'   => esc_html__( 'Contributor', 'plausible-analytics' ),
+						'administrator' => [
+							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
+							'slug'  => 'track_analytics',
+							'type'  => 'checkbox',
+						],
+						'editor'        => [
+							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
+							'slug'  => 'track_analytics',
+							'type'  => 'checkbox',
+						],
+						'author'        => [
+							'label' => esc_html__( 'Author', 'plausible-analytics' ),
+							'slug'  => 'track_analytics',
+							'type'  => 'checkbox',
+						],
+						'contributor'   => [
+							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
+							'slug'  => 'track_analytics',
+							'type'  => 'checkbox',
+						],
 					],
 				],
 			],
