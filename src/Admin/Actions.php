@@ -8,7 +8,7 @@
  * @subpackage Plausible Analytics
  */
 
- namespace Plausible\Analytics\WP\Admin;
+namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
@@ -45,18 +45,26 @@ class Actions {
 		\wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', PLAUSIBLE_ANALYTICS_VERSION, true );
 	}
 
+	/**
+	 * Save Admin Settings.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function save_admin_settings() {
-		$post_data = $_POST;
+		$post_data = Helpers::clean( $_POST );
+		$settings  = Helpers::get_settings();
 
 		// Security: Roadblock to check for unauthorized access.
 		check_admin_referer( 'plausible-analytics-settings-roadblock', 'roadblock' );
 
-		// Unset unnecessary posted data to store into database.
-		unset( $post_data['action'] );
-		unset( $post_data['roadblock'] );
+		// Prepare new settings.
+		$new_settings = wp_parse_args( $post_data['plausible_analytics_settings'], $settings );
 
 		// Save Settings.
-		update_option( 'plausible_analytics_settings', $post_data );
+		update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
 
 		// Send response.
 		wp_send_json_success(
