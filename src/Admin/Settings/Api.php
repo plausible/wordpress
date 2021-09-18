@@ -63,6 +63,7 @@ class API {
 				?>
 				<div class="plausible-analytics-settings-action-wrap">
 					<input type="button" id="plausible-analytics-save-btn" class="plausible-analytics-btn" value="<?php esc_html_e( 'Save Settings', 'plausible-analytics' ); ?>"/>
+					<?php echo wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
 				</div>
 				</form>
 			</div>
