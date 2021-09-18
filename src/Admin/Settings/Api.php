@@ -145,7 +145,7 @@ class API {
 	 */
 	public function render_checkbox_field( array $field ) {
 		ob_start();
-		$value = ! empty( $field['value'] ) ? $field['value'] : '';
+		$value = ! empty( $field['value'] ) ? $field['value'] : 'on';
 		?>
 		<span class="plausible-checkbox-list">
 			<input type="checkbox" name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]" value="<?php echo $value; ?>"/>
