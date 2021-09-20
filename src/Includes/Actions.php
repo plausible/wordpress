@@ -29,6 +29,7 @@ class Actions {
 	 */
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
 	}
 
 	/**
@@ -59,6 +60,53 @@ class Actions {
 		// Track 404 pages.
 		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
+		}
+	}
+
+	/**
+	 * Admin bar node for pages.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+
+	public function admin_bar_node( $admin_bar ) {
+		// Add main admin bar node
+		$args = [
+			'id' => 'plausible-admin-bar',
+			'title' => 'Plausible Analytics',
+		];
+		$admin_bar->add_node( $args );
+
+		// Add sub menu items
+		$args = [];
+		$args[] = [
+			'id' => 'view-analytics',
+			'title' => 'View Analytics',
+			'href' => admin_url( 'index.php?page=plausible-analytics-statistics' ),
+			'parent' => 'plausible-admin-bar'
+		];
+
+		// Add link to individual page stats
+		if ( is_page() || is_single() ) {
+			$args[] = [
+				'id' => 'view-page-analytics',
+				'title' => 'View Page Analytics',
+				'href' => '#',
+				'parent' => 'plausible-admin-bar'
+			];
+		}
+		
+		$args[] = [
+			'id' => 'settings',
+			'title' => 'Settings',
+			'href' => admin_url( 'options-general.php?page=plausible-analytics' ),
+			'parent' => 'plausible-admin-bar'
+		];
+		foreach ( $args as $arg ) {
+			$admin_bar->add_node( $arg );
 		}
 	}
 }
