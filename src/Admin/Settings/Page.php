@@ -265,11 +265,11 @@ class Page extends API {
 					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
 					'class' => 'self-hosted' === $current_tab ? 'active' : '',
 				],
-				'advanced'    => [
-					'name'  => esc_html__( 'Advanced', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=advanced' ),
-					'class' => 'advanced' === $current_tab ? 'active' : '',
-				],
+				// 'advanced'    => [
+				// 	'name'  => esc_html__( 'Advanced', 'plausible-analytics' ),
+				// 	'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=advanced' ),
+				// 	'class' => 'advanced' === $current_tab ? 'active' : '',
+				// ],
 			]
 		);
 
