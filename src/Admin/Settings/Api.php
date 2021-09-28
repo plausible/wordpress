@@ -113,6 +113,7 @@ class API {
 		$fields      = $group['fields'];
 		$field_value = ! empty( $settings[ $group['slug'] ] ) ? $settings[ $group['slug'] ] : false;
 		$is_checked  = checked( $field_value, true, false );
+		$domain_name = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : '';
 		ob_start();
 		?>
 		<div class="plausible-analytics-admin-field">
@@ -125,6 +126,10 @@ class API {
 					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
 				</label>
+				<?php } else { ?>
+					<a target="_blank" class="plausible-analytics-link" href="https://plausible.io/<?php echo $domain_name; ?>">
+						<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
+					</a>
 				<?php } ?>
 			</div>
 			<div class="plausible-analytics-admin-field-body">
