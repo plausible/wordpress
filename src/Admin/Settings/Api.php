@@ -30,6 +30,15 @@ class API {
 	public $fields = [];
 
 	/**
+	 * Admin Settings.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @var $settings
+	 */
+	public $settings;
+	/**
 	 * Constructor.
 	 *
 	 * @since  1.3.0
@@ -38,7 +47,7 @@ class API {
 	 * @return void
 	 */
 	public function __construct() {
-
+		$this->settings = Helpers::get_settings();
 	}
 
 	/**
@@ -148,7 +157,12 @@ class API {
 		$value = ! empty( $field['value'] ) ? $field['value'] : 'on';
 		?>
 		<span class="plausible-checkbox-list">
-			<input type="checkbox" name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]" value="<?php echo $value; ?>"/>
+			<input
+				type="checkbox"
+				name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]"
+				value="<?php echo $value; ?>"
+				<?php checked( in_array( $value, $this->settings['track_analytics'], true ), true ); ?>
+			/>
 			<?php echo esc_attr( $field['label'] ); ?>
 		</span>
 		<?php
