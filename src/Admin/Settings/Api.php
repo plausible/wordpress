@@ -60,7 +60,18 @@ class API {
 				}
 				?>
 				<div class="plausible-analytics-settings-action-wrap">
-					<input type="button" id="plausible-analytics-save-btn" class="plausible-analytics-btn" value="<?php esc_html_e( 'Save Settings', 'plausible-analytics' ); ?>"/>
+					<button
+						id="plausible-analytics-save-btn"
+						class="plausible-analytics-btn plausible-analytics-save-btn"
+						data-default-text="<?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?>"
+						data-saved-text="<?php esc_html_e( 'Saved!', 'plausible-analytics' ); ?>"
+					>
+						<span><?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?></span>
+						<span class="plausible-analytics-spinner">
+							<div class="plausible-analytics-spinner--bounce-1"></div>
+							<div class="plausible-analytics-spinner--bounce-2"></div>
+						</span>
+					</button>
 					<?php echo wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
 				</div>
 				</form>
