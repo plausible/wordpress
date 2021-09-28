@@ -72,7 +72,7 @@ class API {
 							<div class="plausible-analytics-spinner--bounce-2"></div>
 						</span>
 					</button>
-					<?php echo wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
+					<?php wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
 				</div>
 				</form>
 			</div>
