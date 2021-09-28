@@ -79,11 +79,12 @@ class API {
 	 */
 	public function render_text_field( array $field ) {
 		ob_start();
+		$value = ! empty( $field['value'] ) ? $field['value'] : '';
 		?>
 		<label for="">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
-		<input type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $field['value']; ?>" />
+		<input type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
 		<?php
 		return ob_get_clean();
 	}
