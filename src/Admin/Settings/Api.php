@@ -127,9 +127,9 @@ class API {
 				}
 				?>
 			</div>
-			<p class="plausible-analytics-description">
+			<div class="plausible-analytics-description">
 				<?php echo $group['desc']; // Already escaped earlier. ?>
-			</p>
+			</div>
 		</div>
 		<?php
 		return ob_get_clean();
