@@ -1,65 +1,24 @@
-.plausible-analytics-hidden {
-	display: none;
-}
-
-.plausible-analytics-show {
-	display: block;
-}
-
-.plausible-analytics-content {
-	@extend .plausible-analytics-hidden;
-}
-
-.plausible-analytics-statistics-not-loaded {
-	margin: 20px 0 0 -10px;
-	padding: 0 30px;
-	font-size: 15px;
-	line-height: 24px;
-}
-
-.plausible-analytics-header {
-	display: flex;
-	align-items: center;
-	background-color: #fff;
-	padding: 0;
-	position: relative;
-	margin: 0 0 0 -20px;
-	height: 60px;
-
-	.plausible-analytics-logo {
-		padding: 20px;
-		border-right: 1px solid #f1f1f1;
-
-		img {
-			width: 26px;
-			height: 100%;
-		}
-	}
-
-	.plausible-analytics-header-content {
-		display: inline-flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-
-		.plausible-analytics-title {
-			padding: 0 20px;
-
-			h1 {
-				font-size: 1.4rem;
-			}
-		}
-
-		.plausible-analytics-actions {
-			display: flex;
-			margin-left: auto;
-			padding: 20px;
-		}
-	}
-}
-
 .plausible-analytics-wrap {
 	display: flex;
+
+	input[type='text'] {
+		background-color: #f5f5f5;
+		border: none;
+		border-radius: 5px;
+	}
+
+	input[name='shared_link'] {
+		width: 75%;
+	}
+
+	.plausible-checkbox-list {
+		margin: 3px 0;
+		display: inline-block;
+	}
+
+	.plausible-analytics-content {
+		width: 800px;
+	}
 
 	.plausible-analytics-admin-field {
 		background-color: #fff;
@@ -87,12 +46,16 @@
 			align-items: center;
 		}
 
+		.plausible-analytics-admin-field-body {
+			padding: 10px 0 10px 0;
+			margin: 15px 0 15px 0;
+			border-top: 1px dashed #e5e5e5;
+			border-bottom: 1px dashed #e5e5e5;
+		}
+
 		.plausible-analytics-description {
 			font-style: italic;
 			color: #989898;
-			border-top: 1px dashed #e5e5e5;
-			padding: 10px 0 0 0;
-			margin: 15px 0 0 0;
 
 			ol {
 				margin: 5px 15px;
@@ -105,4 +68,19 @@
 			padding: 15px 0 0 0;
 		}
 	}
+}
+
+.plausible-analytics-hidden {
+	display: none;
+}
+
+.plausible-analytics-show {
+	display: block;
+}
+
+.plausible-analytics-statistics-not-loaded {
+	margin: 20px 0 0 -10px;
+	padding: 0 30px;
+	font-size: 15px;
+	line-height: 24px;
 }
