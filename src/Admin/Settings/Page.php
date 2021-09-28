@@ -157,6 +157,7 @@ class Page extends API {
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
 							'slug'  => 'self_hosted_domain',
 							'type'  => 'text',
+							'value' => $self_hosted_domain,
 						],
 					],
 				],
