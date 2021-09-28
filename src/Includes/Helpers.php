@@ -234,4 +234,21 @@ class Helpers {
 			return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
 		}
 	}
+
+	/**
+	 * Get user role for the loggedin user.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function get_user_role() {
+		global $current_user;
+
+		$user_roles = $current_user->roles;
+		$user_role  = array_shift( $user_roles );
+
+		return $user_role;
+	}
 }
