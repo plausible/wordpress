@@ -150,4 +150,105 @@ class Helpers {
 
 		return $url;
 	}
+
+	/**
+	 * Get Quick Actions.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public static function get_quick_actions() {
+		return [
+			'view-docs'        => [
+				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://docs.plausible.io/' ),
+			],
+			'report-issue'     => [
+				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+			],
+			'translate-plugin' => [
+				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
+			],
+		];
+	}
+
+	/**
+	 * Render Quick Actions
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return mixed
+	 */
+	public static function render_quick_actions() {
+		ob_start();
+		$quick_actions = self::get_quick_actions();
+		?>
+		<div class="plausible-analytics-quick-actions">
+		<?php
+		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
+			?>
+			<div class="plausible-analytics-quick-actions-title">
+				<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
+			</div>
+			<ul>
+			<?php
+			foreach ( $quick_actions as $quick_action ) {
+				?>
+				<li>
+					<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
+						<?php echo $quick_action['label']; ?>
+					</a>
+				</li>
+				<?php
+			}
+			?>
+			</ul>
+			<?php
+		}
+		?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Clean variables using `sanitize_text_field`.
+	 * Arrays are cleaned recursively. Non-scalar values are ignored.
+	 *
+	 * @param string|array $var Sanitize the variable.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string|array
+	 */
+	public static function clean( $var ) {
+		if ( is_array( $var ) ) {
+			return array_map( [ __CLASS__, __METHOD__ ], $var );
+		} else {
+			return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
+		}
+	}
+
+	/**
+	 * Get user role for the loggedin user.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function get_user_role() {
+		global $current_user;
+
+		$user_roles = $current_user->roles;
+		$user_role  = array_shift( $user_roles );
+
+		return $user_role;
+	}
 }

@@ -47,7 +47,8 @@ final class Plugin {
 	 */
 	public function register_services() {
 		if ( is_admin() ) {
-			new Admin\Settings();
+			new Admin\Upgrades();
+			new Admin\Settings\Page();
 			new Admin\Filters();
 			new Admin\Actions();
 		}
@@ -87,11 +88,11 @@ final class Plugin {
 		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
 
 		if ( ! $is_default_settings_saved ) {
+			$domain_name      = Helpers::get_domain();
 			$default_settings = [
-				'domain_name'          => Helpers::get_domain(),
-				'custom_domain'        => false,
-				'custom_domain_prefix' => 'analytics',
-				'track_administrator'  => false,
+				'domain_name'     => $domain_name,
+				'custom_domain'   => "analytics.{$domain_name}",
+				'track_analytics' => [],
 			];
 
 			update_option( 'plausible_analytics_settings', $default_settings );
