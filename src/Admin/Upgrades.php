@@ -48,12 +48,20 @@ class Upgrades {
 	public function register_routines() {
 		// Upgrade to version 1.3.0.
 		if ( version_compare( PLAUSIBLE_ANALYTICS_VERSION, '1.3.0', '<' ) ) {
-			$this->upgrade_to_130();
+			// $this->upgrade_to_130();
 		}
 
 		// Add required upgrade routines for future versions here.
 	}
 
+	/**
+	 * Upgrade routine for 1.3.0
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function upgrade_to_130() {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
