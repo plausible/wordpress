@@ -302,14 +302,14 @@ class Page extends API {
 	 * @return void
 	 */
 	public function statistics_page() {
-		$settings            = Helpers::get_settings();
-		$domain              = Helpers::get_domain();
-		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : 'false';
-		$shared_link         = ! empty( $settings['shared_link'] ) ?
+		$settings       = Helpers::get_settings();
+		$domain         = Helpers::get_domain();
+		$is_shared_link = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
+		$shared_link    = ! empty( $settings['shared_link'] ) ?
 			$settings['shared_link'] :
 			'';
 
-		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
+		if ( $is_shared_link && ! empty( $shared_link ) ) {
 			?>
 			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
