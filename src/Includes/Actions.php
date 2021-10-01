@@ -66,14 +66,14 @@ class Actions {
 	/**
 	 * Create admin bar nodes.
 	 *
-	 * @since  1.2.0
+	 * @since  1.3.0
 	 * @access public
 	 *
 	 * @return void
 	 */
 
 	public function admin_bar_node( $admin_bar ) {
-		// Add main admin bar node
+		// Add main admin bar node.
 		$args = [
 			'id'    => 'plausible-admin-bar',
 			'title' => 'Plausible Analytics',
@@ -82,32 +82,32 @@ class Actions {
 
 		// Add sub menu items
 
-		// Add link to view all stats
+		// Add link to view all stats.
 		$args   = [];
 		$args[] = [
 			'id'     => 'view-analytics',
-			'title'  => 'View Analytics',
+			'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
 			'href'   => admin_url( 'index.php?page=plausible_analytics_statistics' ),
 			'parent' => 'plausible-admin-bar',
 		];
 
-		// Add link to individual page stats
+		// Add link to individual page stats.
 		if ( ! is_admin() ) {
 			global $post;
 			$page_url  = admin_url( 'index.php?page=plausible_analytics_statistics' );
 			$page_url .= is_home() ? '' : '&page-url=' . trailingslashit( urlencode( '/' . $post->post_name ) );
 			$args[]    = [
 				'id'     => 'view-page-analytics',
-				'title'  => 'View Page Analytics',
+				'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
 				'href'   => $page_url,
 				'parent' => 'plausible-admin-bar',
 			];
 		}
 
-		// Add link to Plausible Settings page
+		// Add link to Plausible Settings page.
 		$args[] = [
 			'id'     => 'settings',
-			'title'  => 'Settings',
+			'title'  => esc_html__( 'Settings', 'plausible-analytics' ),
 			'href'   => admin_url( 'options-general.php?page=plausible_analytics' ),
 			'parent' => 'plausible-admin-bar',
 		];
