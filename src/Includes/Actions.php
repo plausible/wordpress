@@ -80,8 +80,6 @@ class Actions {
 		];
 		$admin_bar->add_node( $args );
 
-		// Add sub menu items
-
 		// Add link to view all stats.
 		$args   = [];
 		$args[] = [
@@ -94,12 +92,10 @@ class Actions {
 		// Add link to individual page stats.
 		if ( ! is_admin() ) {
 			global $post;
-			$page_url  = admin_url( 'index.php?page=plausible_analytics_statistics' );
-			$page_url .= is_home() ? '' : '&page-url=' . trailingslashit( urlencode( '/' . $post->post_name ) );
 			$args[]    = [
 				'id'     => 'view-page-analytics',
 				'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
-				'href'   => $page_url,
+				'href'   => add_query_arg( 'page-url', is_home() ? '' : trailingslashit( urlencode( '/' . $post->post_name ) ), admin_url( 'index.php?page=plausible_analytics_statistics' ) ),
 				'parent' => 'plausible-admin-bar',
 			];
 		}
