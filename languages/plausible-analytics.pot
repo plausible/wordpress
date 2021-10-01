@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:72
+#: src/Admin/Actions.php:64
 msgid "Settings saved successfully."
 msgstr ""
 
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings/Page.php:230
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:107
 msgid "Settings"
 msgstr ""
 
@@ -36,154 +36,122 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Includes/Helpers.php:165
-msgid "Documentation"
-msgstr ""
-
-#: src/Includes/Helpers.php:169
-msgid "Report an issue"
-msgstr ""
-
-#: src/Includes/Helpers.php:173
-msgid "Translate Plugin"
-msgstr ""
-
-#: src/Includes/Helpers.php:196
-msgid "Quick Links"
-msgstr ""
-
-#: src/Admin/Settings/Api.php:66, src/Admin/Settings/Api.php:69
-msgid "Save Changes"
-msgstr ""
-
-#: src/Admin/Settings/Api.php:67
-msgid "Saved!"
-msgstr ""
-
-#: src/Admin/Settings/Api.php:132
-msgid "Open Analytics"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:40
-msgid "Connect your website with Plausible Analytics"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:45
-msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:47
-msgid "Follow these instructions"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:48
-msgid "to add your site to Plausible."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:53, src/Admin/Settings/Page.php:157
-msgid "Domain Name"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:61
-msgid "Setup custom domain with Plausible Analytics"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:66
-msgid "Enable the custom domain functionality in your Plausible account."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:68, src/Admin/Settings/Page.php:93
-msgid "See how &raquo;"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:69
-msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:70
-msgid "For example,"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:72
-msgid "or"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:78
-msgid "Custom Domain"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:86
-msgid "View your stats in your WordPress dashboard"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:91
-msgid "Create a secure & private shared link in your Plausible account. Make sure the link is not password protected."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:94
-msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:95
-msgid "View your site statistics within your WordPress Dashboard."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:97
-msgid "View Statistics &raquo;"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:102
-msgid "Shared Link"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:110
-msgid "Track analytics for user roles"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:113
-msgid "By default, we won't be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:117
-msgid "Administrator"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:123
-msgid "Editor"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:129
-msgid "Author"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:135
-msgid "Contributor"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:145
-msgid "Self-hosted Plausible Analytics?"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:150
-msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:152
-msgid "about Plausible Self-Hosted."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:182, src/Admin/Settings/Page.php:183
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:286
 msgid "Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:191, src/Admin/Settings/Page.php:192, src/Admin/Settings/Page.php:226
+#: src/Admin/Settings.php:51, src/Admin/Settings.php:52, src/Admin/Settings.php:73
 msgid "Plausible Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:259
+#: src/Admin/Settings.php:81
+msgid "Report a bug"
+msgstr ""
+
+#: src/Admin/Settings.php:84
+msgid "Documentation"
+msgstr ""
+
+#: src/Admin/Settings.php:115
 msgid "General"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:264
+#: src/Admin/Settings.php:120
 msgid "Self Hosted"
+msgstr ""
+
+#: src/Admin/Settings.php:129
+msgid "Domain Name"
+msgstr ""
+
+#: src/Admin/Settings.php:136
+msgid "Open Analytics"
+msgstr ""
+
+#: src/Admin/Settings.php:144
+msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
+msgstr ""
+
+#: src/Admin/Settings.php:146
+msgid "Follow these instructions"
+msgstr ""
+
+#: src/Admin/Settings.php:147
+msgid "to add your site to Plausible."
+msgstr ""
+
+#: src/Admin/Settings.php:155
+msgid "Custom Domain"
+msgstr ""
+
+#: src/Admin/Settings.php:167
+msgid "Enable the custom domain functionality in your Plausible account."
+msgstr ""
+
+#: src/Admin/Settings.php:169, src/Admin/Settings.php:201
+msgid "See how &raquo;"
+msgstr ""
+
+#: src/Admin/Settings.php:170
+msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
+msgstr ""
+
+#: src/Admin/Settings.php:171
+msgid "For example,"
+msgstr ""
+
+#: src/Admin/Settings.php:173
+msgid "or"
+msgstr ""
+
+#: src/Admin/Settings.php:183
+msgid "View your stats in your WordPress dashboard"
+msgstr ""
+
+#: src/Admin/Settings.php:189
+msgid "Shared Link:"
+msgstr ""
+
+#: src/Admin/Settings.php:199
+msgid "Create a secure and private shared link in your Plausible account."
+msgstr ""
+
+#: src/Admin/Settings.php:202
+msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
+msgstr ""
+
+#: src/Admin/Settings.php:203
+msgid "View your site statistics within your WordPress Dashboard."
+msgstr ""
+
+#: src/Admin/Settings.php:205
+msgid "View Statistics &raquo;"
+msgstr ""
+
+#: src/Admin/Settings.php:213
+msgid "Track analytics for administrator"
+msgstr ""
+
+#: src/Admin/Settings.php:218
+msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
+msgstr ""
+
+#: src/Admin/Settings.php:227
+msgid "Self-hosted Plausible?"
+msgstr ""
+
+#: src/Admin/Settings.php:238
+msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
+msgstr ""
+
+#: src/Admin/Settings.php:240
+msgid "about Plausible Self-Hosted."
+msgstr ""
+
+#: src/Admin/Settings.php:252, src/Admin/Settings.php:255
+msgid "Save Changes"
+msgstr ""
+
+#: src/Admin/Settings.php:253
+msgid "Saved!"
 msgstr ""
