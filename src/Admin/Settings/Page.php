@@ -310,7 +310,10 @@ class Page extends API {
 			'';
 
 		if ( $is_shared_link && ! empty( $shared_link ) ) {
-			?>
+			// Append individual page URL if it exists.
+			if ( $shared_link && isset( $_GET['page-url'] ) ) {
+				$shared_link .= "&page={$_GET[ 'page-url' ]}";
+			} ?>
 			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
