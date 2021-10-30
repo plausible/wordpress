@@ -67,7 +67,7 @@ class Filters {
 		$new_actions = [
 			'settings' => sprintf(
 				'<a href="%1$s">%2$s</a>',
-				admin_url( 'admin.php?page=plausible-analytics' ),
+				admin_url( 'admin.php?page=plausible_analytics' ),
 				esc_html__( 'Settings', 'plausible-analytics' )
 			),
 			'support'  => sprintf(
