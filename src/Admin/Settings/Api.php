@@ -168,7 +168,7 @@ class API {
 				type="checkbox"
 				name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]"
 				value="<?php echo $value; ?>"
-				<?php checked( in_array( $value, $settings['track_analytics'], true ), true ); ?>
+				<?php checked( in_array( $value, $settings[ $field['slug'] ], true ), true ); ?>
 			/>
 			<?php echo esc_attr( $field['label'] ); ?>
 		</span>
