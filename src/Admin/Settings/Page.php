@@ -140,33 +140,33 @@ class Page extends API {
 					],
 				],
 				[
-					'label'  => esc_html__( 'User roles have access to Plausible Analytics page', 'plausible-analytics' ),
-					'slug'   => 'can_user_roles_access_plausible_analytics_page',
+					'label'  => esc_html__( 'Show the stats dashboard to specific user roles', 'plausible-analytics' ),
+					'slug'   => 'can_access_analytics_page',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
 					'toggle' => true,
 					'fields' => [
 						'administrator' => [
 							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
-							'slug'  => 'access_plausible_analytics_page',
+							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'administrator',
 						],
 						'editor'        => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
-							'slug'  => 'access_plausible_analytics_page',
+							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'editor',
 						],
 						'author'        => [
 							'label' => esc_html__( 'Author', 'plausible-analytics' ),
-							'slug'  => 'access_plausible_analytics_page',
+							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'author',
 						],
 						'contributor'   => [
 							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
-							'slug'  => 'access_plausible_analytics_page',
+							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'contributor',
 						],
@@ -335,12 +335,43 @@ class Page extends API {
 	 * @return void
 	 */
 	public function statistics_page() {
-		$settings       = Helpers::get_settings();
-		$domain         = Helpers::get_domain();
-		$is_shared_link = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
-		$shared_link    = ! empty( $settings['shared_link'] ) ?
+		global $current_user;
+
+		$settings                  = Helpers::get_settings();
+		$domain                    = Helpers::get_domain();
+		$is_shared_link            = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
+		$shared_link               = ! empty( $settings['shared_link'] ) ?
 			$settings['shared_link'] :
 			'';
+		$can_access_analytics_page = ! empty( $settings['can_access_analytics_page'] ) ?
+			$settings['can_access_analytics_page'] :
+			false;
+
+		if ( $can_access_analytics_page ) {
+			$has_access             = false;
+			$user_roles_have_access = ! empty( $settings['access_to_user_roles'] ) ? $settings['access_to_user_roles'] : [ 'administrator' ];
+
+			foreach ( $current_user->roles as $role ) {
+				if ( in_array( $role, $user_roles_have_access, true ) ) {
+					$has_access = true;
+				}
+			}
+
+			// Show error, if not having access.
+			if ( ! $has_access ) {
+				?>
+				<div class="plausible-analytics-statistics-not-loaded">
+					<?php
+					echo sprintf(
+						'%1$s',
+						esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
+					);
+					return;
+					?>
+				</div>
+				<?php
+			}
+		}
 
 		if ( $is_shared_link && ! empty( $shared_link ) ) {
 			// Append individual page URL if it exists.
