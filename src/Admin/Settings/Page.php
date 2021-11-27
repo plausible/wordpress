@@ -139,6 +139,39 @@ class Page extends API {
 						],
 					],
 				],
+				[
+					'label'  => esc_html__( 'User roles have access to Plausible Analytics page', 'plausible-analytics' ),
+					'slug'   => 'can_user_roles_access_plausible_analytics_page',
+					'type'   => 'group',
+					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
+					'toggle' => true,
+					'fields' => [
+						'administrator' => [
+							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
+							'slug'  => 'access_plausible_analytics_page',
+							'type'  => 'checkbox',
+							'value' => 'administrator',
+						],
+						'editor'        => [
+							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
+							'slug'  => 'access_plausible_analytics_page',
+							'type'  => 'checkbox',
+							'value' => 'editor',
+						],
+						'author'        => [
+							'label' => esc_html__( 'Author', 'plausible-analytics' ),
+							'slug'  => 'access_plausible_analytics_page',
+							'type'  => 'checkbox',
+							'value' => 'author',
+						],
+						'contributor'   => [
+							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
+							'slug'  => 'access_plausible_analytics_page',
+							'type'  => 'checkbox',
+							'value' => 'contributor',
+						],
+					],
+				],
 			],
 			'self-hosted' => [
 				[
@@ -313,7 +346,8 @@ class Page extends API {
 			// Append individual page URL if it exists.
 			if ( $shared_link && isset( $_GET['page-url'] ) ) {
 				$shared_link .= "&page={$_GET[ 'page-url' ]}";
-			} ?>
+			}
+			?>
 			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
