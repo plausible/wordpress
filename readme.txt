@@ -157,6 +157,8 @@ Please make sure you make a backup of your database before updating any version 
 - New setting: Control which user role(s) can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
 - Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
 
+Props @sadmansh and @davidehuey for the contributions.
+
 = 1.2.2 =
 - Resolve conflicts with WP Rocket plugin.
 
