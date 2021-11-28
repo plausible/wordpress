@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 1.2.2
+Stable tag: 1.3.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -153,6 +153,9 @@ Please make sure you make a backup of your database before updating any version 
 - 40-45% reduction in JS code
 - Exclude the roles editor and author [#11](https://github.com/plausible/wordpress/issues/11)
 - Improve settings page to future proof new settings [#26](https://github.com/plausible/wordpress/issues/26)
+- Allow stats within WP for self-hosters too [#36](https://github.com/plausible/wordpress/issues/36)
+- New setting: Control which user role(s) can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
+- Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
 
 = 1.2.2 =
 - Resolve conflicts with WP Rocket plugin.
