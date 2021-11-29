@@ -146,25 +146,19 @@ class Page extends API {
 					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
 					'toggle' => true,
 					'fields' => [
-						'administrator' => [
-							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
-							'slug'  => 'access_to_user_roles',
-							'type'  => 'checkbox',
-							'value' => 'administrator',
-						],
-						'editor'        => [
+						'editor'      => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
 							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'editor',
 						],
-						'author'        => [
+						'author'      => [
 							'label' => esc_html__( 'Author', 'plausible-analytics' ),
 							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'author',
 						],
-						'contributor'   => [
+						'contributor' => [
 							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
 							'slug'  => 'access_to_user_roles',
 							'type'  => 'checkbox',
