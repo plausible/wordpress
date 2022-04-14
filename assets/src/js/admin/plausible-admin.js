@@ -110,7 +110,7 @@
                                     e.querySelector("span").innerText = e.getAttribute("data-saved-error")
                                     setTimeout(function () {
                                         (l.style.display = "none"), e.removeAttribute("disabled"), (e.querySelector("span").innerText = e.getAttribute("data-default-text"));
-                                    }, 2000);
+                                    }, 3000);
                                 }else{
                                     t.success && (e.querySelector("span").innerText = e.getAttribute("data-saved-text")),
                                     setTimeout(function () {

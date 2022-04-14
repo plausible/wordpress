@@ -99,13 +99,11 @@ class Settings {
 	 */
 	public function plausible_analytics_settings_page() {
 		$settings             = Helpers::get_settings();
-		//echo "<pre>";
-		//print_r($settings);
-		//exit("fdfdd");
+		
 		$domain               = ! empty( $settings['domain_name'] ) ? esc_attr($settings['domain_name']) : Helpers::get_domain();
 		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? esc_attr($settings['custom_domain_prefix']) : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? esc_attr($settings['self_hosted_domain']) : 'example.com';
-		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_attr($settings['shared_link']) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_url($settings['shared_link']) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
@@ -191,7 +189,7 @@ class Settings {
 							<label>
 								<?php esc_html_e( 'Shared Link:', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php esc_attr_e($shared_link); ?>" />
+									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo esc_url($shared_link); ?>" />
 								</span>
 							</label>
 						</div>

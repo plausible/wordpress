@@ -150,4 +150,12 @@ class Helpers {
 
 		return $url;
 	}
+
+	public static function get_text_clean($var) {
+		if ( is_array( $var ) ) {
+			return array_map( 'get_text_clean', $var );
+		} else {
+			return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+		}
+	}
 }
