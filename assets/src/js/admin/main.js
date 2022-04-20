@@ -72,6 +72,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			return false;
 		} ).then( response => {
+			if ( response.error ) {
+				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-saved-error' );
+			}
+
 			if ( response.success ) {
 				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-saved-text' );
 			}
