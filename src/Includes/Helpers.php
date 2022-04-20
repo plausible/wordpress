@@ -156,6 +156,9 @@ class Helpers {
 	 *
 	 * @param string|array $var Pass the string to sanitize.
 	 *
+	 * @since  1.2.3
+	 * @access public
+	 *
 	 * @return string|array
 	 */
 	public static function clean( $var ) {
