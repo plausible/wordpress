@@ -151,11 +151,18 @@ class Helpers {
 		return $url;
 	}
 
-	public static function get_text_clean($var) {
+	/**
+	 * Sanitize the fields using this clean function.
+	 *
+	 * @param string|array $var Pass the string to sanitize.
+	 *
+	 * @return string|array
+	 */
+	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
-			return array_map( 'get_text_clean', $var );
+			return array_map( [ static::class, 'clean' ], $var );
 		} else {
-			return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+			return is_scalar( $var ) ? sanitize_text_field( trim( $var ) ) : $var;
 		}
 	}
 }
