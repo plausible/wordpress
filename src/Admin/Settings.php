@@ -99,11 +99,11 @@ class Settings {
 	 */
 	public function plausible_analytics_settings_page() {
 		$settings             = Helpers::get_settings();
-		
-		$domain               = ! empty( $settings['domain_name'] ) ? esc_attr($settings['domain_name']) : Helpers::get_domain();
-		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? esc_attr($settings['custom_domain_prefix']) : 'analytics';
-		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? esc_attr($settings['self_hosted_domain']) : 'example.com';
-		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_url($settings['shared_link']) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+
+		$domain               = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
+		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? esc_attr( $settings['custom_domain_prefix'] ) : 'analytics';
+		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : 'example.com';
+		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
@@ -129,7 +129,7 @@ class Settings {
 							<label for="domain-connected">
 								<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php esc_attr_e($domain); ?>"/>
+									<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<div>
@@ -155,7 +155,7 @@ class Settings {
 							<label for="custom-domain">
 								<?php esc_html_e( 'Custom Domain', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php esc_attr_e($custom_domain_prefix); ?>"/>
+									<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php esc_attr_e($custom_domain_prefix,'plausible-analytics' ); ?>"/>
 									<?php echo esc_html(".{$domain}"); ?>
 								</span>
 							</label>
@@ -169,9 +169,9 @@ class Settings {
 								esc_url( 'https://docs.plausible.io/custom-domain/' ),
 								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 								esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-								__( 'For example,', 'plausible-analytics' ),
+								esc_html__( 'For example,', 'plausible-analytics' ),
 								"<code>stats.$domain</code>",
-								__( 'or', 'plausible-analytics' ),
+								esc_html__( 'or', 'plausible-analytics' ),
 								"<code>analytics.$domain</code>"
 							);
 
@@ -227,7 +227,7 @@ class Settings {
 							<label for="self-hosted-analytics">
 								<?php esc_html_e( 'Self-hosted Plausible?', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php esc_attr_e($self_hosted_domain); ?>"/>
+									<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
