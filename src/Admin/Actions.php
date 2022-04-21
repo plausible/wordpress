@@ -46,7 +46,12 @@ class Actions {
 	}
 
 	public function save_admin_settings() {
-		$post_data = $_POST;
+		// Sanitize all the post data before using.
+		$post_data = Helpers::clean( $_POST );
+
+		$post_data['domain_name']        = htmlspecialchars( $_POST['domain_name'] );
+		$post_data['self_hosted_domain'] = htmlspecialchars( $_POST['self_hosted_domain'] );
+		$post_data['shared_link']        = esc_url_raw( $_POST['shared_link'] );
 
 		// Security: Roadblock to check for unauthorized access.
 		check_admin_referer( 'plausible-analytics-settings-roadblock', 'roadblock' );
@@ -55,13 +60,25 @@ class Actions {
 		unset( $post_data['action'] );
 		unset( $post_data['roadblock'] );
 
-		// Save Settings.
-		update_option( 'plausible_analytics_settings', $post_data );
+		if (
+			! empty( $post_data['domain_name'] ) &&
+			! empty( $post_data['custom_domain_prefix'] ) &&
+			! empty( $post_data['self_hosted_domain'] ) &&
+			! empty( $post_data['shared_link'] )
+		) {
+			$status = 'success';
+			update_option( 'plausible_analytics_settings', $post_data );
+			$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
+		} else {
+			$status = 'error';
+			$message = esc_html__( 'Something gone a wrong.', 'plausible-analytics' );
+		}
 
 		// Send response.
 		wp_send_json_success(
 			[
-				'message' => esc_html__( 'Settings saved successfully.', 'plausible-analytics' ),
+				'message' => $message,
+				'status' => $status
 			]
 		);
 	}

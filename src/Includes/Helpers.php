@@ -150,4 +150,22 @@ class Helpers {
 
 		return $url;
 	}
+
+	/**
+	 * Sanitize the fields using this clean function.
+	 *
+	 * @param string|array $var Pass the string to sanitize.
+	 *
+	 * @since  1.2.3
+	 * @access public
+	 *
+	 * @return string|array
+	 */
+	public static function clean( $var ) {
+		if ( is_array( $var ) ) {
+			return array_map( [ static::class, 'clean' ], $var );
+		} else {
+			return is_scalar( $var ) ? sanitize_text_field( trim( $var ) ) : $var;
+		}
+	}
 }
