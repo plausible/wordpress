@@ -150,7 +150,7 @@ Please make sure you make a backup of your database before updating any version 
 == Changelog ==
 
 = 1.2.3 = 
-- Security Improvements
+- Security Improvements. Thanks for additional help with your PR - Props to [Ankur Modi](https://github.com/ankur0812)
 
 = 1.2.2 =
 - Resolve conflicts with WP Rocket plugin.
