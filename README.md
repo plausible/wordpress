@@ -42,7 +42,7 @@ To get started developing on the Plausible Analytics WordPress Plugin you will n
 
 3. Clone this repository from GitHub into your plugins directory: `https://github.com/plausible/wordpress.git`
 
-4. Run composer to set up dependancies: `composer install`
+4. Run composer to set up dependencies: `composer install`
 
 5. Run npm install to get the necessary npm packages: `npm install`
 
