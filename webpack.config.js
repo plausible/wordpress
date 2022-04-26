@@ -2,7 +2,7 @@ const path = require( 'path' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const wpPot = require( 'wp-pot' );
 
@@ -19,7 +19,7 @@ const config = {
 		path: path.join( __dirname, './assets/dist/' ),
 		filename: 'js/[name].js',
 	},
-	devtool: ! inProduction ? 'source-map' : '',
+	devtool: ! inProduction ? 'source-map' : false,
 	module: {
 		rules: [
 
@@ -53,8 +53,10 @@ const config = {
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true,
-							outputStyle: ( inProduction ? 'compressed' : 'nested' ),
+							sassOptions: {
+								sourceMap: true,
+								outputStyle: ( inProduction ? 'compressed' : 'nested' ),
+							},
 						},
 					} ],
 			},
@@ -79,13 +81,13 @@ const config = {
 	plugins: [
 
 		// Removes the "dist" folder before building.
-		new CleanWebpackPlugin( [ 'assets/dist' ] ),
+		new CleanWebpackPlugin(),
 
 		new MiniCSSExtractPlugin( {
 			filename: 'css/[name].css',
 		} ),
 
-		new CopyWebpackPlugin( [ { from: 'assets/src/images', to: 'images' } ] ),
+		new CopyWebpackPlugin( { patterns: [ { from: 'assets/src/images', to: 'images' } ] } ),
 
 	],
 };
@@ -93,7 +95,7 @@ const config = {
 if ( inProduction ) {
 	// Create RTL css.
 	config.plugins.push( new WebpackRTLPlugin( {
-		suffix: '-rtl',
+		filename: 'css/[name]-rtl.css',
 		minify: true,
 	} ) );
 
