@@ -281,7 +281,7 @@ class Settings {
 		$domain              = Helpers::get_domain();
 		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : 'false';
 		$shared_link         = ! empty( $settings['shared_link'] ) ?
-			$settings['shared_link'] :
+			esc_url( $settings['shared_link'] ) :
 			'';
 
 		// Display admin header.
