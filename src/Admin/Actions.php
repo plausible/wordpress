@@ -8,7 +8,7 @@
  * @subpackage Plausible Analytics
  */
 
- namespace Plausible\Analytics\WP\Admin;
+namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
@@ -45,6 +45,13 @@ class Actions {
 		\wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', PLAUSIBLE_ANALYTICS_VERSION, true );
 	}
 
+	/**
+	 * Save Admin Settings
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
 	public function save_admin_settings() {
 		// Sanitize all the post data before using.
 		$post_data = Helpers::clean( $_POST );

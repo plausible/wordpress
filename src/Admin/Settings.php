@@ -70,17 +70,17 @@ class Settings {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
+				<img src="<?php echo esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png' ); ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
 					<h1><?php echo $name; ?></h1>
 				</div>
 				<div class="plausible-analytics-actions">
-					<a class="plausible-analytics-btn" href="https://github.com/plausible/wordpress/issues/new" target="_blank">
+					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>" target="_blank">
 						<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
 					</a>
-					<a class="plausible-analytics-btn" href="https://docs.plausible.io" target="_blank">
+					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://docs.plausible.io' ); ?>" target="_blank">
 						<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
 					</a>
 				</div>
@@ -280,16 +280,14 @@ class Settings {
 		$settings            = Helpers::get_settings();
 		$domain              = Helpers::get_domain();
 		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : 'false';
-		$shared_link         = ! empty( $settings['shared_link'] ) ?
-			esc_url( $settings['shared_link'] ) :
-			'';
+		$shared_link         = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 
 		// Display admin header.
 		echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
 
 		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
-			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
+			<iframe plausible-embed="" src="<?php echo esc_url( $shared_link ) . '&embed=true&theme=light&background=transparent'; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {

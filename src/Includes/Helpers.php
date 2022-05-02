@@ -66,7 +66,7 @@ class Helpers {
 			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
 		}
 
-		return $url;
+		return esc_url( $url );
 	}
 
 	/**
@@ -81,7 +81,7 @@ class Helpers {
 		$settings = self::get_settings();
 		$domain   = $settings['domain_name'];
 
-		return "https://plausible.io/{$domain}";
+		return esc_url( "https://plausible.io/{$domain}" );
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Helpers {
 			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
 		}
 
-		return $url;
+		return esc_url( $url );
 	}
 
 	/**
