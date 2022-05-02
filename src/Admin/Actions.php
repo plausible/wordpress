@@ -49,8 +49,8 @@ class Actions {
 		// Sanitize all the post data before using.
 		$post_data = Helpers::clean( $_POST );
 
-		$post_data['domain_name']        = htmlspecialchars( $_POST['domain_name'] );
-		$post_data['self_hosted_domain'] = htmlspecialchars( $_POST['self_hosted_domain'] );
+		$post_data['domain_name']        = esc_html( $_POST['domain_name'] );
+		$post_data['self_hosted_domain'] = esc_html( $_POST['self_hosted_domain'] );
 		$post_data['shared_link']        = esc_url_raw( $_POST['shared_link'] );
 
 		// Security: Roadblock to check for unauthorized access.

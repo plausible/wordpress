@@ -1,9 +1,9 @@
 === Plausible Analytics ===
-Contributors: plausible, mehul0810
+Contributors: plausible, mehul0810, ankur0812
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
-Tested up to: 5.7
+Tested up to: 5.9
 Requires PHP: 5.6
 Stable tag: 1.2.3
 License: Massachusetts Institute of Technology (MIT) license
