@@ -15,11 +15,11 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:74
+#: src/Admin/Actions.php:81
 msgid "Something gone a wrong."
 msgstr ""
 
-#: src/Admin/Actions.php:71
+#: src/Admin/Actions.php:78
 msgid "Settings saved successfully."
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:288
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:286
 msgid "Analytics"
 msgstr ""
 
