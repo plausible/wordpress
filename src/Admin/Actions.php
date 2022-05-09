@@ -57,32 +57,39 @@ class Actions {
 		$post_data = Helpers::clean( $_POST );
 
 		// Security: Roadblock to check for unauthorized access.
-		check_admin_referer( 'plausible-analytics-settings-roadblock', 'roadblock' );
-
-		// Unset unnecessary posted data to store into database.
-		unset( $post_data['action'] );
-		unset( $post_data['roadblock'] );
-
 		if (
-			! empty( $post_data['domain_name'] ) &&
-			! empty( $post_data['custom_domain_prefix'] ) &&
-			! empty( $post_data['self_hosted_domain'] ) &&
-			! empty( $post_data['shared_link'] )
+			'plausible_analytics_save_admin_settings' === $post_data['action'] ||
+			current_user_can( 'administrator' ) ||
+			(
+				! empty( $post_data['roadblock'] ) &&
+				wp_verify_nonce( $post_data['roadblock'], 'plausible_analytics_save_admin_settings' )
+			)
 		) {
-			$status = 'success';
-			update_option( 'plausible_analytics_settings', $post_data );
-			$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
-		} else {
-			$status = 'error';
-			$message = esc_html__( 'Something gone a wrong.', 'plausible-analytics' );
-		}
+			// Unset unnecessary posted data to store into database.
+			unset( $post_data['action'] );
+			unset( $post_data['roadblock'] );
 
-		// Send response.
-		wp_send_json_success(
-			[
-				'message' => $message,
-				'status' => $status
-			]
-		);
+			if (
+				! empty( $post_data['domain_name'] ) &&
+				! empty( $post_data['custom_domain_prefix'] ) &&
+				! empty( $post_data['self_hosted_domain'] ) &&
+				! empty( $post_data['shared_link'] )
+			) {
+				$status = 'success';
+				update_option( 'plausible_analytics_settings', $post_data );
+				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
+			} else {
+				$status = 'error';
+				$message = esc_html__( 'Something gone a wrong.', 'plausible-analytics' );
+			}
+
+			// Send response.
+			wp_send_json_success(
+				[
+					'message' => $message,
+					'status' => $status
+				]
+			);
+		}
 	}
 }
