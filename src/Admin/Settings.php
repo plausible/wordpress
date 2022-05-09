@@ -74,7 +74,7 @@ class Settings {
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
-					<h1><?php echo $name; ?></h1>
+					<h1><?php echo esc_html( $name ); ?></h1>
 				</div>
 				<div class="plausible-analytics-actions">
 					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>" target="_blank">
