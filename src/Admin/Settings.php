@@ -74,7 +74,7 @@ class Settings {
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
-					<h1><?php echo $name; ?></h1>
+					<h1><?php echo esc_html( $name ); ?></h1>
 				</div>
 				<div class="plausible-analytics-actions">
 					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>" target="_blank">
@@ -189,7 +189,7 @@ class Settings {
 							<label>
 								<?php esc_html_e( 'Shared Link:', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo esc_url($shared_link); ?>" />
+									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo esc_url( $shared_link ); ?>" />
 								</span>
 							</label>
 						</div>
@@ -297,11 +297,11 @@ class Settings {
 				echo sprintf(
 					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
 					esc_html( 'Please', 'plausible-analytics' ),
-					esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
+					esc_url( "https://plausible.io/{$domain}/settings/visibility" ),
 					esc_html( 'click here', 'plausible-analytics' ),
 					esc_html( 'to generate your shared link from your Plausible Analytics dashboard.', 'plausible-analytics' ),
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					admin_url( 'options-general.php?page=plausible-analytics' ),
+					esc_url( admin_url( 'options-general.php?page=plausible-analytics' ) ),
 					esc_html( 'paste here', 'plausible-analytics' ),
 					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
