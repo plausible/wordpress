@@ -15,11 +15,11 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:81
+#: src/Admin/Actions.php:83
 msgid "Something gone a wrong."
 msgstr ""
 
-#: src/Admin/Actions.php:78
+#: src/Admin/Actions.php:80
 msgid "Settings saved successfully."
 msgstr ""
 
