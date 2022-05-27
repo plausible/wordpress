@@ -99,7 +99,7 @@ class Helpers {
 		$individual_settings = ! empty( $settings[ $name ] ) ? esc_html( $settings[ $name ] ) : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php esc_attr( $name ); ?>]" value="1" type="checkbox" />
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]" value="1" type="checkbox" />
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php

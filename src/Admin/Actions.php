@@ -58,11 +58,11 @@ class Actions {
 
 		// Security: Roadblock to check for unauthorized access.
 		if (
-			'plausible_analytics_save_admin_settings' === $post_data['action'] ||
-			current_user_can( 'administrator' ) ||
+			'plausible_analytics_save_admin_settings' === $post_data['action'] &&
+			current_user_can( 'administrator' ) &&
 			(
 				! empty( $post_data['roadblock'] ) &&
-				wp_verify_nonce( $post_data['roadblock'], 'plausible_analytics_save_admin_settings' )
+				wp_verify_nonce( $post_data['roadblock'], 'plausible-analytics-settings-roadblock' )
 			)
 		) {
 			// Unset unnecessary posted data to store into database.
