@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Define plugin version in SemVer format.
 if ( ! defined( 'PLAUSIBLE_ANALYTICS_VERSION' ) ) {
-	define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.2.3' );
+	define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.2.4' );
 }
 
 // Define plugin root File.
