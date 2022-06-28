@@ -11,7 +11,7 @@
 
 	&--bounce-2 {
 		@include bounce-loading-effect;
-		-webkit-animation-delay: -1s;
+
 		animation-delay: -1s;
 	}
 }

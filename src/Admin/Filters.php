@@ -8,9 +8,9 @@
  * @subpackage Plausible Analytics
  */
 
- namespace Plausible\Analytics\WP\Admin;
+namespace Plausible\Analytics\WP\Admin;
 
- // Bailout, if accessed directly.
+// Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -32,13 +32,11 @@ class Filters {
 	/**
 	 * Add rating links to the admin dashboard.
 	 *
-	 * @param string $footerText The existing footer text.
-	 *
-	 * @since 1.0.0
+	 * @param string $footer_text The existing footer text.
 	 *
 	 * @return string
 	 */
-	public function add_admin_footer_text( $footerText ) {
+	public function add_admin_footer_text( $footer_text ) {
 		$current_screen = get_current_screen();
 
 		if ( true === stristr( $current_screen->base, 'plausible-analytics' ) ) {
@@ -49,7 +47,7 @@ class Filters {
 			);
 		}
 
-		return $footerText;
+		return $footer_text;
 	}
 
 	/**
