@@ -392,7 +392,7 @@ class Page extends API {
 					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
 				?>
-			</p>
+			</div>
 			<?php
 		}
 	}

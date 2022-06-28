@@ -30,16 +30,6 @@ class API {
 	public $fields = [];
 
 	/**
-	 * Constructor.
-	 *
-	 * @since  1.3.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function __construct() {}
-
-	/**
 	 * Render Fields.
 	 *
 	 * @since  1.3.0

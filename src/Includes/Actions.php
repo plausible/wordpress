@@ -66,12 +66,12 @@ class Actions {
 	/**
 	 * Create admin bar nodes.
 	 *
-	 * @since  1.3.0
-	 * @access public
+	 * @param \WP_Admin_Bar $admin_bar Admin bar object.
 	 *
 	 * @return void
+	 * @since  1.3.0
+	 * @access public
 	 */
-
 	public function admin_bar_node( $admin_bar ) {
 		// Add main admin bar node.
 		$args = [
