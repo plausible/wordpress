@@ -1,11 +1,12 @@
 document.addEventListener( 'DOMContentLoaded', () => {
-	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
 
 	// Bailout, if `formElement` doesn't exist.
 	if ( null === formElement ) {
 		return;
 	}
+
+	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 
 	saveSettings.addEventListener( 'click', ( e ) => {
 		e.preventDefault();

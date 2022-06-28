@@ -54,11 +54,9 @@ const config = {
 						loader: 'sass-loader',
 						options: {
 							sourceMap: true,
-							sassOptions: {
-								outputStyle: ( inProduction ? 'compressed' : 'nested' ),
-							},
 						},
-					} ],
+					},
+				],
 			},
 
 			// Image files.
