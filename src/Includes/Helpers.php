@@ -27,9 +27,8 @@ class Helpers {
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
-		$domain   = preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 
-		return $domain;
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 	}
 
 	/**
@@ -47,7 +46,7 @@ class Helpers {
 		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
 		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
 
-		// Triggered when self hosted analytics is enabled.
+		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
 			'true' === $settings['is_self_hosted_analytics']
@@ -182,7 +181,7 @@ class Helpers {
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public static function render_quick_actions() {
 		ob_start();
@@ -230,9 +229,9 @@ class Helpers {
 	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
 			return array_map( [ __CLASS__, __METHOD__ ], $var );
-		} else {
-			return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
 		}
+
+		return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
 	}
 
 	/**
@@ -247,8 +246,7 @@ class Helpers {
 		global $current_user;
 
 		$user_roles = $current_user->roles;
-		$user_role  = array_shift( $user_roles );
 
-		return $user_role;
+		return array_shift( $user_roles );
 	}
 }

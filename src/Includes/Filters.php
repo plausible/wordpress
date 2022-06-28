@@ -37,7 +37,7 @@ class Filters {
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function add_plausible_attributes( $tag, $handle ) {
 		// Bailout, if not `Plausible Analytics` script.
