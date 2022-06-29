@@ -2,7 +2,7 @@
 /**
  * Plausible Analytics | Filters.
  *
- * @since 1.0.0
+ * @since      1.0.0
  *
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -45,9 +45,17 @@ class Filters {
 			return $tag;
 		}
 
-		$settings    = Helpers::get_settings();
-		$api_url     = Helpers::get_data_api_url();
-		$domain_name = $settings['domain_name'];
+		$settings       = Helpers::get_settings();
+		$api_url        = Helpers::get_data_api_url();
+		$domain_name    = $settings['domain_name'];
+		$id_replacement = '';
+
+		// If we're loading the compat script, we need the correct id attribute. If not, we can just remove it.
+		if ( isset( $settings['compat'] ) && $settings['compat'][0] === '1' ) {
+			$id_replacement = " id='plausible'";
+		}
+
+		$tag = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
 
 		return str_replace( ' src', " async defer data-domain='{$domain_name}' data-api='{$api_url}' src", $tag );
 	}

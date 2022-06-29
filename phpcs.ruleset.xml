@@ -18,6 +18,7 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
+		<exclude name="WordPress.PHP.YodaConditions" />
 	</rule>
 
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax.Found">
