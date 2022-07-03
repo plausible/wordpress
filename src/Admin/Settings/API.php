@@ -39,6 +39,7 @@ class API {
 	 */
 	public function settings_page() {
 		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'general';
+		echo "<pre>";print_r(Helpers::get_settings()); echo "</pre>";
 		?>
 		<div class="wrap plausible-analytics-wrap">
 			<div class="plausible-analytics-content">
@@ -53,8 +54,8 @@ class API {
 					<button
 						id="plausible-analytics-save-btn"
 						class="plausible-analytics-btn plausible-analytics-save-btn"
-						data-default-text="<?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?>"
-						data-saved-text="<?php esc_html_e( 'Saved!', 'plausible-analytics' ); ?>"
+						data-default-text="<?php esc_attr_e( 'Save Changes', 'plausible-analytics' ); ?>"
+						data-saved-text="<?php esc_attr_e( 'Saved!', 'plausible-analytics' ); ?>"
 					>
 						<span><?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?></span>
 						<span class="plausible-analytics-spinner">
@@ -110,15 +111,15 @@ class API {
 		<div class="plausible-analytics-admin-field">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
-					<?php echo esc_attr( $group['label'] ); ?>
+					<?php esc_html_e( $group['label'] ); ?>
 				</label>
 				<?php if ( $toggle ) { ?>
 				<label class="plausible-analytics-switch">
-					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
+					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php esc_attr_e( $group['slug'] ); ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
 				</label>
 				<?php } else { ?>
-					<a target="_blank" class="plausible-analytics-link" href="https://plausible.io/<?php echo $domain_name; ?>">
+					<a target="_blank" class="plausible-analytics-link" href="<?php echo esc_url( "https://plausible.io/{$domain_name}" ); ?>">
 						<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
 					</a>
 				<?php } ?>
@@ -133,7 +134,7 @@ class API {
 				?>
 			</div>
 			<div class="plausible-analytics-description">
-				<?php echo $group['desc']; // Already escaped earlier. ?>
+				<?php echo wp_kses_post( $group['desc'] ); ?>
 			</div>
 		</div>
 		<?php
@@ -156,8 +157,8 @@ class API {
 		<span class="plausible-checkbox-list">
 			<input
 				type="checkbox"
-				name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]"
-				value="<?php echo $value; ?>"
+				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
+				value="<?php echo esc_html( $value ); ?>"
 				<?php
 				! empty( $settings[ $field['slug'] ] ) ?
 					checked( in_array( $value, $settings[ $field['slug'] ], true ), true ) :
