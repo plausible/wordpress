@@ -10,3 +10,4 @@ wp-textdomain.js export-ignore
 README.md export-ignore
 tests export-ignore
 node_modules export-ignore
+plausible-analytics.zip export-ignore
