@@ -39,7 +39,6 @@ class API {
 	 */
 	public function settings_page() {
 		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'general';
-		echo "<pre>";print_r(Helpers::get_settings()); echo "</pre>";
 		?>
 		<div class="wrap plausible-analytics-wrap">
 			<div class="plausible-analytics-content">
@@ -111,11 +110,11 @@ class API {
 		<div class="plausible-analytics-admin-field">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
-					<?php esc_html_e( $group['label'] ); ?>
+					<?php esc_html_e( $group['label'], 'plausible-analytics' ); ?>
 				</label>
 				<?php if ( $toggle ) { ?>
 				<label class="plausible-analytics-switch">
-					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php esc_attr_e( $group['slug'] ); ?>]" value="1" type="checkbox">
+					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php esc_attr_e( $group['slug'], 'plausible-analytics' ); ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
 				</label>
 				<?php } else { ?>
