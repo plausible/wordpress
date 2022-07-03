@@ -53,8 +53,8 @@ class API {
 					<button
 						id="plausible-analytics-save-btn"
 						class="plausible-analytics-btn plausible-analytics-save-btn"
-						data-default-text="<?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?>"
-						data-saved-text="<?php esc_html_e( 'Saved!', 'plausible-analytics' ); ?>"
+						data-default-text="<?php esc_attr_e( 'Save Changes', 'plausible-analytics' ); ?>"
+						data-saved-text="<?php esc_attr_e( 'Saved!', 'plausible-analytics' ); ?>"
 					>
 						<span><?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?></span>
 						<span class="plausible-analytics-spinner">
@@ -109,7 +109,7 @@ class API {
 		<div class="plausible-analytics-admin-field">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
-					<?php echo esc_attr( $group['label'] ); ?>
+					<?php echo $group['label']; ?>
 				</label>
 				<?php if ( $toggle === true ) { ?>
 				<label class="plausible-analytics-switch">
@@ -132,7 +132,7 @@ class API {
 				?>
 			</div>
 			<div class="plausible-analytics-description">
-				<?php echo $group['desc']; // Already escaped earlier. ?>
+				<?php echo wp_kses_post( $group['desc'] ); ?>
 			</div>
 		</div>
 		<?php
@@ -156,8 +156,8 @@ class API {
 			<input
 				id="<?php echo $field['slug']; ?>"
 				type="checkbox"
-				name="plausible_analytics_settings[<?php echo $field['slug']; ?>][]"
-				value="<?php echo $value; ?>"
+				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
+				value="<?php echo esc_html( $value ); ?>"
 				<?php
 				! empty( $settings[ $field['slug'] ] ) ?
 					checked( in_array( $value, $settings[ $field['slug'] ], true ), true ) :

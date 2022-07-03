@@ -70,9 +70,9 @@ class Page extends API {
 						esc_url( 'https://docs.plausible.io/custom-domain/' ),
 						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 						esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-						__( 'For example,', 'plausible-analytics' ),
+						esc_html__( 'For example,', 'plausible-analytics' ),
 						"<code>stats.$domain</code>",
-						__( 'or', 'plausible-analytics' ),
+						esc_html__( 'or', 'plausible-analytics' ),
 						"<code>analytics.$domain</code>"
 					),
 					'toggle' => true,
