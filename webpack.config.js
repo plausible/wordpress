@@ -2,7 +2,7 @@ const path = require( 'path' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const wpPot = require( 'wp-pot' );
 
@@ -54,9 +54,9 @@ const config = {
 						loader: 'sass-loader',
 						options: {
 							sourceMap: true,
-							outputStyle: ( inProduction ? 'compressed' : 'nested' ),
 						},
-					} ],
+					},
+				],
 			},
 
 			// Image files.
@@ -79,7 +79,7 @@ const config = {
 	plugins: [
 
 		// Removes the "dist" folder before building.
-		new CleanWebpackPlugin( [ 'assets/dist' ] ),
+		new CleanWebpackPlugin(),
 
 		new MiniCSSExtractPlugin( {
 			filename: 'css/[name].css',

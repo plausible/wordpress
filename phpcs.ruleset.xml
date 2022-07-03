@@ -9,11 +9,8 @@
 	<!-- Default tab width for indentation fixes and such. -->
 	<arg name="tab-width" value="4"/>
 
-	<!-- Exclude directories we don't want checked. -->
-	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>languages/*</exclude-pattern>
-	<exclude-pattern>assets/*</exclude-pattern>
+	<file>./plausible-analytics.php</file>
+	<file>./src/</file>
 
 	<!-- Bring in WP rules. -->
 	<rule ref="WordPress-Core">

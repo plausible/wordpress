@@ -92,7 +92,7 @@ class Actions {
 		// Add link to individual page stats.
 		if ( ! is_admin() ) {
 			global $post;
-			$args[]    = [
+			$args[] = [
 				'id'     => 'view-page-analytics',
 				'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
 				'href'   => add_query_arg( 'page-url', is_home() ? '' : trailingslashit( urlencode( '/' . $post->post_name ) ), admin_url( 'index.php?page=plausible_analytics_statistics' ) ),
