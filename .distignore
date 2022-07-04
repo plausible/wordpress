@@ -40,6 +40,7 @@ package.json
 package-lock.json
 phpunit.xml
 phpunit.xml.dist
+plausible-analytics.zip
 CHANGELOG.md
 README.md
 readme.md
