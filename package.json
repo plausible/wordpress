@@ -15,7 +15,8 @@
         "lint:php": "./vendor/bin/phpcs --colors --standard=phpcs.ruleset.xml",
         "lint:php:fix": "./vendor/bin/phpcbf --colors --standard=phpcs.ruleset.xml",
         "lint:textdomain": "node ./wp-textdomain.js",
-        "lint:scss": "stylelint assets/src/**/*.scss"
+        "lint:scss": "stylelint assets/src/**/*.scss",
+        "artifact": "mkdir release && mkdir release/plausible-analytics && rsync -rc --exclude-from=\"./.distignore\" \"./\" release/plausible-analytics/ --delete --delete-excluded && cd release && zip -r ../plausible-analytics.zip * && cd .. && rm -rf release"
     },
     "repository": {
         "type": "git",

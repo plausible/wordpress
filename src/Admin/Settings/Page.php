@@ -32,6 +32,7 @@ class Page extends API {
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
 		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
 
 		$this->fields = [
@@ -152,6 +153,26 @@ class Page extends API {
 							'slug'  => 'shared_link',
 							'type'  => 'text',
 							'value' => $shared_link,
+						],
+					],
+				],
+				[
+					'label'  => esc_html__( 'Exclude specific pages from being tracked', 'plausible-analytics' ),
+					'slug'   => 'is_exclude_pages',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+						esc_html__( 'Exclude certain pages from being tracked', 'plausible-analytics' ),
+						esc_url( 'https://plausible.io/docs/excluding-pages#2-add-the-pages-youd-like-to-exclude-from-being-tracked' ),
+						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
+					),
+					'toggle' => true,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Excluded pages', 'plausible-analytics' ),
+							'slug'  => 'excluded_pages',
+							'type'  => 'text',
+							'value' => $excluded_pages,
 						],
 					],
 				],
