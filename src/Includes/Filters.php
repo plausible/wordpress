@@ -45,10 +45,18 @@ class Filters {
 			return $tag;
 		}
 
-		$settings    = Helpers::get_settings();
-		$api_url     = Helpers::get_data_api_url();
-		$domain_name = $settings['domain_name'];
+		$settings       = Helpers::get_settings();
+		$api_url        = Helpers::get_data_api_url();
+		$domain_name    = $settings['domain_name'];
 
-		return str_replace( ' src', " async defer data-domain='{$domain_name}' data-api='{$api_url}' src", $tag );
+		$params = "async defer data-domain='{$domain_name}' data-api='{$api_url}'";
+
+		// Triggered when exclude pages is enabled.
+		if ( ! empty( $settings['is_exclude_pages'] ) && $settings['is_exclude_pages'] ) {
+			$excluded_pages = $settings['excluded_pages'];
+			$params .= " data-exclude='{$excluded_pages}'";
+		}
+
+		return str_replace( ' src', " {$params} src", $tag );
 	}
 }
