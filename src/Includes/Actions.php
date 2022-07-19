@@ -61,6 +61,11 @@ class Actions {
 		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
 		}
+
+		// Track search results.
+		if ( apply_filters( 'plausible_analytics_track_search', true ) && is_search() ) {
+			wp_add_inline_script( 'plausible-analytics', 'plausible("pageview", { u: "' . esc_attr( get_search_link() ) . '" })' );
+		}
 	}
 
 	/**

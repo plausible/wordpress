@@ -51,6 +51,11 @@ class Helpers {
 			}
 		}
 
+		if ( is_search() ) {
+			// Add the manual scripts as we need it to track the search parameter.
+			$file_name .= '.manual';
+		}
+
 		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
