@@ -2,7 +2,7 @@
 /**
  * Plausible Analytics | Upgrades
  *
- * @since 1.3.0
+ * @since      1.3.0
  *
  * @package    WordPress
  * @subpackage Plausible Analytics

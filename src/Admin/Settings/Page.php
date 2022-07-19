@@ -2,7 +2,7 @@
 /**
  * Plausible Analytics | Settings API.
  *
- * @since 1.3.0
+ * @since      1.3.0
  *
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -32,7 +32,7 @@ class Page extends API {
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
-		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : "/imprint, /privacy-policy";
+		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
 		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
 
 		$this->fields = [
@@ -48,7 +48,10 @@ class Page extends API {
 						esc_html__( 'Follow these instructions', 'plausible-analytics' ),
 						esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
 					),
-					'toggle' => false,
+					'toggle' => [
+						'anchor' => 'https://plausible.io/' . $domain,
+						'label'  => esc_html__( 'Open Analytics', 'plausible-analytics' ),
+					],
 					'fields' => [
 						[
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
@@ -80,6 +83,52 @@ class Page extends API {
 							'slug'  => 'custom_domain',
 							'type'  => 'text',
 							'value' => $custom_domain,
+						],
+					],
+				],
+				[
+					'label'  => esc_html__( 'Enhanced measurements', 'plausible-analytics' ),
+					'slug'   => 'enhanced_measurements',
+					'type'   => 'group',
+					// translators: %1$s replaced with <code>outbound-links</code>.
+					'desc'   => '<strong>' . esc_html__( 'Note:', 'plausible-analytics' ) . '</strong> ' . esc_html__( 'for each of these extensions, you have to set the goals manually!', 'plausible-analytics' ) . '<br><br>'
+								. sprintf( esc_html__( 'By default, we load just the %1$s extension, you can enable other extensions here.', 'plausible-analytics' ), '<a href="https://plausible.io/docs/outbound-link-click-tracking"></a><code>outbound-links</code></a>' ),
+					'toggle' => [
+						'anchor' => 'https://plausible.io/docs/script-extensions',
+						'label'  => __( 'Documentation', 'plausible-analytics' ),
+					],
+					'fields' => [
+						'outbound-links' => [
+							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/outbound-link-click-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
+							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
+							'slug'       => 'file-downloads',
+							'type'       => 'checkbox',
+							'value'      => '1',
+						],
+						'file-downloads' => [
+							'label'      => esc_html__( 'File downloads', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/file-downloads-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
+							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
+							'slug'       => 'file-downloads',
+							'type'       => 'checkbox',
+							'value'      => '1',
+						],
+						'hash'           => [
+							'label'      => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/hash-based-routing',
+							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+							'slug'       => 'hash',
+							'type'       => 'checkbox',
+							'value'      => '1',
+						],
+						'compat'         => [
+							'label'      => esc_html__( 'IE compatibility', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/script-extensions#scriptcompatjs',
+							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+							'slug'       => 'compat',
+							'type'       => 'checkbox',
+							'value'      => '1',
 						],
 					],
 				],
@@ -250,7 +299,7 @@ class Page extends API {
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return void|mixed
+	 * @return void
 	 */
 	public function render_page_header() {
 		$screen = get_current_screen();
@@ -271,7 +320,7 @@ class Page extends API {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
+				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
@@ -381,6 +430,7 @@ class Page extends API {
 						'%1$s',
 						esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
 					);
+
 					return;
 					?>
 				</div>
@@ -394,7 +444,9 @@ class Page extends API {
 				$shared_link .= "&page={$_GET[ 'page-url' ]}";
 			}
 			?>
-			<iframe plausible-embed="" src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
+			<iframe plausible-embed=""
+					src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no"
+					frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {

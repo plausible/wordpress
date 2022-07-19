@@ -72,7 +72,7 @@ class Actions {
 
 			// Update all the options to plausible settings.
 			update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
-			
+
 			// Send response.
 			wp_send_json_success(
 				[

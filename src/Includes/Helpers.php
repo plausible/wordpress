@@ -2,7 +2,7 @@
 /**
  * Plausible Analytics | Helpers
  *
- * @since 1.0.0
+ * @since      1.0.0
  *
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -40,11 +40,16 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$settings         = self::get_settings();
-		$domain           = $settings['domain_name'];
-		$default_domain   = 'plausible.io';
-		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
-		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
+		$settings       = self::get_settings();
+		$domain         = $settings['domain_name'];
+		$default_domain = 'plausible.io';
+		$file_name      = 'plausible';
+
+		foreach ( [ 'outbound-links', 'file-downloads', 'compat', 'hash' ] as $extension ) {
+			if ( ! empty( $settings[ $extension ] ) && $settings[ $extension ][0] === '1' ) {
+				$file_name .= '.' . $extension;
+			}
+		}
 
 		// Triggered when self-hosted analytics is enabled.
 		if (
@@ -98,7 +103,7 @@ class Helpers {
 		$individual_settings = ! empty( $settings[ $name ] ) ? $settings[ $name ] : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox" />
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox"/>
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
@@ -113,7 +118,15 @@ class Helpers {
 	 * @return array
 	 */
 	public static function get_settings() {
-		return get_option( 'plausible_analytics_settings', [] );
+		$settings = get_option( 'plausible_analytics_settings', [] );
+
+		// Keep around for backwards compatibility reasons.
+		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : true );
+		if ( $track_outbound_links ) {
+			$settings['outbound-links'][0] = 1;
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -235,7 +248,7 @@ class Helpers {
 	}
 
 	/**
-	 * Get user role for the loggedin user.
+	 * Get user role for the logged-in user.
 	 *
 	 * @since  1.3.0
 	 * @access public
