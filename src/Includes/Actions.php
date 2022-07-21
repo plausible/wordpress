@@ -90,7 +90,7 @@ class Actions {
 		];
 
 		// Add link to individual page stats.
-		if ( ! is_admin() ) {
+		if ( is_singular() ) {
 			global $post;
 			$args[] = [
 				'id'     => 'view-page-analytics',
