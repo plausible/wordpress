@@ -20,10 +20,10 @@ class Helpers {
 	/**
 	 * Get Plain Domain.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
@@ -34,16 +34,14 @@ class Helpers {
 	/**
 	 * Get Analytics URL.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$settings       = self::get_settings();
-		$domain         = $settings['domain_name'];
-		$default_domain = 'plausible.io';
-		$file_name      = 'plausible';
+		$settings  = self::get_settings();
+		$file_name = 'script';
 
 		foreach ( [ 'outbound-links', 'file-downloads', 'compat', 'hash' ] as $extension ) {
 			if ( ! empty( $settings[ $extension ] ) && $settings[ $extension ][0] === '1' ) {
@@ -56,6 +54,25 @@ class Helpers {
 			$file_name .= '.manual';
 		}
 
+		return self::get_script_url_path() . $file_name . '.js';
+	}
+
+	/**
+	 * Determine the script's path.
+	 *
+	 * @return string
+	 */
+	private static function get_script_url_path() {
+		$settings = self::get_settings();
+
+		// Early return when there's a script path.
+		if ( ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
+			return $settings['script_path'];
+		}
+
+		$domain         = $settings['domain_name'];
+		$default_domain = 'plausible.io';
+
 		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
@@ -64,7 +81,7 @@ class Helpers {
 			$default_domain = $settings['self_hosted_domain'];
 		}
 
-		$url = "https://{$default_domain}/js/{$file_name}.js";
+		$path = "https://{$default_domain}/js/";
 
 		// Triggered when custom domain is enabled.
 		if (
@@ -72,10 +89,10 @@ class Helpers {
 			'true' === $settings['custom_domain']
 		) {
 			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
+			$path                 = "https://{$custom_domain_prefix}.{$domain}/js/";
 		}
 
-		return $url;
+		return $path;
 	}
 
 	/**
@@ -145,6 +162,10 @@ class Helpers {
 	public static function get_data_api_url() {
 		$settings = self::get_settings();
 		$url      = 'https://plausible.io/api/event';
+		// Early return when there's an event API path set.
+		if ( ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
+			return trailingslashit( $settings['event_path'] ) . 'event';
+		}
 
 		// Triggered when self hosted analytics is enabled.
 		if (
@@ -171,10 +192,10 @@ class Helpers {
 	/**
 	 * Get Quick Actions.
 	 *
+	 * @return array
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return array
 	 */
 	public static function get_quick_actions() {
 		return [
@@ -196,10 +217,10 @@ class Helpers {
 	/**
 	 * Render Quick Actions
 	 *
+	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function render_quick_actions() {
 		ob_start();
@@ -239,10 +260,10 @@ class Helpers {
 	 *
 	 * @param string|array $var Sanitize the variable.
 	 *
+	 * @return string|array
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string|array
 	 */
 	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
@@ -255,10 +276,10 @@ class Helpers {
 	/**
 	 * Get user role for the logged-in user.
 	 *
+	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_user_role() {
 		global $current_user;

@@ -33,7 +33,8 @@ class Page extends API {
 		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
-		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
+		$script_path        = ! empty( $settings['script_path'] ) ? $settings['script_path'] : '';
+		$event_path         = ! empty( $settings['event_path'] ) ? $settings['event_path'] : '';
 
 		$this->fields = [
 			'general'     => [
@@ -58,31 +59,6 @@ class Page extends API {
 							'slug'  => 'domain_name',
 							'type'  => 'text',
 							'value' => $domain,
-						],
-					],
-				],
-				[
-					'label'  => esc_html__( 'Setup custom domain with Plausible Analytics', 'plausible-analytics' ),
-					'slug'   => 'is_custom_domain',
-					'type'   => 'group',
-					'desc'   => sprintf(
-						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-						esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-						esc_url( 'https://docs.plausible.io/custom-domain/' ),
-						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-						esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-						esc_html__( 'For example,', 'plausible-analytics' ),
-						"<code>stats.$domain</code>",
-						esc_html__( 'or', 'plausible-analytics' ),
-						"<code>analytics.$domain</code>"
-					),
-					'toggle' => true,
-					'fields' => [
-						[
-							'label' => esc_html__( 'Custom Domain', 'plausible-analytics' ),
-							'slug'  => 'custom_domain',
-							'type'  => 'text',
-							'value' => $custom_domain,
 						],
 					],
 				],
@@ -236,6 +212,33 @@ class Page extends API {
 						],
 					],
 				],
+				[
+					'label'  => esc_html__( 'Run analytics script from a custom path', 'plausible-analytics' ),
+					'slug'   => 'is_custom_path',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						'<p>%1$s <a href="%2$s" target="_blank">%3$s</a></p><p>%4$s</p>',
+						esc_html__( 'Use a proxy to run Plausible and hide your tracking from ad blockers.', 'plausible-analytics' ),
+						esc_url( 'https://plausible.io/docs/proxy/introduction' ),
+						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+						sprintf( esc_html__( 'Remove %1$s from your script URL and %2$s from your event API URL to get their paths.', 'plausible-analytics' ), '<code>script.js</code>', '<code>event</code>' )
+					),
+					'toggle' => false,
+					'fields' => [
+						[
+							'label' => esc_html__( 'Script Path', 'plausible-analytics' ),
+							'slug'  => 'script_path',
+							'type'  => 'text',
+							'value' => $script_path,
+						],
+						[
+							'label' => esc_html__( 'Event API Path', 'plausible-analytics' ),
+							'slug'  => 'event_path',
+							'type'  => 'text',
+							'value' => $event_path,
+						],
+					],
+				],
 			],
 			'self-hosted' => [
 				[
@@ -320,7 +323,7 @@ class Page extends API {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
+				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
