@@ -20,10 +20,10 @@ class Helpers {
 	/**
 	 * Get Plain Domain.
 	 *
-	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
+	 * @return string
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
@@ -34,10 +34,10 @@ class Helpers {
 	/**
 	 * Get Analytics URL.
 	 *
-	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
+	 * @return string
 	 */
 	public static function get_analytics_url() {
 		$settings  = self::get_settings();
@@ -187,10 +187,10 @@ class Helpers {
 	/**
 	 * Get Quick Actions.
 	 *
-	 * @return array
 	 * @since  1.3.0
 	 * @access public
 	 *
+	 * @return array
 	 */
 	public static function get_quick_actions() {
 		return [
@@ -212,10 +212,10 @@ class Helpers {
 	/**
 	 * Render Quick Actions
 	 *
-	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
+	 * @return string
 	 */
 	public static function render_quick_actions() {
 		ob_start();
@@ -255,10 +255,10 @@ class Helpers {
 	 *
 	 * @param string|array $var Sanitize the variable.
 	 *
-	 * @return string|array
 	 * @since  1.3.0
 	 * @access public
 	 *
+	 * @return string|array
 	 */
 	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
@@ -271,10 +271,10 @@ class Helpers {
 	/**
 	 * Get user role for the logged-in user.
 	 *
-	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
+	 * @return string
 	 */
 	public static function get_user_role() {
 		global $current_user;
