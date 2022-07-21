@@ -49,6 +49,11 @@ class Helpers {
 			}
 		}
 
+		if ( is_search() ) {
+			// Add the manual scripts as we need it to track the search parameter.
+			$file_name .= '.manual';
+		}
+
 		return self::get_script_url_path() . $file_name . '.js';
 	}
 
