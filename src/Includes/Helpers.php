@@ -156,12 +156,12 @@ class Helpers {
 	 */
 	public static function get_data_api_url() {
 		$settings = self::get_settings();
-		$url      = 'https://plausible.io/api/event';
 		// Early return when there's an event API path set.
 		if ( ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
 			return trailingslashit( $settings['event_path'] ) . 'event';
 		}
 
+		$url = 'https://plausible.io/api/event';
 		// Triggered when self hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
