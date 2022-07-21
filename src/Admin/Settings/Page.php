@@ -102,7 +102,7 @@ class Page extends API {
 							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/docs/outbound-link-click-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
 							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
-							'slug'       => 'file-downloads',
+							'slug'       => 'outbound-links',
 							'type'       => 'checkbox',
 							'value'      => '1',
 						],
