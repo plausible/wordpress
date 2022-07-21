@@ -323,7 +323,7 @@ class Page extends API {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
+				<img src="<?php echo trailingslashit( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) . 'assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
