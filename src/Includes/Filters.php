@@ -65,6 +65,8 @@ class Filters {
 			$params        .= " data-exclude='{$excluded_pages}'";
 		}
 
+		$params = apply_filters( 'plausible_analytics_script_params', $params );
+
 		return str_replace( ' src', " {$params} src", $tag );
 	}
 }
