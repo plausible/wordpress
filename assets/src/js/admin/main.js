@@ -24,7 +24,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	} );
 
-	const customDomainElement = formElement.querySelector( 'input[name="plausible_analytics_settings[custom_domain]"]' );
+	const isProxyElement = formElement.querySelector( 'input[name="plausible_analytics_settings[is_proxy]"]' );
 	const selfHostedAnalyticsElement = formElement.querySelector( 'input[name="plausible_analytics_settings[is_self_hosted_analytics]"]' );
 
 	saveSettings.addEventListener( 'click', ( e ) => {
@@ -33,8 +33,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const formData = new FormData();
 		const spinner = formElement.querySelector( '.plausible-analytics-spinner' );
 		const domainName = formElement.querySelector( 'input[name="plausible_analytics_settings[domain_name]"]' ).value;
-		const customDomainPrefix = formElement.querySelector( 'input[name="plausible_analytics_settings[custom_domain_prefix]"]' ).value;
-		const isCustomDomain = null !== customDomainElement ? customDomainElement.checked : false;
+		const isProxy = null !== isProxyElement ? isProxyElement.checked : false;
 		const selfHostedDomain = formElement.querySelector( 'input[name="plausible_analytics_settings[self_hosted_domain]"]' ).value;
 		const isSelfHostedAnalytics = null !== selfHostedAnalyticsElement ? selfHostedAnalyticsElement.checked : false;
 		const trackAdminElement = formElement.querySelector( 'input[name="plausible_analytics_settings[track_administrator]"]:checked' );
@@ -51,8 +50,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		formData.append( 'action', 'plausible_analytics_save_admin_settings' );
 		formData.append( 'roadblock', roadBlock );
 		formData.append( 'domain_name', domainName );
-		formData.append( 'custom_domain', isCustomDomain === true );
-		formData.append( 'custom_domain_prefix', customDomainPrefix );
+		formData.append( 'is_proxy', isProxy === true );
 		formData.append( 'is_self_hosted_analytics', isSelfHostedAnalytics === true );
 		formData.append( 'self_hosted_domain', selfHostedDomain );
 		formData.append( 'embed_analytics', canEmbedAnalytics === 1 );

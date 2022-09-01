@@ -32,7 +32,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings.php:108
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:107
 msgid "Settings"
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:286
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:276
 msgid "Analytics"
 msgstr ""
 
@@ -56,110 +56,118 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: src/Admin/Settings.php:116
+#: src/Admin/Settings.php:115
 msgid "General"
 msgstr ""
 
-#: src/Admin/Settings.php:121
+#: src/Admin/Settings.php:120
 msgid "Self Hosted"
 msgstr ""
 
-#: src/Admin/Settings.php:130
+#: src/Admin/Settings.php:129
 msgid "Domain Name"
 msgstr ""
 
-#: src/Admin/Settings.php:137
+#: src/Admin/Settings.php:136
 msgid "Open Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:145
+#: src/Admin/Settings.php:144
 msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
 msgstr ""
 
-#: src/Admin/Settings.php:147
+#: src/Admin/Settings.php:146
 msgid "Follow these instructions"
 msgstr ""
 
-#: src/Admin/Settings.php:148
+#: src/Admin/Settings.php:147
 msgid "to add your site to Plausible."
 msgstr ""
 
-#: src/Admin/Settings.php:156
-msgid "Custom Domain"
+#: src/Admin/Settings.php:155
+msgid "Avoid Adblockers by setting a Proxy"
 msgstr ""
 
-#: src/Admin/Settings.php:168
-msgid "Enable the custom domain functionality in your Plausible account."
+#: src/Admin/Settings.php:163
+msgid "Configure the proxy in your server."
 msgstr ""
 
-#: src/Admin/Settings.php:170, src/Admin/Settings.php:202
+#: src/Admin/Settings.php:165, src/Admin/Settings.php:192
 msgid "See how &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:171
-msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
-msgstr ""
-
-#: src/Admin/Settings.php:172
-msgid "For example,"
-msgstr ""
-
 #: src/Admin/Settings.php:174
-msgid "or"
-msgstr ""
-
-#: src/Admin/Settings.php:184
 msgid "View your stats in your WordPress dashboard"
 msgstr ""
 
-#: src/Admin/Settings.php:190
+#: src/Admin/Settings.php:180
 msgid "Shared Link:"
 msgstr ""
 
-#: src/Admin/Settings.php:200
+#: src/Admin/Settings.php:190
 msgid "Create a secure and private shared link in your Plausible account."
 msgstr ""
 
-#: src/Admin/Settings.php:203
+#: src/Admin/Settings.php:193
 msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
 msgstr ""
 
-#: src/Admin/Settings.php:204
+#: src/Admin/Settings.php:194
 msgid "View your site statistics within your WordPress Dashboard."
 msgstr ""
 
-#: src/Admin/Settings.php:206
+#: src/Admin/Settings.php:196
 msgid "View Statistics &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:214
+#: src/Admin/Settings.php:204
 msgid "Track analytics for administrator"
 msgstr ""
 
-#: src/Admin/Settings.php:219
+#: src/Admin/Settings.php:209
 msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
 msgstr ""
 
-#: src/Admin/Settings.php:228
+#: src/Admin/Settings.php:218
 msgid "Self-hosted Plausible?"
 msgstr ""
 
-#: src/Admin/Settings.php:239
+#: src/Admin/Settings.php:229
 msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
 msgstr ""
 
-#: src/Admin/Settings.php:241
+#: src/Admin/Settings.php:231
 msgid "about Plausible Self-Hosted."
 msgstr ""
 
-#: src/Admin/Settings.php:253, src/Admin/Settings.php:257
+#: src/Admin/Settings.php:243, src/Admin/Settings.php:247
 msgid "Save Changes"
 msgstr ""
 
-#: src/Admin/Settings.php:254
+#: src/Admin/Settings.php:244
 msgid "Saved!"
 msgstr ""
 
-#: src/Admin/Settings.php:255
+#: src/Admin/Settings.php:245
 msgid "Something Went Wrong!"
+msgstr ""
+
+#: src/Admin/Settings.php:322
+msgid "It looks like you're using The Apache HTTP Server. "
+msgstr ""
+
+#: src/Admin/Settings.php:324, src/Admin/Settings.php:333, src/Admin/Settings.php:342, src/Admin/Settings.php:351
+msgid "See the specific documentation &raquo;"
+msgstr ""
+
+#: src/Admin/Settings.php:331
+msgid "It looks like you're using Nginx . "
+msgstr ""
+
+#: src/Admin/Settings.php:340
+msgid "It looks like you're using Cloudflare CDN/Proxy!. "
+msgstr ""
+
+#: src/Admin/Settings.php:349
+msgid "It looks like you're using Amazon CloudFront. "
 msgstr ""

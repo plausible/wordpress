@@ -89,7 +89,7 @@ final class Plugin {
 		if ( ! $is_default_settings_saved ) {
 			$default_settings = [
 				'domain_name'          => Helpers::get_domain(),
-				'custom_domain'        => false,
+				'is_proxy'        => false,
 				'custom_domain_prefix' => 'analytics',
 				'track_administrator'  => false,
 			];

@@ -71,7 +71,7 @@ class Actions {
 
 			if (
 				! empty( $post_data['domain_name'] ) &&
-				! empty( $post_data['custom_domain_prefix'] ) &&
+				! empty( $post_data['is_proxy'] ) &&
 				! empty( $post_data['self_hosted_domain'] ) &&
 				! empty( $post_data['shared_link'] )
 			) {

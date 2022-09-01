@@ -101,7 +101,6 @@ class Settings {
 		$settings             = Helpers::get_settings();
 
 		$domain               = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
-		$custom_domain_prefix = ! empty( $settings['custom_domain_prefix'] ) ? esc_attr( $settings['custom_domain_prefix'] ) : 'analytics';
 		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : 'example.com';
 		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 
@@ -152,29 +151,20 @@ class Settings {
 					</div>
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
-							<label for="custom-domain">
-								<?php esc_html_e( 'Custom Domain', 'plausible-analytics' ); ?>
-								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[custom_domain_prefix]" value="<?php esc_attr_e($custom_domain_prefix,'plausible-analytics' ); ?>"/>
-									<?php echo esc_html(".{$domain}"); ?>
-								</span>
+							<label for="is-proxy">
+								<?php esc_html_e( 'Avoid Adblockers by setting a Proxy', 'plausible-analytics' ); ?>
 							</label>
-							<?php echo Helpers::display_toggle_switch( 'custom_domain' ); ?>
+							<?php echo Helpers::display_toggle_switch( 'is_proxy' ); ?>
 						</div>
 						<div class="plausible-analytics-description">
 							<?php
 							echo sprintf(
-								'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-								esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-								esc_url( 'https://docs.plausible.io/custom-domain/' ),
+								'%1$s <a href="%2$s" target="_blank">%3$s</a> <br><br> %4$s',
+								esc_html__( 'Configure the proxy in your server.', 'plausible-analytics' ),
+								esc_url( 'https://plausible.io/docs/proxy/introduction' ),
 								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-								esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-								esc_html__( 'For example,', 'plausible-analytics' ),
-								"<code>stats.$domain</code>",
-								esc_html__( 'or', 'plausible-analytics' ),
-								"<code>analytics.$domain</code>"
+								$this->get_proxy_server_software_help_html()
 							);
-
 							?>
 						</div>
 					</div>
@@ -306,8 +296,65 @@ class Settings {
 					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
 				?>
-			</p>
+			</div>
 			<?php
 		}
 	}
+
+	/**
+	 * Return proxy help HTML.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return String
+	 */
+	public function get_proxy_server_software_help_html() {
+		$server_software = Helpers::get_server_software();
+
+		$html = '';
+
+		if ( $server_software ) {
+
+			if ( 'apache' == $server_software ) {
+				$html = sprintf(
+					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+					esc_html__( "It looks like you're using The Apache HTTP Server. ", 'plausible-analytics' ),
+					esc_url( 'https://github.com/Neoflow/ReverseProxy-PlausibleAnalytics' ),
+					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+				);
+			}
+
+			if ( 'nginx' == $server_software ) {
+				$html = sprintf(
+					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+					esc_html__( "It looks like you're using Nginx . ", 'plausible-analytics' ),
+					esc_url( 'https://plausible.io/docs/proxy/guides/nginx' ),
+					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+				);
+			}
+
+			if ( 'cloudflare' == $server_software ) {
+				$html = sprintf(
+					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+					esc_html__( "It looks like you're using Cloudflare CDN/Proxy!. ", 'plausible-analytics' ),
+					esc_url( 'https://plausible.io/docs/proxy/guides/cloudflare' ),
+					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+				);
+			}
+
+			if ( 'cloudfront' == $server_software ) {
+				$html = sprintf(
+					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+					esc_html__( "It looks like you're using Amazon CloudFront. ", 'plausible-analytics' ),
+					esc_url( 'https://plausible.io/docs/proxy/guides/cloudfront' ),
+					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+				);
+			}
+		}
+
+		return $html;
+
+	}
+
 }

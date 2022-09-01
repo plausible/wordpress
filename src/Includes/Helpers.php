@@ -59,11 +59,10 @@ class Helpers {
 
 		// Triggered when custom domain is enabled.
 		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
+			! empty( $settings['is_proxy'] ) &&
+			'true' === $settings['is_proxy']
 		) {
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
+			$url = "https://{$domain}/js/{$file_name}.js";
 		}
 
 		return esc_url( $url );
@@ -140,12 +139,11 @@ class Helpers {
 
 		// Triggered when custom domain is enabled.
 		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
+			! empty( $settings['is_proxy'] ) &&
+			'true' === $settings['is_proxy']
 		) {
 			$domain               = $settings['domain_name'];
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
+			$url                  = "https://{$domain}/api/event";
 		}
 
 		return esc_url( $url );
@@ -168,4 +166,72 @@ class Helpers {
 			return is_scalar( $var ) ? sanitize_text_field( trim( $var ) ) : $var;
 		}
 	}
+
+	/**
+	 * Maybe Render Proxy Help Test according to $_SERVER vars
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function get_server_software() {
+
+		$server_software = false;
+
+		if ( isset( $_SERVER['SERVER_SOFTWARE'] ) ) {
+			if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) ) {
+				if ( false !== strpos( $_SERVER['SERVER_SOFTWARE'], 'nginx' ) ) {
+					$server_software = 'nginx';
+				}
+
+				if ( false !== strpos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) ) {
+					$server_software = 'apache';
+				}
+			}
+		}
+
+		if ( isset( $_SERVER['HTTP_CDN_LOOP'] ) ) {
+			if ( ! empty( $_SERVER['HTTP_CDN_LOOP'] ) ) {
+				if ( false !== strpos( $_SERVER['HTTP_CDN_LOOP'], 'cloudflare' ) ) {
+					$server_software = 'cloudflare';
+				}
+			}
+		}
+
+		if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+				if ( false !== strpos( $_SERVER['HTTP_USER_AGENT'], 'Amazon CloudFront' ) ) {
+					$server_software = 'cloudfront';
+				}
+			}
+		}
+
+		return $server_software;
+
+	}
+
+	/**
+	 * Maybe Render Proxy Help Test according to $_SERVER vars
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function check_proxy_is_working() {
+		$url = self::get_analytics_url();
+
+		$args = array(
+			'timeout'     => 5,
+			'sslverify' => false,
+		);
+
+		$response 		= wp_remote_head( $url , $args );
+		$response_code 	= wp_remote_retrieve_response_code( $response );
+
+		return ( 200 === $response_code );
+
+	}
+
 }
