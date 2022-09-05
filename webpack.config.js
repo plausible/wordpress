@@ -10,6 +10,7 @@ const inProduction = ( 'production' === process.env.NODE_ENV );
 const mode = inProduction ? 'production' : 'development';
 
 const config = {
+	devtool: inProduction ? 'inline-source-map' : 'eval-cheap-module-source-map',
 	mode,
 	entry: {
 		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
@@ -18,7 +19,6 @@ const config = {
 		path: path.join( __dirname, './assets/dist/' ),
 		filename: 'js/[name].js',
 	},
-	devtool: ! inProduction ? 'source-map' : '',
 	module: {
 		rules: [
 
