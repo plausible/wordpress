@@ -11,7 +11,6 @@ const mode = inProduction ? 'production' : 'development';
 
 const config = {
 	mode,
-
 	entry: {
 		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
 	},
@@ -85,7 +84,13 @@ const config = {
 			filename: 'css/[name].css',
 		} ),
 
-		new CopyWebpackPlugin( [ { from: 'assets/src/images', to: 'images' } ] ),
+		new CopyWebpackPlugin(
+			{ 
+				patterns: [
+					{ from: 'assets/src/images', to: 'images' },
+				],
+			}
+		),
 
 	],
 };
@@ -108,7 +113,7 @@ if ( inProduction ) {
 		destFile: 'languages/plausible-analytics.pot',
 		relativeTo: './',
 		src: [ './**/*.php', '!./includes/libraries/**/*', '!./vendor/**/*' ],
-		bugReport: 'https://github.com/mehul0810/plausible-analytics-wp/issues/new',
+		bugReport: 'https://github.com/plausible/wordpress/issues/new',
 		team: 'Plausible Analytics Team <hello@plausible.io>',
 	} );
 }
