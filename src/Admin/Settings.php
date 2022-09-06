@@ -70,7 +70,7 @@ class Settings {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png' ); ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
+				<img src="<?php echo trailingslashit( esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) ) . 'assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
@@ -98,11 +98,19 @@ class Settings {
 	 * @return void
 	 */
 	public function plausible_analytics_settings_page() {
-		$settings             = Helpers::get_settings();
 
-		$domain               = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
-		$self_hosted_domain   = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : 'example.com';
-		$shared_link          = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$settings = Helpers::get_settings();
+
+		$domain                   = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
+		$self_hosted_domain       = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : '';
+		$is_self_hosted_analytics = ! empty( $self_hosted_domain ) && isset( $settings['is_self_hosted_analytics'] ) && $settings['is_self_hosted_analytics'] === 'true';
+		$script_path              = ! empty( $settings['script_path'] ) ? trailingslashit( $settings['script_path'] ) : '';
+		$event_path               = ! empty( $settings['event_path'] ) ? trailingslashit( $settings['event_path'] ) : '';
+		$is_proxy                 = isset( $settings['is_proxy'] ) && $settings['is_proxy'] === 'true';
+		$is_custom_path           = $is_proxy && ! empty( $script_path ) && ! empty( $event_path ) && isset( $settings['is_custom_path'] ) && $settings['is_custom_path'] === 'true';
+		$embed_analytics          = isset( $settings['embed_analytics'] ) && $settings['embed_analytics'] === 'true';
+		$shared_link              = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$track_administrator      = isset( $settings['track_administrator'] ) && $settings['track_administrator'] === 'true';
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
@@ -128,7 +136,7 @@ class Settings {
 							<label for="domain-connected">
 								<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[domain_name]" value="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"/>
+									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text" name="plausible_analytics_settings[domain_name]"  placeholder="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>" value="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<div>
@@ -152,20 +160,91 @@ class Settings {
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="is-proxy">
-								<?php esc_html_e( 'Avoid Adblockers by setting a Proxy', 'plausible-analytics' ); ?>
+								<?php esc_html_e( 'Run the script as a first-party connection from your domain name', 'plausible-analytics' ); ?>
 							</label>
-							<?php echo Helpers::display_toggle_switch( 'is_proxy' ); ?>
+							<?php echo Helpers::display_toggle_switch( 'is_proxy' , $is_proxy ); ?>
 						</div>
 						<div class="plausible-analytics-description">
+
 							<?php
 							echo sprintf(
-								'%1$s <a href="%2$s" target="_blank">%3$s</a> <br><br> %4$s',
-								esc_html__( 'Configure the proxy in your server.', 'plausible-analytics' ),
+								'%1$s <a href="%2$s"  >%3$s</a> <br>',
+								esc_html__( 'This works out of the box and does not affect your server or loading time.
+								Disable it if you want to run the script from the plausible.io domain name.
+								You might see less accurate stats by disabling this due to adblockers blocking third-party scripts.', 'plausible-analytics' ),
 								esc_url( 'https://plausible.io/docs/proxy/introduction' ),
-								esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+								esc_html__( 'Read more here &raquo;', 'plausible-analytics' )
+							);
+							?>
+							<br/><br/>
+							<?php
+							echo sprintf(
+								'%1$s <a href="#advanced-proxy" >%2$s</a><div></div>',
+								esc_html__( 'Optionally, you can enable a manually created proxy', 'plausible-analytics' ),
+								esc_html__( 'here.', 'plausible-analytics' ),
 								$this->get_proxy_server_software_help_html()
 							);
 							?>
+
+						</div>
+						<div id="advanced-proxy" class="<?php esc_attr_e( ! $is_custom_path ? 'plausible-analytics-hidden' : '' ); ?>">
+							<div class="plausible-analytics-admin-field-content">
+								<div class="plausible-analytics-admin-field-sub-header">
+									<label for="is_custom_path">
+										<?php esc_html_e( 'Run analytics script from a custom path', 'plausible-analytics' ) ?>
+									</label>
+										<?php Helpers::display_toggle_switch( 'is_custom_path' , $is_custom_path ) ?>
+								</div>
+								<div class="plausible-analytics-sub-description">
+								<?php   esc_html_e( 'Our default proxy works out of the box and is an excellent solution for most sites, but if you want to specify a custom proxy that you have created manually, you can do so here', 'plausible-analytics' ); ?>
+								</div>
+								<label>
+									<?php esc_html_e( 'Script Path:', 'plausible-analytics' ); ?>
+									<span class="plausible-analytics-admin-field-input">
+										<?php
+										echo sprintf(
+											'<input placeholder="%1$s%2$s" style="%3$s;" type="%4$s" name="%5$s" value="%6$s" %7$s />',
+											esc_html( 'https://' . $domain ),
+											esc_html__( '/stats/js/', 'plausible-analytics' ),
+											esc_attr( 'width: 550px; max-width: 100%;' ),
+											esc_attr( 'url' ),
+											esc_attr( 'plausible_analytics_settings[script_path]' ),
+											esc_url( $script_path ),
+											esc_attr( ! $is_custom_path  ? 'disabled' : '' )
+										);
+										?>
+									</span>
+								</label>
+								<br/>
+								<label>
+									<?php esc_html_e( 'Event API Path:', 'plausible-analytics' ); ?>
+									<span class="plausible-analytics-admin-field-input">
+										<?php
+										echo sprintf(
+											'<input placeholder="%1$s%2$s" style="%3$s;" type="%4$s" name="%5$s" value="%6$s" %7$s />',
+											esc_html( 'https://' . $domain ),
+											esc_html__( '/stats/api/', 'plausible-analytics' ),
+											esc_attr( 'width: 550px; max-width: 100%;' ),
+											esc_attr( 'url' ),
+											esc_attr( 'plausible_analytics_settings[event_path]' ),
+											esc_url( $event_path ),
+											esc_attr( ! $is_custom_path  ? 'disabled' : '' )
+										);
+										?>
+									</span>
+								</label>
+							</div>
+							<div class="plausible-analytics-description">
+								<?php
+								echo sprintf(
+									'%1$s <a href="%2$s" target="_blank">%3$s</a> <br> %4$s',
+									esc_html__( 'You can also setup the proxy in your own infrastructure.', 'plausible-analytics' ),
+									esc_url( 'https://plausible.io/docs/proxy/introduction' ),
+									esc_html__( 'See how &raquo;', 'plausible-analytics' ),
+									$this->get_proxy_server_software_help_html()
+								);
+								?>
+							</div>
 						</div>
 					</div>
 					<div class="plausible-analytics-admin-field">
@@ -179,7 +258,17 @@ class Settings {
 							<label>
 								<?php esc_html_e( 'Shared Link:', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input style="width: 550px; max-width: 100%;" type="text" name="plausible_analytics_settings[shared_link]" value="<?php echo esc_url( $shared_link ); ?>" />
+									<?php
+									echo sprintf(
+										'<input placeholder="%1$s" style="%2$s;" type="%3$s" name="%4$s" value="%5$s" %6$s />',
+										esc_html( 'https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX' ),
+										esc_attr( 'width: 550px; max-width: 100%;' ),
+										esc_attr( 'url' ),
+										esc_attr( 'plausible_analytics_settings[shared_link]' ),
+										esc_url( $shared_link ),
+										esc_attr( ! $embed_analytics  ? 'disabled' : '' )
+									);
+									?>
 								</span>
 							</label>
 						</div>
@@ -217,7 +306,7 @@ class Settings {
 							<label for="self-hosted-analytics">
 								<?php esc_html_e( 'Self-hosted Plausible?', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input type="text" name="plausible_analytics_settings[self_hosted_domain]" value="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>"/>
+									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text" name="plausible_analytics_settings[self_hosted_domain]"  placeholder="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>" value="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
@@ -304,7 +393,7 @@ class Settings {
 	/**
 	 * Return proxy help HTML.
 	 *
-	 * @since  1.3.0
+	 * @since  1.2.5
 	 * @access public
 	 *
 	 * @return String
@@ -321,25 +410,25 @@ class Settings {
 					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
 					esc_html__( "It looks like you're using The Apache HTTP Server. ", 'plausible-analytics' ),
 					esc_url( 'https://github.com/Neoflow/ReverseProxy-PlausibleAnalytics' ),
-					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+					esc_html__( 'See the documentation for setting up your custom proxy in Apache HTTP Server &raquo;', 'plausible-analytics' )
 				);
 			}
 
 			if ( 'nginx' == $server_software ) {
 				$html = sprintf(
 					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-					esc_html__( "It looks like you're using Nginx . ", 'plausible-analytics' ),
+					esc_html__( "It looks like you're using Nginx. ", 'plausible-analytics' ),
 					esc_url( 'https://plausible.io/docs/proxy/guides/nginx' ),
-					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+					esc_html__( 'See the documentation for setting up your custom proxy in Nginx &raquo;', 'plausible-analytics' )
 				);
 			}
 
 			if ( 'cloudflare' == $server_software ) {
 				$html = sprintf(
 					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-					esc_html__( "It looks like you're using Cloudflare CDN/Proxy!. ", 'plausible-analytics' ),
+					esc_html__( "It looks like you're using Cloudflare CDN/Proxy. ", 'plausible-analytics' ),
 					esc_url( 'https://plausible.io/docs/proxy/guides/cloudflare' ),
-					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+					esc_html__( 'See the documentation for setting up your custom proxy in Cloudflare CDN/Proxy &raquo;', 'plausible-analytics' )
 				);
 			}
 
@@ -348,7 +437,7 @@ class Settings {
 					'%1$s <a href="%2$s" target="_blank">%3$s</a>',
 					esc_html__( "It looks like you're using Amazon CloudFront. ", 'plausible-analytics' ),
 					esc_url( 'https://plausible.io/docs/proxy/guides/cloudfront' ),
-					esc_html__( 'See the specific documentation &raquo;', 'plausible-analytics' )
+					esc_html__( 'See the documentation for setting up your custom proxy in Amazon CloudFront &raquo;', 'plausible-analytics' )
 				);
 			}
 		}

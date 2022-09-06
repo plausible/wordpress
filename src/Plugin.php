@@ -89,14 +89,15 @@ final class Plugin {
 		if ( ! $is_default_settings_saved ) {
 			$default_settings = [
 				'domain_name'          => Helpers::get_domain(),
-				'is_proxy'        => false,
-				'custom_domain_prefix' => 'analytics',
-				'track_administrator'  => false,
+				'is_proxy'        => 'true',
+				'track_administrator'  => 'false',
 			];
 
 			update_option( 'plausible_analytics_settings', $default_settings );
 			update_option( 'plausible_analytics_is_default_settings_saved', true );
 		}
+
+		Admin\Actions::maybe_create_js_files();
 	}
 
 	/**

@@ -46,8 +46,9 @@ class Filters {
 		}
 
 		$settings    = Helpers::get_settings();
+		$url     = Helpers::get_analytics_url();
 		$api_url     = Helpers::get_data_api_url();
-		$domain_name = esc_html( $settings['domain_name'] );
+		$domain_name = wp_parse_url( $url, PHP_URL_HOST );
 
 		return str_replace( ' src', " async defer data-domain='{$domain_name}' data-api='{$api_url}' src", $tag );
 	}

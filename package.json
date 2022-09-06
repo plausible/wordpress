@@ -12,8 +12,8 @@
         "lint": "npm run lint:js & npm run lint:scss & npm run lint:php",
         "lint:js": "eslint assets/src/**/*.js",
         "lint:js-fix": "eslint assets/src/**/*.js --fix",
-        "lint:php": "./vendor/bin/phpcs -v --colors --standard=phpcs.ruleset.xml",
-        "lint:php:fix": "./vendor/bin/phpcbf -v --colors --standard=phpcs.ruleset.xml",
+        "lint:php": "npm ./vendor/bin/phpcs -v --colors --standard=phpcs.ruleset.xml",
+        "lint:php:fix": "npm ./vendor/bin/phpcbf -v --colors --standard=phpcs.ruleset.xml",
         "lint:textdomain": "node ./wp-textdomain.js",
         "lint:scss": "stylelint assets/src/**/*.scss"
     },

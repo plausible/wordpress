@@ -27,9 +27,8 @@ class Helpers {
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
-		$domain   = preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 
-		return $domain;
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 	}
 
 	/**
@@ -47,7 +46,12 @@ class Helpers {
 		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
 		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
 
-		// Triggered when self hosted analytics is enabled.
+		// Early return when there's a script path.
+		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path']  === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
+			return $settings['script_path'] . $file_name . 'js';
+		}
+
+		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
 			'true' === $settings['is_self_hosted_analytics']
@@ -66,6 +70,46 @@ class Helpers {
 		}
 
 		return esc_url( $url );
+	}
+
+	/**
+	 *    Get all Analytics URLs from plausible.io
+	 *    For future use
+	 *
+	 * @return array
+	 * @since  1.2.5
+	 * @access public
+	 */
+	public static function get_all_remote_urls() {
+		$settings       = self::get_settings();
+		$default_domain = 'plausible.io';
+
+		$urls = array();
+
+		$file_names = array(
+			'plausible',
+			'plausible.outbound-links',
+			'script.hash',
+			'script.file-downloads',
+			'script.manual',
+			'script.local',
+			'script.compat',
+			'script.exclusions'
+		);
+
+		// Triggered when self hosted analytics is enabled.
+		if (
+			! empty( $settings['is_self_hosted_analytics'] ) &&
+			'true' === $settings['is_self_hosted_analytics']
+		) {
+			$default_domain = $settings['self_hosted_domain'];
+		}
+
+		foreach ( $file_names as $file_name ) {
+			$urls[] = esc_url( "https://{$default_domain}/js/{$file_name}.js" );
+		}
+
+		return $urls;
 	}
 
 	/**
@@ -89,12 +133,16 @@ class Helpers {
 	 * @param string $name Name of the toggle switch.
 	 *
 	 * @since  1.0.0
+	 * @since  1.2.5 Added the optional `force` argument.
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public static function display_toggle_switch( $name ) {
+	public static function display_toggle_switch( $name, $force = null ) {
 		$settings            = Helpers::get_settings();
+		if ( is_bool( $force ) ) {
+			$settings[ $name ] = $force ? $settings[ $name ] : '' ;
+		}
 		$individual_settings = ! empty( $settings[ $name ] ) ? esc_html( $settings[ $name ] ) : '';
 		?>
 		<label class="plausible-analytics-switch">
@@ -128,22 +176,18 @@ class Helpers {
 		$settings = self::get_settings();
 		$url      = 'https://plausible.io/api/event';
 
-		// Triggered when self hosted analytics is enabled.
+		// Early return when there's a script path.
+		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path']  === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
+			return trailingslashit( $settings['event_path'] ) . 'event';
+		}
+
+		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&
 			'true' === $settings['is_self_hosted_analytics']
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
-		}
-
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['is_proxy'] ) &&
-			'true' === $settings['is_proxy']
-		) {
-			$domain               = $settings['domain_name'];
-			$url                  = "https://{$domain}/api/event";
 		}
 
 		return esc_url( $url );
@@ -170,7 +214,7 @@ class Helpers {
 	/**
 	 * Maybe Render Proxy Help Test according to $_SERVER vars
 	 *
-	 * @since  1.3.0
+	 * @since  1.2.5
 	 * @access public
 	 *
 	 * @return string
@@ -208,29 +252,6 @@ class Helpers {
 		}
 
 		return $server_software;
-
-	}
-
-	/**
-	 * Maybe Render Proxy Help Test according to $_SERVER vars
-	 *
-	 * @since  1.3.0
-	 * @access public
-	 *
-	 * @return string
-	 */
-	public static function check_proxy_is_working() {
-		$url = self::get_analytics_url();
-
-		$args = array(
-			'timeout'     => 5,
-			'sslverify' => false,
-		);
-
-		$response 		= wp_remote_head( $url , $args );
-		$response_code 	= wp_remote_retrieve_response_code( $response );
-
-		return ( 200 === $response_code );
 
 	}
 
