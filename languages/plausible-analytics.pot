@@ -15,15 +15,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:84
+#: src/Admin/Actions.php:109
 msgid "Something gone a wrong."
 msgstr ""
 
-#: src/Admin/Actions.php:81
+#: src/Admin/Actions.php:106
 msgid "Settings saved successfully."
 msgstr ""
 
-#: src/Admin/Actions.php:142
+#: src/Admin/Actions.php:167
 msgid "Error when creating the folder"
 msgstr ""
 
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings.php:112
+#: src/Admin/Filters.php:71, src/Admin/Settings.php:115
 msgid "Settings"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:362
+#: src/Admin/Settings.php:44, src/Admin/Settings.php:45, src/Admin/Settings.php:365
 msgid "Analytics"
 msgstr ""
 
@@ -60,173 +60,173 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: src/Admin/Settings.php:120
+#: src/Admin/Settings.php:123
 msgid "General"
 msgstr ""
 
-#: src/Admin/Settings.php:125
+#: src/Admin/Settings.php:128
 msgid "Self Hosted"
 msgstr ""
 
-#: src/Admin/Settings.php:134
+#: src/Admin/Settings.php:137
 msgid "Domain Name"
 msgstr ""
 
-#: src/Admin/Settings.php:141
+#: src/Admin/Settings.php:144
 msgid "Open Analytics"
 msgstr ""
 
-#: src/Admin/Settings.php:149
+#: src/Admin/Settings.php:152
 msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
 msgstr ""
 
-#: src/Admin/Settings.php:151
+#: src/Admin/Settings.php:154
 msgid "Follow these instructions"
 msgstr ""
 
-#: src/Admin/Settings.php:152
+#: src/Admin/Settings.php:155
 msgid "to add your site to Plausible."
 msgstr ""
 
-#: src/Admin/Settings.php:160
+#: src/Admin/Settings.php:163
 msgid "Run the script as a first-party connection from your domain name"
 msgstr ""
 
-#: src/Admin/Settings.php:169
+#: src/Admin/Settings.php:172
 msgid ""
 "This works out of the box and does not affect your server or loading time.\n"
 "								Disable it if you want to run the script from the plausible.io domain name.\n"
 "								You might see less accurate stats by disabling this due to adblockers blocking third-party scripts."
 msgstr ""
 
-#: src/Admin/Settings.php:173
+#: src/Admin/Settings.php:176
 msgid "Read more here &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:180
+#: src/Admin/Settings.php:183
 msgid "Optionally, you can enable a manually created proxy"
 msgstr ""
 
-#: src/Admin/Settings.php:181
+#: src/Admin/Settings.php:184
 msgid "here."
 msgstr ""
 
-#: src/Admin/Settings.php:191
+#: src/Admin/Settings.php:194
 msgid "Run analytics script from a custom path"
 msgstr ""
 
-#: src/Admin/Settings.php:196
+#: src/Admin/Settings.php:199
 msgid "Our default proxy works out of the box and is an excellent solution for most sites, but if you want to specify a custom proxy that you have created manually, you can do so here"
 msgstr ""
 
-#: src/Admin/Settings.php:199
+#: src/Admin/Settings.php:202
 msgid "Script Path:"
 msgstr ""
 
-#: src/Admin/Settings.php:205
+#: src/Admin/Settings.php:208
 msgid "/stats/js/"
 msgstr ""
 
-#: src/Admin/Settings.php:217
+#: src/Admin/Settings.php:220
 msgid "Event API Path:"
 msgstr ""
 
-#: src/Admin/Settings.php:223
+#: src/Admin/Settings.php:226
 msgid "/stats/api/"
 msgstr ""
 
-#: src/Admin/Settings.php:238
+#: src/Admin/Settings.php:241
 msgid "You can also setup the proxy in your own infrastructure."
 msgstr ""
 
-#: src/Admin/Settings.php:240, src/Admin/Settings.php:278
+#: src/Admin/Settings.php:243, src/Admin/Settings.php:281
 msgid "See how &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:250
+#: src/Admin/Settings.php:253
 msgid "View your stats in your WordPress dashboard"
 msgstr ""
 
-#: src/Admin/Settings.php:256
+#: src/Admin/Settings.php:259
 msgid "Shared Link:"
 msgstr ""
 
-#: src/Admin/Settings.php:276
+#: src/Admin/Settings.php:279
 msgid "Create a secure and private shared link in your Plausible account."
 msgstr ""
 
-#: src/Admin/Settings.php:279
+#: src/Admin/Settings.php:282
 msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
 msgstr ""
 
-#: src/Admin/Settings.php:280
+#: src/Admin/Settings.php:283
 msgid "View your site statistics within your WordPress Dashboard."
 msgstr ""
 
-#: src/Admin/Settings.php:282
+#: src/Admin/Settings.php:285
 msgid "View Statistics &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:290
+#: src/Admin/Settings.php:293
 msgid "Track analytics for administrator"
 msgstr ""
 
-#: src/Admin/Settings.php:295
+#: src/Admin/Settings.php:298
 msgid "By default, we won't be tracking analytics for administrator. If you want to track analytics for administrator then please enable this setting."
 msgstr ""
 
-#: src/Admin/Settings.php:304
+#: src/Admin/Settings.php:307
 msgid "Self-hosted Plausible?"
 msgstr ""
 
-#: src/Admin/Settings.php:315
+#: src/Admin/Settings.php:318
 msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
 msgstr ""
 
-#: src/Admin/Settings.php:317
+#: src/Admin/Settings.php:320
 msgid "about Plausible Self-Hosted."
 msgstr ""
 
-#: src/Admin/Settings.php:329, src/Admin/Settings.php:333
+#: src/Admin/Settings.php:332, src/Admin/Settings.php:336
 msgid "Save Changes"
 msgstr ""
 
-#: src/Admin/Settings.php:330
+#: src/Admin/Settings.php:333
 msgid "Saved!"
 msgstr ""
 
-#: src/Admin/Settings.php:331
+#: src/Admin/Settings.php:334
 msgid "Something Went Wrong!"
 msgstr ""
 
-#: src/Admin/Settings.php:408
+#: src/Admin/Settings.php:411
 msgid "It looks like you're using The Apache HTTP Server. "
 msgstr ""
 
-#: src/Admin/Settings.php:410
+#: src/Admin/Settings.php:413
 msgid "See the documentation for setting up your custom proxy in Apache HTTP Server &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:417
+#: src/Admin/Settings.php:420
 msgid "It looks like you're using Nginx. "
 msgstr ""
 
-#: src/Admin/Settings.php:419
+#: src/Admin/Settings.php:422
 msgid "See the documentation for setting up your custom proxy in Nginx &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:426
+#: src/Admin/Settings.php:429
 msgid "It looks like you're using Cloudflare CDN/Proxy. "
 msgstr ""
 
-#: src/Admin/Settings.php:428
+#: src/Admin/Settings.php:431
 msgid "See the documentation for setting up your custom proxy in Cloudflare CDN/Proxy &raquo;"
 msgstr ""
 
-#: src/Admin/Settings.php:435
+#: src/Admin/Settings.php:438
 msgid "It looks like you're using Amazon CloudFront. "
 msgstr ""
 
-#: src/Admin/Settings.php:437
+#: src/Admin/Settings.php:440
 msgid "See the documentation for setting up your custom proxy in Amazon CloudFront &raquo;"
 msgstr ""
