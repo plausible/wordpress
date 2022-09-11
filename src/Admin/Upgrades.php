@@ -59,9 +59,6 @@ class Upgrades {
 		}
 
 		// Add required upgrade routines for future versions here.
-
-		// Update the version in DB to the latest as upgrades completed.
-		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
 	}
 
 	/**
@@ -76,7 +73,10 @@ class Upgrades {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		$new_settings['is_custom_domain'] = $old_settings['custom_domain'];
+		if ( is_bool( $old_settings['custom_domain'] ) || 'true' === $old_settings['custom_domain'] ) {
+			$new_settings['is_custom_domain'] = $old_settings['custom_domain'];
+		}
+		
 		$new_settings['custom_domain']    = "{$old_settings['custom_domain_prefix']}.{$old_settings['domain_name']}";
 		$new_settings['is_shared_link']   = $old_settings['embed_analytics'];
 
@@ -89,6 +89,9 @@ class Upgrades {
 
 		// Update the new settings.
 		update_option( 'plausible_analytics_settings', $new_settings );
+
+		// Update the version in DB to the latest as upgrades completed.
+		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
 	}
 }
 
