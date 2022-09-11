@@ -28,12 +28,17 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
-		$settings           = Helpers::get_settings();
-		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
-		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
-		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
-		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
-		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
+		$settings            = Helpers::get_settings();
+		$domain              = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$self_hosted_domain  = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
+		$shared_link         = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$excluded_pages      = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
+		$custom_domain       = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
+		$is_shared_link      = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
+		$is_custom_domain    = ! empty( $settings['is_custom_domain'] ) ? (bool) $settings['is_custom_domain'] : false;
+		$is_exclude_pages    = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
+		$is_selfhosted       = ! empty( $settings['is_self_hosted_plausible_analytics'] ) ? (bool) $settings['is_self_hosted_plausible_analytics'] : false;
+		$can_track_analytics = ! empty( $settings['can_role_track_analytics'] ) ? (bool) $settings['can_role_track_analytics'] : false;
 
 		$this->fields = [
 			'general'     => [
@@ -76,7 +81,7 @@ class Page extends API {
 						esc_html__( 'or', 'plausible-analytics' ),
 						"<code>analytics.$domain</code>"
 					),
-					'toggle' => true,
+					'toggle' => $is_custom_domain,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Custom Domain', 'plausible-analytics' ),
@@ -102,7 +107,7 @@ class Page extends API {
 							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/docs/outbound-link-click-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
 							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
-							'slug'       => 'file-downloads',
+							'slug'       => 'outbound-links',
 							'type'       => 'checkbox',
 							'value'      => '1',
 						],
@@ -146,7 +151,7 @@ class Page extends API {
 						admin_url( 'index.php?page=plausible-analytics-statistics' ),
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => is_shared_link,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Shared Link', 'plausible-analytics' ),
@@ -166,7 +171,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/docs/excluding-pages#2-add-the-pages-youd-like-to-exclude-from-being-tracked' ),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => $is_exclude_pages,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Excluded pages', 'plausible-analytics' ),
@@ -181,7 +186,7 @@ class Page extends API {
 					'slug'   => 'can_role_track_analytics',
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
-					'toggle' => true,
+					'toggle' => $can_track_analytics,
 					'fields' => [
 						'administrator' => [
 							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
@@ -214,7 +219,7 @@ class Page extends API {
 					'slug'   => 'can_access_analytics_page',
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
-					'toggle' => true,
+					'toggle' => false,
 					'fields' => [
 						'editor'      => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
@@ -248,7 +253,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
 						esc_html__( 'about Plausible Self-Hosted.', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => $is_selfhosted,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
