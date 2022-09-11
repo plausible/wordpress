@@ -46,12 +46,22 @@ class Upgrades {
 	 * @return void
 	 */
 	public function register_routines() {
+		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
+
+		// If version doesn't exist, then consider it `1.0.0`.
+		if ( ! $plausible_analytics_version ) {
+			$plausible_analytics_version = '1.0.0';
+		}
+
 		// Upgrade to version 1.3.0.
-		if ( version_compare( PLAUSIBLE_ANALYTICS_VERSION, '1.3.0', '<' ) ) {
+		if ( version_compare( $plausible_analytics_version, '1.3.0', '<=' ) ) {
 			$this->upgrade_to_130();
 		}
 
 		// Add required upgrade routines for future versions here.
+
+		// Update the version in DB to the latest as upgrades completed.
+		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
 	}
 
 	/**
