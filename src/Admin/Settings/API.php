@@ -103,7 +103,7 @@ class API {
 		$toggle      = $group['toggle'];
 		$fields      = $group['fields'];
 		$field_value = ! empty( $settings[ $group['slug'] ] ) ? $settings[ $group['slug'] ] : false;
-		$is_checked  = checked( $field_value, true, false );
+		$is_checked  = checked( $toggle, true, false );
 		ob_start();
 		?>
 		<div class="plausible-analytics-admin-field">
@@ -111,7 +111,7 @@ class API {
 				<label for="">
 					<?php echo $group['label']; ?>
 				</label>
-				<?php if ( $toggle === true ) { ?>
+				<?php if ( ! empty( $toggle ) ) { ?>
 				<label class="plausible-analytics-switch">
 					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
