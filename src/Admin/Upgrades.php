@@ -95,6 +95,10 @@ class Upgrades {
 		// For self hosted plausible analytics.
 		$new_settings['is_self_hosted_plausible_analytics'] = $old_is_self_hosted_analytics;
 
+		// Enable Enhanced Measurements an Outbound links by default.
+		$new_settings['enhanced_measurements'] = true;
+		$new_settings['outbound-links'] = true;
+
 		// Update the new settings.
 		update_option( 'plausible_analytics_settings', $new_settings );
 
