@@ -72,21 +72,28 @@ class Upgrades {
 	public function upgrade_to_130() {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
+		
+		$old_custom_domain_prefix     = ! empty( $old_settings['custom_domain_prefix'] ) ? $old_settings['custom_domain_prefix'] : '';
+		$old_embed_analytics          = ! empty( $old_settings['embed_analytics'] ) ? $old_settings['embed_analytics'] : '';
+		$old_is_self_hosted_analytics = ! empty( $old_settings['is_self_hosted_analytics'] ) ? $old_settings['is_self_hosted_analytics'] : '';
 
 		if ( is_bool( $old_settings['custom_domain'] ) || 'true' === $old_settings['custom_domain'] ) {
 			$new_settings['is_custom_domain'] = $old_settings['custom_domain'];
 		}
 		
-		$new_settings['custom_domain']    = "{$old_settings['custom_domain_prefix']}.{$old_settings['domain_name']}";
-		$new_settings['is_shared_link']   = $old_settings['embed_analytics'];
+		$new_settings['custom_domain']  = "{$old_custom_domain_prefix}.{$old_settings['domain_name']}";
+		$new_settings['is_shared_link'] = $old_embed_analytics;
 
-		if ( $old_settings['track_administrator'] ) {
+		if (
+			! empty( $old_settings['track_administrator'] ) &&
+			$old_settings['track_administrator']
+		) {
 			$new_settings['can_role_track_analytics'] = true;
 			$new_settings['track_analytics']          = [ 'administrator' ];
 		}
 
 		// For self hosted plausible analytics.
-		$new_settings['is_self_hosted_plausible_analytics'] = $old_settings['is_self_hosted_analytics'];
+		$new_settings['is_self_hosted_plausible_analytics'] = $old_is_self_hosted_analytics;
 
 		// Update the new settings.
 		update_option( 'plausible_analytics_settings', $new_settings );
