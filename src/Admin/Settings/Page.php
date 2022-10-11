@@ -151,7 +151,7 @@ class Page extends API {
 						admin_url( 'index.php?page=plausible-analytics-statistics' ),
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => is_shared_link,
+					'toggle' => $is_shared_link,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Shared Link', 'plausible-analytics' ),
