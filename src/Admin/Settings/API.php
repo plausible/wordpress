@@ -111,15 +111,15 @@ class API {
 				<label for="">
 					<?php echo $group['label']; ?>
 				</label>
-				<?php if ( ! empty( $toggle ) ) { ?>
+				<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) { ?>
+					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle['anchor']; ?>">
+						<?php echo $toggle['label']; ?>
+					</a>
+				<?php } elseif ( ! empty( $toggle ) ) { ?>
 				<label class="plausible-analytics-switch">
 					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
 					<span class="plausible-analytics-switch-slider"></span>
 				</label>
-				<?php } elseif ( is_array( $toggle ) ) { ?>
-					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle['anchor']; ?>">
-						<?php echo $toggle['label']; ?>
-					</a>
 				<?php } ?>
 			</div>
 			<div class="plausible-analytics-admin-field-body">
