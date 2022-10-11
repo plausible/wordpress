@@ -81,7 +81,7 @@ class Upgrades {
 		$new_settings['is_shared_link']   = $old_settings['embed_analytics'];
 
 		if ( $old_settings['track_administrator'] ) {
-			$new_settings['can_role_track_analytics'] = true
+			$new_settings['can_role_track_analytics'] = true;
 			$new_settings['track_analytics']          = [ 'administrator' ];
 		}
 
