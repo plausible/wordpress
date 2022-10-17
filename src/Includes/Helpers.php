@@ -20,10 +20,10 @@ class Helpers {
 	/**
 	 * Get Plain Domain.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
@@ -34,39 +34,32 @@ class Helpers {
 	/**
 	 * Get Analytics URL.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_analytics_url() {
 		$settings         = self::get_settings();
-		$domain           = $settings['domain_name'];
 		$default_domain   = 'plausible.io';
 		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
 		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
 
 		// Early return when there's a script path.
-		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path']  === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
-			return $settings['script_path'] . $file_name . 'js';
+		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
+			return $settings['script_path'] . $file_name . '.js';
 		}
 
 		// Triggered when self-hosted analytics is enabled.
-		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
-		) {
+		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
 			$default_domain = $settings['self_hosted_domain'];
 		}
 
 		$url = "https://{$default_domain}/js/{$file_name}.js";
 
 		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['is_proxy'] ) &&
-			'true' === $settings['is_proxy']
-		) {
-			$url = "https://{$domain}/js/{$file_name}.js";
+		if ( ! empty( $settings['is_proxy'] ) && 'true' === $settings['is_proxy'] ) {
+			$url    = trailingslashit (WP_CONTENT_URL ). "stats/js/{$file_name}.js";
 		}
 
 		return esc_url( $url );
@@ -83,8 +76,8 @@ class Helpers {
 	public static function get_all_remote_urls() {
 		$settings       = self::get_settings();
 		$default_domain = 'plausible.io';
-
-		$urls = array();
+		$urls           = array();
+		$folder         = '';
 
 		$file_names = array(
 			'plausible',
@@ -98,15 +91,13 @@ class Helpers {
 		);
 
 		// Triggered when self hosted analytics is enabled.
-		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
-		) {
+		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
 			$default_domain = $settings['self_hosted_domain'];
+			$folder         = apply_filters( 'plausible_analytics_self_hosted_domain_scripts_folder', '' );
 		}
 
 		foreach ( $file_names as $file_name ) {
-			$urls[] = esc_url( "https://{$default_domain}/js/{$file_name}.js" );
+			$urls[] = esc_url( "https://{$default_domain}/{$folder}js/{$file_name}.js" );
 		}
 
 		return $urls;
@@ -115,10 +106,10 @@ class Helpers {
 	/**
 	 * Get Dashboard URL.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_analytics_dashboard_url() {
 		$settings = self::get_settings();
@@ -132,21 +123,23 @@ class Helpers {
 	 *
 	 * @param string $name Name of the toggle switch.
 	 *
-	 * @since  1.0.0
+	 * @return void
 	 * @since  1.2.5 Added the optional `force` argument.
 	 * @access public
 	 *
-	 * @return void
+	 * @since  1.0.0
 	 */
 	public static function display_toggle_switch( $name, $force = null ) {
-		$settings            = Helpers::get_settings();
+		$settings = Helpers::get_settings();
 		if ( is_bool( $force ) ) {
-			$settings[ $name ] = $force ? $settings[ $name ] : '' ;
+			$settings[ $name ] = $force ? $settings[ $name ] : '';
 		}
 		$individual_settings = ! empty( $settings[ $name ] ) ? esc_html( $settings[ $name ] ) : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]" value="1" type="checkbox" />
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox"
+																	 name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]"
+																	 value="1" type="checkbox"/>
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
@@ -155,39 +148,72 @@ class Helpers {
 	/**
 	 * Get Settings.
 	 *
+	 * @return array
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return array
 	 */
 	public static function get_settings() {
 		return get_option( 'plausible_analytics_settings', [] );
 	}
 
+
+	/**
+	 * Get Remote Default Data API URL.
+	 *
+	 * @return string
+	 * @since  1.2.5
+	 * @access public
+	 *
+	 */
+	public static function get_default_data_api_url() {
+
+		$url      = 'https://plausible.io/api/event';
+
+		$settings = Helpers::get_settings();
+
+		// Triggered when self-hosted analytics is enabled.
+		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
+			$settings       = self::get_settings();
+			$default_domain = $settings['self_hosted_domain'];
+			$url            = "https://{$default_domain}/api/event";
+		}
+
+		return esc_url( $url );
+	}
+
 	/**
 	 * Get Data API URL.
 	 *
+	 * @return string
 	 * @since  1.2.2
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_data_api_url() {
+
 		$settings = self::get_settings();
+		$domain   = $settings['domain_name'];
 		$url      = 'https://plausible.io/api/event';
+		$folder   = trailingslashit( apply_filters( 'plausible_analytics_api_folder', 'stats' ) );
 
 		// Early return when there's a script path.
-		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path']  === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
+		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
 			return trailingslashit( $settings['event_path'] ) . 'event';
 		}
 
 		// Triggered when self-hosted analytics is enabled.
-		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
-		) {
+		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
+		}
+
+		// Triggered when custom domain is enabled.
+		if ( ! empty( $settings['is_proxy'] ) && 'true' === $settings['is_proxy'] ) {
+			$url = "https://{$domain}/";
+			// Add the RESTful prefix.
+			$url .= trailingslashit( rest_get_url_prefix() );
+			$url .= "{$folder}api/event";
 		}
 
 		return esc_url( $url );
@@ -198,10 +224,10 @@ class Helpers {
 	 *
 	 * @param string|array $var Pass the string to sanitize.
 	 *
+	 * @return string|array
 	 * @since  1.2.3
 	 * @access public
 	 *
-	 * @return string|array
 	 */
 	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
@@ -214,10 +240,10 @@ class Helpers {
 	/**
 	 * Maybe Render Proxy Help Test according to $_SERVER vars
 	 *
+	 * @return string
 	 * @since  1.2.5
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_server_software() {
 

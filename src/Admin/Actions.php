@@ -11,6 +11,8 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
+use function wp_enqueue_script;
+use function wp_enqueue_style;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,10 +24,10 @@ class Actions {
 	/**
 	 * Constructor.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
@@ -35,22 +37,22 @@ class Actions {
 	/**
 	 * Register Assets.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function register_assets() {
-		\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', PLAUSIBLE_ANALYTICS_VERSION, 'all' );
-		\wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', PLAUSIBLE_ANALYTICS_VERSION, true );
+		wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', PLAUSIBLE_ANALYTICS_VERSION, 'all' );
+		wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', PLAUSIBLE_ANALYTICS_VERSION, true );
 	}
 
 	/**
 	 * Save Admin Settings
 	 *
+	 * @return void
 	 * @since 1.0.0
 	 *
-	 * @return void
 	 */
 	public function save_admin_settings() {
 		// Sanitize all the post data before using.
@@ -144,6 +146,29 @@ class Actions {
 
 			$urls = Helpers::get_all_remote_urls();
 
+			/**
+			 * Filters to modify the path of the parent folder where the analytics scripts folder will be created
+			 *
+			 * The Full path to the parent folder
+			 * By default, the path is WP_CONTENT_DIR;
+			 *
+			 * @since 1.2.5
+			 *
+			 */
+			$parent_folder = apply_filters( 'plausible_analytics_scripts_parent_folder', WP_CONTENT_DIR );
+
+
+			/**
+			 * Filters to rename the folder where the analytics scripts files will be created
+			 *
+			 * The folder name
+			 * By default, the folder name is 'stats';
+			 *
+			 * @since 1.2.5
+			 *
+			 */
+			$folder = trailingslashit( $parent_folder . DIRECTORY_SEPARATOR . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) );
+
 			foreach ( $urls as $url ) {
 
 				$data = wp_remote_get( $url );
@@ -160,7 +185,7 @@ class Actions {
 
 				$file_content = $data['body'];
 				$file_name    = wp_basename( $url );
-				$file_path    = ABSPATH . 'js' . DIRECTORY_SEPARATOR;
+				$file_path    = $folder . 'js' . DIRECTORY_SEPARATOR;
 
 				if ( ! is_dir( $file_path ) ) {
 					if ( ! wp_mkdir_p( $file_path ) ) {
@@ -175,6 +200,22 @@ class Actions {
 				}
 
 			}
+
+			$api_files_from = PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'api-event-files/';
+
+			$api_files_to = $folder . 'api/event/';
+			$api_files    = array_filter( glob( "$api_files_from*" ), "is_file" );
+
+			if ( ! is_dir( $api_files_to ) ) {
+				if ( ! wp_mkdir_p( $api_files_to ) ) {
+					return new WP_Error( 'mkdir', __( 'Error when creating the API folder', 'plausible-analytics' ) );
+				}
+			}
+
+			foreach ( $api_files as $api_file ) {
+				copy( $api_file, $api_files_to . basename( $api_file ) );
+			}
+
 		}
 	}
 

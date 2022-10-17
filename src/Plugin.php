@@ -54,6 +54,11 @@ final class Plugin {
 
 		new Includes\Actions();
 		new Includes\Filters();
+
+		/**
+		 * @since  1.2.5
+		 */
+		new Includes\RestApi\Server();
 	}
 
 	/**
