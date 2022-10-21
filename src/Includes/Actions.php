@@ -41,7 +41,7 @@ class Actions {
 		$settings = Helpers::get_settings();
 
 		// Bailout, if `administrator` user role accessing frontend.
-		if ( 'false' === $settings['track_administrator'] && current_user_can( 'manage_options' ) ) {
+		if ( ( ! isset( $settings['track_administrator'] ) || 'false' === $settings['track_administrator'] ) && current_user_can( 'manage_options' ) ) {
 			return;
 		}
 

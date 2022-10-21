@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
-"POT-Creation-Date: 2022-10-21 18:42+0000\n"
+"POT-Creation-Date: 2022-10-21 20:09+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/mehul0810/plausible-analytics-wp/issues/new\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -99,8 +99,8 @@ msgstr ""
 
 #: src/Admin/Settings.php:172
 msgid ""
-"This works out of the box and does not affect your server or loading time.\n"
-"								Disable it if you want to run the script from the plausible.io domain name.\n"
+"This works out of the box and does not affect your server or loading time.\n"
+"								Disable it if you want to run the script from the plausible.io domain name.\n"
 "								You might see less accurate stats by disabling this due to adblockers blocking third-party scripts."
 msgstr ""
 

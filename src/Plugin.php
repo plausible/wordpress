@@ -47,6 +47,7 @@ final class Plugin {
 	 */
 	public function register_services() {
 		if ( is_admin() ) {
+			new Admin\Upgrades();
 			new Admin\Settings();
 			new Admin\Filters();
 			new Admin\Actions();

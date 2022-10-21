@@ -187,7 +187,7 @@ class Settings {
 							?>
 
 						</div>
-						<div id="advanced-proxy" class="<?php esc_attr_e( ! $is_custom_path ? 'plausible-analytics-hidden' : '' ); ?>">
+						<div id="advanced-proxy" class="<?php esc_attr_e( ! $is_custom_path ? 'plausible-analytics-hidden' : '', 'plausible-analytics' ); ?>">
 							<div class="plausible-analytics-admin-field-content">
 								<div class="plausible-analytics-admin-field-sub-header">
 									<label for="is_custom_path">

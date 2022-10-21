@@ -49,7 +49,7 @@ class Helpers {
 		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
 
 		// Early return when there's a script path.
-		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
+		if ( isset( $settings['is_proxy'] ) && $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
 			return $settings['script_path'] . $file_name . '.js';
 		}
 
@@ -118,7 +118,8 @@ class Helpers {
 	 */
 	public static function get_analytics_dashboard_url() {
 		$settings = self::get_settings();
-		$domain   = isset ($settings['domain_name'] ) ?  : Helpers::get_domain();
+		$domain   = isset ( $settings['domain_name'] ) ?: Helpers::get_domain();
+
 		return esc_url( "https://plausible.io/{$domain}" );
 	}
 
@@ -200,7 +201,7 @@ class Helpers {
 		$url      = 'https://plausible.io/api/event';
 
 		// Early return when there's a script path.
-		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
+		if ( isset( $settings['is_proxy'] ) && $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
 			return trailingslashit( $settings['event_path'] ) . 'event';
 		}
 
