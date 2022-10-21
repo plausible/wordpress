@@ -11,6 +11,7 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
+use Plausible\Analytics\WP\Includes\RestApi\Controllers\RestEventController;
 use function wp_enqueue_script;
 use function wp_enqueue_style;
 
@@ -155,7 +156,10 @@ class Actions {
 			 * @since 1.2.5
 			 *
 			 */
-			$parent_folder = apply_filters( 'plausible_analytics_scripts_parent_folder', WP_CONTENT_DIR );
+
+			$upload_dir = wp_upload_dir();
+			$upload_dir = $upload_dir ['basedir'];
+			$parent_folder = apply_filters( 'plausible_analytics_scripts_parent_folder', $upload_dir );
 
 
 			/**
@@ -200,6 +204,22 @@ class Actions {
 				}
 
 			}
+
+			// test if restapi is working.
+
+			$api_rest_url = RestEventController::get_event_route_url();
+
+			$response = wp_remote_post( $api_rest_url, array( 'sslverify' => false ) );
+			// Retrieve information
+			$response_code    = wp_remote_retrieve_response_code( $response );
+
+			if ( 200 == $response_code  ) {
+				$settings['is_rest'] = 'true';
+			} else {
+				$settings['is_rest'] = 'false';
+			}
+
+			update_option( 'plausible_analytics_settings', $settings );
 
 			$api_files_from = PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'api-event-files/';
 

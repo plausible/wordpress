@@ -7,6 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
+"POT-Creation-Date: 2022-10-21 18:42+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/mehul0810/plausible-analytics-wp/issues/new\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -15,16 +16,20 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:109
+#: src/Admin/Actions.php:112
 msgid "Something gone a wrong."
 msgstr ""
 
-#: src/Admin/Actions.php:106
+#: src/Admin/Actions.php:109
 msgid "Settings saved successfully."
 msgstr ""
 
-#: src/Admin/Actions.php:167
+#: src/Admin/Actions.php:196
 msgid "Error when creating the folder"
+msgstr ""
+
+#: src/Admin/Actions.php:231
+msgid "Error when creating the API folder"
 msgstr ""
 
 #. translators: %s: Link to 5 star rating

@@ -11,6 +11,9 @@
 namespace Plausible\Analytics\WP\Includes;
 
 // Bailout, if accessed directly.
+use Plausible\Analytics\WP\Includes\RestApi\Controllers\RestEventController;
+use Plausible\Analytics\WP\Admin\Actions;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -59,7 +62,9 @@ class Helpers {
 
 		// Triggered when custom domain is enabled.
 		if ( ! empty( $settings['is_proxy'] ) && 'true' === $settings['is_proxy'] ) {
-			$url    = trailingslashit (WP_CONTENT_URL ). "stats/js/{$file_name}.js";
+			$upload_dir = wp_upload_dir();
+			$upload_url = $upload_dir ['baseurl'];
+			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . "/js/{$file_name}.js";
 		}
 
 		return esc_url( $url );
@@ -168,7 +173,7 @@ class Helpers {
 	 */
 	public static function get_default_data_api_url() {
 
-		$url      = 'https://plausible.io/api/event';
+		$url = 'https://plausible.io/api/event';
 
 		$settings = Helpers::get_settings();
 
@@ -195,7 +200,6 @@ class Helpers {
 		$settings = self::get_settings();
 		$domain   = $settings['domain_name'];
 		$url      = 'https://plausible.io/api/event';
-		$folder   = trailingslashit( apply_filters( 'plausible_analytics_api_folder', 'stats' ) );
 
 		// Early return when there's a script path.
 		if ( $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['event_path'] ) && is_string( $settings['event_path'] ) ) {
@@ -204,16 +208,26 @@ class Helpers {
 
 		// Triggered when self-hosted analytics is enabled.
 		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
-			$default_domain = $settings['self_hosted_domain'];
-			$url            = "https://{$default_domain}/api/event";
+			$self_hosted_domain = $settings['self_hosted_domain'];
+			$url                = "https://{$self_hosted_domain}/api/event";
 		}
 
 		// Triggered when custom domain is enabled.
 		if ( ! empty( $settings['is_proxy'] ) && 'true' === $settings['is_proxy'] ) {
-			$url = "https://{$domain}/";
-			// Add the RESTful prefix.
-			$url .= trailingslashit( rest_get_url_prefix() );
-			$url .= "{$folder}api/event";
+
+			// Maybe Create proxy files
+			if ( empty( $settings['is_rest'] ) ) {
+				Actions::maybe_create_js_files();
+			}
+
+			if ( ! empty( $settings['is_rest'] ) && 'true' === $settings['is_rest'] ) {
+				return RestEventController::get_event_route_url();
+			}
+
+			$upload_dir = wp_upload_dir();
+			$upload_url = $upload_dir ['baseurl'];
+			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . "/api/event";
+
 		}
 
 		return esc_url( $url );

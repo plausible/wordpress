@@ -58,7 +58,7 @@ class ApiHelpers {
 		$response_body    = wp_remote_retrieve_body( $result );
 
 		if ( ! is_wp_error( $result ) ) {
-			return new WP_REST_Response(
+			wp_send_json(
 				array(
 					'status'        => $response_code,
 					'response'      => $response_message,
@@ -68,8 +68,6 @@ class ApiHelpers {
 		} else {
 			return new WP_Error( $response_code, $response_message, $response_body );
 		}
-
-		exit();
 
 	}
 	

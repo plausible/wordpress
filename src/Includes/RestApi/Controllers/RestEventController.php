@@ -34,14 +34,14 @@ class RestEventController {
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'stats/api';
+	protected static $namespace = 'stats/api';
 
 	/**
 	 * Route base.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'event';
+	protected static $rest_base = 'event';
 
 	/**
 	 * Coupons actions.
@@ -54,7 +54,7 @@ class RestEventController {
 	 * Register the routes for coupons.
 	 */
 	public function register_routes() {
-		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+		register_rest_route( self::$namespace, '/' . self::$rest_base, array(
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'event' ),
@@ -69,6 +69,13 @@ class RestEventController {
 	public function event( $request ) {
 		$event_remote_route = Helpers::get_default_data_api_url();
 		ApiHelpers::send_proxy_request( $event_remote_route, $request );
+	}
+
+	/**
+	 * @return string
+	 */
+	static public function get_event_route_url() {
+		return get_rest_url( null, self::$namespace . '/' . self::$rest_base );
 	}
 
 }
