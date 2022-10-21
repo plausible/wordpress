@@ -118,8 +118,7 @@ class Helpers {
 	 */
 	public static function get_analytics_dashboard_url() {
 		$settings = self::get_settings();
-		$domain   = $settings['domain_name'];
-
+		$domain   = isset ($settings['domain_name'] ) ?  : Helpers::get_domain();
 		return esc_url( "https://plausible.io/{$domain}" );
 	}
 
@@ -198,7 +197,6 @@ class Helpers {
 	public static function get_data_api_url() {
 
 		$settings = self::get_settings();
-		$domain   = $settings['domain_name'];
 		$url      = 'https://plausible.io/api/event';
 
 		// Early return when there's a script path.
