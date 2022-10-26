@@ -159,9 +159,11 @@ class API {
 				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
 				value="<?php echo esc_html( $value ); ?>"
 				<?php
-				! empty( $settings[ $field['slug'] ] ) ?
-					checked( $value, $settings[ $field['slug'] ], true ) :
-					'';
+				! empty( $settings[ $field['slug'] ] ) &&
+				is_array( $settings[ $field['slug'] ] ) &&
+				in_array( $value, $settings[ $field['slug'] ], true ) ?
+					checked( true ) :
+					checked( $value, $settings[ $field['slug'] ], true );
 				?>
 			/>
 			<label for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
