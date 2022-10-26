@@ -103,7 +103,7 @@ class API {
 		$toggle      = $group['toggle'];
 		$fields      = $group['fields'];
 		$field_value = ! empty( $settings[ $group['slug'] ] ) ? $settings[ $group['slug'] ] : false;
-		$is_checked  = checked( $toggle, true, false );
+		$is_checked  = ! is_array( $toggle ) ? checked( $toggle, true, false ) : '';
 		ob_start();
 		?>
 		<div class="plausible-analytics-admin-field">
@@ -160,7 +160,7 @@ class API {
 				value="<?php echo esc_html( $value ); ?>"
 				<?php
 				! empty( $settings[ $field['slug'] ] ) ?
-					checked( in_array( $value, $settings[ $field['slug'] ], true ), true ) :
+					checked( $value, $settings[ $field['slug'] ], true ) :
 					'';
 				?>
 			/>
