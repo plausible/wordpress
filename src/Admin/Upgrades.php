@@ -11,6 +11,7 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
+use Plausible\Analytics\WP\Admin;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -54,6 +55,11 @@ class Upgrades {
 		}
 
 		// Upgrade to version 1.2.5.
+		if ( version_compare( $plausible_analytics_version, '1.2.5', '<' ) ) {
+			$this->upgrade_from_less_125();
+		}
+
+	// Upgrade from version < 1.2.5.
 		if ( version_compare( $plausible_analytics_version, '1.2.5', '<=' ) ) {
 			$this->upgrade_to_125();
 		}
@@ -71,12 +77,11 @@ class Upgrades {
 	 */
 	public function upgrade_to_125() {
 
-		var_dump( 'upgrade_to_125' );
-
 		$settings = Helpers::get_settings();
 
 		if ( ! isset( $settings['is_proxy'] ) ) {
 			$settings['is_proxy'] = 'true';
+			Admin\Actions::maybe_create_js_files();
 		}
 
 		if ( ! isset( $settings['track_administrator'] ) ) {
@@ -94,6 +99,25 @@ class Upgrades {
 
 		// Update the version in DB to the latest as upgrades completed.
 		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
+	}
+
+	/**
+	 * Upgrade routine from less than 1.2.5 
+	 *
+	 * @since  1.2.5
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function upgrade_from_less_125() {
+
+		$settings = Helpers::get_settings();
+
+		if ( $settings['is_proxy'] == 'true' ||! isset( $settings['is_proxy'] ) ) {
+			$settings['is_proxy'] = 'true';
+			Admin\Actions::maybe_create_js_files();
+		}
+
 	}
 }
 

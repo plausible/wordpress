@@ -134,6 +134,7 @@ class Actions {
 	 */
 
 	public static function maybe_create_js_files() {
+
 		$settings = Helpers::get_settings();
 
 		$is_proxy       = isset( $settings['is_proxy'] ) && $settings['is_proxy'] === 'true';

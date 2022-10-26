@@ -162,6 +162,29 @@ class Helpers {
 		return get_option( 'plausible_analytics_settings', [] );
 	}
 
+	/**
+	 * Check if Default Settings are saved.
+	 *
+	 * @return array
+	 * @since  1.2.5
+	 * @access public
+	 *
+	 */
+	public static function is_default_settings_saved() {
+		return get_option( 'plausible_analytics_is_default_settings_saved', false );
+	}
+
+	/**
+	 * Get Plugin version from DB.
+	 *
+	 * @return array
+	 * @since  1.2.5
+	 * @access public
+	 *
+	 */
+	public static function get_plugin_version_from_db() {
+		return get_option( 'plausible_analytics_version', '1.0.0' );
+	}
 
 	/**
 	 * Get Remote Default Data API URL.

@@ -22,10 +22,10 @@ class Settings {
 	/**
 	 * Constructor.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
@@ -34,10 +34,10 @@ class Settings {
 	/**
 	 * Register Menu.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function register_menu() {
 		add_dashboard_page(
@@ -61,26 +61,31 @@ class Settings {
 	 *
 	 * @param string $name Header Name.
 	 *
+	 * @return mixed
 	 * @since  1.2.0
 	 * @access public
 	 *
-	 * @return mixed
 	 */
 	public function get_header( $name ) {
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo trailingslashit( esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) ) . 'assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>" />
+				<img
+					src="<?php echo trailingslashit( esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) ) . 'assets/dist/images/icon.png'; ?>"
+					alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
 					<h1><?php echo esc_html( $name ); ?></h1>
 				</div>
 				<div class="plausible-analytics-actions">
-					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>" target="_blank">
+					<a class="plausible-analytics-btn"
+					   href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>"
+					   target="_blank">
 						<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
 					</a>
-					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://docs.plausible.io' ); ?>" target="_blank">
+					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://docs.plausible.io' ); ?>"
+					   target="_blank">
 						<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
 					</a>
 				</div>
@@ -92,14 +97,20 @@ class Settings {
 	/**
 	 * Settings Page.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function plausible_analytics_settings_page() {
 
-		$settings = Helpers::get_settings();
+		$settings                  = Helpers::get_settings();
+		$is_default_settings_saved = Helpers::is_default_settings_saved();
+		$plugin_version_from_db    = Helpers::get_plugin_version_from_db();
+
+		$debug_info = $settings
+					  + array( 'is_default_settings_saved' =>  $is_default_settings_saved )
+					  + array( 'plugin_version_from_db' => $plugin_version_from_db );
 
 		$domain                   = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
 		$self_hosted_domain       = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : '';
@@ -111,6 +122,7 @@ class Settings {
 		$embed_analytics          = isset( $settings['embed_analytics'] ) && $settings['embed_analytics'] === 'true';
 		$shared_link              = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 		$track_administrator      = isset( $settings['track_administrator'] ) && $settings['track_administrator'] === 'true';
+
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
@@ -128,19 +140,29 @@ class Settings {
 								<?php esc_html_e( 'Self Hosted', 'plausible-analytics' ); ?>
 							</a>
 						</li>
+						<li>
+							<a href="#" data-tab="info">
+								<?php esc_html_e( 'Info', 'plausible-analytics' ); ?>
+							</a>
+						</li>
 					</ul>
 				</div>
-				<div id="plausible-analytics-content-general" class="plausible-analytics-content plausible-analytics-show">
+				<div id="plausible-analytics-content-general"
+					 class="plausible-analytics-content plausible-analytics-show">
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
 							<label for="domain-connected">
 								<?php esc_html_e( 'Domain Name', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text" name="plausible_analytics_settings[domain_name]"  placeholder="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>" value="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"/>
+									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text"
+										   name="plausible_analytics_settings[domain_name]"
+										   placeholder="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"
+										   value="<?php esc_attr_e( $domain, 'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<div>
-								<a class="plausible-analytics-link" href="<?php echo Helpers::get_analytics_dashboard_url(); ?>" target="_blank">
+								<a class="plausible-analytics-link"
+								   href="<?php echo Helpers::get_analytics_dashboard_url(); ?>" target="_blank">
 									<?php esc_html_e( 'Open Analytics', 'plausible-analytics' ); ?>
 								</a>
 							</div>
@@ -162,7 +184,7 @@ class Settings {
 							<label for="is-proxy">
 								<?php esc_html_e( 'Run the script as a first-party connection from your domain name', 'plausible-analytics' ); ?>
 							</label>
-							<?php echo Helpers::display_toggle_switch( 'is_proxy' , $is_proxy ); ?>
+							<?php echo Helpers::display_toggle_switch( 'is_proxy', $is_proxy ); ?>
 						</div>
 						<div class="plausible-analytics-description">
 
@@ -187,16 +209,17 @@ class Settings {
 							?>
 
 						</div>
-						<div id="advanced-proxy" class="<?php esc_attr_e( ! $is_custom_path ? 'plausible-analytics-hidden' : '', 'plausible-analytics' ); ?>">
+						<div id="advanced-proxy"
+							 class="<?php esc_attr_e( ! $is_custom_path ? 'plausible-analytics-hidden' : '', 'plausible-analytics' ); ?>">
 							<div class="plausible-analytics-admin-field-content">
 								<div class="plausible-analytics-admin-field-sub-header">
 									<label for="is_custom_path">
 										<?php esc_html_e( 'Run analytics script from a custom path', 'plausible-analytics' ) ?>
 									</label>
-										<?php Helpers::display_toggle_switch( 'is_custom_path' , $is_custom_path ) ?>
+									<?php Helpers::display_toggle_switch( 'is_custom_path', $is_custom_path ) ?>
 								</div>
 								<div class="plausible-analytics-sub-description">
-								<?php   esc_html_e( 'Our default proxy works out of the box and is an excellent solution for most sites, but if you want to specify a custom proxy that you have created manually, you can do so here', 'plausible-analytics' ); ?>
+									<?php esc_html_e( 'Our default proxy works out of the box and is an excellent solution for most sites, but if you want to specify a custom proxy that you have created manually, you can do so here', 'plausible-analytics' ); ?>
 								</div>
 								<label>
 									<?php esc_html_e( 'Script Path:', 'plausible-analytics' ); ?>
@@ -210,7 +233,7 @@ class Settings {
 											esc_attr( 'url' ),
 											esc_attr( 'plausible_analytics_settings[script_path]' ),
 											esc_url( $script_path ),
-											esc_attr( ! $is_custom_path  ? 'disabled' : '' )
+											esc_attr( ! $is_custom_path ? 'disabled' : '' )
 										);
 										?>
 									</span>
@@ -228,7 +251,7 @@ class Settings {
 											esc_attr( 'url' ),
 											esc_attr( 'plausible_analytics_settings[event_path]' ),
 											esc_url( $event_path ),
-											esc_attr( ! $is_custom_path  ? 'disabled' : '' )
+											esc_attr( ! $is_custom_path ? 'disabled' : '' )
 										);
 										?>
 									</span>
@@ -266,7 +289,7 @@ class Settings {
 										esc_attr( 'url' ),
 										esc_attr( 'plausible_analytics_settings[shared_link]' ),
 										esc_url( $shared_link ),
-										esc_attr( ! $embed_analytics  ? 'disabled' : '' )
+										esc_attr( ! $embed_analytics ? 'disabled' : '' )
 									);
 									?>
 								</span>
@@ -306,7 +329,10 @@ class Settings {
 							<label for="self-hosted-analytics">
 								<?php esc_html_e( 'Self-hosted Plausible?', 'plausible-analytics' ); ?>
 								<span class="plausible-analytics-admin-field-input">
-									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text" name="plausible_analytics_settings[self_hosted_domain]"  placeholder="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>" value="<?php esc_attr_e($self_hosted_domain,'plausible-analytics' ); ?>"/>
+									<input pattern="([A-Za-z0-9]{1,50}\.)+[-A-Za-z0-9]{2,}" type="text"
+										   name="plausible_analytics_settings[self_hosted_domain]"
+										   placeholder="<?php esc_attr_e( $self_hosted_domain, 'plausible-analytics' ); ?>"
+										   value="<?php esc_attr_e( $self_hosted_domain, 'plausible-analytics' ); ?>"/>
 								</span>
 							</label>
 							<?php echo Helpers::display_toggle_switch( 'is_self_hosted_analytics' ); ?>
@@ -324,6 +350,34 @@ class Settings {
 						</div>
 					</div>
 				</div>
+
+				<div id="plausible-analytics-content-info" class="plausible-analytics-content">
+					<div class="plausible-analytics-admin-field">
+						<div class="plausible-analytics-admin-field-header">
+							<label for="info-analytics">
+								<?php esc_html_e( 'Debug Info', 'plausible-analytics' ); ?>
+							</label>
+						</div>
+						<p class="plausible-analytics-description">
+						<pre
+							id="plausible-analytics-info-text"><?php print wp_json_encode( $debug_info, JSON_PRETTY_PRINT ) ?></pre>
+						<br/>
+						<a href="#"
+						   title="<?php esc_html_e( 'Copy info to clipboard', 'plausible-analytics' ); ?>"
+						   id="plausible-analytics-info-copy-btn"
+						   class="plausible-analytics-btn plausible-analytics-info-copy-btn"
+						   data-copied-text="<?php esc_html_e( 'Copied!', 'plausible-analytics' ); ?>"
+						>
+							<span><?php esc_html_e( 'Copy Info', 'plausible-analytics' ); ?></span>
+							<span class="plausible-analytics-spinner">
+								<div class="plausible-analytics-spinner--bounce-1"></div>
+								<div class="plausible-analytics-spinner--bounce-2"></div>
+							</span>
+						</a>
+						</p>
+					</div>
+				</div>
+
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">
 						<button
@@ -339,7 +393,9 @@ class Settings {
 								<div class="plausible-analytics-spinner--bounce-2"></div>
 							</span>
 						</button>
-						<input class="plausible-analytics-admin-settings-roadblock" type="hidden" name="plausible_analytics_settings[roadblock]" value="<?php echo wp_create_nonce( 'plausible-analytics-settings-roadblock' ); ?>"/>
+						<input class="plausible-analytics-admin-settings-roadblock" type="hidden"
+							   name="plausible_analytics_settings[roadblock]"
+							   value="<?php echo wp_create_nonce( 'plausible-analytics-settings-roadblock' ); ?>"/>
 					</div>
 				</div>
 			</form>
@@ -350,10 +406,10 @@ class Settings {
 	/**
 	 * Statistics Page via Embed feature.
 	 *
+	 * @return void
 	 * @since  1.2.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function statistics_page() {
 		$settings            = Helpers::get_settings();
@@ -366,7 +422,9 @@ class Settings {
 
 		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
 			?>
-			<iframe plausible-embed="" src="<?php echo esc_url( $shared_link ) . '&embed=true&theme=light&background=transparent'; ?>" scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
+			<iframe plausible-embed=""
+					src="<?php echo esc_url( $shared_link ) . '&embed=true&theme=light&background=transparent'; ?>"
+					scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
 			<script async="" src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {
@@ -393,10 +451,10 @@ class Settings {
 	/**
 	 * Return proxy help HTML.
 	 *
+	 * @return String
 	 * @since  1.2.5
 	 * @access public
 	 *
-	 * @return String
 	 */
 	public function get_proxy_server_software_help_html() {
 		$server_software = Helpers::get_server_software();

@@ -1,6 +1,8 @@
 document.addEventListener( 'DOMContentLoaded', () => {
 	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
+	const infoElement = document.getElementById( 'plausible-analytics-info-text' );
+	const infoCopyBtn = document.getElementById( 'plausible-analytics-info-copy-btn' );
 
 	// Bailout, if `formElement` doesn't exist.
 	if ( null === formElement ) {
@@ -46,7 +48,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	formElement.addEventListener( 'change', function( e ) {
 		// eslint-disable-next-line no-console
-		console.log( e.target );
 
 		if ( e.target && e.target === isProxyElement ) {
 			if ( isProxyElement.checked && ! isCustomPathElement.checked ) {
@@ -77,6 +78,16 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( e.target && ( e.target === selfHostedAnalyticsElement ) ) {
 			selfHostedDomainElement.disabled = ! ( selfHostedAnalyticsElement.checked );
 		}
+	} );
+
+	infoCopyBtn.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+
+		const copyText = infoElement.innerText;
+		// eslint-disable-next-line no-undef
+		navigator.clipboard.writeText( copyText ).then( () => {
+			infoCopyBtn.innerText = infoCopyBtn.getAttribute( 'data-copied-text' );
+		} );
 	} );
 
 	saveSettings.addEventListener( 'click', ( e ) => {
@@ -117,7 +128,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			{
 				method: 'POST',
 				body: formData,
-			}
+			},
 		).then( response => {
 			if ( 200 === response.status ) {
 				return response.json();

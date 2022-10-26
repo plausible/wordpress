@@ -90,9 +90,11 @@ final class Plugin {
 	 * @return void
 	 */
 	public function activate( $network_wide = false ) {
+
 		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
 
 		if ( ! $is_default_settings_saved ) {
+
 			$default_settings = [
 				'domain_name'          => Helpers::get_domain(),
 				'is_proxy'        => 'true',

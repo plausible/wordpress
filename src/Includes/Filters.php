@@ -19,10 +19,10 @@ class Filters {
 	/**
 	 * Constructor.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
@@ -31,13 +31,13 @@ class Filters {
 	/**
 	 * Add Plausible Analytics attributes.
 	 *
-	 * @param string $tag    Script tag.
+	 * @param string $tag Script tag.
 	 * @param string $handle Script handle.
 	 *
+	 * @return mixed
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return mixed
 	 */
 	public function add_plausible_attributes( $tag, $handle ) {
 		// Bailout, if not `Plausible Analytics` script.
@@ -47,7 +47,7 @@ class Filters {
 
 		$settings       = Helpers::get_settings();
 		$api_url        = Helpers::get_data_api_url() . '/';
-		$domain_name   = isset ($settings['domain_name'] ) ?  : Helpers::get_domain();
+		$domain_name    = isset ( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$id_replacement = '';
 
 		// If we're loading the compat script, we need the correct id attribute. If not, we can just remove it.
@@ -62,7 +62,7 @@ class Filters {
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['is_exclude_pages'] ) && $settings['is_exclude_pages'] ) {
 			$excluded_pages = $settings['excluded_pages'];
-			$params        .= " data-exclude='{$excluded_pages}'";
+			$params         .= " data-exclude='{$excluded_pages}'";
 		}
 
 		return str_replace( ' src', " {$params} src", $tag );
