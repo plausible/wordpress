@@ -109,7 +109,7 @@ class Settings {
 		$plugin_version_from_db    = Helpers::get_plugin_version_from_db();
 
 		$debug_info = $settings
-					  + array( 'is_default_settings_saved' =>  $is_default_settings_saved )
+					  + array( 'is_default_settings_saved' => $is_default_settings_saved )
 					  + array( 'plugin_version_from_db' => $plugin_version_from_db );
 
 		$domain                   = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();

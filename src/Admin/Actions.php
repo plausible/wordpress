@@ -158,8 +158,8 @@ class Actions {
 			 *
 			 */
 
-			$upload_dir = wp_upload_dir();
-			$upload_dir = $upload_dir ['basedir'];
+			$upload_dir    = wp_upload_dir();
+			$upload_dir    = $upload_dir ['basedir'];
 			$parent_folder = apply_filters( 'plausible_analytics_scripts_parent_folder', $upload_dir );
 
 
@@ -212,9 +212,9 @@ class Actions {
 
 			$response = wp_remote_post( $api_rest_url, array( 'sslverify' => false ) );
 			// Retrieve information
-			$response_code    = wp_remote_retrieve_response_code( $response );
+			$response_code = wp_remote_retrieve_response_code( $response );
 
-			if ( 200 == $response_code  ) {
+			if ( 200 == $response_code ) {
 				$settings['is_rest'] = 'true';
 			} else {
 				$settings['is_rest'] = 'false';
@@ -236,6 +236,8 @@ class Actions {
 			foreach ( $api_files as $api_file ) {
 				copy( $api_file, $api_files_to . basename( $api_file ) );
 			}
+
+			update_option( 'plausible_analytics_is_js_files_created', true );
 
 		}
 	}

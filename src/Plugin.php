@@ -92,6 +92,7 @@ final class Plugin {
 	public function activate( $network_wide = false ) {
 
 		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
+		$is_js_files_created = get_option( 'plausible_analytics_is_js_files_created', false );
 
 		if ( ! $is_default_settings_saved ) {
 
@@ -105,7 +106,10 @@ final class Plugin {
 			update_option( 'plausible_analytics_is_default_settings_saved', true );
 		}
 
-		Admin\Actions::maybe_create_js_files();
+		if ( ! $is_js_files_created ) {
+			Admin\Actions::maybe_create_js_files();
+		}
+
 	}
 
 	/**

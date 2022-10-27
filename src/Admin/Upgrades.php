@@ -27,10 +27,10 @@ class Upgrades {
 	/**
 	 * Constructor for Upgrades.
 	 *
+	 * @return void
 	 * @since  1.2.5
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_routines' ] );
@@ -41,10 +41,10 @@ class Upgrades {
 	 *
 	 * This is intended for automatic upgrade routines having less resource intensive tasks.
 	 *
+	 * @return void
 	 * @since  1.2.5
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function register_routines() {
 		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
@@ -55,11 +55,6 @@ class Upgrades {
 		}
 
 		// Upgrade to version 1.2.5.
-		if ( version_compare( $plausible_analytics_version, '1.2.5', '<' ) ) {
-			$this->upgrade_from_less_125();
-		}
-
-	// Upgrade from version < 1.2.5.
 		if ( version_compare( $plausible_analytics_version, '1.2.5', '<=' ) ) {
 			$this->upgrade_to_125();
 		}
@@ -70,16 +65,17 @@ class Upgrades {
 	/**
 	 * Upgrade routine for 1.2.5
 	 *
+	 * @return void
 	 * @since  1.2.5
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function upgrade_to_125() {
 
-		$settings = Helpers::get_settings();
+		$settings            = Helpers::get_settings();
+		$is_js_files_created = get_option( 'plausible_analytics_is_js_files_created', false );
 
-		if ( ! isset( $settings['is_proxy'] ) ) {
+		if ( ( 'true' == $settings['is_proxy'] && ! $is_js_files_created ) || ! isset( $settings['is_proxy'] ) ) {
 			$settings['is_proxy'] = 'true';
 			Admin\Actions::maybe_create_js_files();
 		}
@@ -99,25 +95,6 @@ class Upgrades {
 
 		// Update the version in DB to the latest as upgrades completed.
 		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
-	}
-
-	/**
-	 * Upgrade routine from less than 1.2.5 
-	 *
-	 * @since  1.2.5
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function upgrade_from_less_125() {
-
-		$settings = Helpers::get_settings();
-
-		if ( $settings['is_proxy'] == 'true' ||! isset( $settings['is_proxy'] ) ) {
-			$settings['is_proxy'] = 'true';
-			Admin\Actions::maybe_create_js_files();
-		}
-
 	}
 }
 
