@@ -151,6 +151,7 @@ class API {
 		ob_start();
 		$value    = ! empty( $field['value'] ) ? $field['value'] : 'on';
 		$settings = Helpers::get_settings();
+		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
 		?>
 		<span class="plausible-checkbox-list">
 			<input
@@ -159,11 +160,11 @@ class API {
 				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
 				value="<?php echo esc_html( $value ); ?>"
 				<?php
-				! empty( $settings[ $field['slug'] ] ) &&
-				is_array( $settings[ $field['slug'] ] ) &&
-				in_array( $value, $settings[ $field['slug'] ], true ) ?
-					checked( true ) :
-					checked( $value, $settings[ $field['slug'] ], true );
+				if ( is_array( $slug ) ) {
+					checked( $value, in_array( $value, $slug, false ) ? $value : false, true );
+				} else {
+					checked( $value, $slug, true );
+				}
 				?>
 			/>
 			<label for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
