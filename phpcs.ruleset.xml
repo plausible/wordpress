@@ -9,11 +9,10 @@
 	<!-- Default tab width for indentation fixes and such. -->
 	<arg name="tab-width" value="4"/>
 
-	<!-- Exclude directories we don't want checked. -->
-	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>languages/*</exclude-pattern>
-	<exclude-pattern>assets/*</exclude-pattern>
+	<file>./plausible-analytics.php</file>
+	<file>./src/</file>
+	<file>./api-event-files/</file>
+
 
 	<!-- Bring in WP rules. -->
 	<rule ref="WordPress-Core">
@@ -21,6 +20,7 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
+		<exclude name="WordPress.PHP.YodaConditions" />
 	</rule>
 
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax.Found">

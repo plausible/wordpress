@@ -10,7 +10,10 @@
 
 namespace Plausible\Analytics\WP\Includes\RestApi;
 
-defined( 'ABSPATH' ) || exit;
+// Bailout, if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Loading the REST API and all REST API namespaces.
@@ -22,7 +25,7 @@ class Server {
 	 *
 	 * @var array
 	 */
-	protected $controllers = array();
+	protected $controllers = [];
 
 	public function __construct() {
 		// WP REST API.
@@ -33,7 +36,7 @@ class Server {
 	 * Hook into WordPress ready to init the REST API as needed.
 	 */
 	public function init() {
-		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
+		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ], 10 );
 	}
 
 	/**
@@ -55,9 +58,9 @@ class Server {
 	 * @return array List of Namespaces and Main controller classes.
 	 */
 	protected function get_rest_namespaces() {
-		return array(
-			'stats/api/' => $this->get_controllers()
-		);
+		return [
+			'stats/api/' => $this->get_controllers(),
+		];
 	}
 
 	/**
@@ -66,9 +69,9 @@ class Server {
 	 * @return array
 	 */
 	protected function get_controllers() {
-		return array(
+		return [
 			'event' => 'RestEventController',
-		);
+		];
 	}
 
 	/**

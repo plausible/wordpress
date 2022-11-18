@@ -14,25 +14,12 @@ namespace Plausible\Analytics\WP\Includes;
 use Plausible\Analytics\WP\Includes\RestApi\Controllers\RestEventController;
 use Plausible\Analytics\WP\Admin\Actions;
 
+// Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 class Helpers {
-
-	/**
-	 * Get Plain Domain.
-	 *
-	 * @return string
-	 * @since  1.0.0
-	 * @access public
-	 *
-	 */
-	public static function get_domain() {
-		$site_url = site_url();
-
-		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
-	}
 
 	/**
 	 * Get Analytics URL.
@@ -46,7 +33,7 @@ class Helpers {
 		$settings         = self::get_settings();
 		$default_domain   = 'plausible.io';
 		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
-		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
+		$file_name        = $is_outbound_link ? 'script.outbound-links' : 'plausible';
 
 		// Early return when there's a script path.
 		if ( isset( $settings['is_proxy'] ) && $settings['is_proxy'] === 'true' && $settings['is_custom_path'] === 'true' && ! empty( $settings['script_path'] ) && is_string( $settings['script_path'] ) ) {
@@ -64,10 +51,25 @@ class Helpers {
 		if ( ! empty( $settings['is_proxy'] ) && 'true' === $settings['is_proxy'] ) {
 			$upload_dir = wp_upload_dir();
 			$upload_url = $upload_dir ['baseurl'];
-			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . "/js/{$file_name}.js";
+			if ( is_ssl() ) {
+				$upload_url = str_replace( 'http://', 'https://', $upload_url );
+			}
+			$url = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . "/js/{$file_name}.js";
 		}
 
 		return esc_url( $url );
+	}
+
+	/**
+	 * Get Settings.
+	 *
+	 * @return array
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 */
+	public static function get_settings() {
+		return get_option( 'plausible_analytics_settings', [] );
 	}
 
 	/**
@@ -81,19 +83,19 @@ class Helpers {
 	public static function get_all_remote_urls() {
 		$settings       = self::get_settings();
 		$default_domain = 'plausible.io';
-		$urls           = array();
+		$urls           = [];
 		$folder         = '';
 
-		$file_names = array(
+		$file_names = [
 			'plausible',
-			'plausible.outbound-links',
+			'script.outbound-links',
 			'script.hash',
 			'script.file-downloads',
 			'script.manual',
 			'script.local',
 			'script.compat',
-			'script.exclusions'
-		);
+			'script.exclusions',
+		];
 
 		// Triggered when self hosted analytics is enabled.
 		if ( ! empty( $settings['is_self_hosted_analytics'] ) && 'true' === $settings['is_self_hosted_analytics'] ) {
@@ -118,9 +120,23 @@ class Helpers {
 	 */
 	public static function get_analytics_dashboard_url() {
 		$settings = self::get_settings();
-		$domain   = isset ( $settings['domain_name'] ) ?: Helpers::get_domain();
+		$domain   = isset( $settings['domain_name'] ) ?: Helpers::get_domain();
 
 		return esc_url( "https://plausible.io/{$domain}" );
+	}
+
+	/**
+	 * Get Plain Domain.
+	 *
+	 * @return string
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 */
+	public static function get_domain() {
+		$site_url = site_url();
+
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 	}
 
 	/**
@@ -148,18 +164,6 @@ class Helpers {
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
-	}
-
-	/**
-	 * Get Settings.
-	 *
-	 * @return array
-	 * @since  1.0.0
-	 * @access public
-	 *
-	 */
-	public static function get_settings() {
-		return get_option( 'plausible_analytics_settings', [] );
 	}
 
 	/**
@@ -248,7 +252,7 @@ class Helpers {
 
 			$upload_dir = wp_upload_dir();
 			$upload_url = $upload_dir ['baseurl'];
-			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . "/api/event";
+			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . '/api/event';
 
 		}
 
@@ -269,7 +273,7 @@ class Helpers {
 		if ( is_array( $var ) ) {
 			return array_map( [ static::class, 'clean' ], $var );
 		} else {
-			return is_scalar( $var ) ? sanitize_text_field( trim( $var ) ) : $var;
+			return is_scalar( $var ) ? esc_attr( trim( $var ) ) : $var;
 		}
 	}
 

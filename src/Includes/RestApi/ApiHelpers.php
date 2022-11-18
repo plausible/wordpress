@@ -10,11 +10,11 @@
 
 namespace Plausible\Analytics\WP\Includes\RestApi;
 
-// Bailout, if accessed directly.
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
+// Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -32,7 +32,7 @@ class ApiHelpers {
 	 */
 	public static function send_proxy_request( $url, $request ) {
 
-		$headers = array();
+		$headers = [];
 
 		foreach ( getallheaders() as $key => $value ) {
 			if ( ! in_array( $key, [ 'Host', 'Accept-Encoding', 'X-Forwarded-For', 'Client-IP' ] ) ) {
@@ -46,7 +46,7 @@ class ApiHelpers {
 		$args = [
 			'headers' => $headers,
 			'body'    => $request->get_body(),
-			'method'  => $request->get_method()
+			'method'  => $request->get_method(),
 		];
 
 		# Proxy
@@ -59,16 +59,16 @@ class ApiHelpers {
 
 		if ( ! is_wp_error( $result ) ) {
 			wp_send_json(
-				array(
+				[
 					'status'        => $response_code,
 					'response'      => $response_message,
-					'body_response' => $response_body
-				)
+					'body_response' => $response_body,
+				]
 			);
 		} else {
 			return new WP_Error( $response_code, $response_message, $response_body );
 		}
 
 	}
-	
+
 }

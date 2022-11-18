@@ -1,7 +1,7 @@
 {
     "root": true,
-    "parser": "babel-eslint",
-    "extends": ["wordpress", "plugin:react/recommended"],
+    "parser": "@babel/eslint-parser",
+    "extends": ["plugin:@wordpress/eslint-plugin/recommended", "plugin:react/recommended"],
     "env": {
         "browser": false,
         "es6": true,
@@ -31,6 +31,7 @@
         }
     },
     "rules": {
+        "prettier/prettier": 0,
         "linebreak-style": 0,
         "array-bracket-spacing": ["error", "always"],
         "brace-style": ["error", "1tbs"],

@@ -55,6 +55,7 @@ final class Plugin {
 
 		new Includes\Actions();
 		new Includes\Filters();
+		new Includes\ThirdParties();
 
 		/**
 		 * @since  1.2.5
@@ -92,14 +93,14 @@ final class Plugin {
 	public function activate( $network_wide = false ) {
 
 		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
-		$is_js_files_created = get_option( 'plausible_analytics_is_js_files_created', false );
+		$is_js_files_created       = get_option( 'plausible_analytics_is_js_files_created', false );
 
 		if ( ! $is_default_settings_saved ) {
 
 			$default_settings = [
-				'domain_name'          => Helpers::get_domain(),
-				'is_proxy'        => 'true',
-				'track_administrator'  => 'false',
+				'domain_name'         => Helpers::get_domain(),
+				'is_proxy'            => 'true',
+				'track_administrator' => 'false',
 			];
 
 			update_option( 'plausible_analytics_settings', $default_settings );

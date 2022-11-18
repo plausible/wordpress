@@ -109,8 +109,8 @@ class Settings {
 		$plugin_version_from_db    = Helpers::get_plugin_version_from_db();
 
 		$debug_info = $settings
-					  + array( 'is_default_settings_saved' => $is_default_settings_saved )
-					  + array( 'plugin_version_from_db' => $plugin_version_from_db );
+					  + [ 'is_default_settings_saved' => $is_default_settings_saved ]
+					  + [ 'plugin_version_from_db' => $plugin_version_from_db ];
 
 		$domain                   = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
 		$self_hosted_domain       = ! empty( $settings['self_hosted_domain'] ) ? esc_attr( $settings['self_hosted_domain'] ) : '';
@@ -122,7 +122,6 @@ class Settings {
 		$embed_analytics          = isset( $settings['embed_analytics'] ) && $settings['embed_analytics'] === 'true';
 		$shared_link              = ! empty( $settings['shared_link'] ) ? esc_url( $settings['shared_link'] ) : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
 		$track_administrator      = isset( $settings['track_administrator'] ) && $settings['track_administrator'] === 'true';
-
 
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
@@ -140,11 +139,13 @@ class Settings {
 								<?php esc_html_e( 'Self Hosted', 'plausible-analytics' ); ?>
 							</a>
 						</li>
+						<?php if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) : ?>
 						<li>
 							<a href="#" data-tab="info">
 								<?php esc_html_e( 'Info', 'plausible-analytics' ); ?>
 							</a>
 						</li>
+						<?php endif; ?>
 					</ul>
 				</div>
 				<div id="plausible-analytics-content-general"
@@ -191,9 +192,12 @@ class Settings {
 							<?php
 							echo sprintf(
 								'%1$s <a href="%2$s"  >%3$s</a> <br>',
-								esc_html__( 'This works out of the box and does not affect your server or loading time.
+								esc_html__(
+									'This works out of the box and does not affect your server or loading time.
 								Disable it if you want to run the script from the plausible.io domain name.
-								You might see less accurate stats by disabling this due to adblockers blocking third-party scripts.', 'plausible-analytics' ),
+								You might see less accurate stats by disabling this due to adblockers blocking third-party scripts.',
+									'plausible-analytics'
+								),
 								esc_url( 'https://plausible.io/docs/proxy/introduction' ),
 								esc_html__( 'Read more here &raquo;', 'plausible-analytics' )
 							);
@@ -214,9 +218,9 @@ class Settings {
 							<div class="plausible-analytics-admin-field-content">
 								<div class="plausible-analytics-admin-field-sub-header">
 									<label for="is_custom_path">
-										<?php esc_html_e( 'Run analytics script from a custom path', 'plausible-analytics' ) ?>
+										<?php esc_html_e( 'Run analytics script from a custom path', 'plausible-analytics' ); ?>
 									</label>
-									<?php Helpers::display_toggle_switch( 'is_custom_path', $is_custom_path ) ?>
+									<?php Helpers::display_toggle_switch( 'is_custom_path', $is_custom_path ); ?>
 								</div>
 								<div class="plausible-analytics-sub-description">
 									<?php esc_html_e( 'Our default proxy works out of the box and is an excellent solution for most sites, but if you want to specify a custom proxy that you have created manually, you can do so here', 'plausible-analytics' ); ?>
@@ -351,6 +355,7 @@ class Settings {
 					</div>
 				</div>
 
+				<?php if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) : ?>
 				<div id="plausible-analytics-content-info" class="plausible-analytics-content">
 					<div class="plausible-analytics-admin-field">
 						<div class="plausible-analytics-admin-field-header">
@@ -360,7 +365,7 @@ class Settings {
 						</div>
 						<p class="plausible-analytics-description">
 						<pre
-							id="plausible-analytics-info-text"><?php print wp_json_encode( $debug_info, JSON_PRETTY_PRINT ) ?></pre>
+							id="plausible-analytics-info-text"><?php print wp_json_encode( $debug_info, JSON_PRETTY_PRINT ); ?></pre>
 						<br/>
 						<a href="#"
 						   title="<?php esc_html_e( 'Copy info to clipboard', 'plausible-analytics' ); ?>"
@@ -377,6 +382,7 @@ class Settings {
 						</p>
 					</div>
 				</div>
+				<?php endif; ?>
 
 				<div class="plausible-analytics-admin-field">
 					<div class="plausible-analytics-admin-field-header">

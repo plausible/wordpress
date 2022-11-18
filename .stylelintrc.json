@@ -1,7 +1,9 @@
 {
-    "extends": ["stylelint-config-wordpress", "stylelint-prettier/recommended"],
+    "extends": ["stylelint-config-standard-scss", "@wordpress/stylelint-config", "stylelint-prettier/recommended"],
     "rules": {
         "at-rule-no-unknown": null,
+        "rule-empty-line-before": null,
+        "scss/at-import-no-partial-leading-underscore": null,
         "scss/at-rule-no-unknown": true
     }
 }

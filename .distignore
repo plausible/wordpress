@@ -13,6 +13,7 @@
 /vendor/bin
 /vendor/composer/installers
 /wp-org-assets
+/release
 
 .scrutinizer.yml
 .travis.yml
@@ -30,6 +31,8 @@
 .lintstagedrc.json
 .distignore
 .stylelintignore
+.gitpod.yml
+.nvmrc
 
 sample-data/wordpress.sql
 sample-data/sample-data.numbers
@@ -40,6 +43,7 @@ package.json
 package-lock.json
 phpunit.xml
 phpunit.xml.dist
+plausible-analytics.zip
 CHANGELOG.md
 README.md
 readme.md
@@ -52,3 +56,4 @@ postcss.config.js
 webpack.config.js
 docker-compose.yml
 wp-textdomain.js
+release.sh

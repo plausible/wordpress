@@ -17,6 +17,7 @@ use Plausible\Analytics\WP\Includes\Helpers;
 use Plausible\Analytics\WP\Includes\RestApi\ApiHelpers;
 use WP_REST_Server;
 
+// Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -54,13 +55,17 @@ class RestEventController {
 	 * Register the routes for coupons.
 	 */
 	public function register_routes() {
-		register_rest_route( self::$namespace, '/' . self::$rest_base, array(
-			array(
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => array( $this, 'event' ),
-				'permission_callback' => '__return_true',
-			),
-		) );
+		register_rest_route(
+			self::$namespace,
+			'/' . self::$rest_base,
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'event' ],
+					'permission_callback' => '__return_true',
+				],
+			]
+		);
 	}
 
 	/**

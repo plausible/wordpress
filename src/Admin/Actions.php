@@ -85,14 +85,13 @@ class Actions {
 					$post_data['domain_name'] = Helpers::get_domain();
 				}
 
-
 				// Disable embed_analytics if no shared link provided
-				if ( empty ( $post_data['shared_link'] ) ) {
+				if ( empty( $post_data['shared_link'] ) ) {
 					$post_data['embed_analytics'] = 'false';
 				}
 
 				// Disable is_custom_path if no custom path provided
-				if ( ( $post_data['is_proxy'] === 'false' || empty ( $post_data['script_path'] ) || empty ( $post_data['event_path'] ) ) ) {
+				if ( ( $post_data['is_proxy'] === 'false' || empty( $post_data['script_path'] ) || empty( $post_data['event_path'] ) ) ) {
 					$post_data['is_custom_path'] = 'false';
 				}
 
@@ -119,7 +118,7 @@ class Actions {
 			wp_send_json_success(
 				[
 					'message' => $message,
-					'status'  => $status
+					'status'  => $status,
 				]
 			);
 		}
@@ -162,7 +161,6 @@ class Actions {
 			$upload_dir    = $upload_dir ['basedir'];
 			$parent_folder = apply_filters( 'plausible_analytics_scripts_parent_folder', $upload_dir );
 
-
 			/**
 			 * Filters to rename the folder where the analytics scripts files will be created
 			 *
@@ -180,11 +178,11 @@ class Actions {
 
 				if ( is_wp_error( $data ) && false !== strpos( $data->get_error_message(), 'cURL error 60' ) ) {
 					// Fix for expired certificates in old WordPress version
-					$data = wp_remote_get( $url, array( 'sslverify' => false ) );
+					$data = wp_remote_get( $url, [ 'sslverify' => false ] );
 					if ( is_wp_error( $data ) ) {
 						return $data;
 					}
-				} else if ( is_wp_error( $data ) ) {
+				} elseif ( is_wp_error( $data ) ) {
 					return $data;
 				}
 
@@ -201,20 +199,19 @@ class Actions {
 
 				$result = $wp_filesystem->put_contents( $file_path . $file_name, $file_content );
 				if ( ! $result ) {
-					return new WP_Error( 'put_contents', __( 'Error when creating the file' . $file_name, 'plausible-analytics' ) );
+					return new WP_Error( 'put_contents', __( "Error when creating the file $file_name", 'plausible-analytics' ) );
 				}
-
 			}
 
 			// test if restapi is working.
 
 			$api_rest_url = RestEventController::get_event_route_url();
 
-			$response = wp_remote_post( $api_rest_url, array( 'sslverify' => false ) );
+			$response = wp_remote_post( $api_rest_url, [ 'sslverify' => false ] );
 			// Retrieve information
 			$response_code = wp_remote_retrieve_response_code( $response );
 
-			if ( 200 == $response_code ) {
+			if ( 200 === $response_code ) {
 				$settings['is_rest'] = 'true';
 			} else {
 				$settings['is_rest'] = 'false';
@@ -225,7 +222,7 @@ class Actions {
 			$api_files_from = PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'api-event-files/';
 
 			$api_files_to = $folder . 'api/event/';
-			$api_files    = array_filter( glob( "$api_files_from*" ), "is_file" );
+			$api_files    = array_filter( glob( "$api_files_from*" ), 'is_file' );
 
 			if ( ! is_dir( $api_files_to ) ) {
 				if ( ! wp_mkdir_p( $api_files_to ) ) {

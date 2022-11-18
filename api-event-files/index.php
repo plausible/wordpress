@@ -1,12 +1,12 @@
 <?php
 
-$url = "https://plausible.io/api/event";
+$url = 'https://plausible.io/api/event';
 
-$headers = array();
+$headers = [];
 
 $allowed_headers =
 
-	array(
+	[
 		'Accept',
 		'Accept-Language',
 		'Connection',
@@ -30,7 +30,7 @@ $allowed_headers =
 		'X-Real-Ip',
 		'X-Request-Id',
 		'X-Scheme',
-	);
+	];
 
 foreach ( getallheaders() as $key => $value ) {
 	if ( in_array( $key, $allowed_headers ) ) {

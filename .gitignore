@@ -47,3 +47,9 @@ assets/dist/
 
 # Composer
 vendor
+
+# Artifact file
+plausible-analytics.zip
+/release
+/.gitpod.yml
+/.nvmrc

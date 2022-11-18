@@ -1,0 +1,1 @@
+ mkdir release && mkdir "release/plausible-analytics" && rsync -rc --exclude './node_modules' './release' --exclude-from="./.distignore" "./" release/plausible-analytics/ --delete --delete-excluded && cd release && zip -r ../plausible-analytics.zip *

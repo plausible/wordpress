@@ -7,8 +7,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
-"POT-Creation-Date: 2022-10-26 14:45+0000\n"
-"Report-Msgid-Bugs-To: https://github.com/mehul0810/plausible-analytics-wp/issues/new\n"
+"POT-Creation-Date: 2022-10-27 11:18+0000\n"
+"Report-Msgid-Bugs-To: https://github.com/plausible/wordpress/issues/new\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -33,19 +33,19 @@ msgid "Error when creating the API folder"
 msgstr ""
 
 #. translators: %s: Link to 5 star rating
-#: src/Admin/Filters.php:47
+#: src/Admin/Filters.php:50
 msgid "If you like <strong>Plausible Analytics</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!"
 msgstr ""
 
-#: src/Admin/Filters.php:48
+#: src/Admin/Filters.php:51
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:71, src/Admin/Settings.php:127
+#: src/Admin/Filters.php:74, src/Admin/Settings.php:127
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/Filters.php:76
+#: src/Admin/Filters.php:79
 msgid "Support"
 msgstr ""
 
