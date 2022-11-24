@@ -27,6 +27,7 @@ class ThirdParties {
 		'wp_rocket',
 		'autoptimize',
 		'siteground_optimizer',
+		'litespeed_optimize',
 	];
 
 	/**
@@ -58,6 +59,24 @@ class ThirdParties {
 	 */
 	private function get_third_parties() {
 		return $this->third_parties;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function run_third_party_action_litespeed_optimize() {
+		add_filter( 'litespeed_optimize_js_excludes', [ $this, 'add_litespeed_optimize_filter' ], 10, 1 );
+	}
+
+	/**
+	 * @param $exclude_js
+	 *
+	 * @return mixed
+	 */
+	public function add_litespeed_optimize_filter( $exclude_js ) {
+		$exclude_js[] = 'plausible-analytics';
+
+		return $exclude_js;
 	}
 
 	/**

@@ -45,11 +45,17 @@ class Filters {
 			return $tag;
 		}
 
-		$settings    = Helpers::get_settings();
-		$api_url     = Helpers::get_data_api_url() . '/';
-		$domain_name = isset( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$settings = Helpers::get_settings();
+		$api_url  = Helpers::get_data_api_url() . '/';
 
-		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
+		if ( isset( $settings['domain_name'] ) ) {
+			$domain_name = $settings['domain_name'];
+		} else {
+			$domain_name = Helpers::get_domain();
+		}
+
+		// add data-no-optimize data-cfasync attrs to ignore the JS from CloudFlare and other optimizer
+		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}' data-no-optimize data-cfasync='false'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['is_exclude_pages'] ) && $settings['is_exclude_pages'] ) {

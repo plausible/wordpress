@@ -120,7 +120,11 @@ class Helpers {
 	 */
 	public static function get_analytics_dashboard_url() {
 		$settings = self::get_settings();
-		$domain   = isset( $settings['domain_name'] ) ?: Helpers::get_domain();
+		if ( isset( $settings['domain_name'] ) ) {
+			$domain = $settings['domain_name'];
+		} else {
+			$domain = Helpers::get_domain();
+		}
 
 		return esc_url( "https://plausible.io/{$domain}" );
 	}
@@ -252,7 +256,12 @@ class Helpers {
 
 			$upload_dir = wp_upload_dir();
 			$upload_url = $upload_dir ['baseurl'];
-			$url        = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . '/api/event';
+
+			if ( is_ssl() ) {
+				$upload_url = str_replace( 'http://', 'https://', $upload_url );
+			}
+
+			$url = trailingslashit( $upload_url ) . apply_filters( 'plausible_analytics_scripts_folder', 'stats' ) . '/api/event';
 
 		}
 

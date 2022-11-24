@@ -38,9 +38,15 @@ class Actions {
 	 * @return void
 	 */
 	public function register_assets() {
-		$settings = Helpers::get_settings();
 
 		// Bailout, if `administrator` user role accessing frontend.
+		if ( current_user_can( 'manage_options' ) ) {
+			$settings = Helpers::get_settings();
+			if ( ( ! isset( $settings['track_administrator'] ) || 'false' === $settings['track_administrator'] ) ) {
+				return;
+			}
+		}
+
 		if ( ( ! isset( $settings['track_administrator'] ) || 'false' === $settings['track_administrator'] ) && current_user_can( 'manage_options' ) ) {
 			return;
 		}
