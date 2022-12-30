@@ -9,7 +9,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const infoElement = document.getElementById( 'plausible-analytics-info-text' );
 	const infoCopyBtn = document.getElementById( 'plausible-analytics-info-copy-btn' );
 	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
-	
+
 	const tabsWrap = formElement.querySelector( '.plausible-analytics-admin-tabs' );
 	const tabs = Array.from( tabsWrap.querySelectorAll( 'a' ) );
 	const tabContents = Array.from( formElement.querySelectorAll( '.plausible-analytics-content' ) );
