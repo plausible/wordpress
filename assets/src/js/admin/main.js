@@ -1,14 +1,15 @@
 document.addEventListener( 'DOMContentLoaded', () => {
-	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
-	const infoElement = document.getElementById( 'plausible-analytics-info-text' );
-	const infoCopyBtn = document.getElementById( 'plausible-analytics-info-copy-btn' );
 
 	// Bailout, if `formElement` doesn't exist.
 	if ( null === formElement ) {
 		return;
 	}
-
+	const formErrors = document.getElementById( 'plausible-analytics-settings-errors' );
+	const infoElement = document.getElementById( 'plausible-analytics-info-text' );
+	const infoCopyBtn = document.getElementById( 'plausible-analytics-info-copy-btn' );
+	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
+	
 	const tabsWrap = formElement.querySelector( '.plausible-analytics-admin-tabs' );
 	const tabs = Array.from( tabsWrap.querySelectorAll( 'a' ) );
 	const tabContents = Array.from( formElement.querySelectorAll( '.plausible-analytics-content' ) );
@@ -80,15 +81,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 	} );
 
-	infoCopyBtn.addEventListener( 'click', ( e ) => {
-		e.preventDefault();
+	if ( null !== infoCopyBtn ) {
+		infoCopyBtn.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
 
-		const copyText = infoElement.innerText;
-		// eslint-disable-next-line no-undef
-		navigator.clipboard.writeText( copyText ).then( () => {
-			infoCopyBtn.innerText = infoCopyBtn.getAttribute( 'data-copied-text' );
+			const copyText = infoElement.innerText;
+			// eslint-disable-next-line no-undef
+			navigator.clipboard.writeText( copyText ).then( () => {
+				infoCopyBtn.innerText = infoCopyBtn.getAttribute( 'data-copied-text' );
+			} );
 		} );
-	} );
+	}
 
 	saveSettings.addEventListener( 'click', ( e ) => {
 		e.preventDefault();
@@ -109,6 +112,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		spinner.style.display = 'block';
 		saveSettings.setAttribute( 'disabled', 'disabled' );
+
+		formErrors.style.display = 'none';
+		const ul = formErrors.querySelector( 'ul' );
+		ul.innerHTML = '';
 
 		formData.append( 'action', 'plausible_analytics_save_admin_settings' );
 		formData.append( 'roadblock', roadBlock );
@@ -142,6 +149,32 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			if ( response.success ) {
 				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-saved-text' );
+
+				const hasProxyApiPhp = response.data.error.some( ( error ) =>
+					error.errors.hasOwnProperty( 'proxy-api-php' ),
+				);
+				const hasProxyApiRest = response.data.error.some( ( error ) =>
+					error.errors.hasOwnProperty( 'proxy-api-rest' ),
+				);
+
+				const proxyErrors = response.data.error
+					.map( ( error ) =>
+						Object.entries( error.errors ).filter( ( [ key ] ) => key.startsWith( 'proxy-' ) ),
+					)
+					.flat();
+
+				if ( proxyErrors.length ) {
+					for ( const [ errorMessages ] of proxyErrors ) {
+						errorMessages.forEach( errorMessage => {
+							ul.innerHTML += `<li>${ errorMessage }</li>`;
+						} );
+					}
+				}
+
+				if ( proxyErrors.length > 2 || ( hasProxyApiPhp && hasProxyApiRest ) ) {
+					formErrors.style.display = 'block';
+					isProxyElement.checked = false;
+				}
 			}
 
 			setTimeout( () => {
@@ -150,5 +183,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-default-text' );
 			}, 500 );
 		} );
+	} );
+
+	formErrors.querySelector( 'a[href="#more-error-details"]' ).addEventListener( 'click', event => {
+		event.preventDefault();
+		formErrors.querySelector( 'ul' ).style.display = 'block';
 	} );
 } );

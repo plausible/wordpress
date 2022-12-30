@@ -31,18 +31,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class RestEventController {
 
 	/**
-	 * Endpoint namespace.
-	 *
-	 * @var string
-	 */
-	protected static $namespace = 'stats/api';
-
-	/**
 	 * Route base.
 	 *
 	 * @var string
 	 */
-	protected static $rest_base = 'event';
+	protected static $rest_base = 'js';
 
 	/**
 	 * Coupons actions.
@@ -55,8 +48,9 @@ class RestEventController {
 	 * Register the routes for coupons.
 	 */
 	public function register_routes() {
+
 		register_rest_route(
-			self::$namespace,
+			ApiHelpers::get_namespace(),
 			'/' . self::$rest_base,
 			[
 				[
@@ -80,7 +74,7 @@ class RestEventController {
 	 * @return string
 	 */
 	static public function get_event_route_url() {
-		return get_rest_url( null, self::$namespace . '/' . self::$rest_base );
+		return get_rest_url( null, ApiHelpers::get_namespace() . '/' . self::$rest_base );
 	}
 
 }

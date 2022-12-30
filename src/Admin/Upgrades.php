@@ -72,13 +72,9 @@ class Upgrades {
 	 */
 	public function upgrade_to_125() {
 
-		$settings            = Helpers::get_settings();
-		$is_js_files_created = get_option( 'plausible_analytics_is_js_files_created', false );
+		$settings = Helpers::get_settings();
 
-		if ( ( 'true' == $settings['is_proxy'] && ! $is_js_files_created ) || ! isset( $settings['is_proxy'] ) ) {
-			$settings['is_proxy'] = 'true';
-			Admin\Actions::maybe_create_js_files();
-		}
+		$is_js_files_created = get_option( 'plausible_analytics_is_js_files_created', false );
 
 		if ( ! isset( $settings['track_administrator'] ) ) {
 			$settings['track_administrator'] = 'false';
@@ -91,7 +87,13 @@ class Upgrades {
 		unset( $settings['custom_domain'] );
 		unset( $settings['custom_domain_prefix'] );
 
+		Helpers::save_settings( $settings );
 		update_option( 'plausible_analytics_settings', $settings );
+
+		if ( ! isset( $settings['is_proxy'] ) || ( 'true' == $settings['is_proxy'] && ! $is_js_files_created ) ) {
+			$settings['is_proxy'] = 'true';
+			Admin\Actions::maybe_create_js_files();
+		}
 
 		// Update the version in DB to the latest as upgrades completed.
 		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );

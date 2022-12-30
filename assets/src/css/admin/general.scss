@@ -1,13 +1,21 @@
-.plausible-analytics-hidden {
+%hidden {
 	display: none;
 }
 
-.plausible-analytics-show {
+%show {
 	display: block;
 }
 
+.plausible-analytics-hidden {
+	@extend %hidden;
+}
+
+.plausible-analytics-show {
+	@extend %show;
+}
+
 .plausible-analytics-content {
-	@extend .plausible-analytics-hidden;
+	@extend %hidden;
 }
 
 .plausible-analytics-statistics-not-loaded {
@@ -55,9 +63,22 @@
 
 .plausible-analytics-wrap {
 	width: 800px;
-	margin: 0 auto;
-	margin-top: 50px;
+	margin: 50px auto 0;
 	max-width: 100%;
+
+	.plausible-analytics-errors {
+		background-color: #fef3c7;
+		margin-bottom: 20px;
+		padding: 15px;
+		color: #78350f;
+		font-weight: 500;
+		display: none;
+
+		ul {
+			display: none;
+			list-style: inside;
+		}
+	}
 
 	.plausible-analytics-admin-field {
 		background-color: #fff;
@@ -100,8 +121,8 @@
 			font-style: italic;
 			color: #989898;
 			border-top: 1px dashed #e5e5e5;
-			padding: 10px 0 0 0;
-			margin: 15px 0 0 0;
+			padding: 10px 0 0;
+			margin: 15px 0 0;
 
 			ol {
 				margin: 5px 15px;
@@ -111,21 +132,21 @@
 		.plausible-analytics-admin-field-content {
 			border-top: 1px dashed #e5e5e5;
 			margin-top: 15px;
-			padding: 15px 0 0 0;
+			padding: 15px 0 0;
 
 			.plausible-analytics-admin-field-sub-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin: 0 0 15px 0;
+				margin: 0 0 15px;
 			}
 
 			.plausible-analytics-sub-description {
 				font-style: italic;
 				color: #989898;
 				border-top: 1px dashed #e5e5e5;
-				padding: 10px 0 0 0;
-				margin: 15px 0 15px 0;
+				padding: 10px 0 0;
+				margin: 15px 0;
 
 				ol {
 					margin: 5px 15px;

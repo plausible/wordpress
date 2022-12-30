@@ -10,9 +10,8 @@
 
 namespace Plausible\Analytics\WP\Includes\RestApi;
 
-use WP_Error;
-use WP_REST_Request;
-use WP_REST_Response;
+use Plausible\Analytics\WP\Includes\Helpers;
+use Plausible\Analytics\WP\Includes\RestApi\Controllers\RestEventController;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,11 +23,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ApiHelpers {
 
+	public static function get_namespace() {
+
+		return Helpers::get_child_folder_name();
+
+	}
+
 	/**
 	 * @param $url
 	 * @param WP_REST_Request $request
 	 *
 	 * @return WP_Error|WP_REST_Response
+	 * @since 1.2.5
+	 *
 	 */
 	public static function send_proxy_request( $url, $request ) {
 
@@ -69,6 +76,28 @@ class ApiHelpers {
 			return new WP_Error( $response_code, $response_message, $response_body );
 		}
 
+	}
+
+	/**
+	 * Check if the REST API is working.
+	 *
+	 * @return int|string The response code, or an empty string if the request failed.
+	 * @since 1.2.5
+	 *
+	 */
+	public static function check_rest_api() {
+		$api_rest_url = RestEventController::get_event_route_url();
+
+		$response = wp_remote_post(
+			$api_rest_url,
+			[
+				'sslverify' => false,
+				'timeout'   => 3,
+			]
+		);
+
+		// Retrieve the response code.
+		return wp_remote_retrieve_response_code( $response );
 	}
 
 }

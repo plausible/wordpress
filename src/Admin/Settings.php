@@ -57,44 +57,6 @@ class Settings {
 	}
 
 	/**
-	 * Get Admin Header.
-	 *
-	 * @param string $name Header Name.
-	 *
-	 * @return mixed
-	 * @since  1.2.0
-	 * @access public
-	 *
-	 */
-	public function get_header( $name ) {
-		?>
-		<div class="plausible-analytics-header">
-			<div class="plausible-analytics-logo">
-				<img
-					src="<?php echo trailingslashit( esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) ) . 'assets/dist/images/icon.png'; ?>"
-					alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
-			</div>
-			<div class="plausible-analytics-header-content">
-				<div class="plausible-analytics-title">
-					<h1><?php echo esc_html( $name ); ?></h1>
-				</div>
-				<div class="plausible-analytics-actions">
-					<a class="plausible-analytics-btn"
-					   href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>"
-					   target="_blank">
-						<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
-					</a>
-					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://docs.plausible.io' ); ?>"
-					   target="_blank">
-						<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
-					</a>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Settings Page.
 	 *
 	 * @return void
@@ -106,10 +68,12 @@ class Settings {
 
 		$settings                  = Helpers::get_settings();
 		$is_default_settings_saved = Helpers::is_default_settings_saved();
+		$is_js_files_created       = Helpers::is_js_files_created();
 		$plugin_version_from_db    = Helpers::get_plugin_version_from_db();
 
 		$debug_info = $settings
 					  + [ 'is_default_settings_saved' => $is_default_settings_saved ]
+					  + [ 'is_js_files_created' => $is_js_files_created ]
 					  + [ 'plugin_version_from_db' => $plugin_version_from_db ];
 
 		$domain                   = ! empty( $settings['domain_name'] ) ? esc_attr( $settings['domain_name'] ) : Helpers::get_domain();
@@ -126,6 +90,12 @@ class Settings {
 		echo $this->get_header( esc_html__( 'Settings', 'plausible-analytics' ) );
 		?>
 		<div class="wrap plausible-analytics-wrap">
+			<div id="plausible-analytics-settings-errors" class="plausible-analytics-errors">
+				<?php
+				_e( sprintf( __( 'Your tracking script is running and collecting data, but we were unable to activate the feature that allows it to run from your domain name. %s', 'plausible-analytics' ), sprintf( '<a href="%s">%s</a>', esc_url( '#more-error-details' ), esc_html( __( 'See here for more details', 'plausible-analytics' ) ) ) ), 'plausible-analytics' );
+				?>
+				<ul></ul>
+			</div>
 			<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
 				<div class="plausible-analytics-admin-field plausible-analytics-admin-menu">
 					<ul class="plausible-analytics-admin-tabs">
@@ -140,11 +110,11 @@ class Settings {
 							</a>
 						</li>
 						<?php if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) : ?>
-						<li>
-							<a href="#" data-tab="info">
-								<?php esc_html_e( 'Info', 'plausible-analytics' ); ?>
-							</a>
-						</li>
+							<li>
+								<a href="#" data-tab="info">
+									<?php esc_html_e( 'Info', 'plausible-analytics' ); ?>
+								</a>
+							</li>
 						<?php endif; ?>
 					</ul>
 				</div>
@@ -356,32 +326,28 @@ class Settings {
 				</div>
 
 				<?php if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) : ?>
-				<div id="plausible-analytics-content-info" class="plausible-analytics-content">
-					<div class="plausible-analytics-admin-field">
-						<div class="plausible-analytics-admin-field-header">
-							<label for="info-analytics">
-								<?php esc_html_e( 'Debug Info', 'plausible-analytics' ); ?>
-							</label>
+					<div id="plausible-analytics-content-info" class="plausible-analytics-content">
+						<div class="plausible-analytics-admin-field">
+							<div class="plausible-analytics-admin-field-header">
+								<label for="info-analytics">
+									<?php esc_html_e( 'Debug Info', 'plausible-analytics' ); ?>
+								</label>
+							</div>
+							<p class="plausible-analytics-description">
+							<pre
+								id="plausible-analytics-info-text"><?php print wp_json_encode( $debug_info, JSON_PRETTY_PRINT ); ?></pre>
+							<br/>
+							<a href="#"
+							   title="<?php esc_html_e( 'Copy info to clipboard', 'plausible-analytics' ); ?>"
+							   id="plausible-analytics-info-copy-btn"
+							   class="plausible-analytics-btn plausible-analytics-info-copy-btn"
+							   data-copied-text="<?php esc_html_e( 'Copied!', 'plausible-analytics' ); ?>"
+							>
+								<span><?php esc_html_e( 'Copy Info', 'plausible-analytics' ); ?></span>
+							</a>
+							</p>
 						</div>
-						<p class="plausible-analytics-description">
-						<pre
-							id="plausible-analytics-info-text"><?php print wp_json_encode( $debug_info, JSON_PRETTY_PRINT ); ?></pre>
-						<br/>
-						<a href="#"
-						   title="<?php esc_html_e( 'Copy info to clipboard', 'plausible-analytics' ); ?>"
-						   id="plausible-analytics-info-copy-btn"
-						   class="plausible-analytics-btn plausible-analytics-info-copy-btn"
-						   data-copied-text="<?php esc_html_e( 'Copied!', 'plausible-analytics' ); ?>"
-						>
-							<span><?php esc_html_e( 'Copy Info', 'plausible-analytics' ); ?></span>
-							<span class="plausible-analytics-spinner">
-								<div class="plausible-analytics-spinner--bounce-1"></div>
-								<div class="plausible-analytics-spinner--bounce-2"></div>
-							</span>
-						</a>
-						</p>
 					</div>
-				</div>
 				<?php endif; ?>
 
 				<div class="plausible-analytics-admin-field">
@@ -410,48 +376,41 @@ class Settings {
 	}
 
 	/**
-	 * Statistics Page via Embed feature.
+	 * Get Admin Header.
 	 *
-	 * @return void
+	 * @param string $name Header Name.
+	 *
+	 * @return mixed
 	 * @since  1.2.0
 	 * @access public
 	 *
 	 */
-	public function statistics_page() {
-		$settings            = Helpers::get_settings();
-		$domain              = Helpers::get_domain();
-		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : 'false';
-		$shared_link         = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
-
-		// Display admin header.
-		echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
-
-		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
-			?>
-			<iframe plausible-embed=""
-					src="<?php echo esc_url( $shared_link ) . '&embed=true&theme=light&background=transparent'; ?>"
-					scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
-			<script async="" src="https://plausible.io/js/embed.host.js"></script>
-			<?php
-		} else {
-			?>
-			<div class="plausible-analytics-statistics-not-loaded">
-				<?php
-				echo sprintf(
-					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
-					esc_html( 'Please', 'plausible-analytics' ),
-					esc_url( "https://plausible.io/{$domain}/settings/visibility" ),
-					esc_html( 'click here', 'plausible-analytics' ),
-					esc_html( 'to generate your shared link from your Plausible Analytics dashboard.', 'plausible-analytics' ),
-					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					esc_url( admin_url( 'options-general.php?page=plausible-analytics' ) ),
-					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
-				);
-				?>
+	public function get_header( $name ) {
+		?>
+		<div class="plausible-analytics-header">
+			<div class="plausible-analytics-logo">
+				<img
+					src="<?php echo trailingslashit( esc_url( PLAUSIBLE_ANALYTICS_PLUGIN_URL ) ) . 'assets/dist/images/icon.png'; ?>"
+					alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
-			<?php
-		}
+			<div class="plausible-analytics-header-content">
+				<div class="plausible-analytics-title">
+					<h1><?php echo esc_html( $name ); ?></h1>
+				</div>
+				<div class="plausible-analytics-actions">
+					<a class="plausible-analytics-btn"
+					   href="<?php echo esc_url( 'https://github.com/plausible/wordpress/issues/new' ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Report a bug', 'plausible-analytics' ); ?>
+					</a>
+					<a class="plausible-analytics-btn" href="<?php echo esc_url( 'https://docs.plausible.io' ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Documentation', 'plausible-analytics' ); ?>
+					</a>
+				</div>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
@@ -508,6 +467,51 @@ class Settings {
 
 		return $html;
 
+	}
+
+	/**
+	 * Statistics Page via Embed feature.
+	 *
+	 * @return void
+	 * @since  1.2.0
+	 * @access public
+	 *
+	 */
+	public function statistics_page() {
+		$settings            = Helpers::get_settings();
+		$domain              = Helpers::get_domain();
+		$can_embed_analytics = ! empty( $settings['embed_analytics'] ) ? $settings['embed_analytics'] : 'false';
+		$shared_link         = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
+
+		// Display admin header.
+		echo $this->get_header( esc_html__( 'Analytics', 'plausible-analytics' ) );
+
+		if ( 'true' === $can_embed_analytics && ! empty( $shared_link ) ) {
+			?>
+			<iframe plausible-embed=""
+					src="<?php echo esc_url( $shared_link ) . '&embed=true&theme=light&background=transparent'; ?>"
+					scrolling="no" frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
+			<script async="" src="https://plausible.io/js/embed.host.js"></script>
+			<?php
+		} else {
+			?>
+			<div class="plausible-analytics-statistics-not-loaded">
+				<?php
+				echo sprintf(
+					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
+					esc_html( 'Please', 'plausible-analytics' ),
+					esc_url( "https://plausible.io/{$domain}/settings/visibility" ),
+					esc_html( 'click here', 'plausible-analytics' ),
+					esc_html( 'to generate your shared link from your Plausible Analytics dashboard.', 'plausible-analytics' ),
+					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
+					esc_url( admin_url( 'options-general.php?page=plausible-analytics' ) ),
+					esc_html( 'paste here', 'plausible-analytics' ),
+					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
+				);
+				?>
+			</div>
+			<?php
+		}
 	}
 
 }

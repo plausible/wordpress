@@ -1,6 +1,6 @@
 .plausible-analytics-spinner {
-	width: 20px;
-	height: 20px;
+	width: 17px;
+	height: 17px;
 	position: relative;
 	margin: 0 0 0 15px;
 	display: none;
@@ -11,7 +11,8 @@
 
 	&--bounce-2 {
 		@include bounce-loading-effect;
-		-webkit-animation-delay: -1s;
+
+		animation-delay: -1s;
 		animation-delay: -1s;
 	}
 }
