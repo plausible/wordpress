@@ -465,7 +465,7 @@ class Page extends API {
 					esc_html( 'click here', 'plausible-analytics' ),
 					esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					admin_url( 'options-general.php?page=plausible-analytics' ),
+					admin_url( 'options-general.php?page=plausible_analytics' ),
 					esc_html( 'paste here', 'plausible-analytics' ),
 					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
