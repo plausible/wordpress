@@ -61,15 +61,6 @@ class Helpers {
 
 		$url = "https://{$default_domain}/js/{$file_name}.js";
 
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
-		}
-
 		return esc_url( $url );
 	}
 
@@ -140,16 +131,6 @@ class Helpers {
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
-		}
-
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$domain               = $settings['domain_name'];
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
 		}
 
 		return esc_url( $url );

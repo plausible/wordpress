@@ -85,7 +85,7 @@ class API {
 		<label for="<?php echo $field['slug']; ?>">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
-		<input id="<?php echo $field['slug']; ?>" <?php echo $field['placeholder'] ? 'placeholder="' . $field['placeholder'] . '"' : ''; ?> type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
+		<input id="<?php echo $field['slug']; ?>" <?php echo $field['placeholder'] ?? 'placeholder="' . $field['placeholder'] . '"'; ?> type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
 		<?php
 		return ob_get_clean();
 	}

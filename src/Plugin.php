@@ -91,7 +91,6 @@ final class Plugin {
 			$domain_name      = Helpers::get_domain();
 			$default_settings = [
 				'domain_name'     => $domain_name,
-				'custom_domain'   => "analytics.{$domain_name}",
 				'track_analytics' => [],
 			];
 
