@@ -54,7 +54,7 @@ class Upgrades {
 		}
 
 		// Upgrade to version 1.3.0.
-		if ( version_compare( $plausible_analytics_version, '1.3.0', '<=' ) ) {
+		if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
 			$this->upgrade_to_130();
 		}
 
@@ -72,7 +72,7 @@ class Upgrades {
 	public function upgrade_to_130() {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
-		
+
 		$old_custom_domain_prefix     = ! empty( $old_settings['custom_domain_prefix'] ) ? $old_settings['custom_domain_prefix'] : '';
 		$old_embed_analytics          = ! empty( $old_settings['embed_analytics'] ) ? $old_settings['embed_analytics'] : '';
 		$old_is_self_hosted_analytics = ! empty( $old_settings['is_self_hosted_analytics'] ) ? $old_settings['is_self_hosted_analytics'] : '';
@@ -80,7 +80,7 @@ class Upgrades {
 		if ( is_bool( $old_settings['custom_domain'] ) || 'true' === $old_settings['custom_domain'] ) {
 			$new_settings['is_custom_domain'] = $old_settings['custom_domain'];
 		}
-		
+
 		$new_settings['custom_domain']  = "{$old_custom_domain_prefix}.{$old_settings['domain_name']}";
 		$new_settings['is_shared_link'] = $old_embed_analytics;
 
@@ -105,4 +105,3 @@ class Upgrades {
 		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
 	}
 }
-
