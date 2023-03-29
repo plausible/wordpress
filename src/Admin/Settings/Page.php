@@ -416,7 +416,17 @@ class Page extends API {
 			}
 		}
 
-		if ( $is_shared_link && ! empty( $shared_link ) ) {
+		/**
+		 * Prior to this version, the default value would contain an example "auth" key, i.e. XXXXXXXXX.
+		 *
+		 * When this option was saved to the database, underlying code would fail, throwing a CORS related error in browsers.
+		 *
+		 * Now, we explicitly check for the existence of this example "auth" key, and display a human readable error message to
+		 * those we haven't properly set it up.
+		 *
+		 * @since v1.2.5
+		 */
+		if ( $is_shared_link && ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) ) {
 			// Append individual page URL if it exists.
 			if ( $shared_link && isset( $_GET['page-url'] ) ) {
 				$shared_link .= "&page={$_GET[ 'page-url' ]}";
@@ -440,7 +450,7 @@ class Page extends API {
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
 					admin_url( 'options-general.php?page=plausible_analytics' ),
 					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
+					esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
 				?>
 			</div>
