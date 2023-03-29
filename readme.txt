@@ -1,5 +1,5 @@
 === Plausible Analytics ===
-Contributors: plausible, mehul0810, ankur0812
+Contributors: plausible, DaanvandenBergh, mehul0810, ankur0812
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
