@@ -55,7 +55,7 @@ class Actions {
 	public function save_admin_settings() {
 		// Sanitize all the post data before using.
 		$post_data = Helpers::clean( $_POST );
-		
+
 		// Security: Roadblock to check for unauthorized access.
 		if (
 			'plausible_analytics_save_admin_settings' === $post_data['action'] &&
@@ -70,12 +70,11 @@ class Actions {
 			unset( $post_data['roadblock'] );
 
 			if (
-				! empty( $post_data['plausible_analytics_settings']['domain_name'] ) &&
-				! empty( $post_data['plausible_analytics_settings']['custom_domain'] )
+				! empty( $post_data['plausible_analytics_settings']['domain_name'] )
 			) {
 				// Update all the options to plausible settings.
 				update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
-				
+
 				$status  = 'success';
 				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
 			} else {
@@ -87,7 +86,7 @@ class Actions {
 			wp_send_json_success(
 				[
 					'message' => $message,
-					'status'  => $status
+					'status'  => $status,
 				]
 			);
 		}

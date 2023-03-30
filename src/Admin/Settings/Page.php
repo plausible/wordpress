@@ -28,17 +28,14 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
-		$settings            = Helpers::get_settings();
-		$domain              = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
-		$self_hosted_domain  = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
-		$shared_link         = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
-		$excluded_pages      = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
-		$custom_domain       = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
-		$is_shared_link      = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
-		$is_custom_domain    = ! empty( $settings['is_custom_domain'] ) ? (bool) $settings['is_custom_domain'] : false;
-		$is_exclude_pages    = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
-		$is_selfhosted       = ! empty( $settings['is_self_hosted_plausible_analytics'] ) ? (bool) $settings['is_self_hosted_plausible_analytics'] : false;
-		$can_track_analytics = ! empty( $settings['can_role_track_analytics'] ) ? (bool) $settings['can_role_track_analytics'] : false;
+		$settings           = Helpers::get_settings();
+		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
+		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
+		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
+		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
+		$is_exclude_pages   = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
+		$is_selfhosted      = ! empty( $settings['is_self_hosted_plausible_analytics'] ) ? (bool) $settings['is_self_hosted_plausible_analytics'] : false;
 
 		$this->fields = [
 			'general'     => [
@@ -63,31 +60,6 @@ class Page extends API {
 							'slug'  => 'domain_name',
 							'type'  => 'text',
 							'value' => $domain,
-						],
-					],
-				],
-				[
-					'label'  => esc_html__( 'Setup custom domain with Plausible Analytics', 'plausible-analytics' ),
-					'slug'   => 'is_custom_domain',
-					'type'   => 'group',
-					'desc'   => sprintf(
-						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-						esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-						esc_url( 'https://docs.plausible.io/custom-domain/' ),
-						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-						esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-						esc_html__( 'For example,', 'plausible-analytics' ),
-						"<code>stats.$domain</code>",
-						esc_html__( 'or', 'plausible-analytics' ),
-						"<code>analytics.$domain</code>"
-					),
-					'toggle' => $is_custom_domain,
-					'fields' => [
-						[
-							'label' => esc_html__( 'Custom Domain', 'plausible-analytics' ),
-							'slug'  => 'custom_domain',
-							'type'  => 'text',
-							'value' => $custom_domain,
 						],
 					],
 				],
@@ -154,10 +126,11 @@ class Page extends API {
 					'toggle' => $is_shared_link,
 					'fields' => [
 						[
-							'label' => esc_html__( 'Shared Link', 'plausible-analytics' ),
-							'slug'  => 'shared_link',
-							'type'  => 'text',
-							'value' => $shared_link,
+							'label'       => esc_html__( 'Shared Link', 'plausible-analytics' ),
+							'slug'        => 'shared_link',
+							'type'        => 'text',
+							'value'       => $shared_link,
+							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX"
 						],
 					],
 				],
