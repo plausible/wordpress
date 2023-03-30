@@ -109,7 +109,16 @@ class Helpers {
 	 * @return array
 	 */
 	public static function get_settings() {
-		return get_option( 'plausible_analytics_settings', [] );
+		$settings = get_option( 'plausible_analytics_settings', [] );
+
+		// Keep around for backwards compatibility reasons.
+		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : true );
+    
+		if ( $track_outbound_links ) {
+			$settings['outbound-links'][0] = '1';
+		}
+
+		return $settings;
 	}
 
 	/**
