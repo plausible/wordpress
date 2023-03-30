@@ -58,9 +58,9 @@ class Upgrades {
 		}
 
 		// Upgrade to version 1.3.0.
-		if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
-			$this->upgrade_to_130();
-		}
+		// if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
+		// 	$this->upgrade_to_130();
+		// }
 
 		// Add required upgrade routines for future versions here.
 	}

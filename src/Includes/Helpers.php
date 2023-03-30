@@ -45,7 +45,7 @@ class Helpers {
 		$default_domain = 'plausible.io';
 		$file_name      = 'plausible';
 
-		foreach ( [ 'outbound-links', 'file-downloads', 'compat', 'hash' ] as $extension ) {
+		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'compat', 'hash' ] as $extension ) {
 			if ( ! empty( $settings[ $extension ] ) && $settings[ $extension ][0] === '1' ) {
 				$file_name .= '.' . $extension;
 			}
@@ -112,8 +112,8 @@ class Helpers {
 		$settings = get_option( 'plausible_analytics_settings', [] );
 
 		// Keep around for backwards compatibility reasons.
-		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : true );
-    
+		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : false );
+
 		if ( $track_outbound_links ) {
 			$settings['outbound-links'][0] = '1';
 		}

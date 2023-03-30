@@ -91,6 +91,14 @@ class Page extends API {
 							'type'       => 'checkbox',
 							'value'      => '1',
 						],
+						'tagged-events'  => [
+							'label'      => esc_html__( 'Tagged events', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/custom-event-goals',
+							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+							'slug'       => 'tagged-events',
+							'type'       => 'checkbox',
+							'value'      => '1',
+						],
 						'hash'           => [
 							'label'      => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/docs/hash-based-routing',
@@ -130,7 +138,7 @@ class Page extends API {
 							'slug'        => 'shared_link',
 							'type'        => 'text',
 							'value'       => $shared_link,
-							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX"
+							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
 						],
 					],
 				],
