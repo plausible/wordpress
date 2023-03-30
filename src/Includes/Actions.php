@@ -28,7 +28,7 @@ class Actions {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_register_assets' ] );
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
 	}
 
@@ -40,15 +40,20 @@ class Actions {
 	 *
 	 * @return void
 	 */
-	public function register_assets() {
+	public function maybe_register_assets() {
 		$settings  = Helpers::get_settings();
 		$user_role = Helpers::get_user_role();
 
-		// Bailout, if `administrator` user role accessing frontend.
+		/**
+		 * Bail if track_analytics is empty (which means no roles should be tracked) or,
+		 * if current role should not be tracked.
+		 */
 		if (
-			! empty( $user_role ) &&
-			! in_array( $user_role, $settings['track_analytics'], true )
-		) {
+			( ! empty( $user_role )
+				&& ! isset( $settings['track_analytics'] ) )
+			|| ( ! empty( $user_role )
+				&& ! in_array( $user_role, $settings['track_analytics'], true ) )
+			) {
 			return;
 		}
 

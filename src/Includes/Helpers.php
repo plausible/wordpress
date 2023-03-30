@@ -61,16 +61,7 @@ class Helpers {
 
 		$url = "https://{$default_domain}/js/{$file_name}.js";
 
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
-		}
-
-		return $url;
+		return esc_url( $url );
 	}
 
 	/**
@@ -85,7 +76,7 @@ class Helpers {
 		$settings = self::get_settings();
 		$domain   = $settings['domain_name'];
 
-		return "https://plausible.io/{$domain}";
+		return esc_url( "https://plausible.io/{$domain}" );
 	}
 
 	/**
@@ -100,10 +91,10 @@ class Helpers {
 	 */
 	public static function display_toggle_switch( $name ) {
 		$settings            = Helpers::get_settings();
-		$individual_settings = ! empty( $settings[ $name ] ) ? $settings[ $name ] : '';
+		$individual_settings = ! empty( $settings[ $name ] ) ? esc_html( $settings[ $name ] ) : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $name; ?>]" value="1" type="checkbox"/>
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]" value="1" type="checkbox"/>
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
@@ -122,6 +113,7 @@ class Helpers {
 
 		// Keep around for backwards compatibility reasons.
 		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : true );
+    
 		if ( $track_outbound_links ) {
 			$settings['outbound-links'][0] = '1';
 		}
@@ -150,17 +142,7 @@ class Helpers {
 			$url            = "https://{$default_domain}/api/event";
 		}
 
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$domain               = $settings['domain_name'];
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
-		}
-
-		return $url;
+		return esc_url( $url );
 	}
 
 	/**

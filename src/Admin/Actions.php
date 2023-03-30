@@ -46,10 +46,9 @@ class Actions {
 	}
 
 	/**
-	 * Save Admin Settings.
+	 * Save Admin Settings
 	 *
-	 * @since  1.3.0
-	 * @access public
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -70,13 +69,24 @@ class Actions {
 			unset( $post_data['action'] );
 			unset( $post_data['roadblock'] );
 
-			// Update all the options to plausible settings.
-			update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
+			if (
+				! empty( $post_data['plausible_analytics_settings']['domain_name'] )
+			) {
+				// Update all the options to plausible settings.
+				update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
+
+				$status  = 'success';
+				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
+			} else {
+				$status  = 'error';
+				$message = esc_html__( 'Something gone a wrong.', 'plausible-analytics' );
+			}
 
 			// Send response.
 			wp_send_json_success(
 				[
-					'message' => esc_html__( 'Settings saved successfully.', 'plausible-analytics' ),
+					'message' => $message,
+					'status'  => $status,
 				]
 			);
 		}

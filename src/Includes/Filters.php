@@ -47,9 +47,9 @@ class Filters {
 
 		$settings       = Helpers::get_settings();
 		$api_url        = Helpers::get_data_api_url();
-		$domain_name    = $settings['domain_name'];
+		$domain_name    = esc_html( $settings['domain_name'] );
 		$id_replacement = '';
-
+		
 		// If we're loading the compat script, we need the correct id attribute. If not, we can just remove it.
 		if ( isset( $settings['compat'] ) && $settings['compat'][0] === '1' ) {
 			$id_replacement = " id='plausible'";

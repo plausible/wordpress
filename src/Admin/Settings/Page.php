@@ -31,9 +31,11 @@ class Page extends API {
 		$settings           = Helpers::get_settings();
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
 		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
-		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX";
+		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '/imprint, /privacy-policy';
-		$custom_domain      = ! empty( $settings['custom_domain'] ) ? $settings['custom_domain'] : "analytics.{$domain}";
+		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
+		$is_exclude_pages   = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
+		$is_selfhosted      = ! empty( $settings['is_self_hosted_plausible_analytics'] ) ? (bool) $settings['is_self_hosted_plausible_analytics'] : false;
 
 		$this->fields = [
 			'general'     => [
@@ -58,31 +60,6 @@ class Page extends API {
 							'slug'  => 'domain_name',
 							'type'  => 'text',
 							'value' => $domain,
-						],
-					],
-				],
-				[
-					'label'  => esc_html__( 'Setup custom domain with Plausible Analytics', 'plausible-analytics' ),
-					'slug'   => 'is_custom_domain',
-					'type'   => 'group',
-					'desc'   => sprintf(
-						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s %5$s %6$s %7$s %8$s</li></ol>',
-						esc_html__( 'Enable the custom domain functionality in your Plausible account.', 'plausible-analytics' ),
-						esc_url( 'https://docs.plausible.io/custom-domain/' ),
-						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-						esc_html__( 'Enable this setting and configure it to link with Plausible Analytics on your custom domain.', 'plausible-analytics' ),
-						esc_html__( 'For example,', 'plausible-analytics' ),
-						"<code>stats.$domain</code>",
-						esc_html__( 'or', 'plausible-analytics' ),
-						"<code>analytics.$domain</code>"
-					),
-					'toggle' => true,
-					'fields' => [
-						[
-							'label' => esc_html__( 'Custom Domain', 'plausible-analytics' ),
-							'slug'  => 'custom_domain',
-							'type'  => 'text',
-							'value' => $custom_domain,
 						],
 					],
 				],
@@ -146,13 +123,14 @@ class Page extends API {
 						admin_url( 'index.php?page=plausible-analytics-statistics' ),
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => $is_shared_link,
 					'fields' => [
 						[
-							'label' => esc_html__( 'Shared Link', 'plausible-analytics' ),
-							'slug'  => 'shared_link',
-							'type'  => 'text',
-							'value' => $shared_link,
+							'label'       => esc_html__( 'Shared Link', 'plausible-analytics' ),
+							'slug'        => 'shared_link',
+							'type'        => 'text',
+							'value'       => $shared_link,
+							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX"
 						],
 					],
 				],
@@ -166,7 +144,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/docs/excluding-pages#2-add-the-pages-youd-like-to-exclude-from-being-tracked' ),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => $is_exclude_pages,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Excluded pages', 'plausible-analytics' ),
@@ -181,7 +159,7 @@ class Page extends API {
 					'slug'   => 'can_role_track_analytics',
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
-					'toggle' => true,
+					'toggle' => false,
 					'fields' => [
 						'administrator' => [
 							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
@@ -214,7 +192,7 @@ class Page extends API {
 					'slug'   => 'can_access_analytics_page',
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
-					'toggle' => true,
+					'toggle' => false,
 					'fields' => [
 						'editor'      => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
@@ -248,7 +226,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
 						esc_html__( 'about Plausible Self-Hosted.', 'plausible-analytics' )
 					),
-					'toggle' => true,
+					'toggle' => $is_selfhosted,
 					'fields' => [
 						[
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
@@ -438,7 +416,17 @@ class Page extends API {
 			}
 		}
 
-		if ( $is_shared_link && ! empty( $shared_link ) ) {
+		/**
+		 * Prior to this version, the default value would contain an example "auth" key, i.e. XXXXXXXXX.
+		 *
+		 * When this option was saved to the database, underlying code would fail, throwing a CORS related error in browsers.
+		 *
+		 * Now, we explicitly check for the existence of this example "auth" key, and display a human readable error message to
+		 * those we haven't properly set it up.
+		 *
+		 * @since v1.2.5
+		 */
+		if ( $is_shared_link && ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) ) {
 			// Append individual page URL if it exists.
 			if ( $shared_link && isset( $_GET['page-url'] ) ) {
 				$shared_link .= "&page={$_GET[ 'page-url' ]}";
@@ -460,9 +448,9 @@ class Page extends API {
 					esc_html( 'click here', 'plausible-analytics' ),
 					esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
 					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					admin_url( 'options-general.php?page=plausible-analytics' ),
+					admin_url( 'options-general.php?page=plausible_analytics' ),
 					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html( 'under Embed Analytics to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
+					esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
 				);
 				?>
 			</div>
