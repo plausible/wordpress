@@ -100,7 +100,7 @@ class API {
 	 */
 	public function render_group_field( array $group ) {
 		$settings    = Helpers::get_settings();
-		$toggle      = $group['toggle'];
+		$toggle      = $group['toggle'] ?? [];
 		$fields      = $group['fields'];
 		$field_value = ! empty( $settings[ $group['slug'] ] ) ? $settings[ $group['slug'] ] : false;
 		$is_checked  = ! is_array( $toggle ) ? checked( $toggle, true, false ) : '';

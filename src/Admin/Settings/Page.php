@@ -68,32 +68,35 @@ class Page extends API {
 					'slug'   => 'enhanced_measurements',
 					'type'   => 'group',
 					// translators: %1$s replaced with <code>outbound-links</code>.
-					'desc'   => '<strong>' . esc_html__( 'Note:', 'plausible-analytics' ) . '</strong> ' . esc_html__( 'for each of these extensions, you have to set the goals manually!', 'plausible-analytics' ) . '<br><br>'
-								. sprintf( esc_html__( 'By default, we load just the %1$s extension, you can enable other extensions here.', 'plausible-analytics' ), '<a href="https://plausible.io/docs/outbound-link-click-tracking"></a><code>outbound-links</code></a>' ),
-					'toggle' => [
-						'anchor' => 'https://plausible.io/docs/script-extensions',
-						'label'  => __( 'Documentation', 'plausible-analytics' ),
-					],
+					'desc'   => esc_html__( 'To complete the setup process of a particular enhanced measurement, click on the "Additional action required" link and follow the instructions.', 'plausible-analytics' ),
 					'fields' => [
 						'outbound-links' => [
 							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/outbound-link-click-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
-							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'outbound-links',
 							'type'       => 'checkbox',
 							'value'      => '1',
 						],
 						'file-downloads' => [
 							'label'      => esc_html__( 'File downloads', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/file-downloads-tracking#step-2-create-a-custom-event-goal-in-your-plausible-analytics-account',
-							'docs_label' => esc_html__( 'Goal setup', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'file-downloads',
+							'type'       => 'checkbox',
+							'value'      => '1',
+						],
+						'tagged-events'  => [
+							'label'      => esc_html__( 'Custom events', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
+							'slug'       => 'tagged-events',
 							'type'       => 'checkbox',
 							'value'      => '1',
 						],
 						'hash'           => [
 							'label'      => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/hash-based-routing',
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
 							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
 							'slug'       => 'hash',
 							'type'       => 'checkbox',
@@ -101,7 +104,7 @@ class Page extends API {
 						],
 						'compat'         => [
 							'label'      => esc_html__( 'IE compatibility', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/script-extensions#scriptcompatjs',
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
 							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
 							'slug'       => 'compat',
 							'type'       => 'checkbox',
@@ -130,7 +133,7 @@ class Page extends API {
 							'slug'        => 'shared_link',
 							'type'        => 'text',
 							'value'       => $shared_link,
-							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX"
+							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
 						],
 					],
 				],
