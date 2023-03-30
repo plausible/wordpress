@@ -49,10 +49,11 @@ class Actions {
 		 * if current role should not be tracked.
 		 */
 		if (
-			! isset( $settings['track_analytics'] )
+			( ! empty( $user_role )
+				&& ! isset( $settings['track_analytics'] ) )
 			|| ( ! empty( $user_role )
 				&& ! in_array( $user_role, $settings['track_analytics'], true ) )
-		) {
+			) {
 			return;
 		}
 
