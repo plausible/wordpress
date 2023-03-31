@@ -91,6 +91,9 @@ class Upgrades {
 			unset( $new_settings['is_custom_domain'] );
 		}
 
+		// Enable Outbound links by default.
+		$new_settings['outbound-links'] = '1';
+
 		update_option( 'plausible_analytics_settings', $new_settings );
 
 		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
@@ -123,9 +126,6 @@ class Upgrades {
 
 		// For self hosted plausible analytics.
 		$new_settings['is_self_hosted_plausible_analytics'] = $old_is_self_hosted_analytics;
-
-		// Enable Outbound links by default.
-		$new_settings['outbound-links'] = '1';
 
 		// Update the new settings.
 		update_option( 'plausible_analytics_settings', $new_settings );
