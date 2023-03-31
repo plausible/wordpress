@@ -170,7 +170,7 @@ class API {
 			/>
 			<label for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
 			<?php if ( ! empty( $field['docs'] ) ) { ?>
-				- <a href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>
+				- <a target="_blank" href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>
 			<?php } ?>
 		</span>
 		<?php
