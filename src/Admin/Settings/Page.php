@@ -143,8 +143,8 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-						esc_html__( 'Exclude certain pages from being tracked', 'plausible-analytics' ),
-						esc_url( 'https://plausible.io/docs/excluding-pages#2-add-the-pages-youd-like-to-exclude-from-being-tracked' ),
+						esc_html__( 'Exclude certain pages from being tracked. Wildcards are supported.', 'plausible-analytics' ),
+						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-exclude-specific-pages-from-being-tracked' ),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
 					'toggle' => $is_exclude_pages,

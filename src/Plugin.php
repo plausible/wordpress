@@ -30,8 +30,8 @@ final class Plugin {
 		register_activation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'activate' ] );
 		register_deactivation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'deactivate' ] );
 
-		// Register services used throughout the plugin.
-		add_action( 'plugins_loaded', [ $this, 'register_services' ] );
+		// Register services used throughout the plugin. (WP Rocket runs at priority 10)
+		add_action( 'plugins_loaded', [ $this, 'register_services' ], 9 );
 
 		// Load text domain.
 		add_action( 'init', [ $this, 'load_plugin_textdomain' ] );
@@ -54,6 +54,7 @@ final class Plugin {
 		}
 
 		new Includes\Actions();
+		new Includes\Compatibility();
 		new Includes\Filters();
 	}
 
