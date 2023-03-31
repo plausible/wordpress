@@ -123,7 +123,7 @@ class Page extends API {
 						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 						esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
 						esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
-						admin_url( 'index.php?page=plausible-analytics-statistics' ),
+						admin_url( 'index.php?page=plausible_analytics_statistics' ),
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
 					'toggle' => $is_shared_link,
