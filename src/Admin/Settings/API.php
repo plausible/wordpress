@@ -177,6 +177,15 @@ class API {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Render textarea field.
+	 *
+	 * @since 1.2.5
+	 * @access public
+	 *
+	 * @param array $field
+	 * @return string|false
+	 */
 	public function render_textarea_field( array $field ) {
 		ob_start();
 		$value = ! empty( $field['value'] ) ? $field['value'] : '';
