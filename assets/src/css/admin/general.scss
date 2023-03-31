@@ -1,14 +1,16 @@
 .plausible-analytics-wrap {
 	display: flex;
 
-	input[type='text'] {
+	input[type='text'],
+	textarea {
 		background-color: #f5f5f5;
 		border: none;
 		border-radius: 5px;
 	}
 
-	input[name='shared_link'] {
-		width: 75%;
+	input#shared_link,
+	textarea#excluded_pages {
+		width: 100%;
 	}
 
 	.plausible-checkbox-list {

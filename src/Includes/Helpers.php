@@ -51,6 +51,11 @@ class Helpers {
 			}
 		}
 
+		// Load exclusions.js if any excluded pages are set.
+		if ( ! empty( $settings['excluded_pages'] ) ) {
+			$file_name .= '.' . 'exclusions';
+		}
+
 		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['is_self_hosted_analytics'] ) &&

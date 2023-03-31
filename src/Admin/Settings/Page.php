@@ -119,7 +119,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
 						esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ),
-						esc_url( 'https://plausible.io/docs/shared-links' ),
+						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard' ),
 						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
 						esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
 						esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
@@ -133,7 +133,7 @@ class Page extends API {
 							'slug'        => 'shared_link',
 							'type'        => 'text',
 							'value'       => $shared_link,
-							'placeholder' => "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
+							'placeholder' => "E.g. https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
 						],
 					],
 				],
@@ -150,10 +150,11 @@ class Page extends API {
 					'toggle' => $is_exclude_pages,
 					'fields' => [
 						[
-							'label' => esc_html__( 'Excluded pages', 'plausible-analytics' ),
-							'slug'  => 'excluded_pages',
-							'type'  => 'text',
-							'value' => $excluded_pages,
+							'label'       => esc_html__( 'Excluded pages', 'plausible-analytics' ),
+							'slug'        => 'excluded_pages',
+							'type'        => 'textarea',
+							'value'       => $excluded_pages,
+							'placeholder' => esc_html__( 'E.g. **hello-world**, /example-page/, *another-example-page' ),
 						],
 					],
 				],

@@ -80,12 +80,13 @@ class API {
 	 */
 	public function render_text_field( array $field ) {
 		ob_start();
-		$value = ! empty( $field['value'] ) ? $field['value'] : '';
+		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
+		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		?>
 		<label for="<?php echo $field['slug']; ?>">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
-		<input id="<?php echo $field['slug']; ?>" <?php isset( $field['placeholder'] ) ? 'placeholder="' . $field['placeholder'] . '"' : ''; ?> type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
+		<input id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
 		<?php
 		return ob_get_clean();
 	}
@@ -172,6 +173,28 @@ class API {
 				- <a href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>
 			<?php } ?>
 		</span>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render textarea field.
+	 *
+	 * @since 1.2.5
+	 * @access public
+	 *
+	 * @param array $field
+	 * @return string|false
+	 */
+	public function render_textarea_field( array $field ) {
+		ob_start();
+		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
+		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
+		?>
+		<label for="<?php echo $field['slug']; ?>">
+			<?php echo esc_attr( $field['label'] ); ?>
+		</label>
+		<textarea rows="5" id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]"><?php echo $value; ?></textarea>
 		<?php
 		return ob_get_clean();
 	}
