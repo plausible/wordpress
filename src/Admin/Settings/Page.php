@@ -46,7 +46,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
 						esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
-						esc_url( 'https://docs.plausible.io/register-account' ),
+						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics' ),
 						esc_html__( 'Follow these instructions', 'plausible-analytics' ),
 						esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
 					),
