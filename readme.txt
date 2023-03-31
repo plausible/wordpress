@@ -1,11 +1,11 @@
 === Plausible Analytics ===
-Contributors: plausible, DaanvandenBergh, mehul0810, ankur0812
+Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
-Tested up to: 6.0
+Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.3.0
+Stable tag: 1.2.5
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -149,18 +149,19 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
-= 1.3.0 =
+= 1.2.5 =
 - 40-45% reduction in JS code
 - Exclude the roles editor and author [#11](https://github.com/plausible/wordpress/issues/11)
-- Improve settings page to future proof new settings [#26](https://github.com/plausible/wordpress/issues/26)
-- Allow stats within WP for self-hosters too [#36](https://github.com/plausible/wordpress/issues/36)
-- New setting: Control which user role(s) can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
+- Added: control which user role(s) can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
 - Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
+- Added: compatibility for WP Rocket
+- Removed: Custom Domains options
+- Added: disable tracking by User Role.
 
 Props @sadmansh and @davidehuey for the contributions.
 
 = 1.2.4 =
-More Security Improvements.
+- More Security Improvements.
 
 = 1.2.3 = 
 - Security Improvements. Thanks for additional help with your PR - Props to [Ankur Modi](https://github.com/ankur0812)
