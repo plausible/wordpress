@@ -7,8 +7,9 @@
 		border-radius: 5px;
 	}
 
-	input[name='shared_link'] {
-		width: 75%;
+	input#shared_link,
+	textarea#excluded_pages {
+		width: 100%;
 	}
 
 	.plausible-checkbox-list {
