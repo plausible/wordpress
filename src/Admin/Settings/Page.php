@@ -152,7 +152,7 @@ class Page extends API {
 						[
 							'label' => esc_html__( 'Excluded pages', 'plausible-analytics' ),
 							'slug'  => 'excluded_pages',
-							'type'  => 'text',
+							'type'  => 'textarea',
 							'value' => $excluded_pages,
 						],
 					],
