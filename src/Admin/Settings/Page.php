@@ -133,7 +133,7 @@ class Page extends API {
 							'slug'        => 'shared_link',
 							'type'        => 'text',
 							'value'       => $shared_link,
-							'placeholder' => "E.g. https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
+							'placeholder' => esc_html__( 'E.g.', 'plausible-analytics' ) . "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
 						],
 					],
 				],
@@ -154,7 +154,7 @@ class Page extends API {
 							'slug'        => 'excluded_pages',
 							'type'        => 'textarea',
 							'value'       => $excluded_pages,
-							'placeholder' => esc_html__( 'E.g. **hello-world**, /example-page/, *another-example-page' ),
+							'placeholder' => esc_html__( 'E.g.', 'plausible-analytics' ) . '**hello-world**, /example-page/, *another-example-page',
 						],
 					],
 				],
@@ -243,8 +243,8 @@ class Page extends API {
 			],
 		];
 
-		add_action( 'admin_menu', [ $this, 'register_menu' ] );
-		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
+				add_action( 'admin_menu', [ $this, 'register_menu' ] );
+				add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
 	}
 
 	/**
