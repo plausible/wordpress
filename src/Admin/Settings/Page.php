@@ -154,7 +154,7 @@ class Page extends API {
 							'slug'        => 'excluded_pages',
 							'type'        => 'textarea',
 							'value'       => $excluded_pages,
-							'placeholder' => esc_html__( 'E.g. **hello-world**, /example-page/, **another-example-page' ),
+							'placeholder' => esc_html__( 'E.g. **hello-world**, /example-page/, *another-example-page' ),
 						],
 					],
 				],
