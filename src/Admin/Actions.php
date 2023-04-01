@@ -79,7 +79,7 @@ class Actions {
 				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
 			} else {
 				$status  = 'error';
-				$message = esc_html__( 'Something gone a wrong.', 'plausible-analytics' );
+				$message = esc_html__( 'Something went wrong.', 'plausible-analytics' );
 			}
 
 			// Send response.
