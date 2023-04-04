@@ -156,12 +156,14 @@ Please make sure you make a backup of your database before updating any version 
 
 = 1.2.5 =
 - 40-45% reduction in JS code
-- Exclude the roles editor and author [#11](https://github.com/plausible/wordpress/issues/11)
-- Added: control which user role(s) can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
+- Improved: specify which user roles to track [#11](https://github.com/plausible/wordpress/issues/11)
+- Added: specify which user roles can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
 - Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
 - Added: compatibility for WP Rocket
 - Removed: Custom Domains options
 - Added: disable tracking by User Role.
+- Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility.
+- Several code optimizations.
 
 Props @sadmansh and @davidehuey for the contributions.
 
