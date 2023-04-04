@@ -13,9 +13,9 @@ Plausible Analytics is a simple, open-source, lightweight and privacy-friendly w
 
 == Description ==
 
-Plausible Analytics is a simple, open-source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is an easy to use, open-source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
 
-Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU 🇪🇺.
+Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU, powered by European-owned cloud infrastructure 🇪🇺  🇪🇺.
 
 Take a look at [the live demo](https://plausible.io/plausible.io).
 
@@ -29,7 +29,11 @@ We choose the subscription business model rather than surveillance capitalism. W
 
 Plausible Analytics is built for privacy-conscious site owners. You get valuable and actionable stats to help you improve your efforts while your visitors keep having a nice and enjoyable experience.
 
-Here's what makes Plausible a great Google Analytics alternative and why we're trusted by 2,000+ subscribers to deliver their website and business insights: 
+Here's what makes Plausible a great Google Analytics alternative and why we're trusted by 9,000+ subscribers to deliver their website and business insights: 
+
+### Smooth transition from Universal Analytics
+
+Plausible features a realtime dashboard, entry pages report and integration with Search Console. You can track your paid campaigns and conversions. You can invite team members. You can even [import your historical stats from Universal Analytics](https://plausible.io/docs/google-analytics-import). Learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience) and join thousands who have already migrated from Universal Analytics. 
 
 ### Simple analytics at a glance
 
@@ -45,11 +49,11 @@ Plausible is privacy-friendly analytics. All the site measurement is carried out
 
 ### Track events, goal conversions and campaigns
 
-Plausible is useful. Segment the data by any metric you click on. Answer the important questions about your visitors, content and referral sources. Analyze paid campaigns and dark traffic using UTM parameters. Track outbound link clicks and 404 error pages. Create custom events, see how they convert over time and identify trends that matter.
+Plausible is useful. Segment the data by any metric you click on. Answer the important questions about your visitors, content and referral sources. Analyze paid campaigns and dark traffic using UTM parameters. Track file downloads, outbound link clicks and 404 error pages. Create custom events using CSS class names directly in your WordPress editor, then see how they convert over time and identify trends that matter.
 
 ### Open and share your web analytics dashboard
 
-Plausible is shareable. Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them. You can also share your stats privately by generating a secure link. This link is impossible to guess but you can add password protection for extra security.
+Plausible is shareable. Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them. You can also share your stats privately by generating a secure link. This link is impossible to guess but you can add password protection for extra security. You can invite team members and assign user roles too.
 
 ### Transparent and fully open source software
 
@@ -60,9 +64,10 @@ Plausible is open source analytics. Our source code is available and accessible 
 * Our product is updated several times per week and with this plugin you always have access to all the latest features
 * Automatically includes tracking code in the header of your site
 * Simple plugin settings page with easy options
-* Disables tracking of admin-level users by default 
-* Tracks external link clicks and 404 error pages by default 
-* Serve the script as a first-party connection from your domain name
+* View your Plausible stats directly in your WordPress dashboard (and grant access to other user roles too)
+* Tracking of admin users is disabled by default (you can optionally disabled tracking of other user roles too)
+* File downloads, external link clicks and 404 error pages are tracked by default 
+* Custom events can be setup using CSS class names
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
 * Keep an eye on your traffic with weekly and/or monthly reports email and Slack reports
 * Get traffic spike notifications via email or Slack so you don't miss being on the Hacker News
