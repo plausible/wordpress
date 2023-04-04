@@ -92,7 +92,7 @@ class Upgrades {
 		}
 
 		// Enable Outbound links by default.
-		$new_settings['outbound-links'] = '1';
+		$new_settings['outbound-links'][0] = '1';
 
 		update_option( 'plausible_analytics_settings', $new_settings );
 
