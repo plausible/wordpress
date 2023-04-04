@@ -65,7 +65,7 @@ Plausible is open source analytics. Our source code is available and accessible 
 * Automatically includes tracking code in the header of your site
 * Simple plugin settings page with easy options
 * View your Plausible stats directly in your WordPress dashboard (and grant access to other user roles too)
-* Tracking of admin users is disabled by default (you can optionally disabled tracking of other user roles too)
+* Tracking of admin users is disabled by default (you can optionally disable tracking of other user roles too)
 * File downloads, external link clicks and 404 error pages are tracked by default 
 * Custom events can be setup using CSS class names
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
