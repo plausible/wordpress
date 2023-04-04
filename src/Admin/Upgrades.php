@@ -92,7 +92,12 @@ class Upgrades {
 		}
 
 		// Enable Outbound links by default.
-		$new_settings['outbound-links'][0] = '1';
+		$new_settings['enhanced_measurements'] = [ 'outbound-links' ];
+
+		if ( ! empty( $old_settings['track_administrator'] )
+			&& $old_settings['track_administrator'] ) {
+			$new_settings['tracked_user_roles'] = [ 'administrator' ];
+		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
 
@@ -111,21 +116,8 @@ class Upgrades {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		$old_embed_analytics          = ! empty( $old_settings['embed_analytics'] ) ? $old_settings['embed_analytics'] : '';
-		$old_is_self_hosted_analytics = ! empty( $old_settings['is_self_hosted_analytics'] ) ? $old_settings['is_self_hosted_analytics'] : '';
-
+		$old_embed_analytics            = ! empty( $old_settings['embed_analytics'] ) ? $old_settings['embed_analytics'] : '';
 		$new_settings['is_shared_link'] = $old_embed_analytics;
-
-		if (
-			! empty( $old_settings['track_administrator'] ) &&
-			$old_settings['track_administrator']
-		) {
-			$new_settings['can_role_track_analytics'] = true;
-			$new_settings['track_analytics']          = [ 'administrator' ];
-		}
-
-		// For self hosted plausible analytics.
-		$new_settings['is_self_hosted_plausible_analytics'] = $old_is_self_hosted_analytics;
 
 		// Update the new settings.
 		update_option( 'plausible_analytics_settings', $new_settings );

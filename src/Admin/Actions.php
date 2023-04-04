@@ -54,7 +54,8 @@ class Actions {
 	 */
 	public function save_admin_settings() {
 		// Sanitize all the post data before using.
-		$post_data = Helpers::clean( $_POST );
+		$post_data        = Helpers::clean( $_POST );
+		$current_settings = Helpers::get_settings();
 
 		// Security: Roadblock to check for unauthorized access.
 		if (
@@ -65,15 +66,13 @@ class Actions {
 				wp_verify_nonce( $post_data['roadblock'], 'plausible-analytics-settings-roadblock' )
 			)
 		) {
-			// Unset unnecessary posted data to store into database.
-			unset( $post_data['action'] );
-			unset( $post_data['roadblock'] );
-
 			if (
 				! empty( $post_data['plausible_analytics_settings']['domain_name'] )
-			) {
+				|| isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] ) ) {
+				$current_settings = array_replace( $current_settings, $post_data['plausible_analytics_settings'] );
+
 				// Update all the options to plausible settings.
-				update_option( 'plausible_analytics_settings', $post_data['plausible_analytics_settings'] );
+				update_option( 'plausible_analytics_settings', $current_settings );
 
 				$status  = 'success';
 				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );

@@ -45,14 +45,14 @@ class Actions {
 		$user_role = Helpers::get_user_role();
 
 		/**
-		 * Bail if track_analytics is empty (which means no roles should be tracked) or,
+		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or,
 		 * if current role should not be tracked.
 		 */
 		if (
 			( ! empty( $user_role )
-				&& ! isset( $settings['track_analytics'] ) )
+				&& ! isset( $settings['tracked_user_roles'] ) )
 			|| ( ! empty( $user_role )
-				&& ! in_array( $user_role, $settings['track_analytics'], true ) )
+				&& ! in_array( $user_role, $settings['tracked_user_roles'], true ) )
 			) {
 			return;
 		}

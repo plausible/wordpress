@@ -91,8 +91,8 @@ final class Plugin {
 		if ( ! $is_default_settings_saved ) {
 			$domain_name      = Helpers::get_domain();
 			$default_settings = [
-				'domain_name'     => $domain_name,
-				'track_analytics' => [],
+				'domain_name'        => $domain_name,
+				'tracked_user_roles' => [],
 			];
 
 			update_option( 'plausible_analytics_settings', $default_settings );

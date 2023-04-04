@@ -155,9 +155,7 @@ class API {
 		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
 		?>
 		<span class="plausible-checkbox-list">
-			<input
-				id="<?php echo $field['slug']; ?>"
-				type="checkbox"
+			<input id="<?php echo $field['slug']; ?>" type="checkbox"
 				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
 				value="<?php echo esc_html( $value ); ?>"
 				<?php
@@ -168,6 +166,8 @@ class API {
 				}
 				?>
 			/>
+			<?php // This trick'll make our option always show up in $_POST. Even when unchecked. ?>
+			<input id="<?php echo $field['slug']; ?>" type="hidden" name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]" value="0" />
 			<label for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
 			<?php if ( ! empty( $field['docs'] ) ) { ?>
 				- <a target="_blank" href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>

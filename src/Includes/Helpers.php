@@ -41,12 +41,11 @@ class Helpers {
 	 */
 	public static function get_analytics_url() {
 		$settings       = self::get_settings();
-		$domain         = $settings['domain_name'];
 		$default_domain = 'plausible.io';
 		$file_name      = 'plausible';
 
 		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'compat', 'hash' ] as $extension ) {
-			if ( ! empty( $settings[ $extension ] ) && $settings[ $extension ][0] === '1' ) {
+			if ( in_array( $extension, $settings['enhanced_measurements'], true ) ) {
 				$file_name .= '.' . $extension;
 			}
 		}
@@ -58,8 +57,7 @@ class Helpers {
 
 		// Triggered when self-hosted analytics is enabled.
 		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
+			! empty( $settings['self_hosted_domain'] )
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 		}
@@ -114,16 +112,19 @@ class Helpers {
 	 * @return array
 	 */
 	public static function get_settings() {
+		$defaults = [
+			'domain_name'             => '',
+			'enhanced_measurements'   => [],
+			'shared_link'             => '',
+			'excluded_pages'          => '',
+			'tracked_user_roles'      => [],
+			'expand_dashboard_access' => [],
+			'self_hosted_domain'      => '',
+		];
+
 		$settings = get_option( 'plausible_analytics_settings', [] );
 
-		// Keep around for backwards compatibility reasons.
-		$track_outbound_links = apply_filters( 'plausible_analytics_enable_outbound_links', isset( $settings['outbound-links'][0] ) ? $settings['outbound-links'][0] : false );
-
-		if ( $track_outbound_links ) {
-			$settings['outbound-links'][0] = '1';
-		}
-
-		return $settings;
+		return wp_parse_args( $settings, $defaults );
 	}
 
 	/**
@@ -140,8 +141,7 @@ class Helpers {
 
 		// Triggered when self hosted analytics is enabled.
 		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
+			! empty( $settings['self_hosted_domain'] )
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
