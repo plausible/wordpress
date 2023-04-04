@@ -30,7 +30,7 @@ class Page extends API {
 	public function __construct() {
 		$settings           = Helpers::get_settings();
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
-		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : 'example.com';
+		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '';
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
 		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
@@ -74,41 +74,41 @@ class Page extends API {
 							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
-							'slug'       => 'outbound-links',
+							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => '1',
+							'value'      => 'outbound-links',
 						],
 						'file-downloads' => [
 							'label'      => esc_html__( 'File downloads', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
-							'slug'       => 'file-downloads',
+							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => '1',
+							'value'      => 'file-downloads',
 						],
 						'tagged-events'  => [
 							'label'      => esc_html__( 'Custom events', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
-							'slug'       => 'tagged-events',
+							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => '1',
+							'value'      => 'tagged-events',
 						],
 						'hash'           => [
 							'label'      => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
 							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-							'slug'       => 'hash',
+							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => '1',
+							'value'      => 'hash',
 						],
 						'compat'         => [
 							'label'      => esc_html__( 'IE compatibility', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
 							'docs_label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-							'slug'       => 'compat',
+							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => '1',
+							'value'      => 'compat',
 						],
 					],
 				],
@@ -160,32 +160,32 @@ class Page extends API {
 				],
 				[
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
-					'slug'   => 'can_role_track_analytics',
+					'slug'   => 'can_role_tracked_user_roles',
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => false,
 					'fields' => [
 						'administrator' => [
 							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
-							'slug'  => 'track_analytics',
+							'slug'  => 'tracked_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'administrator',
 						],
 						'editor'        => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
-							'slug'  => 'track_analytics',
+							'slug'  => 'tracked_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'editor',
 						],
 						'author'        => [
 							'label' => esc_html__( 'Author', 'plausible-analytics' ),
-							'slug'  => 'track_analytics',
+							'slug'  => 'tracked_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'author',
 						],
 						'contributor'   => [
 							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
-							'slug'  => 'track_analytics',
+							'slug'  => 'tracked_user_roles',
 							'type'  => 'checkbox',
 							'value' => 'contributor',
 						],
@@ -200,19 +200,19 @@ class Page extends API {
 					'fields' => [
 						'editor'      => [
 							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
-							'slug'  => 'access_to_user_roles',
+							'slug'  => 'expand_dashboard_access',
 							'type'  => 'checkbox',
 							'value' => 'editor',
 						],
 						'author'      => [
 							'label' => esc_html__( 'Author', 'plausible-analytics' ),
-							'slug'  => 'access_to_user_roles',
+							'slug'  => 'expand_dashboard_access',
 							'type'  => 'checkbox',
 							'value' => 'author',
 						],
 						'contributor' => [
 							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
-							'slug'  => 'access_to_user_roles',
+							'slug'  => 'expand_dashboard_access',
 							'type'  => 'checkbox',
 							'value' => 'contributor',
 						],
@@ -233,18 +233,19 @@ class Page extends API {
 					'toggle' => $is_selfhosted,
 					'fields' => [
 						[
-							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
-							'slug'  => 'self_hosted_domain',
-							'type'  => 'text',
-							'value' => $self_hosted_domain,
+							'label'       => esc_html__( 'Domain Name', 'plausible-analytics' ),
+							'slug'        => 'self_hosted_domain',
+							'type'        => 'text',
+							'value'       => $self_hosted_domain,
+							'placeholder' => 'e.g. ' . Helpers::get_domain(),
 						],
 					],
 				],
 			],
 		];
 
-				add_action( 'admin_menu', [ $this, 'register_menu' ] );
-				add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
+		add_action( 'admin_menu', [ $this, 'register_menu' ] );
+		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
 	}
 
 	/**
@@ -395,7 +396,7 @@ class Page extends API {
 
 		if ( $can_access_analytics_page ) {
 			$has_access             = false;
-			$user_roles_have_access = ! empty( $settings['access_to_user_roles'] ) ? $settings['access_to_user_roles'] : [ 'administrator' ];
+			$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? $settings['expand_dashboard_access'] : [ 'administrator' ];
 
 			foreach ( $current_user->roles as $role ) {
 				if ( in_array( $role, $user_roles_have_access, true ) ) {
