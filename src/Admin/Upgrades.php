@@ -96,7 +96,7 @@ class Upgrades {
 
 		update_option( 'plausible_analytics_settings', $new_settings );
 
-		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
+		update_option( 'plausible_analytics_version', '1.2.5' );
 	}
 
 	/**
@@ -131,6 +131,6 @@ class Upgrades {
 		update_option( 'plausible_analytics_settings', $new_settings );
 
 		// Update the version in DB to the latest as upgrades completed.
-		update_option( 'plausible_analytics_version', PLAUSIBLE_ANALYTICS_VERSION );
+		update_option( 'plausible_analytics_version', '1.3.0' );
 	}
 }
