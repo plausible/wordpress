@@ -161,7 +161,6 @@ Please make sure you make a backup of your database before updating any version 
 - Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
 - Added: compatibility for WP Rocket
 - Removed: Custom Domains options
-- Added: disable tracking by User Role.
 - Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility.
 - Several code optimizations.
 
