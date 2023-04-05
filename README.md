@@ -1,9 +1,11 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/plausible/wordpress)
+
 # [Plausible Analytics](https://plausible.io "Plausible Analytics") #
 
 ![WordPress version](https://img.shields.io/wordpress/plugin/v/plausible-analytics.svg) ![WordPress Rating](https://img.shields.io/wordpress/plugin/r/plausible-analytics.svg) ![WordPress Downloads](https://img.shields.io/wordpress/plugin/dt/plausible-analytics.svg)
 
 Welcome to the Plausible Analytics WordPress Plugin GitHub repository. This is the code source and the center of active development. Here you can browse the source, look at open issues, and contribute to the project.
- 
+
 ## Getting Started 
 
 If you're looking to contribute or actively develop on Plausible Analytics then skip ahead to the [Local Development](https://github.com/plausible/wordpress/#local-development) section below. The following is if you're looking to actively use the plugin on your WordPress site.
@@ -40,7 +42,7 @@ To get started developing on the Plausible Analytics WordPress Plugin you will n
 
 3. Clone this repository from GitHub into your plugins directory: `https://github.com/plausible/wordpress.git`
 
-4. Run composer to set up dependancies: `composer install`
+4. Run composer to set up dependencies: `composer install`
 
 5. Run npm install to get the necessary npm packages: `npm install`
 

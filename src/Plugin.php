@@ -30,8 +30,8 @@ final class Plugin {
 		register_activation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'activate' ] );
 		register_deactivation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'deactivate' ] );
 
-		// Register services used throughout the plugin.
-		add_action( 'plugins_loaded', [ $this, 'register_services' ] );
+		// Register services used throughout the plugin. (WP Rocket runs at priority 10)
+		add_action( 'plugins_loaded', [ $this, 'register_services' ], 9 );
 
 		// Load text domain.
 		add_action( 'init', [ $this, 'load_plugin_textdomain' ] );
@@ -47,12 +47,14 @@ final class Plugin {
 	 */
 	public function register_services() {
 		if ( is_admin() ) {
-			new Admin\Settings();
+			new Admin\Upgrades();
+			new Admin\Settings\Page();
 			new Admin\Filters();
 			new Admin\Actions();
 		}
 
 		new Includes\Actions();
+		new Includes\Compatibility();
 		new Includes\Filters();
 	}
 
@@ -87,11 +89,10 @@ final class Plugin {
 		$is_default_settings_saved = get_option( 'plausible_analytics_is_default_settings_saved', false );
 
 		if ( ! $is_default_settings_saved ) {
+			$domain_name      = Helpers::get_domain();
 			$default_settings = [
-				'domain_name'          => Helpers::get_domain(),
-				'custom_domain'        => false,
-				'custom_domain_prefix' => 'analytics',
-				'track_administrator'  => false,
+				'domain_name'        => $domain_name,
+				'tracked_user_roles' => [],
 			];
 
 			update_option( 'plausible_analytics_settings', $default_settings );

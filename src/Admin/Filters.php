@@ -8,9 +8,9 @@
  * @subpackage Plausible Analytics
  */
 
- namespace Plausible\Analytics\WP\Admin;
+namespace Plausible\Analytics\WP\Admin;
 
- // Bailout, if accessed directly.
+// Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -34,24 +34,20 @@ class Filters {
 	 *
 	 * @param string $footer_text The existing footer text.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @return string
 	 */
-	public function add_admin_footer_text( $footerText ) {
+	public function add_admin_footer_text( $footer_text ) {
 		$current_screen = get_current_screen();
 
-		if ( true == stristr( $current_screen->base, 'plausible-analytics' ) ) {
-			$ratingText = sprintf(
+		if ( true === stristr( $current_screen->base, 'plausible-analytics' ) ) {
+			return sprintf(
 				/* translators: %s: Link to 5 star rating */
 				__( 'If you like <strong>Plausible Analytics</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!', 'plausible-analytics' ),
 				'<a href="https://wordpress.org/support/view/plugin-reviews/plausible-analytics?filter=5#postform" target="_blank" class="plausible-analytics-rating-link" style="text-decoration:none;" data-rated="' . esc_attr__( 'Thanks :)', 'plausible-analytics' ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 			);
-
-			return $ratingText;
-		} else {
-			return $footerText;
 		}
+
+		return $footer_text;
 	}
 
 	/**
@@ -67,7 +63,7 @@ class Filters {
 		$new_actions = [
 			'settings' => sprintf(
 				'<a href="%1$s">%2$s</a>',
-				admin_url( 'admin.php?page=plausible-analytics' ),
+				admin_url( 'admin.php?page=plausible_analytics' ),
 				esc_html__( 'Settings', 'plausible-analytics' )
 			),
 			'support'  => sprintf(

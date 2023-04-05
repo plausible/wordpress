@@ -2,7 +2,7 @@ const path = require( 'path' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const wpPot = require( 'wp-pot' );
 
@@ -10,8 +10,8 @@ const inProduction = ( 'production' === process.env.NODE_ENV );
 const mode = inProduction ? 'production' : 'development';
 
 const config = {
+	devtool: inProduction ? 'inline-source-map' : 'eval-cheap-module-source-map',
 	mode,
-
 	entry: {
 		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
 	},
@@ -19,7 +19,6 @@ const config = {
 		path: path.join( __dirname, './assets/dist/' ),
 		filename: 'js/[name].js',
 	},
-	devtool: ! inProduction ? 'source-map' : '',
 	module: {
 		rules: [
 
@@ -54,9 +53,9 @@ const config = {
 						loader: 'sass-loader',
 						options: {
 							sourceMap: true,
-							outputStyle: ( inProduction ? 'compressed' : 'nested' ),
 						},
-					} ],
+					},
+				],
 			},
 
 			// Image files.
@@ -79,13 +78,19 @@ const config = {
 	plugins: [
 
 		// Removes the "dist" folder before building.
-		new CleanWebpackPlugin( [ 'assets/dist' ] ),
+		new CleanWebpackPlugin(),
 
 		new MiniCSSExtractPlugin( {
 			filename: 'css/[name].css',
 		} ),
 
-		new CopyWebpackPlugin( [ { from: 'assets/src/images', to: 'images' } ] ),
+		new CopyWebpackPlugin(
+			{ 
+				patterns: [
+					{ from: 'assets/src/images', to: 'images' },
+				],
+			}
+		),
 
 	],
 };
@@ -108,7 +113,7 @@ if ( inProduction ) {
 		destFile: 'languages/plausible-analytics.pot',
 		relativeTo: './',
 		src: [ './**/*.php', '!./includes/libraries/**/*', '!./vendor/**/*' ],
-		bugReport: 'https://github.com/mehul0810/plausible-analytics-wp/issues/new',
+		bugReport: 'https://github.com/plausible/wordpress/issues/new',
 		team: 'Plausible Analytics Team <hello@plausible.io>',
 	} );
 }

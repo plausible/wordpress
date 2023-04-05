@@ -7,28 +7,16 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	-webkit-animation: plausible-bounce 2s infinite ease-in-out;
 	animation: plausible-bounce 2s infinite ease-in-out;
-}
-
-@-webkit-keyframes plausible-bounce {
-	0%,
-	100% {
-		-webkit-transform: scale(0);
-	}
-	50% {
-		-webkit-transform: scale(1);
-	}
 }
 
 @keyframes plausible-bounce {
 	0%,
 	100% {
 		transform: scale(0);
-		-webkit-transform: scale(0);
 	}
+
 	50% {
 		transform: scale(1);
-		-webkit-transform: scale(1);
 	}
 }

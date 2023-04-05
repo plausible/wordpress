@@ -1,0 +1,39 @@
+.plausible-analytics-header {
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	padding: 0;
+	position: relative;
+	margin: 0 0 0 -20px;
+	height: 60px;
+
+	.plausible-analytics-logo {
+		padding: 20px;
+		border-right: 1px solid #f1f1f1;
+
+		img {
+			width: 26px;
+			height: 100%;
+		}
+	}
+
+	.plausible-analytics-header-content {
+		display: inline-flex;
+		align-items: center;
+		width: 100%;
+
+		.plausible-analytics-title {
+			padding: 0 20px;
+
+			h1 {
+				font-size: 1.4rem;
+			}
+		}
+
+		.plausible-analytics-actions {
+			display: flex;
+			margin-left: auto;
+			padding: 20px;
+		}
+	}
+}

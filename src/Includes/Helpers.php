@@ -2,7 +2,7 @@
 /**
  * Plausible Analytics | Helpers
  *
- * @since 1.0.0
+ * @since      1.0.0
  *
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -27,9 +27,8 @@ class Helpers {
 	 */
 	public static function get_domain() {
 		$site_url = site_url();
-		$domain   = preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 
-		return $domain;
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
 	}
 
 	/**
@@ -41,30 +40,29 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_analytics_url() {
-		$settings         = self::get_settings();
-		$domain           = $settings['domain_name'];
-		$default_domain   = 'plausible.io';
-		$is_outbound_link = apply_filters( 'plausible_analytics_enable_outbound_links', true );
-		$file_name        = $is_outbound_link ? 'plausible.outbound-links' : 'plausible';
+		$settings       = self::get_settings();
+		$default_domain = 'plausible.io';
+		$file_name      = 'plausible';
 
-		// Triggered when self hosted analytics is enabled.
+		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'compat', 'hash' ] as $extension ) {
+			if ( in_array( $extension, $settings['enhanced_measurements'], true ) ) {
+				$file_name .= '.' . $extension;
+			}
+		}
+
+		// Load exclusions.js if any excluded pages are set.
+		if ( ! empty( $settings['excluded_pages'] ) ) {
+			$file_name .= '.' . 'exclusions';
+		}
+
+		// Triggered when self-hosted analytics is enabled.
 		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
+			! empty( $settings['self_hosted_domain'] )
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 		}
 
 		$url = "https://{$default_domain}/js/{$file_name}.js";
-
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/js/{$file_name}.js";
-		}
 
 		return esc_url( $url );
 	}
@@ -99,7 +97,7 @@ class Helpers {
 		$individual_settings = ! empty( $settings[ $name ] ) ? esc_html( $settings[ $name ] ) : '';
 		?>
 		<label class="plausible-analytics-switch">
-			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]" value="1" type="checkbox" />
+			<input <?php checked( $individual_settings, 'true' ); ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo esc_attr( $name ); ?>]" value="1" type="checkbox"/>
 			<span class="plausible-analytics-switch-slider"></span>
 		</label>
 		<?php
@@ -114,7 +112,19 @@ class Helpers {
 	 * @return array
 	 */
 	public static function get_settings() {
-		return get_option( 'plausible_analytics_settings', [] );
+		$defaults = [
+			'domain_name'             => '',
+			'enhanced_measurements'   => [],
+			'shared_link'             => '',
+			'excluded_pages'          => '',
+			'tracked_user_roles'      => [],
+			'expand_dashboard_access' => [],
+			'self_hosted_domain'      => '',
+		];
+
+		$settings = get_option( 'plausible_analytics_settings', [] );
+
+		return wp_parse_args( $settings, $defaults );
 	}
 
 	/**
@@ -131,41 +141,112 @@ class Helpers {
 
 		// Triggered when self hosted analytics is enabled.
 		if (
-			! empty( $settings['is_self_hosted_analytics'] ) &&
-			'true' === $settings['is_self_hosted_analytics']
+			! empty( $settings['self_hosted_domain'] )
 		) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
-		}
-
-		// Triggered when custom domain is enabled.
-		if (
-			! empty( $settings['custom_domain'] ) &&
-			'true' === $settings['custom_domain']
-		) {
-			$domain               = $settings['domain_name'];
-			$custom_domain_prefix = $settings['custom_domain_prefix'];
-			$url                  = "https://{$custom_domain_prefix}.{$domain}/api/event";
 		}
 
 		return esc_url( $url );
 	}
 
 	/**
-	 * Sanitize the fields using this clean function.
+	 * Get Quick Actions.
 	 *
-	 * @param string|array $var Pass the string to sanitize.
+	 * @since  1.3.0
+	 * @access public
 	 *
-	 * @since  1.2.3
+	 * @return array
+	 */
+	public static function get_quick_actions() {
+		return [
+			'view-docs'        => [
+				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://docs.plausible.io/' ),
+			],
+			'report-issue'     => [
+				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+			],
+			'translate-plugin' => [
+				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
+			],
+		];
+	}
+
+	/**
+	 * Render Quick Actions
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function render_quick_actions() {
+		ob_start();
+		$quick_actions = self::get_quick_actions();
+		?>
+		<div class="plausible-analytics-quick-actions">
+		<?php
+		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
+			?>
+			<div class="plausible-analytics-quick-actions-title">
+				<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
+			</div>
+			<ul>
+			<?php
+			foreach ( $quick_actions as $quick_action ) {
+				?>
+				<li>
+					<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
+						<?php echo $quick_action['label']; ?>
+					</a>
+				</li>
+				<?php
+			}
+			?>
+			</ul>
+			<?php
+		}
+		?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Clean variables using `sanitize_text_field`.
+	 * Arrays are cleaned recursively. Non-scalar values are ignored.
+	 *
+	 * @param string|array $var Sanitize the variable.
+	 *
+	 * @since  1.3.0
 	 * @access public
 	 *
 	 * @return string|array
 	 */
 	public static function clean( $var ) {
 		if ( is_array( $var ) ) {
-			return array_map( [ static::class, 'clean' ], $var );
-		} else {
-			return is_scalar( $var ) ? sanitize_text_field( trim( $var ) ) : $var;
+			return array_map( [ __CLASS__, __METHOD__ ], $var );
 		}
+
+		return is_scalar( $var ) ? sanitize_text_field( wp_unslash( $var ) ) : $var;
+	}
+
+	/**
+	 * Get user role for the logged-in user.
+	 *
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @return string
+	 */
+	public static function get_user_role() {
+		global $current_user;
+
+		$user_roles = $current_user->roles;
+
+		return array_shift( $user_roles );
 	}
 }

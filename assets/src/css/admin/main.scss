@@ -1,7 +1,9 @@
 @import './_variables';
 @import './_mixins';
-@import './menu.scss';
-@import './general.scss';
-@import './switch.scss';
-@import './trigger.scss';
-@import './spinner.scss';
+@import './menu';
+@import './quick-actions';
+@import './header';
+@import './general';
+@import './switch';
+@import './trigger';
+@import './spinner';
