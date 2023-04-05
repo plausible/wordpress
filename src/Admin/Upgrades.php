@@ -57,12 +57,37 @@ class Upgrades {
 			$this->upgrade_to_125();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '1.2.6', '<' ) ) {
+			$this->upgrade_to_126();
+		}
+
 		// Upgrade to version 1.3.0.
 		// if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
 		// 	$this->upgrade_to_130();
 		// }
 
 		// Add required upgrade routines for future versions here.
+	}
+
+	/**
+	 * Get rid of the previous "example.com" default for self_hosted_domain.
+	 *
+	 * @since 1.2.6
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_126() {
+		$old_settings = Helpers::get_settings();
+		$new_settings = $old_settings;
+
+		if ( ! empty( $old_settings['self_hosted_domain'] )
+			&& strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
+				$new_settings['self_hosted_domain'] = '';
+		}
+
+		update_option( 'plausible_analytics_settings', $new_settings );
+
+		update_option( 'plausible_analytics_version', '1.2.6' );
 	}
 
 	/**

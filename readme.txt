@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -154,6 +154,9 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 1.2.6 =
+- Added migration script to remove "example.com" default from DB for Self Hosted Domain option.
+
 = 1.2.5 =
 - 40-45% reduction in JS code
 - Improved: specify which user roles to track [#11](https://github.com/plausible/wordpress/issues/11)
@@ -161,7 +164,7 @@ Please make sure you make a backup of your database before updating any version 
 - Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
 - Added: compatibility for WP Rocket
 - Removed: Custom Domains options
-- Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility.
+- Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility. (thanks, @jdevalk!)
 - Several code optimizations.
 
 Props @sadmansh and @davidehuey for the contributions.
