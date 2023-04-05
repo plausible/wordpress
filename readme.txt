@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -153,6 +153,9 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.2.6 =
+- Added migration script to remove "example.com" default from DB for Self Hosted Domain option.
 
 = 1.2.5 =
 - 40-45% reduction in JS code
