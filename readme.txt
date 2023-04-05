@@ -69,7 +69,7 @@ Plausible is open source analytics. Our source code is available and accessible 
 * File downloads, external link clicks and 404 error pages are tracked by default 
 * Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
-* Keep an eye on your traffic with weekly and/or monthly reports email and Slack reports
+* Keep an eye on your traffic with weekly and/or monthly email and Slack reports
 * Get traffic spike notifications via email or Slack so you don't miss being on the Hacker News
 * Tag your paid ads, emails and social media posts with UTM tags and analyze your ecommerce and marketing campaigns from click to conversion
 * Filter the dashboard by any metric that you click on to get further insights. Mix and match filters too
