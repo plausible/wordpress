@@ -42,6 +42,7 @@ class Helpers {
 	public static function get_analytics_url() {
 		$settings       = self::get_settings();
 		$default_domain = 'plausible.io';
+		$domain         = $default_domain;
 		$file_name      = 'plausible';
 
 		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'compat', 'hash' ] as $extension ) {
@@ -55,14 +56,21 @@ class Helpers {
 			$file_name .= '.' . 'exclusions';
 		}
 
+		// Allows for hard-coding the self hosted domain.
+		if ( defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ) {
+			// phpcs:ignore
+			$domain = PLAUSIBLE_SELF_HOSTED_DOMAIN;
+		}
+
 		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['self_hosted_domain'] )
+			&& $domain === $default_domain
 		) {
-			$default_domain = $settings['self_hosted_domain'];
+			$domain = $settings['self_hosted_domain'];
 		}
 
-		$url = "https://{$default_domain}/js/{$file_name}.js";
+		$url = "https://{$domain}/js/{$file_name}.js";
 
 		return esc_url( $url );
 	}
