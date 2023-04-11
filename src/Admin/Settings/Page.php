@@ -218,6 +218,22 @@ class Page extends API {
 						],
 					],
 				],
+				[
+					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
+					'slug'          => 'disable_toolbar_menu',
+					'type'          => 'group',
+					'desc'          => esc_html__( 'Check this option if you don\'t want the Plausible Analytics menu item to be added to the toolbar at the top of the screen.', 'plausible-analytics' ),
+					'toggle'        => false,
+					'add_sub_array' => false,
+					'fields'        => [
+						'disable_toolbar_menu' => [
+							'label' => esc_html__( 'Disable toolbar menu', 'plausible-analytics' ),
+							'slug'  => 'disable_toolbar_menu',
+							'type'  => 'checkbox',
+							'value' => '1',
+						],
+					],
+				],
 			],
 			'self-hosted' => [
 				[
