@@ -119,6 +119,7 @@ class Helpers {
 			'excluded_pages'          => '',
 			'tracked_user_roles'      => [],
 			'expand_dashboard_access' => [],
+			'disable_toolbar_menu'    => '',
 			'self_hosted_domain'      => '',
 		];
 
