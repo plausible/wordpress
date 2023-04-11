@@ -153,9 +153,8 @@ class API {
 		$value    = ! empty( $field['value'] ) ? $field['value'] : 'on';
 		$settings = Helpers::get_settings();
 		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
-		
-		$id = sanitize_title('plausible_analytics_settings-' . $field['label']);
-		
+		$id       = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
+
 		?>
 		<span class="plausible-checkbox-list">
 			<input id="<?php echo $id; ?>" type="checkbox"
