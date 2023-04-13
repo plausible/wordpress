@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Helpers {
 
 	/**
-	 * Get Plain Domain.
+	 * Get Plain Domain (without protocol or www. subdomain)
 	 *
 	 * @since  1.0.0
 	 * @access public
@@ -26,9 +26,9 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_domain() {
-		$site_url = site_url();
+		$url = home_url();
 
-		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $url );
 	}
 
 	/**
