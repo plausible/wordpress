@@ -70,6 +70,11 @@ class Helpers {
 			$domain = $settings['self_hosted_domain'];
 		}
 
+		if ( is_search() ) {
+			// Add the manual scripts as we need it to track the search parameter.
+			$file_name .= '.manual';
+		}
+
 		$url = "https://{$domain}/js/{$file_name}.js";
 
 		return esc_url( $url );

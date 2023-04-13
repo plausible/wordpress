@@ -66,6 +66,14 @@ class Actions {
 		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
 		}
+
+		// Track search results. Tracks a search event with the search term and the number of results, and a pageview with the site's search URL.
+		if ( apply_filters( 'plausible_analytics_track_search', true ) && is_search() ) {
+			$search_url = str_replace( '%search%', '', get_site_url( null, $GLOBALS['wp_rewrite']->get_search_permastruct() ) );
+			$data = 'plausible("pageview", { u: "' . esc_attr( $search_url ) . '" });' .
+					'plausible( \'Search\', {props: {keyword: \'' . get_search_query() . '\', resultCount: ' . intval( $GLOBALS['wp_query']->found_posts ) . '}});';
+			wp_add_inline_script( 'plausible-analytics', $data );
+		}
 	}
 
 	/**
