@@ -21,13 +21,19 @@
 	border-radius: 5px;
 	margin: 0 5px;
 	justify-self: right;
-	color: #fff;
+	color: $white-color;
 	font-weight: 500;
 	text-transform: uppercase;
 	border: none;
 
+	&:active {
+		color: $white-color;
+		background-color: $click-color;
+	}
+
 	&:hover {
-		color: #fff;
+		cursor: pointer;
+		color: $white-color;
 	}
 }
 
