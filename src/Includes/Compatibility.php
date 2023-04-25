@@ -61,7 +61,7 @@ class Compatibility {
 	 * @return array
 	 */
 	public function exclude_plausible_js( $excluded_js ) {
-		$excluded_js[] = Helpers::get_analytics_url();
+		$excluded_js[] = Helpers::get_js_url( true );
 
 		return $excluded_js;
 	}

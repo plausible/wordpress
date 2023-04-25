@@ -191,10 +191,21 @@ class API {
 		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		?>
+		<label for="<?php echo esc_attr( $field['slug'] ); ?>">
+			<?php echo esc_attr( $field['label'] ); ?>
+		</label>
+		<textarea rows="5" id="<?php echo esc_attr( $field['slug'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>]"><?php echo $value; ?></textarea>
+		<?php
+		return ob_get_clean();
+	}
+
+	public function render_button_field( array $field ) {
+		ob_start();
+		?>
 		<label for="<?php echo $field['slug']; ?>">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
-		<textarea rows="5" id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]"><?php echo $value; ?></textarea>
+		<button class="plausible-analytics-btn" type="button" id="<?php esc_attr( $field['slug'] ); ?>"><?php echo esc_attr( $field['button_label'] ); ?></button>
 		<?php
 		return ob_get_clean();
 	}

@@ -81,6 +81,8 @@ class Actions {
 				$message = esc_html__( 'Something went wrong.', 'plausible-analytics' );
 			}
 
+			do_action( 'plausible_analytics_settings_saved' );
+
 			// Send response.
 			wp_send_json_success(
 				[

@@ -56,6 +56,8 @@ final class Plugin {
 		new Includes\Actions();
 		new Includes\Compatibility();
 		new Includes\Filters();
+		new Includes\Proxy();
+		new Includes\Setup();
 	}
 
 	/**

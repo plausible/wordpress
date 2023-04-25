@@ -113,6 +113,30 @@ class Page extends API {
 					],
 				],
 				[
+					'label'  => esc_html__( 'Avoid ad blocker detection', 'plausible-analytics' ),
+					'slug'   => 'enable_proxy',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						esc_html__( 'Get more accurate statistics by serving the JS file from your server and routing all hits to the Plausible API through your own server i.e. the WordPress API.', 'plausible-analytics' )
+					),
+					'toggle' => '',
+					'fields' => [
+						[
+							'label' => esc_html__( 'Enable', 'plausible-analytics' ),
+							'slug'  => 'avoid_ad_blockers',
+							'type'  => 'checkbox',
+							'value' => 'enable',
+						],
+						[
+							'label'        => esc_html__( 'Send Test Traffic', 'plausible-analytics' ),
+							'slug'         => 'test_proxy',
+							'type'         => 'button',
+							'button_label' => esc_html__( 'Send', 'plausible-analytics' ),
+							'value'        => '',
+						],
+					],
+				],
+				[
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
