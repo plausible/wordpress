@@ -105,31 +105,19 @@ class Proxy {
 		$ip     = $this->get_user_ip_address();
 		$url    = 'https://plausible.io/api/event';
 
-		$curl = curl_init( $url );
-
-		if ( ! $curl ) {
-			return false;
-		}
-
-		curl_setopt_array(
-			$curl,
+		$response = wp_remote_post(
+			$url,
 			[
-				CURLOPT_POSTFIELDS     => $params,
-				CURLOPT_HTTPHEADER     => [
-					"X-Forwarded-For: $ip",
-					'Content-Type: application/json',
+				'user-agent' => $_SERVER['HTTP_USER_AGENT'],
+				'headers'    => [
+					'X-Forwarded-For' => $ip,
+					'Content-Type'    => 'application/json',
 				],
-				CURLOPT_USERAGENT      => $_SERVER['HTTP_USER_AGENT'],
-				CURLOPT_FOLLOWLOCATION => true,
-				CURLOPT_RETURNTRANSFER => true,
+				'body'       => $params,
 			]
 		);
 
-		$result = curl_exec( $curl );
-
-		curl_close( $curl );
-
-		return $result;
+		return $response;
 	}
 
 	/**
