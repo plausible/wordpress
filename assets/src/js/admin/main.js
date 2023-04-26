@@ -6,6 +6,26 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return;
 	}
 
+	const testProxy = document.getElementById( 'plausible-analytics-test-proxy' );
+
+	testProxy.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+
+		const form = new FormData();
+
+		form.append( 'action', 'plausible_analytics_test_proxy');
+
+		fetch(
+			ajaxurl,
+			{
+				method: 'POST',
+				body: form,
+			}
+		).then( response => {
+			
+		} );
+	} );
+
 	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 
 	saveSettings.addEventListener( 'click', ( e ) => {

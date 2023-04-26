@@ -11,6 +11,7 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
+use WP_REST_Request;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,6 +31,7 @@ class Actions {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_admin_settings', [ $this, 'save_admin_settings' ] );
+		add_action( 'wp_ajax_plausible_analytics_test_proxy', [ $this, 'test_proxy' ] );
 	}
 
 	/**
@@ -92,5 +94,39 @@ class Actions {
 				]
 			);
 		}
+	}
+
+	/**
+	 * Test Proxy through AJAX.
+	 *
+	 * @return void
+	 */
+	public function test_proxy() {
+		$namespace = Helpers::get_proxy_resource( 'namespace' );
+		$base      = Helpers::get_proxy_resource( 'base' );
+		$endpoint  = Helpers::get_proxy_resource( 'endpoint' );
+		$request   = new WP_REST_Request( 'POST', "/$namespace/v1/$base/$endpoint" );
+
+		/** @var WP_REST_Response $result */
+		$result = rest_do_request( $request );
+
+		if ( $result->get_status() === 200 ) {
+			wp_send_json_success(
+				[
+					'message' => __( 'Awesome! This website is now using the proxy.', 'plausible-analytics' ),
+					'status'  => 'success',
+				]
+			);
+		}
+
+		$result = $result->as_error();
+
+		/** @var WP_Error $result */
+		wp_send_json_error(
+			[
+				'message' => __( 'Oops! Something went wrong while trying to access the WordPress API', 'plausible-analytics' ) . ': ' . $result->get_error_code() . ' - ' . $result->get_error_message(),
+				'status'  => 'error',
+			]
+		);
 	}
 }
