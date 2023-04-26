@@ -68,7 +68,8 @@ class Actions {
 		) {
 			if (
 				! empty( $post_data['plausible_analytics_settings']['domain_name'] )
-				|| isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] ) ) {
+				|| isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] )
+			) {
 				$current_settings = array_replace( $current_settings, $post_data['plausible_analytics_settings'] );
 
 				// Update all the options to plausible settings.

@@ -176,7 +176,7 @@ class Helpers {
 		$defaults = [
 			'domain_name'             => '',
 			'enhanced_measurements'   => [],
-			'proxy'                   => '',
+			'avoid_ad_blockers'       => '',
 			'shared_link'             => '',
 			'excluded_pages'          => '',
 			'tracked_user_roles'      => [],
