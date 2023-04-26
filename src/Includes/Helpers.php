@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Helpers {
 
 	/**
-	 * Get Plain Domain.
+	 * Get Plain Domain (without protocol or www. subdomain)
 	 *
 	 * @since  1.0.0
 	 * @access public
@@ -29,9 +29,9 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_domain() {
-		$site_url = site_url();
+		$url = home_url();
 
-		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $site_url );
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $url );
 	}
 
 	/**
@@ -46,6 +46,7 @@ class Helpers {
 		$settings       = self::get_settings();
 		$file_name      = self::get_filename( $local );
 		$default_domain = 'plausible.io';
+		$domain         = $default_domain;
 
 		/**
 		 * If Avoid ad blockers is enabled, return URL to local file.
@@ -56,16 +57,22 @@ class Helpers {
 			);
 		}
 
-		/**
-		 * Set $defailt_domain to self_hosted_domain if it exists.
-		 */
-		if (
-			! empty( $settings['self_hosted_domain'] )
-		) {
-			$default_domain = $settings['self_hosted_domain'];
+		// Allows for hard-coding the self hosted domain.
+		if ( defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ) {
+			// phpcs:ignore
+			$domain = PLAUSIBLE_SELF_HOSTED_DOMAIN;
 		}
 
-		$url = "https://{$default_domain}/js/{$file_name}.js";
+		/**
+		 * Set $domain to self_hosted_domain if it exists.
+		 */
+		if (
+			! empty( $settings['self_hosted_domain'] ) && $domain === $default_domain
+		) {
+			$domain = $settings['self_hosted_domain'];
+		}
+
+		$url = "https://{$domain}/js/{$file_name}.js";
 
 		return esc_url( $url );
 	}
@@ -174,6 +181,7 @@ class Helpers {
 			'excluded_pages'          => '',
 			'tracked_user_roles'      => [],
 			'expand_dashboard_access' => [],
+			'disable_toolbar_menu'    => '',
 			'self_hosted_domain'      => '',
 		];
 

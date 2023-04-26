@@ -30,7 +30,7 @@ class Page extends API {
 	public function __construct() {
 		$settings           = Helpers::get_settings();
 		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
-		$self_hosted_domain = ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '';
+		$self_hosted_domain = defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
 		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
@@ -239,6 +239,22 @@ class Page extends API {
 							'slug'  => 'expand_dashboard_access',
 							'type'  => 'checkbox',
 							'value' => 'contributor',
+						],
+					],
+				],
+				[
+					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
+					'slug'          => 'disable_toolbar_menu',
+					'type'          => 'group',
+					'desc'          => esc_html__( 'Check this option if you don\'t want the Plausible Analytics menu item to be added to the toolbar at the top of the screen.', 'plausible-analytics' ),
+					'toggle'        => false,
+					'add_sub_array' => false,
+					'fields'        => [
+						'disable_toolbar_menu' => [
+							'label' => esc_html__( 'Disable toolbar menu', 'plausible-analytics' ),
+							'slug'  => 'disable_toolbar_menu',
+							'type'  => 'checkbox',
+							'value' => '1',
 						],
 					],
 				],

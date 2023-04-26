@@ -78,6 +78,12 @@ class Actions {
 	 * @access public
 	 */
 	public function admin_bar_node( $admin_bar ) {
+		$disable = ! empty( Helpers::get_settings()['disable_toolbar_menu'][0] );
+
+		if ( $disable ) {
+			return;
+		}
+
 		// Add main admin bar node.
 		$args = [
 			'id'    => 'plausible-admin-bar',

@@ -28,6 +28,7 @@ class Compatibility {
 			add_filter( 'rocket_excluded_inline_js_content', [ $this, 'exclude_plausible_inline_js' ] );
 			add_filter( 'rocket_exclude_js', [ $this, 'exclude_plausible_js' ] );
 			add_filter( 'rocket_minify_excluded_external_js', [ $this, 'exclude_plausible_js' ] );
+			add_filter( 'rocket_delay_js_scripts', [ $this, 'exclude_plausible_js' ] );
 		}
 	}
 
@@ -50,7 +51,7 @@ class Compatibility {
 	}
 
 	/**
-	 * Dear WP Rocket, don't minify/combine our external JS, please.
+	 * Dear WP Rocket, don't minify/combine/delay our external JS, please.
 	 *
 	 * @filter rocket_exclude_js
 	 * @filter rocket_minify_excluded_external_js
