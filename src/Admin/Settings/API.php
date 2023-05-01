@@ -217,6 +217,7 @@ class API {
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
 		<button class="plausible-analytics-btn" type="button" id="plausible-analytics-<?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>"><?php echo esc_attr( $field['button_label'] ); ?></button>
+		<span class="plausible-analytics-notice" id="plausible-analytics-notice-<?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>"></span>
 		<?php
 		return ob_get_clean();
 	}

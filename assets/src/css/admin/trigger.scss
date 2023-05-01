@@ -41,3 +41,26 @@
 	display: flex;
 	align-items: center;
 }
+
+#plausible-analytics-notice-test-proxy {
+	display: inline-block;
+
+	.plausible-analytics-loading.spinner.is-active {
+		margin: 0 0 -6px;
+	}
+
+	.notice {
+		padding: 10px 15px;
+		border-radius: 3px;
+
+		&.success {
+			border: 1px solid #2ECC40;
+			background-color: #c6f1cb;
+		}
+
+		&.error {
+			border: 1px solid #FF4136;
+			background-color: #ffafaa;
+		}
+	}
+}
