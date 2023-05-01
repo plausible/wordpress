@@ -24,6 +24,7 @@ class Compatibility {
 	 * @return void
 	 */
 	public function __construct() {
+		// WP Rocket
 		if ( defined( 'WP_ROCKET_VERSION' ) ) {
 			add_filter( 'rocket_excluded_inline_js_content', [ $this, 'exclude_plausible_inline_js' ] );
 			add_filter( 'rocket_exclude_js', [ $this, 'exclude_plausible_js' ] );
@@ -31,11 +32,17 @@ class Compatibility {
 			add_filter( 'rocket_delay_js_scripts', [ $this, 'exclude_plausible_js' ] );
 		}
 
+		// SG Optimizer
 		if ( defined( 'SiteGround_Optimizer\VERSION' ) ) {
 			add_filter( 'sgo_javascript_combine_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_js_minify_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_js_async_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_javascript_combine_excluded_inline_content', [ $this, 'exclude_plausible_inline_js' ] );
+		}
+
+		// WP Optimize
+		if ( defined( 'WPO_VERSION' ) ) {
+			add_filter( 'wp-optimize-minify-default-exclusions', [ $this, 'exclude_plausible_js' ] );
 		}
 	}
 
