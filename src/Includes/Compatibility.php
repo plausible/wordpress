@@ -30,10 +30,17 @@ class Compatibility {
 			add_filter( 'rocket_minify_excluded_external_js', [ $this, 'exclude_plausible_js' ] );
 			add_filter( 'rocket_delay_js_scripts', [ $this, 'exclude_plausible_js' ] );
 		}
+
+		if ( defined( 'SiteGround_Optimizer\VERSION' ) ) {
+			add_filter( 'sgo_javascript_combine_exclude', [ $this, 'exclude_js_by_handle' ] );
+			add_filter( 'sgo_js_minify_exclude', [ $this, 'exclude_js_by_handle' ] );
+			add_filter( 'sgo_js_async_exclude', [ $this, 'exclude_js_by_handle' ] );
+			add_filter( 'sgo_javascript_combine_excluded_inline_content', [ $this, 'exclude_plausible_inline_js' ] );
+		}
 	}
 
 	/**
-	 * Dear WP Rocket, don't minify/combine our inline JS, please.
+	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine our inline JS, please.
 	 *
 	 * @filter rocket_excluded_inline_js_content
 	 *
@@ -51,7 +58,7 @@ class Compatibility {
 	}
 
 	/**
-	 * Dear WP Rocket, don't minify/combine/delay our external JS, please.
+	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine/delay our external JS, please.
 	 *
 	 * @filter rocket_exclude_js
 	 * @filter rocket_minify_excluded_external_js
@@ -65,5 +72,22 @@ class Compatibility {
 		$excluded_js[] = Helpers::get_js_url( true );
 
 		return $excluded_js;
+	}
+
+	/**
+	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine/delay our external JS, please.
+	 *
+	 * @filter rocket_exclude_js
+	 * @filter rocket_minify_excluded_external_js
+	 *
+	 * @param array $excluded_js
+	 * @since 1.2.5
+	 *
+	 * @return array
+	 */
+	public function exclude_js_by_handle( $excluded_handles ) {
+		$excluded_handles[] = 'plausible-analytics';
+
+		return $excluded_handles;
 	}
 }
