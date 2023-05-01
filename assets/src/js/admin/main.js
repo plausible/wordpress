@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				saveSettings.removeAttribute('disabled');
 				saveSettings.querySelector('span').innerText = saveSettings.getAttribute('data-default-text');
 			}, 500);
+
+			document.location.reload();
 		});
 	});
 });

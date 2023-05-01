@@ -42,13 +42,13 @@ class API {
 		?>
 		<div class="wrap plausible-analytics-wrap">
 			<div class="plausible-analytics-content">
-				<?php echo Helpers::render_quick_actions(); ?>
+			<?php echo Helpers::render_quick_actions(); ?>
 				<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
-				<?php
-				foreach ( $this->fields[ $current_tab ] as $tab => $field ) {
-					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
-				}
-				?>
+			<?php
+			foreach ( $this->fields[ $current_tab ] as $tab => $field ) {
+				echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
+			}
+			?>
 				<div class="plausible-analytics-settings-action-wrap">
 					<button
 						id="plausible-analytics-save-btn"
@@ -62,12 +62,12 @@ class API {
 							<div class="plausible-analytics-spinner--bounce-2"></div>
 						</span>
 					</button>
-					<?php wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
+				<?php wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
 				</div>
 				</form>
 			</div>
 		</div>
-		<?php
+			<?php
 	}
 
 	/**
@@ -84,7 +84,7 @@ class API {
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		?>
 		<label for="<?php echo $field['slug']; ?>">
-			<?php echo esc_attr( $field['label'] ); ?>
+		<?php echo esc_attr( $field['label'] ); ?>
 		</label>
 		<input id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
 		<?php
@@ -110,9 +110,9 @@ class API {
 		<div class="plausible-analytics-admin-field">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
-					<?php echo $group['label']; ?>
+				<?php echo $group['label']; ?>
 				</label>
-				<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) { ?>
+			<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) { ?>
 					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle['anchor']; ?>">
 						<?php echo $toggle['label']; ?>
 					</a>
@@ -124,20 +124,20 @@ class API {
 				<?php } ?>
 			</div>
 			<div class="plausible-analytics-admin-field-body">
-				<?php
-				if ( ! empty( $fields ) ) {
-					foreach ( $fields as $field ) {
-						echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field ) . '<br/>';
-					}
+			<?php
+			if ( ! empty( $fields ) ) {
+				foreach ( $fields as $field ) {
+					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field ) . '<br/>';
 				}
-				?>
+			}
+			?>
 			</div>
 			<div class="plausible-analytics-description">
-				<?php echo wp_kses_post( $group['desc'] ); ?>
+			<?php echo wp_kses_post( $group['desc'] ); ?>
 			</div>
 		</div>
-		<?php
-		return ob_get_clean();
+			<?php
+			return ob_get_clean();
 	}
 
 	/**
@@ -160,13 +160,13 @@ class API {
 			<input id="<?php echo $id; ?>" type="checkbox"
 				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
 				value="<?php echo esc_html( $value ); ?>"
-				<?php
-				if ( is_array( $slug ) ) {
-					checked( $value, in_array( $value, $slug, false ) ? $value : false, true );
-				} else {
-					checked( $value, $slug, true );
-				}
-				?>
+			<?php
+			if ( is_array( $slug ) ) {
+				checked( $value, in_array( $value, $slug, false ) ? $value : false, true );
+			} else {
+				checked( $value, $slug, true );
+			}
+			?>
 			/>
 			<?php // This trick'll make our option always show up in $_POST. Even when unchecked. ?>
 			<input id="<?php echo $id; ?>" type="hidden" name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]" value="0" />
@@ -175,8 +175,8 @@ class API {
 				- <a target="_blank" href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>
 			<?php } ?>
 		</span>
-		<?php
-		return ob_get_clean();
+			<?php
+			return ob_get_clean();
 	}
 
 	/**
@@ -194,7 +194,7 @@ class API {
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		?>
 		<label for="<?php echo esc_attr( $field['slug'] ); ?>">
-			<?php echo esc_attr( $field['label'] ); ?>
+		<?php echo esc_attr( $field['label'] ); ?>
 		</label>
 		<textarea rows="5" id="<?php echo esc_attr( $field['slug'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>]"><?php echo $value; ?></textarea>
 		<?php
@@ -214,11 +214,34 @@ class API {
 		ob_start();
 		?>
 		<label for="<?php echo $field['slug']; ?>">
-			<?php echo esc_attr( $field['label'] ); ?>
+		<?php echo esc_attr( $field['label'] ); ?>
 		</label>
 		<button class="plausible-analytics-btn" type="button" id="plausible-analytics-<?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>"><?php echo esc_attr( $field['button_label'] ); ?></button>
 		<span class="plausible-analytics-notice" id="plausible-analytics-notice-<?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>"></span>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Render just the label, and allow insertion of anything using the hook beside it.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $field
+	 *
+	 * @return string|false
+	 */
+	public function render_hook_field( array $field ) {
+		ob_start();
+		?>
+		<label for="<?php echo $field['slug']; ?>">
+			<?php echo esc_attr( $field['label'] ); ?>
+		</label>
+		<?php
+		do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] );
+		?>
+		<?php
+
+		return trim( ob_get_clean() );
 	}
 }

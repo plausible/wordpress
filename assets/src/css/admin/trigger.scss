@@ -18,13 +18,14 @@
 	text-decoration: none;
 	padding: 10px 15px;
 	background-color: $base-color;
-	border-radius: 5px;
+	border-radius: 3px;
 	margin: 0 5px;
 	justify-self: right;
 	color: $white-color;
 	font-weight: 500;
 	text-transform: uppercase;
 	border: none;
+	vertical-align: middle;
 
 	&:active {
 		color: $white-color;
@@ -44,13 +45,14 @@
 
 #plausible-analytics-notice-test-proxy {
 	display: inline-block;
+	vertical-align: middle;
 
 	.plausible-analytics-loading.spinner.is-active {
-		margin: 0 0 -6px;
+		margin: 0 0 -7px;
 	}
 
 	.notice {
-		padding: 10px 15px;
+		padding: 9px 18px;
 		border-radius: 3px;
 
 		&.success {
@@ -62,5 +64,15 @@
 			border: 1px solid #FF4136;
 			background-color: #ffafaa;
 		}
+	}
+}
+
+#plausible_analytics_setting_proxy_status {
+	background-color: #f5f5f5;
+	padding: 15px 30px;
+	max-width: 100%;
+
+	strong {
+		font-weight: 700;
 	}
 }
