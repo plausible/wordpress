@@ -234,12 +234,14 @@ class API {
 	public function render_hook_field( array $field ) {
 		ob_start();
 		?>
+		<div class="plausible-analytics-admin-field-row">
 		<label for="<?php echo $field['slug']; ?>">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>
 		<?php
 		do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] );
 		?>
+		</div>
 		<?php
 
 		return trim( ob_get_clean() );
