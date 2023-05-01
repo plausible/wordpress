@@ -113,7 +113,7 @@ class Actions {
 		if ( $result->get_status() === 200 ) {
 			wp_send_json_success(
 				[
-					'message' => __( 'Awesome! This website is now using the proxy.', 'plausible-analytics' ),
+					'message' => __( 'Test traffic sent successfully. Awesome! You can now safely enable the proxy.', 'plausible-analytics' ),
 					'status'  => 'success',
 				]
 			);
@@ -124,7 +124,7 @@ class Actions {
 		/** @var WP_Error $result */
 		wp_send_json_error(
 			[
-				'message' => __( 'Oops! Something went wrong while trying to access the WordPress API', 'plausible-analytics' ) . ': ' . $result->get_error_code() . ' - ' . $result->get_error_message(),
+				'message' => __( 'Oops! Something went wrong while trying to access the API. Please contact us and copy this error message', 'plausible-analytics' ) . ': ' . $result->get_error_code() . ' - ' . $result->get_error_message(),
 				'status'  => 'error',
 			]
 		);
