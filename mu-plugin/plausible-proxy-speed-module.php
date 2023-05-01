@@ -8,16 +8,14 @@
  * Author URI: https://plausible.io
  *
  * Text Domain: plausible-analytics
- *
- * @package Plausible Analytics
- * @category Safe Mode
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-class ProxySpeed {
+class PlausibleProxySpeed {
+
 	/**
 	 * Is current request a request to our proxy?
 	 *
@@ -26,11 +24,19 @@ class ProxySpeed {
 	private $is_proxy_request = false;
 
 	/**
+	 * Currenct request URI.
+	 *
+	 * @var string
+	 */
+	private $request_uri = '';
+
+	/**
 	 * Build properties.
 	 *
 	 * @return void
 	 */
 	public function __construct() {
+		$this->request_uri      = $this->get_request_uri();
 		$this->is_proxy_request = $this->is_proxy_request();
 
 		$this->init();
@@ -45,8 +51,28 @@ class ProxySpeed {
 		add_filter( 'option_active_plugins', [ $this, 'filter_active_plugins' ] );
 	}
 
+	/**
+	 * Helper method to retrieve Request URI. Checks several globals.
+	 *
+	 * @return mixed
+	 */
+	private function get_request_uri() {
+		return $_SERVER['REQUEST_URI'];
+	}
+
+	/**
+	 * Check if current request is a proxy request.
+	 *
+	 * @return bool
+	 */
 	private function is_proxy_request() {
-		return true;
+		$namespace = get_option( 'plausible_analytics_proxy_resources' )['namespace'] ?? '';
+
+		if ( ! $namespace ) {
+			return false;
+		}
+
+		return strpos( $this->request_uri, $namespace ) !== false;
 	}
 
 	/**
@@ -77,4 +103,4 @@ class ProxySpeed {
 	}
 }
 
-new ProxySpeed();
+new PlausibleProxySpeed();
