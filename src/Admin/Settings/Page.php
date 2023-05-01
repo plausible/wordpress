@@ -527,11 +527,16 @@ class Page extends API {
 		<?php
 	}
 
+	/**
+	 * Check if the Proxy Speed Module is installed and create a human readable status message.
+	 *
+	 * @return string
+	 */
 	private function get_module_status() {
 		if ( file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
-			return '✅ ' . __( 'Proxy Speed Module is properly installed.', 'plausible-analytics' );
+			return '✅ ' . sprintf( __( 'Proxy Speed Module is properly installed. <a href="%s" target="_blank">What\'s this?</a>', 'plausible-analytics' ), '' );
 		} elseif ( ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
-			return '❌ ' . sprintf( __( 'Proxy Speed Module failed to install. Try <a href="%s">installing it manually</a>.', 'plausible-analytics' ), '' );
+			return '❌ ' . sprintf( __( 'Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), '' );
 		} else {
 			return 'Module not installed, because Avoid ad blocker detection is disabled.';
 		}
