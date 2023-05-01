@@ -46,8 +46,6 @@ class Proxy {
 	/**
 	 * Endpoint
 	 *
-	 * TODO: Should we randomize this, too?
-	 *
 	 * @var string
 	 */
 	private $endpoint;
@@ -100,10 +98,11 @@ class Proxy {
 	/**
 	 * @return void
 	 */
-	public function send() {
-		$params = file_get_contents( 'php://input' );
-		$ip     = $this->get_user_ip_address();
-		$url    = 'https://plausible.io/api/event';
+	public function send( $request ) {
+		$params = $request->get_body();
+
+		$ip  = $this->get_user_ip_address();
+		$url = 'https://plausible.io/api/event';
 
 		$response = wp_remote_post(
 			$url,

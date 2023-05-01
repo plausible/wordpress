@@ -106,11 +106,20 @@ class Actions {
 		$base      = Helpers::get_proxy_resource( 'base' );
 		$endpoint  = Helpers::get_proxy_resource( 'endpoint' );
 		$request   = new WP_REST_Request( 'POST', "/$namespace/v1/$base/$endpoint" );
+		$request->set_body(
+			wp_json_encode(
+				[
+					'd' => 'plausible.test',
+					'n' => 'pageview',
+					'u' => 'https://plausible.test/test',
+				]
+			)
+		);
 
-		/** @var WP_REST_Response $result */
+		/** @var \WP_REST_Response $result */
 		$result = rest_do_request( $request );
 
-		if ( $result->get_status() === 200 ) {
+		if ( wp_remote_retrieve_response_code( $result->get_data() ) === 202 ) {
 			wp_send_json_success(
 				[
 					'message' => __( 'Test traffic sent successfully. Awesome! You can now safely enable the proxy.', 'plausible-analytics' ),
@@ -119,12 +128,12 @@ class Actions {
 			);
 		}
 
-		$result = $result->as_error();
+		/** @var \WP_Error $error */
+		$error = $result->as_error();
 
-		/** @var WP_Error $result */
 		wp_send_json_error(
 			[
-				'message' => __( 'Oops! Something went wrong while trying to access the API. Please contact us and copy this error message', 'plausible-analytics' ) . ': ' . $result->get_error_code() . ' - ' . $result->get_error_message(),
+				'message' => __( 'Oops! Something went wrong while trying to access the API. Please contact us and copy this error message', 'plausible-analytics' ) . ': ' . $error->get_error_code() . ' - ' . $error->get_error_message(),
 				'status'  => 'error',
 			]
 		);
