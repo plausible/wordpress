@@ -518,7 +518,7 @@ class Page extends API {
 		?>
 		<ul id="plausible_analytics_setting_<?php echo $slug; ?>">
 		<?php
-		$proxy_path       = ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) ? Helpers::get_data_api_url() : __( 'Avoid ad blocker detection is disabled.', 'plausible-analytics' );
+		$proxy_path       = ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) ? Helpers::get_data_api_url() : __( 'Proxy URL not available, because Avoid ad blocker detection is disabled.', 'plausible-analytics' );
 		$module_installed = $this->get_module_status();
 		echo '<li><strong>Proxy URL:</strong> ' . $proxy_path . '</li>';
 		echo '<li><strong>Module status:</strong> ' . $module_installed . '</li>';

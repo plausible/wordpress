@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
-"POT-Creation-Date: 2023-05-01 13:48+0000\n"
+"POT-Creation-Date: 2023-05-02 07:53+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/plausible/wordpress/issues/new\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -291,13 +291,13 @@ msgid "You don't have sufficient privileges to access the analytics dashboard. P
 msgstr ""
 
 #: src/Admin/Settings/Page.php:521
-msgid "Avoid ad blocker detection is disabled."
+msgid "Proxy URL not available, because Avoid ad blocker detection is disabled."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:534
-msgid "Proxy Speed Module failed to install. Try <a href=\"%s\">installing it manually</a>."
+#: src/Admin/Settings/Page.php:539
+msgid "Proxy Speed Module failed to install. Try <a href=\"%s\" target=\"_blank\">installing it manually</a>."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:532
-msgid "Proxy Speed Module is properly installed."
+#: src/Admin/Settings/Page.php:537
+msgid "Proxy Speed Module is properly installed. <a href=\"%s\" target=\"_blank\">What's this?</a>"
 msgstr ""
