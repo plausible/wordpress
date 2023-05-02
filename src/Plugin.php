@@ -51,11 +51,14 @@ final class Plugin {
 			new Admin\Settings\Page();
 			new Admin\Filters();
 			new Admin\Actions();
+			new Admin\Module();
 		}
 
 		new Includes\Actions();
 		new Includes\Compatibility();
 		new Includes\Filters();
+		new Includes\Proxy();
+		new Includes\Setup();
 	}
 
 	/**

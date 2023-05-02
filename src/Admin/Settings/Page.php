@@ -113,6 +113,35 @@ class Page extends API {
 					],
 				],
 				[
+					'label'  => esc_html__( 'Avoid ad blocker detection', 'plausible-analytics' ),
+					'slug'   => 'enable_proxy',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						esc_html__( 'Get more accurate statistics by serving the JS file from your server and routing all hits to the Plausible API through your own server i.e. the WordPress API.', 'plausible-analytics' )
+					),
+					'toggle' => '',
+					'fields' => [
+						[
+							'label' => esc_html__( 'Enable', 'plausible-analytics' ),
+							'slug'  => 'avoid_ad_blockers',
+							'type'  => 'checkbox',
+							'value' => 'enable',
+						],
+						[
+							'label' => esc_html__( 'Proxy status', 'plausible-analytics' ),
+							'slug'  => 'proxy_status',
+							'type'  => 'hook',
+						],
+						[
+							'label'        => esc_html__( 'Send Test Traffic', 'plausible-analytics' ),
+							'slug'         => 'test_proxy',
+							'type'         => 'button',
+							'button_label' => esc_html__( 'Send', 'plausible-analytics' ),
+							'value'        => '',
+						],
+					],
+				],
+				[
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
@@ -262,6 +291,7 @@ class Page extends API {
 
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
+		add_action( 'plausible_analytics_settings_proxy_status', [ $this, 'proxy_status' ] );
 	}
 
 	/**
@@ -305,14 +335,14 @@ class Page extends API {
 
 		// Bailout, if screen id doesn't match.
 		if (
-			! in_array(
-				$screen->id,
-				[
-					'settings_page_plausible_analytics',
-					'dashboard_page_plausible_analytics_statistics',
-				],
-				true
-			)
+		! in_array(
+			$screen->id,
+			[
+				'settings_page_plausible_analytics',
+				'dashboard_page_plausible_analytics_statistics',
+			],
+			true
+		)
 		) {
 			return;
 		}
@@ -325,7 +355,7 @@ class Page extends API {
 				<div class="plausible-analytics-title">
 					<h1><?php esc_html_e( 'Settings', 'plausible-analytics' ); ?></h1>
 				</div>
-				<?php $this->render_header_navigation(); ?>
+		<?php $this->render_header_navigation(); ?>
 			</div>
 		</div>
 		<?php
@@ -375,16 +405,16 @@ class Page extends API {
 		}
 		?>
 		<div class="plausible-analytics-header-navigation">
-			<?php
-			foreach ( $tabs as $tab ) {
-				printf(
-					'<a href="%1$s" class="%2$s">%3$s</a>',
-					esc_url( $tab['url'] ),
-					esc_attr( $tab['class'] ),
-					esc_html( $tab['name'] )
-				);
-			}
-			?>
+		<?php
+		foreach ( $tabs as $tab ) {
+			printf(
+				'<a href="%1$s" class="%2$s">%3$s</a>',
+				esc_url( $tab['url'] ),
+				esc_attr( $tab['class'] ),
+				esc_html( $tab['name'] )
+			);
+		}
+		?>
 		</div>
 		<?php
 	}
@@ -404,11 +434,11 @@ class Page extends API {
 		$domain                    = Helpers::get_domain();
 		$is_shared_link            = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
 		$shared_link               = ! empty( $settings['shared_link'] ) ?
-			$settings['shared_link'] :
-			'';
+		$settings['shared_link'] :
+		'';
 		$can_access_analytics_page = ! empty( $settings['can_access_analytics_page'] ) ?
-			$settings['can_access_analytics_page'] :
-			false;
+		$settings['can_access_analytics_page'] :
+		false;
 
 		if ( $can_access_analytics_page ) {
 			$has_access             = false;
@@ -424,14 +454,14 @@ class Page extends API {
 			if ( ! $has_access ) {
 				?>
 				<div class="plausible-analytics-statistics-not-loaded">
-					<?php
-					echo sprintf(
-						'%1$s',
-						esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
-					);
+				<?php
+				echo sprintf(
+					'%1$s',
+					esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
+				);
 
-					return;
-					?>
+				return;
+				?>
 				</div>
 				<?php
 			}
@@ -443,7 +473,7 @@ class Page extends API {
 		 * When this option was saved to the database, underlying code would fail, throwing a CORS related error in browsers.
 		 *
 		 * Now, we explicitly check for the existence of this example "auth" key, and display a human readable error message to
-		 * those we haven't properly set it up.
+		 * those who haven't properly set it up.
 		 *
 		 * @since v1.2.5
 		 */
@@ -461,21 +491,54 @@ class Page extends API {
 		} else {
 			?>
 			<div class="plausible-analytics-statistics-not-loaded">
-				<?php
-				echo sprintf(
-					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
-					esc_html( 'Please', 'plausible-analytics' ),
-					esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
-					esc_html( 'click here', 'plausible-analytics' ),
-					esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
-					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					admin_url( 'options-general.php?page=plausible_analytics' ),
-					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
-				);
-				?>
+			<?php
+			echo sprintf(
+				'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
+				esc_html( 'Please', 'plausible-analytics' ),
+				esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
+				esc_html( 'click here', 'plausible-analytics' ),
+				esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
+				esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
+				admin_url( 'options-general.php?page=plausible_analytics' ),
+				esc_html( 'paste here', 'plausible-analytics' ),
+				esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
+			);
+			?>
 			</div>
 			<?php
+		}
+	}
+
+	/**
+	 * Shows the checkmark to indicate if the Proxy module is properly installed.
+	 *
+	 * @return void
+	 */
+	public function proxy_status( $slug ) {
+		?>
+		<ul id="plausible_analytics_setting_<?php echo $slug; ?>">
+		<?php
+		$proxy_path       = ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) ? Helpers::get_data_api_url() : __( 'Proxy URL not available, because Avoid ad blocker detection is disabled.', 'plausible-analytics' );
+		$module_installed = $this->get_module_status();
+		echo '<li><strong>Proxy URL:</strong> ' . $proxy_path . '</li>';
+		echo '<li><strong>Module status:</strong> ' . $module_installed . '</li>';
+		?>
+		</ul>
+		<?php
+	}
+
+	/**
+	 * Check if the Proxy Speed Module is installed and create a human readable status message.
+	 *
+	 * @return string
+	 */
+	private function get_module_status() {
+		if ( file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
+			return '✅ ' . sprintf( __( 'Proxy Speed Module is properly installed. <a href="%s" target="_blank">What\'s this?</a>', 'plausible-analytics' ), '' );
+		} elseif ( ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
+			return '❌ ' . sprintf( __( 'Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), '' );
+		} else {
+			return 'Module not installed, because Avoid ad blocker detection is disabled.';
 		}
 	}
 }

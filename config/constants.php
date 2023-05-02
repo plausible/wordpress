@@ -4,11 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Define plugin version in SemVer format.
-if ( ! defined( 'PLAUSIBLE_ANALYTICS_VERSION' ) ) {
-	define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.2.6' );
-}
-
 // Define plugin root File.
 if ( ! defined( 'PLAUSIBLE_ANALYTICS_PLUGIN_FILE' ) ) {
 	define( 'PLAUSIBLE_ANALYTICS_PLUGIN_FILE', dirname( dirname( __FILE__ ) ) . '/plausible-analytics.php' );

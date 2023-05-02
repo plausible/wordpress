@@ -57,7 +57,7 @@ class Actions {
 			return;
 		}
 
-		wp_enqueue_script( 'plausible-analytics', Helpers::get_analytics_url(), '', PLAUSIBLE_ANALYTICS_VERSION );
+		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', filemtime( Helpers::get_js_path() ) );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
 		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
