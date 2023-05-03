@@ -198,6 +198,10 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_proxy_resource( $resource_name ) {
+		if ( empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) ) {
+			return '';
+		}
+
 		static $resources;
 
 		if ( $resources === null ) {
