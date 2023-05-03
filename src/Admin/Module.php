@@ -79,7 +79,7 @@ class Module {
 	}
 
 	/**
-	 * Uninstall the Speed Module when the proxy is disabled.
+	 * Uninstall the Speed Module and all related settings when the proxy is disabled.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -100,6 +100,7 @@ class Module {
 
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
 		delete_option( 'plausible_analytics_proxy_speed_module_installed' );
+		delete_option( 'plausible_analytics_proxy_resources' );
 
 		return true;
 	}
