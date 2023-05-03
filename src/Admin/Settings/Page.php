@@ -113,17 +113,26 @@ class Page extends API {
 					],
 				],
 				[
-					'label'  => esc_html__( 'Avoid ad blocker detection', 'plausible-analytics' ),
+					'label'  => esc_html__( 'Bypass ad blockers', 'plausible-analytics' ),
 					'slug'   => 'enable_proxy',
 					'type'   => 'group',
 					'desc'   => sprintf(
-						esc_html__( 'Get more accurate statistics by serving the JS file from your server and routing all hits to the Plausible API through your own server i.e. the WordPress API.', 'plausible-analytics' )
+						wp_kses(
+							__( 'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. <a href="%s" target="_blank">Learn more &raquo;</a>', 'plausible-analytics' ),
+							[
+								'a' => [
+									'href'   => true,
+									'target' => true,
+								],
+							]
+						),
+						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),
 					'toggle' => '',
 					'fields' => [
 						[
-							'label' => esc_html__( 'Enable', 'plausible-analytics' ),
-							'slug'  => 'avoid_ad_blockers',
+							'label' => esc_html__( 'Enable proxy', 'plausible-analytics' ),
+							'slug'  => 'bypass_ad_blockers',
 							'type'  => 'checkbox',
 							'value' => 'enable',
 						],
@@ -133,11 +142,9 @@ class Page extends API {
 							'type'  => 'hook',
 						],
 						[
-							'label'        => esc_html__( 'Send Test Traffic', 'plausible-analytics' ),
-							'slug'         => 'test_proxy',
-							'type'         => 'button',
-							'button_label' => esc_html__( 'Send', 'plausible-analytics' ),
-							'value'        => '',
+							'label' => esc_html__( 'Test proxy', 'plausible-analytics' ),
+							'slug'  => 'test_proxy',
+							'type'  => 'hook',
 						],
 					],
 				],
@@ -292,6 +299,7 @@ class Page extends API {
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
 		add_action( 'plausible_analytics_settings_proxy_status', [ $this, 'proxy_status' ] );
+		add_action( 'plausible_analytics_settings_test_proxy', [ $this, 'test_proxy' ] );
 	}
 
 	/**
@@ -518,10 +526,20 @@ class Page extends API {
 		?>
 		<ul id="plausible_analytics_setting_<?php echo $slug; ?>">
 		<?php
-		$proxy_path       = ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) ? Helpers::get_data_api_url() : __( 'Proxy URL not available, because Avoid ad blocker detection is disabled.', 'plausible-analytics' );
+		$proxy_path       = ! empty( Helpers::get_settings()['bypass_ad_blockers'][0] ) ? Helpers::get_data_api_url() : '';
 		$module_installed = $this->get_module_status();
-		echo '<li><strong>Proxy URL:</strong> ' . $proxy_path . '</li>';
-		echo '<li><strong>Module status:</strong> ' . $module_installed . '</li>';
+
+		if ( $proxy_path ) {
+			echo '<li><strong>' . __( 'Proxy URL', 'plausible-analytics' ) . ':</strong> ' . $proxy_path . '</li>';
+		}
+
+		if ( $module_installed ) {
+			echo '<li><strong>' . __( 'Module status', 'plausible-analytics' ) . ':</strong> ' . $module_installed . '</li>';
+		}
+
+		if ( ! $proxy_path && ! $module_installed ) {
+			echo '<em>' . __( 'Proxy disabled.', 'plausible-analytics' ) . '</em>';
+		}
 		?>
 		</ul>
 		<?php
@@ -533,10 +551,24 @@ class Page extends API {
 	 * @return string
 	 */
 	private function get_module_status() {
-		if ( ! empty( Helpers::get_settings()['avoid_ad_blockers'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
+		if ( ! empty( Helpers::get_settings()['bypass_ad_blockers'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
 			return '❌ ' . sprintf( __( 'Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), '' );
 		} else {
 			return '';
 		}
+	}
+
+	/**
+	 * Add the Test Proxy button if Bypass ad blockers is enabled.
+	 *
+	 * @param mixed $slug
+	 * @return void
+	 */
+	public function test_proxy( $slug ) {
+		$disabled = empty( Helpers::get_settings()['bypass_ad_blockers'][0] );
+		?>
+			<button class="plausible-analytics-btn" type="button" <?php echo $disabled ? 'disabled' : ''; ?> <?php echo $disabled ? 'title="' . __( 'Test not available, because Proxy is disabled.', 'plausible-analytics' ) . '"' : ''; ?> id="plausible-analytics-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"><?php echo esc_attr( __( 'Test', 'plausible-analytics' ) ); ?></button>
+			<span class="plausible-analytics-notice" id="plausible-analytics-notice-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"></span>
+		<?php
 	}
 }

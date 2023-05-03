@@ -48,7 +48,7 @@ class Proxy {
 	 *
 	 * @var string
 	 */
-	private $endpoint;
+	private $endpoint = '';
 
 	/**
 	 * Build properties.
@@ -71,7 +71,10 @@ class Proxy {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'rest_api_init', [ $this, 'register_route' ] );
+		// No need to continue if these values turn up empty.
+		if ( $this->namespace && $this->base && $this->endpoint ) {
+			add_action( 'rest_api_init', [ $this, 'register_route' ] );
+		}
 	}
 
 	/**

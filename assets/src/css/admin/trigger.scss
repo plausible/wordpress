@@ -36,6 +36,19 @@
 		cursor: pointer;
 		color: $white-color;
 	}
+
+	&:disabled {
+		background-color: grey;
+
+		&:hover {
+			cursor: not-allowed;
+		}
+
+		&:active {
+			color: $white-color;
+			background-color: grey;
+		}
+	}
 }
 
 .plausible-analytics-save-btn {

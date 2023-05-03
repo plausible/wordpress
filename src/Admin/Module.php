@@ -37,7 +37,7 @@ class Module {
 	 * @return void
 	 */
 	public function maybe_install_module( $settings ) {
-		if ( ! empty( $settings['avoid_ad_blockers'][0] ) ) {
+		if ( ! empty( $settings['bypass_ad_blockers'][0] ) ) {
 			$this->install();
 		} else {
 			$this->uninstall();
