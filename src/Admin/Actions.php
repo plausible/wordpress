@@ -122,7 +122,7 @@ class Actions {
 		if ( wp_remote_retrieve_response_code( $result->get_data() ) === 202 ) {
 			wp_send_json_success(
 				[
-					'message' => __( 'Test traffic sent successfully. Awesome! You can now safely enable the proxy.', 'plausible-analytics' ),
+					'message' => __( 'Test traffic sent successfully. Awesome!', 'plausible-analytics' ),
 					'status'  => 'success',
 				]
 			);
