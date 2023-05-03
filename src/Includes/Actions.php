@@ -57,7 +57,8 @@ class Actions {
 			return;
 		}
 
-		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', filemtime( Helpers::get_js_path() ) );
+		$version = ! empty( $settings['bypass_ad_blockers'][0] ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
+		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
 		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
