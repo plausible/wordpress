@@ -33,6 +33,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Define plugin version here for convenience.
+define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.2.6' );
+
 require_once __DIR__ . '/config/constants.php';
 
 // Automatically loads files used throughout the plugin.
