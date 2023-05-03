@@ -120,7 +120,7 @@ class Upgrades {
 		$new_settings['enhanced_measurements'] = [ 'outbound-links' ];
 
 		if ( ! empty( $old_settings['track_administrator'] )
-			&& $old_settings['track_administrator'] ) {
+			&& $old_settings['track_administrator'] === 'true' ) {
 			$new_settings['tracked_user_roles'] = [ 'administrator' ];
 		}
 
