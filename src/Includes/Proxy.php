@@ -110,12 +110,12 @@ class Proxy {
 		$response = wp_remote_post(
 			$url,
 			[
-				'user-agent' => $_SERVER['HTTP_USER_AGENT'],
+				'user-agent' => wp_kses( $_SERVER['HTTP_USER_AGENT'], 'strip' ),
 				'headers'    => [
 					'X-Forwarded-For' => $ip,
 					'Content-Type'    => 'application/json',
 				],
-				'body'       => $params,
+				'body'       => wp_kses( $params, 'strip' ),
 			]
 		);
 
@@ -130,7 +130,7 @@ class Proxy {
 
 		foreach ( self::PROXY_IP_HEADERS as $header ) {
 			if ( $this->header_exists( $header ) ) {
-				$ip = $_SERVER[ $header ];
+				$ip = wp_kses( $_SERVER[ $header ], 'strip' );
 
 				if ( strpos( $ip, ',' ) !== false ) {
 					$ip = explode( ',', $ip );
