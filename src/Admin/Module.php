@@ -10,6 +10,7 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Includes\Helpers;
 
 class Module {
