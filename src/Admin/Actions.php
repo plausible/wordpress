@@ -44,7 +44,7 @@ class Actions {
 	 * @return void
 	 */
 	public function register_assets( $current_page ) {
-		if ( $current_page === 'settings_page_plausible_analytics' ) {
+		if ( $current_page === 'settings_page_plausible_analytics' || $current_page === 'dashboard_page_plausible_analytics_statistics' ) {
 			\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ), 'all' );
 		}
 
