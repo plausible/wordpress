@@ -12,6 +12,8 @@ namespace Plausible\Analytics\WP\Admin\Settings;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
+use function PHPSTORM_META\map;
+
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	wp_die( 'Cheat\'in huh?' );
@@ -191,32 +193,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
 					'toggle' => false,
-					'fields' => [
-						'administrator' => [
-							'label' => esc_html__( 'Administrator', 'plausible-analytics' ),
-							'slug'  => 'tracked_user_roles',
-							'type'  => 'checkbox',
-							'value' => 'administrator',
-						],
-						'editor'        => [
-							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
-							'slug'  => 'tracked_user_roles',
-							'type'  => 'checkbox',
-							'value' => 'editor',
-						],
-						'author'        => [
-							'label' => esc_html__( 'Author', 'plausible-analytics' ),
-							'slug'  => 'tracked_user_roles',
-							'type'  => 'checkbox',
-							'value' => 'author',
-						],
-						'contributor'   => [
-							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
-							'slug'  => 'tracked_user_roles',
-							'type'  => 'checkbox',
-							'value' => 'contributor',
-						],
-					],
+					'fields' => $this->build_user_roles_array( 'tracked_user_roles' ),
 				],
 				[
 					'label'  => esc_html__( 'Show the stats dashboard to specific user roles', 'plausible-analytics' ),
@@ -224,26 +201,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
 					'toggle' => false,
-					'fields' => [
-						'editor'      => [
-							'label' => esc_html__( 'Editor', 'plausible-analytics' ),
-							'slug'  => 'expand_dashboard_access',
-							'type'  => 'checkbox',
-							'value' => 'editor',
-						],
-						'author'      => [
-							'label' => esc_html__( 'Author', 'plausible-analytics' ),
-							'slug'  => 'expand_dashboard_access',
-							'type'  => 'checkbox',
-							'value' => 'author',
-						],
-						'contributor' => [
-							'label' => esc_html__( 'Contributor', 'plausible-analytics' ),
-							'slug'  => 'expand_dashboard_access',
-							'type'  => 'checkbox',
-							'value' => 'contributor',
-						],
-					],
+					'fields' => $this->build_user_roles_array( 'expand_dashboard_access' ),
 				],
 				[
 					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
@@ -507,7 +465,36 @@ class Page extends API {
 		}
 	}
 
+	/**
+	 * Renders the warning for the Enable Proxy option.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return void
+	 */
 	public function render_proxy_warning() {
 		echo sprintf( wp_kses( __( 'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!', 'plausible-analytics' ), 'post' ), 'https://plausible.io/contact' );
+	}
+
+	/**
+	 * Load all available user roles as a list of checkboxes to be processed by the Settings API.
+	 *
+	 * @param string $slug
+	 *
+	 * @return array
+	 */
+	private function build_user_roles_array( $slug ) {
+		$wp_roles = wp_roles()->roles ?? [];
+
+		foreach ( $wp_roles as $id => $role ) {
+			$roles_array[ $id ] = [
+				'label' => $role['name'] ?? '',
+				'slug'  => $slug,
+				'type'  => 'checkbox',
+				'value' => $id,
+			];
+		}
+
+		return $roles_array;
 	}
 }
