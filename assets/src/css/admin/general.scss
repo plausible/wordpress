@@ -37,6 +37,15 @@
 			}
 		}
 
+		&.bypass-ad-blockers {
+			.plausible-hook {
+				border: 1px solid #2271b1;
+				border-radius: 3px;
+				background-color: #c1d7e9;
+				padding: 1em 2em;
+			}
+		}
+
 		label {
 			font-weight: 700;
 

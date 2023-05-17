@@ -62,7 +62,5 @@ class Notice {
 				}
 			}
 		}
-
-		delete_transient( self::TRANSIENT_NAME );
 	}
 }
