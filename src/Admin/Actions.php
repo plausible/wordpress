@@ -11,7 +11,6 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Includes\Helpers;
-use WP_REST_Request;
 
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
