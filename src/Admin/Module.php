@@ -10,6 +10,8 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Exception;
+use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Includes\Helpers;
 
 class Module {
@@ -30,13 +32,14 @@ class Module {
 	private function init() {
 		add_action( 'admin_init', [ $this, 'maybe_show_notice' ] );
 		add_action( 'admin_notices', [ $this, 'print_notices' ] );
-		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 10 );
+		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9 );
+		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 2 );
 	}
 
 	/**
 	 * Show an admin-wide notice if the Speed Module failed to install.
 	 *
-	 * When dismissed it will be shown again after 1 day.
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
@@ -49,12 +52,28 @@ class Module {
 	}
 
 	/**
+	 * @since 1.3.0
+	 *
+	 * @return void
+	 */
+	private function throw_notice() {
+		Notice::set_notice( sprintf( wp_kses( __( 'Plausible\'s proxy is enabled, but the Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), 'post' ), 'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow' ), 'plausible-analytics-module-install-failed', 'error' );
+	}
+
+	/**
 	 * Takes care of printing the notice.
+	 *
+	 * Notices are now primarily used to display any information related to failures around the Proxy feature introduced in 1.3.0.
+	 * If in the future admin-wide notices are used in different contexts, this function needs to be revised.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
 	public function print_notices() {
-		if ( get_transient( 'plausible_analytics_speed_module_notice_dismissed' ) ) {
+		if ( get_transient( 'plausible_analytics_notice_dismissed' ) ) {
+			delete_transient( Notice::TRANSIENT_NAME );
+
 			return;
 		}
 
@@ -79,7 +98,9 @@ class Module {
 	}
 
 	/**
-	 * Takes care of installing the MU plugin when the Proxy is enabled.
+	 * Takes care of installing the M(ust)U(se) plugin when the Proxy is enabled.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -115,14 +136,9 @@ class Module {
 	}
 
 	/**
-	 * @return void
-	 */
-	private function throw_notice() {
-		Notice::set_notice( sprintf( __( 'Plausible Analytics\' proxy is enabled, but the Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), 'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow' ), 'plausible-analytics-module-install-failed', 'error' );
-	}
-
-	/**
 	 * Uninstall the Speed Module and all related settings when the proxy is disabled.
+	 *
+	 * @since 1.3.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -144,7 +160,7 @@ class Module {
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
 		delete_option( 'plausible_analytics_proxy_speed_module_installed' );
 		delete_option( 'plausible_analytics_proxy_resources' );
-		delete_transient( 'plausible_analytics_speed_module_notice_dismissed' );
+		delete_transient( 'plausible_analytics_notice_dismissed' );
 
 		return true;
 	}
@@ -166,5 +182,69 @@ class Module {
 		$iterator = new \FilesystemIterator( $dir );
 
 		return ! $iterator->valid();
+	}
+
+	/**
+	 * Test the proxy before enabling the option.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param mixed $settings
+	 * @param mixed $old_settings
+	 *
+	 * @return mixed
+	 *
+	 * @throws Exception
+	 */
+	public function maybe_enable_proxy( $settings, $old_settings ) {
+		$test_succeeded = $this->test_proxy( ! empty( $settings['proxy_enabled'][0] ) );
+
+		if ( ! $test_succeeded && ! empty( $settings['proxy_enabled'][0] ) ) {
+			Notice::set_notice( sprintf( wp_kses( __( 'Plausible\'s proxy couldn\'t be enabled, because the WordPress API is inaccessable. This might be due to a conflicting setting in a (security) plugin or server firewall. Make sure you whitelist requests to the Proxy\'s endpoint: <code>%1$s</code>. <a href="%2$s" target="_blank">Contact support</a> if you need help locating the issue.', 'plausible-analytics' ), 'post' ), Helpers::get_rest_endpoint( false ), 'https://plausible.io/contact' ), 'plausible-analytics-proxy-failed', 'error' );
+
+			return $old_settings;
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Runs a quick internal call to the WordPress API to make sure it's accessable.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return bool
+	 *
+	 * @throws Exception
+	 */
+	private function test_proxy( $run = true ) {
+		// Should we run the test?
+		if ( ! $run ) {
+			return false;
+		}
+
+		$namespace = Helpers::get_proxy_resource( 'namespace' );
+		$base      = Helpers::get_proxy_resource( 'base' );
+		$endpoint  = Helpers::get_proxy_resource( 'endpoint' );
+		$request   = new \WP_REST_Request( 'POST', "/$namespace/v1/$base/$endpoint" );
+		$request->set_body(
+			wp_json_encode(
+				[
+					'd' => 'plausible.test',
+					'n' => 'pageview',
+					'u' => 'https://plausible.test/test',
+				]
+			)
+		);
+
+		/** @var \WP_REST_Response $result */
+		try {
+			$result = rest_do_request( $request );
+		} catch ( \Exception ) {
+			//  There's no need to handle the error, because we don't want to display it anyway.
+			return false;
+		}
+
+		return wp_remote_retrieve_response_code( $result->get_data() ) === 202;
 	}
 }

@@ -4,9 +4,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		if ( dismissButton ) {
 			const form = new FormData();
-	
+
 			form.append( 'action', 'plausible_analytics_notice_dismissed' );
-	
+
 			fetch(
 				ajaxurl,
 				{
@@ -17,41 +17,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 	} );
 
-	const testProxy = document.getElementById( 'plausible-analytics-test-proxy' );
-
-	testProxy.addEventListener( 'click', ( e ) => {
-		e.preventDefault();
-
-		const form = new FormData();
-		const span = document.getElementById( 'plausible-analytics-notice-test-proxy' );
-
-		form.append( 'action', 'plausible_analytics_test_proxy' );
-
-		fetch(
-			ajaxurl,
-			{
-				method: 'POST',
-				body: form,
-			}
-		).then( response => {
-			span.innerHTML = '<span class="plausible-analytics-loading spinner is-active"></span>';
-
-			return response.json();
-		} ).then( response => {
-			const success = response.success === true ? 'success' : 'error';
-			const message = response.data.message;
-
-			span.innerHTML = '<span class="notice ' + success + '">' + message + '</span>';
-		} );
-	} );
-
 	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
-	
+
 	// Bailout, if `formElement` doesn't exist.
 	if ( null === formElement ) {
 		return;
 	}
-	
+
 	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
 
 	saveSettings.addEventListener( 'click', ( e ) => {

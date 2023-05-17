@@ -133,8 +133,8 @@ class Page extends API {
 							'value' => 'enable',
 						],
 						[
-							'label' => esc_html__( 'Test proxy', 'plausible-analytics' ),
-							'slug'  => 'test_proxy',
+							'label' => '',
+							'slug'  => 'proxy_warning',
 							'type'  => 'hook',
 						],
 					],
@@ -289,7 +289,7 @@ class Page extends API {
 
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
-		add_action( 'plausible_analytics_settings_test_proxy', [ $this, 'test_proxy' ] );
+		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'render_proxy_warning' ] );
 	}
 
 	/**
@@ -507,17 +507,7 @@ class Page extends API {
 		}
 	}
 
-	/**
-	 * Add the Test Proxy button if Bypass ad blockers is enabled.
-	 *
-	 * @param mixed $slug
-	 * @return void
-	 */
-	public function test_proxy( $slug ) {
-		$disabled = empty( Helpers::get_settings()['proxy_enabled'][0] );
-		?>
-			<button class="plausible-analytics-btn" type="button" <?php echo $disabled ? 'disabled' : ''; ?> <?php echo $disabled ? 'title="' . __( 'Test not available, because Proxy is disabled.', 'plausible-analytics' ) . '"' : ''; ?> id="plausible-analytics-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"><?php echo esc_attr( __( 'Test', 'plausible-analytics' ) ); ?></button>
-			<span class="plausible-analytics-notice" id="plausible-analytics-notice-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"></span>
-		<?php
+	public function render_proxy_warning() {
+		echo sprintf( wp_kses( __( 'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!', 'plausible-analytics' ), 'post' ), 'https://plausible.io/contact' );
 	}
 }

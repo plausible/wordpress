@@ -200,10 +200,6 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_proxy_resource( $resource_name = '' ) {
-		if ( empty( Helpers::get_settings()['proxy_enabled'][0] ) ) {
-			return '';
-		}
-
 		static $resources;
 
 		if ( $resources === null ) {
@@ -248,11 +244,7 @@ class Helpers {
 		$url      = 'https://plausible.io/api/event';
 
 		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
-			$namespace = self::get_proxy_resource( 'namespace' );
-			$base      = self::get_proxy_resource( 'base' );
-			$endpoint  = self::get_proxy_resource( 'endpoint' );
-
-			return get_rest_url( null, "$namespace/v1/$base/$endpoint" );
+			return self::get_rest_endpoint();
 		}
 
 		// Triggered when self hosted analytics is enabled.
@@ -264,6 +256,27 @@ class Helpers {
 		}
 
 		return esc_url( $url );
+	}
+
+	/**
+	 * Returns the Proxy's REST endpoint.
+	 *
+	 * @return string
+	 *
+	 * @throws Exception
+	 */
+	public static function get_rest_endpoint( $abs_url = true ) {
+		$namespace = self::get_proxy_resource( 'namespace' );
+		$base      = self::get_proxy_resource( 'base' );
+		$endpoint  = self::get_proxy_resource( 'endpoint' );
+
+		$uri = "$namespace/v1/$base/$endpoint";
+
+		if ( $abs_url ) {
+			return get_rest_url( null, $uri );
+		}
+
+		return '/wp-json/' . $uri;
 	}
 
 	/**
