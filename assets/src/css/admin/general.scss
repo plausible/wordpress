@@ -14,8 +14,12 @@
 	}
 
 	.plausible-checkbox-list {
-		margin: 3px 0;
+		margin: .5em 1em .5em 0;
 		display: inline-block;
+	}
+
+	.plausible-hook {
+		padding: 1em 0 0 2em;
 	}
 
 	.plausible-analytics-content {
@@ -26,6 +30,12 @@
 		background-color: #fff;
 		margin-bottom: 20px;
 		padding: 15px;
+
+		&.enhanced-measurements {
+			.plausible-checkbox-list {
+				display: block;
+			}
+		}
 
 		label {
 			font-weight: 700;

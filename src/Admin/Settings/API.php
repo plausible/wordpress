@@ -107,7 +107,7 @@ class API {
 		$is_checked  = ! is_array( $toggle ) ? checked( $toggle, true, false ) : '';
 		ob_start();
 		?>
-		<div class="plausible-analytics-admin-field">
+		<div class="plausible-analytics-admin-field <?php echo str_replace( '_', '-', $group['slug'] ); ?>">
 			<div class="plausible-analytics-admin-field-header">
 				<label for="">
 				<?php echo $group['label']; ?>
@@ -127,7 +127,7 @@ class API {
 			<?php
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $field ) {
-					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field ) . '<br/>';
+					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
 				}
 			}
 			?>
@@ -213,7 +213,7 @@ class API {
 	public function render_hook_field( array $field ) {
 		ob_start();
 		?>
-		<div class="plausible-analytics-admin-field-row">
+		<div class="plausible-hook">
 		<label for="<?php echo $field['slug']; ?>">
 			<?php echo esc_attr( $field['label'] ); ?>
 		</label>

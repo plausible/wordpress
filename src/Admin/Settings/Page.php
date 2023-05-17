@@ -114,7 +114,7 @@ class Page extends API {
 				],
 				[
 					'label'  => esc_html__( 'Bypass ad blockers', 'plausible-analytics' ),
-					'slug'   => 'enable_proxy',
+					'slug'   => 'bypass_ad_blockers',
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
@@ -128,14 +128,9 @@ class Page extends API {
 					'fields' => [
 						[
 							'label' => esc_html__( 'Enable proxy', 'plausible-analytics' ),
-							'slug'  => 'bypass_ad_blockers',
+							'slug'  => 'proxy_enabled',
 							'type'  => 'checkbox',
 							'value' => 'enable',
-						],
-						[
-							'label' => esc_html__( 'Proxy status', 'plausible-analytics' ),
-							'slug'  => 'proxy_status',
-							'type'  => 'hook',
 						],
 						[
 							'label' => esc_html__( 'Test proxy', 'plausible-analytics' ),
@@ -294,7 +289,6 @@ class Page extends API {
 
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
-		add_action( 'plausible_analytics_settings_proxy_status', [ $this, 'proxy_status' ] );
 		add_action( 'plausible_analytics_settings_test_proxy', [ $this, 'test_proxy' ] );
 	}
 
@@ -514,54 +508,13 @@ class Page extends API {
 	}
 
 	/**
-	 * Shows the checkmark to indicate if the Proxy module is properly installed.
-	 *
-	 * @return void
-	 */
-	public function proxy_status( $slug ) {
-		?>
-		<ul id="plausible_analytics_setting_<?php echo $slug; ?>">
-		<?php
-		$proxy_path       = ! empty( Helpers::get_settings()['bypass_ad_blockers'][0] ) ? Helpers::get_data_api_url() : '';
-		$module_installed = $this->get_module_status();
-
-		if ( $proxy_path ) {
-			echo '<li><strong>' . __( 'Proxy URL', 'plausible-analytics' ) . ':</strong> ' . $proxy_path . '</li>';
-		}
-
-		if ( $module_installed ) {
-			echo '<li><strong>' . __( 'Module status', 'plausible-analytics' ) . ':</strong> ' . $module_installed . '</li>';
-		}
-
-		if ( ! $proxy_path && ! $module_installed ) {
-			echo '<em>' . __( 'Proxy disabled.', 'plausible-analytics' ) . '</em>';
-		}
-		?>
-		</ul>
-		<?php
-	}
-
-	/**
-	 * Check if the Proxy Speed Module is installed and create a human readable status message.
-	 *
-	 * @return string
-	 */
-	private function get_module_status() {
-		if ( ! empty( Helpers::get_settings()['bypass_ad_blockers'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
-			return '❌ ' . sprintf( __( 'Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), '' );
-		} else {
-			return '';
-		}
-	}
-
-	/**
 	 * Add the Test Proxy button if Bypass ad blockers is enabled.
 	 *
 	 * @param mixed $slug
 	 * @return void
 	 */
 	public function test_proxy( $slug ) {
-		$disabled = empty( Helpers::get_settings()['bypass_ad_blockers'][0] );
+		$disabled = empty( Helpers::get_settings()['proxy_enabled'][0] );
 		?>
 			<button class="plausible-analytics-btn" type="button" <?php echo $disabled ? 'disabled' : ''; ?> <?php echo $disabled ? 'title="' . __( 'Test not available, because Proxy is disabled.', 'plausible-analytics' ) . '"' : ''; ?> id="plausible-analytics-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"><?php echo esc_attr( __( 'Test', 'plausible-analytics' ) ); ?></button>
 			<span class="plausible-analytics-notice" id="plausible-analytics-notice-<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>"></span>

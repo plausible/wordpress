@@ -57,7 +57,7 @@ class Actions {
 			return;
 		}
 
-		$version = ! empty( $settings['bypass_ad_blockers'][0] ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
+		$version = ! empty( $settings['proxy_enabled'][0] ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
 		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).

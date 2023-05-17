@@ -30,6 +30,7 @@ class Actions {
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_speed_module_notice' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_admin_settings', [ $this, 'save_admin_settings' ] );
 		add_action( 'wp_ajax_plausible_analytics_test_proxy', [ $this, 'test_proxy' ] );
 	}
@@ -38,13 +39,27 @@ class Actions {
 	 * Register Assets.
 	 *
 	 * @since  1.0.0
+	 * @since  1.3.0 Don't load CSS admin-wide. JS needs to load admin-wide, since we're throwing admin-wide, dismissable notices.
+	 *
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function register_assets() {
-		\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ), 'all' );
+	public function register_assets( $current_page ) {
+		if ( $current_page === 'settings_page_plausible_analytics' ) {
+			\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ), 'all' );
+		}
+
 		\wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ), true );
+	}
+
+	/**
+	 * Marks the Speed Module notice as dismissed.
+	 *
+	 * @return void
+	 */
+	public function dismiss_speed_module_notice() {
+		set_transient( 'plausible_analytics_speed_module_notice_dismissed', true );
 	}
 
 	/**
