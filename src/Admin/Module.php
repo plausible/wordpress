@@ -103,11 +103,11 @@ class Module {
 
 		$results = copy_dir( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'mu-plugin', WPMU_PLUGIN_DIR );
 
-		// if ( is_wp_error( $results ) ) {
+		if ( is_wp_error( $results ) ) {
 			$this->throw_notice();
 
 			return false;
-		// }
+		}
 
 		add_option( 'plausible_analytics_proxy_speed_module_installed', true );
 
