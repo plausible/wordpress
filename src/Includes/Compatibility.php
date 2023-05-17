@@ -44,6 +44,13 @@ class Compatibility {
 		if ( defined( 'WPO_VERSION' ) ) {
 			add_filter( 'wp-optimize-minify-default-exclusions', [ $this, 'exclude_plausible_js' ] );
 		}
+
+		// LiteSpeed Cache
+		if ( defined( 'LSCWP_V' ) ) {
+			add_filter( 'litespeed_optimize_js_excludes', [ $this, 'exclude_plausible_js' ] );
+			add_filter( 'litespeed_optm_js_defer_exc', [ $this, 'exclude_plausible_inline_js' ] );
+			add_filter( 'litespeed_optm_gm_js_exc', [ $this, 'exclude_plausible_inline_js' ] );
+		}
 	}
 
 	/**

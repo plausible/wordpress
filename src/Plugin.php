@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 final class Plugin {
-
 	/**
 	 * Registers functionality with WordPress hooks.
 	 *

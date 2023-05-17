@@ -45,19 +45,15 @@ class Filters {
 			return $tag;
 		}
 
-		$settings       = Helpers::get_settings();
-		$api_url        = Helpers::get_data_api_url();
-		$domain_name    = esc_html( $settings['domain_name'] );
-		$id_replacement = '';
+		$settings    = Helpers::get_settings();
+		$api_url     = Helpers::get_data_api_url();
+		$domain_name = esc_html( $settings['domain_name'] );
 
-		// If we're loading the compat script, we need the correct id attribute. If not, we can just remove it.
-		if ( isset( $settings['compat'] ) && $settings['compat'][0] === '1' ) {
-			$id_replacement = " id='plausible'";
-		}
+		// We need the correct id attribute for IE compatibility.
+		$id_replacement = " id='plausible'";
+		$tag            = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
 
-		$tag = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
-
-		$params = "async defer data-domain='{$domain_name}' data-api='{$api_url}'";
+		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {

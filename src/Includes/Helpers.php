@@ -51,7 +51,7 @@ class Helpers {
 		/**
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
-		if ( $local && ! empty( $settings['avoid_ad_blockers'][0] ) ) {
+		if ( $local && ! empty( $settings['proxy_enabled'][0] ) ) {
 			return esc_url(
 				self::get_proxy_resource( 'cache_url' ) . $file_name . '.js'
 			);
@@ -98,7 +98,7 @@ class Helpers {
 		$settings  = self::get_settings();
 		$file_name = 'plausible';
 
-		if ( $local && ! empty( $settings['avoid_ad_blockers'][0] ) ) {
+		if ( $local && ! empty( $settings['proxy_enabled'][0] ) ) {
 			return self::get_proxy_resource( 'file_alias' );
 		}
 
@@ -176,7 +176,7 @@ class Helpers {
 		$defaults = [
 			'domain_name'             => '',
 			'enhanced_measurements'   => [],
-			'avoid_ad_blockers'       => '',
+			'proxy_enabled'           => '',
 			'shared_link'             => '',
 			'excluded_pages'          => '',
 			'tracked_user_roles'      => [],
@@ -191,13 +191,19 @@ class Helpers {
 	}
 
 	/**
-	 * Get (and generate/store if non-existent) all necessary proxy resources.
+	 * Get (and generate/store if non-existent) a proxy resource by name.
 	 *
-	 * @param mixed $resource_name
-	 * @return mixed
+	 * @param string $resource_name
+	 *
+	 * @return string Value of resource from DB or empty string if Bypass ad blockers option is disabled.
+	 *
 	 * @throws Exception
 	 */
-	public static function get_proxy_resource( $resource_name ) {
+	public static function get_proxy_resource( $resource_name = '' ) {
+		if ( empty( Helpers::get_settings()['proxy_enabled'][0] ) ) {
+			return '';
+		}
+
 		static $resources;
 
 		if ( $resources === null ) {
@@ -241,7 +247,7 @@ class Helpers {
 		$settings = self::get_settings();
 		$url      = 'https://plausible.io/api/event';
 
-		if ( ! empty( $settings['avoid_ad_blockers'][0] ) ) {
+		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
 			$namespace = self::get_proxy_resource( 'namespace' );
 			$base      = self::get_proxy_resource( 'base' );
 			$endpoint  = self::get_proxy_resource( 'endpoint' );

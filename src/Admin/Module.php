@@ -10,6 +10,8 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Plausible\Analytics\WP\Includes\Helpers;
+
 class Module {
 	/**
 	 * Build properties.
@@ -26,7 +28,37 @@ class Module {
 	 * @return void
 	 */
 	private function init() {
+		add_action( 'admin_init', [ $this, 'maybe_show_notice' ] );
+		add_action( 'admin_notices', [ $this, 'print_notices' ] );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 10 );
+	}
+
+	/**
+	 * Show an admin-wide notice if the Speed Module failed to install.
+	 *
+	 * When dismissed it will be shown again after 1 day.
+	 *
+	 * @return void
+	 */
+	public function maybe_show_notice() {
+		$settings = Helpers::get_settings();
+
+		if ( ! empty( $settings['proxy_enabled'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . 'plausible-proxy-speed-module.php' ) ) {
+			$this->throw_notice();
+		}
+	}
+
+	/**
+	 * Takes care of printing the notice.
+	 *
+	 * @return void
+	 */
+	public function print_notices() {
+		if ( get_transient( 'plausible_analytics_speed_module_notice_dismissed' ) ) {
+			return;
+		}
+
+		Notice::print_notices();
 	}
 
 	/**
@@ -37,7 +69,7 @@ class Module {
 	 * @return void
 	 */
 	public function maybe_install_module( $settings ) {
-		if ( ! empty( $settings['avoid_ad_blockers'][0] ) ) {
+		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
 			$this->install();
 		} else {
 			$this->uninstall();
@@ -64,22 +96,33 @@ class Module {
 		}
 
 		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
-			wp_die( esc_html__( 'Cannot install Plausible Proxy Speed module', 'plausible-analytics' ) );
+			$this->throw_notice();
+
+			return false;
 		}
 
 		$results = copy_dir( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'mu-plugin', WPMU_PLUGIN_DIR );
 
-		if ( is_wp_error( $results ) ) {
-			return $results;
-		}
+		// if ( is_wp_error( $results ) ) {
+			$this->throw_notice();
+
+			return false;
+		// }
 
 		add_option( 'plausible_analytics_proxy_speed_module_installed', true );
 
-		return $results;
+		return true;
 	}
 
 	/**
-	 * Uninstall the Speed Module when the proxy is disabled.
+	 * @return void
+	 */
+	private function throw_notice() {
+		Notice::set_notice( sprintf( __( 'Plausible Analytics\' proxy is enabled, but the Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.', 'plausible-analytics' ), 'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow' ), 'plausible-analytics-module-install-failed', 'error' );
+	}
+
+	/**
+	 * Uninstall the Speed Module and all related settings when the proxy is disabled.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -100,6 +143,8 @@ class Module {
 
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
 		delete_option( 'plausible_analytics_proxy_speed_module_installed' );
+		delete_option( 'plausible_analytics_proxy_resources' );
+		delete_transient( 'plausible_analytics_speed_module_notice_dismissed' );
 
 		return true;
 	}
