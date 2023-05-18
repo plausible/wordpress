@@ -196,12 +196,12 @@ class Page extends API {
 					'fields' => $this->build_user_roles_array( 'tracked_user_roles' ),
 				],
 				[
-					'label'  => esc_html__( 'Show the stats dashboard to specific user roles', 'plausible-analytics' ),
+					'label'  => esc_html__( 'Show stats dashboard to additional user roles', 'plausible-analytics' ),
 					'slug'   => 'can_access_analytics_page',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, the stats dashboard is only available to admin users. If you want the dashboard to be available for other user roles, then please specify them above.', 'plausible-analytics' ),
 					'toggle' => false,
-					'fields' => $this->build_user_roles_array( 'expand_dashboard_access' ),
+					'fields' => $this->build_user_roles_array( 'expand_dashboard_access', [ 'administrator' ] ),
 				],
 				[
 					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
@@ -477,16 +477,20 @@ class Page extends API {
 	}
 
 	/**
-	 * Load all available user roles as a list of checkboxes to be processed by the Settings API.
+	 * Load all available user roles as a list (sorted alphabetically) of checkboxes to be processed by the Settings API.
 	 *
 	 * @param string $slug
 	 *
 	 * @return array
 	 */
-	private function build_user_roles_array( $slug ) {
+	private function build_user_roles_array( $slug, $filter_elements = [] ) {
 		$wp_roles = wp_roles()->roles ?? [];
 
 		foreach ( $wp_roles as $id => $role ) {
+			if ( in_array( $id, $filter_elements, true ) ) {
+				continue;
+			}
+
 			$roles_array[ $id ] = [
 				'label' => $role['name'] ?? '',
 				'slug'  => $slug,
@@ -494,6 +498,8 @@ class Page extends API {
 				'value' => $id,
 			];
 		}
+
+		ksort( $roles_array, SORT_STRING );
 
 		return $roles_array;
 	}
