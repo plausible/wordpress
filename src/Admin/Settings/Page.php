@@ -199,7 +199,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Show stats dashboard to additional user roles', 'plausible-analytics' ),
 					'slug'   => 'can_access_analytics_page',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, the stats dashboard is only available to admin users. If you want the dashboard to be available for other user roles, then please specify them above.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.', 'plausible-analytics' ),
 					'toggle' => false,
 					'fields' => $this->build_user_roles_array( 'expand_dashboard_access', [ 'administrator' ] ),
 				],
