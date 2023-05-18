@@ -191,7 +191,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
 					'slug'   => 'can_role_tracked_user_roles',
 					'type'   => 'group',
-					'desc'   => esc_html__( 'By default, we won\'t be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting.', 'plausible-analytics' ),
+					'desc'   => esc_html__( 'By default, visits from logged-in users aren\'t tracked. If you want to track visits for certain user roles then please specify them above.', 'plausible-analytics' ),
 					'toggle' => false,
 					'fields' => $this->build_user_roles_array( 'tracked_user_roles' ),
 				],
