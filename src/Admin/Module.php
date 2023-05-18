@@ -240,8 +240,11 @@ class Module {
 		/** @var \WP_REST_Response $result */
 		try {
 			$result = rest_do_request( $request );
-		} catch ( \Exception ) {
-			//  There's no need to handle the error, because we don't want to display it anyway.
+		} catch ( \Exception $e ) {
+			/**
+			 * There's no need to handle the error, because we don't want to display it anyway.
+			 * We'll leave the parameter for backwards compatibility.
+			 */
 			return false;
 		}
 
