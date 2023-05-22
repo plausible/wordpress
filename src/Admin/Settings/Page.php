@@ -227,9 +227,9 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-						esc_html__( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more', 'plausible-analytics' ),
+						wp_kses( __( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Multisites can use the <code>PLAUSIBLE_SELF_HOSTED_DOMAIN</code> constant to define the URL for all subsites at once.', 'plausible-analytics' ), 'post' ),
 						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
-						esc_html__( 'about Plausible Self-Hosted.', 'plausible-analytics' )
+						esc_html__( 'Learn more about Plausible Self-Hosted.', 'plausible-analytics' )
 					),
 					'toggle' => $is_selfhosted,
 					'fields' => [
