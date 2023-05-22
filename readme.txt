@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.2.6
+Stable tag: 1.3.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -154,6 +154,19 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.3.0 =
+- Added: Bypass Ad Blockers option.
+- Added: The `PLAUSIBLE_SELF_HOSTED_DOMAIN` constant can be used to define the Self-hosted URL (this is convenient for Multisites)
+- Added: uninstall script.
+- Improved: All user roles (including custom ones) are now shown in the *Track analytics for user roles* and *Show the stats dashboard to specific user roles* options.
+- UX: when hovering over button, a pointer is now shown
+- Added: SG Optimizer compatibility
+- Added: WP Optimize compatibility
+- Added: LS Cache compatibility
+- Improved: only load CSS stylesheet on Plausible's configuration screen
+- Improved: Labels for checkboxes are now clickable. (Thanks, @joshwgd!)
+
 
 = 1.2.6 =
 - Added migration script to remove "example.com" default from DB for Self Hosted Domain option.
