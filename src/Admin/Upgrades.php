@@ -61,12 +61,35 @@ class Upgrades {
 			$this->upgrade_to_126();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '1.3.1', '<' ) ) {
+			$this->upgrade_to_131();
+		}
+
 		// Upgrade to version 1.3.0.
 		// if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
 		// 	$this->upgrade_to_130();
 		// }
 
 		// Add required upgrade routines for future versions here.
+	}
+
+	/**
+	 * Upgrade to 1.3.1
+	 *
+	 * - Enables 404 pages tracking by default.
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_131() {
+		$settings = Helpers::get_settings();
+
+		if ( ! in_array( '404', $settings['enhanced_measurements'], true ) ) {
+			array_unshift( $settings['enhanced_measurements'], '404' );
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		update_option( 'plausible_analytics_version', '1.3.1' );
 	}
 
 	/**
