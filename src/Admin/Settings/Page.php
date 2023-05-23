@@ -73,7 +73,7 @@ class Page extends API {
 					'desc'   => esc_html__( 'To complete the setup process of a particular enhanced measurement, click on the "Additional action required" link and follow the instructions.', 'plausible-analytics' ),
 					'fields' => [
 						'404'            => [
-							'label'      => esc_html__( ' 404 error pages', 'plausible-analytics' ),
+							'label'      => esc_html__( '404 error pages', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'enhanced_measurements',
