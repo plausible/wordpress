@@ -24,6 +24,11 @@ class Compatibility {
 	 * @return void
 	 */
 	public function __construct() {
+		// Autoptimize
+		if ( defined( 'AUTOPTIMIZE_PLUGIN_VERSION' ) ) {
+			add_filter( 'autoptimize_filter_js_exclude', [ $this, 'exclude_plausible_js_as_string' ] );
+		}
+
 		// WP Rocket
 		if ( defined( 'WP_ROCKET_VERSION' ) ) {
 			add_filter( 'rocket_excluded_inline_js_content', [ $this, 'exclude_plausible_inline_js' ] );
@@ -51,6 +56,17 @@ class Compatibility {
 			add_filter( 'litespeed_optm_js_defer_exc', [ $this, 'exclude_plausible_inline_js' ] );
 			add_filter( 'litespeed_optm_gm_js_exc', [ $this, 'exclude_plausible_inline_js' ] );
 		}
+	}
+
+	/**
+	 * Adds window.plausible
+	 * @param mixed $exclude_js
+	 * @return string
+	 */
+	public function exclude_plausible_js_as_string( $exclude_js ) {
+		$exclude_js .= ', window.plausible, ' . Helpers::get_js_url( true );
+
+		return $exclude_js;
 	}
 
 	/**
