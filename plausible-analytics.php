@@ -3,7 +3,7 @@
  * Plugin Name: Plausible Analytics
  * Plugin URI: https://plausible.io
  * Description: Simple and privacy-friendly alternative to Google Analytics.
- * Author: PlausibleHQ
+ * Author: Plausible.io
  * Author URI: https://plausible.io
  * Version: 1.3.0
  * Text Domain: plausible-analytics
