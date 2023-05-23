@@ -58,13 +58,13 @@ class Actions {
 		}
 
 		$version = ! empty( $settings['proxy_enabled'][0] ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
-		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version );
+		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
 		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
 
 		// Track 404 pages.
-		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
+		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( '404', $settings['enhanced_measurements'] ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
 		}
 	}
