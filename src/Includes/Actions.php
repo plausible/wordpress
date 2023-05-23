@@ -67,6 +67,9 @@ class Actions {
 		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( '404', $settings['enhanced_measurements'] ) && is_404() ) {
 			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
 		}
+
+		// This action allows you to add your own custom scripts!
+		do_action( 'plausible_analytics_after_register_assets', $settings );
 	}
 
 	/**
