@@ -72,6 +72,14 @@ class Page extends API {
 					// translators: %1$s replaced with <code>outbound-links</code>.
 					'desc'   => esc_html__( 'To complete the setup process of a particular enhanced measurement, click on the "Additional action required" link and follow the instructions.', 'plausible-analytics' ),
 					'fields' => [
+						'404'            => [
+							'label'      => esc_html__( ' 404 pages', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
+							'slug'       => 'enhanced_measurements',
+							'type'       => 'checkbox',
+							'value'      => '404',
+						],
 						'outbound-links' => [
 							'label'      => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
