@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -154,6 +154,12 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 1.3.1 =
+- Added: 404 error pages option to Enhanced Measurements
+- Added: Autoptimize compatibility
+- Fixed: remove `defer` attribute from script when Proxy is enabled.
+  - Fixes 404 tracking error when Proxy is enabled.
 
 = 1.3.0 =
 - Added: Bypass Ad Blockers option.
