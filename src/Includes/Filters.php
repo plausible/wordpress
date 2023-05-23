@@ -52,8 +52,14 @@ class Filters {
 		// We need the correct id attribute for IE compatibility.
 		$id_replacement = " id='plausible'";
 		$tag            = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
+		$params         = '';
 
-		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
+		// The defer attribute should only be inserted, if our Proxy is enabled.
+		if ( empty( $settings['proxy_enabled'][0] ) ) {
+			$params = ' defer ';
+		}
+
+		$params = "data-domain='{$domain_name}' data-api='{$api_url}'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
