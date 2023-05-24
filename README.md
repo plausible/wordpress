@@ -32,6 +32,21 @@ This repository is not suitable for support. Please don't use GitHub issues for 
 
 * [WP.org Support Forums](https://wordpress.org/support/plugin/plausible-analytics) - for all users
 
+## Available Actions, Filters and Toggles
+
+### Filters
+- `plausible_load_js_in_footer`: Allows you to load the JS code snippet in the footer.
+- `plausible_analytics_script_params`: Allows you to modify the `script` element, loading the Plausible JS library.
+
+### Actions
+- `plausible_analytics_settings_saved`: Trigger additional tasks directly after settings are saved.
+- `plausible_analytics_after_register_assets`: This action allows you to trigger additional tasks or add custom JS (e.g. events) to the tracking code.
+
+### Toggles
+Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If you're using a custom plugin, make sure its code is loaded before 
+
+- `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self hosted version of Plausible, this constant allows you to specify the Self Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the plugin's setting. So, if this constant is defined, changing the setting won't have any effect.
+
 ## Local Development 
 
 To get started developing on the Plausible Analytics WordPress Plugin you will need to perform the following steps:
