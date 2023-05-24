@@ -81,12 +81,14 @@ class Module {
 	/**
 	 * Decide whether we should install the module, or not.
 	 *
+	 * @param array $settings Current settings available in POST. These are not yet written to the database.
+	 *
 	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
 	public function maybe_install_module( $settings ) {
-		if ( Helpers::proxy_enabled() ) {
+		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
 			$this->install();
 		} else {
 			$this->uninstall();
