@@ -51,7 +51,7 @@ class Helpers {
 		/**
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
-		if ( $local && ! empty( $settings['proxy_enabled'][0] ) ) {
+		if ( $local && self::proxy_enabled() ) {
 			return esc_url(
 				self::get_proxy_resource( 'cache_url' ) . $file_name . '.js'
 			);
@@ -78,6 +78,17 @@ class Helpers {
 	}
 
 	/**
+	 * Is the proxy enabled?
+	 *
+	 * @return bool
+	 */
+	public static function proxy_enabled() {
+		$settings = self::get_settings();
+
+		return ! empty( $settings['proxy_enabled'][0] ) || isset( $_GET['plausible_proxy'] );
+	}
+
+	/**
 	 * A convenient way to retrieve the absolute path to the local JS file.
 	 *
 	 * @return string
@@ -98,7 +109,7 @@ class Helpers {
 		$settings  = self::get_settings();
 		$file_name = 'plausible';
 
-		if ( $local && ! empty( $settings['proxy_enabled'][0] ) ) {
+		if ( $local && self::proxy_enabled() ) {
 			return self::get_proxy_resource( 'file_alias' );
 		}
 
@@ -243,7 +254,7 @@ class Helpers {
 		$settings = self::get_settings();
 		$url      = 'https://plausible.io/api/event';
 
-		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
+		if ( Helpers::proxy_enabled() ) {
 			return self::get_rest_endpoint();
 		}
 

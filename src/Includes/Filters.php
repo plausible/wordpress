@@ -54,8 +54,8 @@ class Filters {
 		$tag            = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
 		$params         = '';
 
-		// The defer attribute should only be inserted, if our Proxy is enabled.
-		if ( empty( $settings['proxy_enabled'][0] ) ) {
+		// The defer attribute should only be inserted, if our Proxy is disabled.
+		if ( ! Helpers::proxy_enabled() ) {
 			$params = ' defer ';
 		}
 

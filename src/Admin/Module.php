@@ -44,9 +44,7 @@ class Module {
 	 * @return void
 	 */
 	public function maybe_show_notice() {
-		$settings = Helpers::get_settings();
-
-		if ( ! empty( $settings['proxy_enabled'][0] ) && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
+		if ( Helpers::proxy_enabled() && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
 			$this->throw_notice();
 		}
 	}
@@ -88,7 +86,7 @@ class Module {
 	 * @return void
 	 */
 	public function maybe_install_module( $settings ) {
-		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
+		if ( Helpers::proxy_enabled() ) {
 			$this->install();
 		} else {
 			$this->uninstall();
@@ -201,9 +199,9 @@ class Module {
 	 * @throws Exception
 	 */
 	public function maybe_enable_proxy( $settings, $old_settings ) {
-		$test_succeeded = $this->test_proxy( ! empty( $settings['proxy_enabled'][0] ) );
+		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled() );
 
-		if ( ! $test_succeeded && ! empty( $settings['proxy_enabled'][0] ) ) {
+		if ( ! $test_succeeded && Helpers::proxy_enabled() ) {
 			Notice::set_notice( sprintf( wp_kses( __( 'Plausible\'s proxy couldn\'t be enabled, because the WordPress API is inaccessable. This might be due to a conflicting setting in a (security) plugin or server firewall. Make sure you whitelist requests to the Proxy\'s endpoint: <code>%1$s</code>. <a href="%2$s" target="_blank">Contact support</a> if you need help locating the issue.', 'plausible-analytics' ), 'post' ), Helpers::get_rest_endpoint( false ), 'https://plausible.io/contact' ), 'plausible-analytics-proxy-failed', 'error' );
 
 			return $old_settings;
