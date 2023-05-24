@@ -71,7 +71,8 @@ class Proxy {
 	 * @return void
 	 */
 	private function init() {
-		if ( $this->namespace && $this->base || $this->endpoint ) {
+		// No need to continue if Proxy isn't enabled.
+		if ( Helpers::proxy_enabled() ) {
 			add_action( 'rest_api_init', [ $this, 'register_route' ] );
 		}
 	}

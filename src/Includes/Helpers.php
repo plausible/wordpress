@@ -255,7 +255,10 @@ class Helpers {
 		$url      = 'https://plausible.io/api/event';
 
 		if ( Helpers::proxy_enabled() ) {
-			return self::get_rest_endpoint();
+			// This'll make sure the API endpoint is properly registered when we're testing.
+			$append = isset( $_GET['plausible_proxy'] ) ? '?plausible_proxy=1' : '';
+
+			return self::get_rest_endpoint() . $append;
 		}
 
 		// Triggered when self hosted analytics is enabled.
