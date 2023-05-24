@@ -37,7 +37,7 @@ This repository is not suitable for support. Please don't use GitHub issues for 
 ### Filters
 - `plausible_load_js_in_footer`: Allows you to load the JS code snippet in the footer.
 - `plausible_analytics_script_params`: Allows you to modify the `script` element, loading the Plausible JS library.
-  - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types.
+  - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types when File Downloads tracking is enabled.
 
 ### Actions
 - `plausible_analytics_settings_saved`: Trigger additional tasks directly after settings are saved.
