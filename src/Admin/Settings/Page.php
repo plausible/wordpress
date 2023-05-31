@@ -128,10 +128,11 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
-							__( 'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with %1$s. <a href="%2$s" target="_blank">Learn more &raquo;</a>', 'plausible-analytics' ),
+							__( 'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with <code>%1$s</code> and %2$s. <a href="%3$s" target="_blank">Learn more &raquo;</a>', 'plausible-analytics' ),
 							wp_kses_allowed_html( 'post' )
 						),
 						get_site_url( null, 'wp-json' ),
+						empty( Helpers::get_settings()['proxy_enabled'][0] ) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace( ABSPATH, '', Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource( 'file_alias' ) . '.js</code>' ),
 						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),
 					'toggle' => '',
