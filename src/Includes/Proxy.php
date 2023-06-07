@@ -6,6 +6,10 @@
  *
  * @package    WordPress
  * @subpackage Plausible Analytics
+ *
+ * @copyright This code was copied from CAOS Pro, created by:
+ *            @author Daan van den Bergh
+ *            https://daan.dev/wordpress/caos-pro/
  */
 
 namespace Plausible\Analytics\WP\Includes;
