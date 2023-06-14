@@ -82,7 +82,7 @@ class PlausibleProxySpeed {
 	 *
 	 * @return array The filtered list of active plugins.
 	 */
-	function filter_active_plugins( $active_plugins ) {
+	public function filter_active_plugins( $active_plugins ) {
 		if ( ! $this->is_proxy_request || ! is_array( $active_plugins ) ) {
 			return $active_plugins;
 		}
