@@ -218,14 +218,14 @@ class Helpers {
 		}
 
 		if ( empty( $resources ) ) {
-			$cache_dir = bin2hex( random_bytes( 5 ) );
-
-			$resources = [
+			$cache_dir  = bin2hex( random_bytes( 5 ) );
+			$upload_dir = wp_get_upload_dir();
+			$resources  = [
 				'namespace'  => bin2hex( random_bytes( 3 ) ),
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
-				'cache_dir'  => trailingslashit( wp_upload_dir()['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => trailingslashit( wp_upload_dir()['baseurl'] ) . trailingslashit( $cache_dir ),
+				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
@@ -254,7 +254,7 @@ class Helpers {
 		$settings = self::get_settings();
 		$url      = 'https://plausible.io/api/event';
 
-		if ( Helpers::proxy_enabled() ) {
+		if ( self::proxy_enabled() ) {
 			// This'll make sure the API endpoint is properly registered when we're testing.
 			$append = isset( $_GET['plausible_proxy'] ) ? '?plausible_proxy=1' : '';
 
