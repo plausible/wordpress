@@ -268,9 +268,12 @@ class Page extends API {
 	 * @return void
 	 */
 	public function register_menu() {
-		$user         = wp_get_current_user();
-		$user_roles   = isset( $user->roles ) ? $user->roles : [];
-		$is_allowed   = false;
+		$user       = wp_get_current_user();
+		$user_roles = isset( $user->roles ) ? $user->roles : [];
+		$is_allowed = false;
+		/**
+		 * By default, only allow administrators to access the Statistics page.
+		 */
 		$capabilities = 'manage_options';
 
 		/**
