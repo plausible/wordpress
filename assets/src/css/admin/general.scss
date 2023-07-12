@@ -13,7 +13,8 @@
 		width: 100%;
 	}
 
-	.plausible-checkbox-list {
+	.plausible-checkbox-list,
+	.plausible-text-field {
 		margin: .5em 1em .5em 0;
 		display: inline-block;
 	}
@@ -43,6 +44,19 @@
 				border-radius: 3px;
 				background-color: #c1d7e9;
 				padding: 1em 2em;
+			}
+		}
+
+		&.is-self-hosted {
+			.plausible-hook {
+				border: 1px solid #2271b1;
+				border-radius: 3px;
+				background-color: #c1d7e9;
+				padding: 1em 2em;
+
+				&:empty {
+					display: none;
+				}
 			}
 		}
 
