@@ -37,7 +37,7 @@ class Page extends API {
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
 		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
 		$is_exclude_pages   = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
-		$is_selfhosted      = ! empty( $settings['is_self_hosted_plausible_analytics'] ) ? (bool) $settings['is_self_hosted_plausible_analytics'] : false;
+		$is_selfhosted      = ! empty( $settings['is_self_hosted'] ) ? (bool) $settings['is_self_hosted'] : false;
 
 		$this->fields = [
 			'general'     => [
@@ -138,10 +138,11 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label' => esc_html__( 'Enable proxy', 'plausible-analytics' ),
-							'slug'  => 'proxy_enabled',
-							'type'  => 'checkbox',
-							'value' => 'enable',
+							'label'    => esc_html__( 'Enable proxy', 'plausible-analytics' ),
+							'slug'     => 'proxy_enabled',
+							'type'     => 'checkbox',
+							'value'    => 'enable',
+							'disabled' => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
 						],
 						[
 							'label' => '',
@@ -231,8 +232,8 @@ class Page extends API {
 			],
 			'self-hosted' => [
 				[
-					'label'  => esc_html__( 'Self-hosted Plausible Analytics?', 'plausible-analytics' ),
-					'slug'   => 'is_self_hosted_plausible_analytics',
+					'label'  => esc_html__( 'Self-hosted Plausible Analytics', 'plausible-analytics' ),
+					'slug'   => 'is_self_hosted',
 					'type'   => 'group',
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
@@ -248,6 +249,12 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $self_hosted_domain,
 							'placeholder' => 'e.g. ' . Helpers::get_domain(),
+							'disabled'    => ! empty( Helpers::get_settings()['proxy_enabled'][0] ),
+						],
+						[
+							'label' => '',
+							'slug'  => 'self_hosted_domain_notice',
+							'type'  => 'hook',
 						],
 					],
 				],
@@ -257,6 +264,7 @@ class Page extends API {
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
 		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'render_proxy_warning' ] );
+		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'maybe_render_self_hosted_warning' ] );
 	}
 
 	/**
@@ -381,7 +389,7 @@ class Page extends API {
 					'class' => '' === $current_tab ? 'active' : '',
 				],
 				'self-hosted' => [
-					'name'  => esc_html__( 'Self Hosted', 'plausible-analytics' ),
+					'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
 					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
 					'class' => 'self-hosted' === $current_tab ? 'active' : '',
 				],
@@ -509,7 +517,17 @@ class Page extends API {
 	 * @return void
 	 */
 	public function render_proxy_warning() {
-		echo sprintf( wp_kses( __( 'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!', 'plausible-analytics' ), 'post' ), 'https://plausible.io/contact' );
+		if ( ! empty( Helpers::get_settings()['self_hosted_domain'] ) ) {
+			echo wp_kses( __( 'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.', 'plausible-analytics' ), 'post' );
+		} else {
+			echo sprintf( wp_kses( __( 'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!', 'plausible-analytics' ), 'post' ), 'https://plausible.io/contact' );
+		}
+	}
+
+	public function maybe_render_self_hosted_warning() {
+		if ( Helpers::proxy_enabled() ) {
+			echo wp_kses( __( 'This option is disabled, because the <strong>Proxy</strong> setting is enabled under <em>General</em> settings.', 'plausible-analytics' ), 'post' );
+		}
 	}
 
 	/**

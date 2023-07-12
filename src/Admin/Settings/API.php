@@ -82,11 +82,12 @@ class API {
 		ob_start();
 		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$disabled    = ! empty( $field['disabled'] ) ? 'disabled' : '';
 		?>
-		<label for="<?php echo $field['slug']; ?>">
-		<?php echo esc_attr( $field['label'] ); ?>
-		</label>
-		<input id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" />
+		<span class="plausible-text-field">
+			<label for="<?php echo $field['slug']; ?>"><?php echo esc_attr( $field['label'] ); ?></label>
+			<input id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" type="text" name="plausible_analytics_settings[<?php echo $field['slug']; ?>]" value="<?php echo $value; ?>" <?php echo $disabled; ?> />
+		</span>
 		<?php
 		return ob_get_clean();
 	}
@@ -154,20 +155,14 @@ class API {
 		$settings = Helpers::get_settings();
 		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
 		$id       = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
+		$checked  = is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false );
+		$disabled = ! empty( $field['disabled'] ) ? 'disabled' : '';
 
 		?>
 		<span class="plausible-checkbox-list">
 			<input id="<?php echo $id; ?>" type="checkbox"
 				name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
-				value="<?php echo esc_html( $value ); ?>"
-			<?php
-			if ( is_array( $slug ) ) {
-				checked( $value, in_array( $value, $slug, false ) ? $value : false, true );
-			} else {
-				checked( $value, $slug, true );
-			}
-			?>
-			/>
+				value="<?php echo esc_html( $value ); ?>" <?php echo $checked; ?> <?php echo $disabled; ?> />
 			<?php // This trick'll make our option always show up in $_POST. Even when unchecked. ?>
 			<input id="<?php echo $id; ?>" type="hidden" name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]" value="0" />
 			<label for="<?php echo $id; ?>"><?php echo $field['label']; ?></label>
@@ -213,14 +208,7 @@ class API {
 	public function render_hook_field( array $field ) {
 		ob_start();
 		?>
-		<div class="plausible-hook">
-		<label for="<?php echo $field['slug']; ?>">
-			<?php echo esc_attr( $field['label'] ); ?>
-		</label>
-		<?php
-		do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] );
-		?>
-		</div>
+		<div class="plausible-hook"><?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?></div>
 		<?php
 
 		return trim( ob_get_clean() );

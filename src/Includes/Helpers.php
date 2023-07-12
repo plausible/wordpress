@@ -57,7 +57,7 @@ class Helpers {
 			);
 		}
 
-		// Allows for hard-coding the self hosted domain.
+		// Allows for hard-coding the self-hosted domain.
 		if ( defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ) {
 			// phpcs:ignore
 			$domain = PLAUSIBLE_SELF_HOSTED_DOMAIN;
@@ -261,7 +261,7 @@ class Helpers {
 			return self::get_rest_endpoint() . $append;
 		}
 
-		// Triggered when self hosted analytics is enabled.
+		// Triggered when self-hosted analytics is enabled.
 		if (
 			! empty( $settings['self_hosted_domain'] )
 		) {
