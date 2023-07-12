@@ -518,7 +518,7 @@ class Page extends API {
 	 */
 	public function render_proxy_warning() {
 		if ( ! empty( Helpers::get_settings()['self_hosted_domain'] ) ) {
-			echo wp_kses( __( 'This option is disabled, because the <strong>Self-hosted Domain</strong> setting is enabled under <em>Self-Hosted</em> settings.', 'plausible-analytics' ), 'post' );
+			echo wp_kses( __( 'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.', 'plausible-analytics' ), 'post' );
 		} else {
 			echo sprintf( wp_kses( __( 'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!', 'plausible-analytics' ), 'post' ), 'https://plausible.io/contact' );
 		}
