@@ -4,7 +4,7 @@ Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy, privacy friendly
 Requires at least: 4.8
 Tested up to: 6.2
-Requires PHP: 7.0
+Requires PHP: 5.6
 Stable tag: 1.3.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
