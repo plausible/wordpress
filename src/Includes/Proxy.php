@@ -119,7 +119,7 @@ class Proxy {
 					'X-Forwarded-For' => $ip,
 					'Content-Type'    => 'application/json',
 				],
-				'body'       => wp_kses( $params, 'strip' ),
+				'body'       => wp_kses_no_null( $params ),
 			]
 		);
 
