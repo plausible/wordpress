@@ -287,8 +287,14 @@ class Page extends API {
 			}
 		}
 
+		/**
+		 * If current user role is allowed to access, overwrite $capabilities with this user's capabilities.
+		 */
 		if ( $is_allowed ) {
-			$capabilities = isset( $user->caps ) ? array_key_first( $user->caps ) : 'manage_options';
+			if ( isset( $user->caps ) ) {
+				reset( $user->caps );
+				$capabilities = key( $user->caps );
+			}
 		}
 
 		// Setup `Analytics` page under Dashboard.
