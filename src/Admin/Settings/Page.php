@@ -268,11 +268,31 @@ class Page extends API {
 	 * @return void
 	 */
 	public function register_menu() {
+		$user         = wp_get_current_user();
+		$user_roles   = isset( $user->roles ) ? $user->roles : [];
+		$is_allowed   = false;
+		$capabilities = 'manage_options';
+
+		/**
+		 * Let's see if current user is allowed to access the Stats page.
+		 */
+		foreach ( $user_roles as $user_role ) {
+			if ( in_array( $user_role, Helpers::get_settings()['expand_dashboard_access'], true ) ) {
+				$is_allowed = true;
+
+				break;
+			}
+		}
+
+		if ( $is_allowed ) {
+			$capabilities = isset( $user->caps ) ? array_key_first( $user->caps ) : 'manage_options';
+		}
+
 		// Setup `Analytics` page under Dashboard.
 		add_dashboard_page(
 			esc_html__( 'Analytics', 'plausible-analytics' ),
 			esc_html__( 'Analytics', 'plausible-analytics' ),
-			'manage_options',
+			$capabilities,
 			'plausible_analytics_statistics',
 			[ $this, 'statistics_page' ]
 		);
@@ -398,9 +418,7 @@ class Page extends API {
 		$settings                  = Helpers::get_settings();
 		$domain                    = Helpers::get_domain();
 		$is_shared_link            = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
-		$shared_link               = ! empty( $settings['shared_link'] ) ?
-		$settings['shared_link'] :
-		'';
+		$shared_link               = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$can_access_analytics_page = ! empty( $settings['can_access_analytics_page'] ) ?
 		$settings['can_access_analytics_page'] :
 		false;
