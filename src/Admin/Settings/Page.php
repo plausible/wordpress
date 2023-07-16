@@ -12,8 +12,6 @@ namespace Plausible\Analytics\WP\Admin\Settings;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
-use function PHPSTORM_META\map;
-
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	wp_die( 'Cheat\'in huh?' );
