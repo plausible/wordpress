@@ -202,7 +202,7 @@ class Helpers {
 	}
 
 	/**
-	 * Get (and generate/store if non-existent) a proxy resource by name.
+	 * Get a proxy resource by name.
 	 *
 	 * @param string $resource_name
 	 *
@@ -211,6 +211,24 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_proxy_resource( $resource_name = '' ) {
+		$resources = self::get_proxy_resources();
+
+		/**
+		 * Create the cache directory if it doesn't exist.
+		 */
+		if ( $resource_name === 'cache_dir' && ! is_dir( $resources[ $resource_name ] ) ) {
+			wp_mkdir_p( $resources[ $resource_name ] );
+		}
+
+		return isset( $resources[ $resource_name ] ) ? $resources[ $resource_name ] : '';
+	}
+
+	/**
+	 * Get (and generate/store if non-existent) proxy resources.
+	 *
+	 * @return array
+	 */
+	public static function get_proxy_resources() {
 		static $resources;
 
 		if ( $resources === null ) {
@@ -232,14 +250,7 @@ class Helpers {
 			update_option( 'plausible_analytics_proxy_resources', $resources );
 		}
 
-		/**
-		 * Create the cache directory if it doesn't exist.
-		 */
-		if ( $resource_name === 'cache_dir' && ! is_dir( $resources[ $resource_name ] ) ) {
-			wp_mkdir_p( $resources[ $resource_name ] );
-		}
-
-		return isset( $resources[ $resource_name ] ) ? $resources[ $resource_name ] : '';
+		return $resources;
 	}
 
 	/**
