@@ -27,6 +27,8 @@ class Setup {
 		register_activation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'create_cache_dir' ] );
 		register_activation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'activate_cron' ] );
 		register_deactivation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'deactivate_cron' ] );
+
+		// Attach the cron script to the cron action.
 		add_action( $this->cron, [ $this, 'load_cron_script' ] );
 
 		// This assures that the local file is updated when settings are saved.
