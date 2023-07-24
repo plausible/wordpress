@@ -225,7 +225,7 @@ class Helpers {
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
 				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => str_replace( [ 'https:', 'http:' ], '', trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ) ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
@@ -287,7 +287,7 @@ class Helpers {
 		$uri = "$namespace/v1/$base/$endpoint";
 
 		if ( $abs_url ) {
-			return get_rest_url( null, $uri );
+			return str_replace( [ 'https:', 'http:' ], '', get_rest_url( null, $uri ) );
 		}
 
 		return '/wp-json/' . $uri;
