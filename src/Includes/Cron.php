@@ -29,6 +29,7 @@ class Cron {
 	 * Run
 	 *
 	 * @return void
+	 *
 	 * @throws InvalidArgument
 	 * @throws Exception
 	 */
@@ -44,13 +45,18 @@ class Cron {
 	}
 
 	/**
-	 * Download the plausible.js file and download it to the uploads directory with an alias.
+	 * Download the plausible.js file if the Proxy is enabled and downloads it to the uploads directory with an alias.
 	 *
 	 * @return bool
+	 *
 	 * @throws InvalidArgument
 	 * @throws Exception
 	 */
 	private function download() {
+		if ( ! Helpers::proxy_enabled() ) {
+			return false;
+		}
+
 		$remote = Helpers::get_js_url();
 		$local  = Helpers::get_js_path();
 

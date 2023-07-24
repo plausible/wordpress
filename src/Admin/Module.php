@@ -140,7 +140,7 @@ class Module {
 	}
 
 	/**
-	 * Uninstall the Speed Module and all related settings when the proxy is disabled.
+	 * Uninstall the Speed Module, generates JS files and all related settings when the proxy is disabled.
 	 *
 	 * @since 1.3.0
 	 *
@@ -151,6 +151,9 @@ class Module {
 			return false;
 		}
 
+		/**
+		 * Clean up MU plugin.
+		 */
 		$file_path = WP_CONTENT_DIR . '/mu-plugins/plausible-proxy-speed-module.php';
 
 		if ( file_exists( $file_path ) ) {
@@ -161,6 +164,23 @@ class Module {
 			rmdir( WPMU_PLUGIN_DIR );
 		}
 
+		/**
+		 * Clean up generated JS files in /uploads dir.
+		 */
+		$cache_dir = Helpers::get_proxy_resource( 'cache_dir' );
+		$js_file   = Helpers::get_proxy_resource( 'file_alias' );
+
+		if ( file_exists( $cache_dir . $js_file . '.js' ) ) {
+			unlink( $cache_dir . $js_file . '.js' );
+		}
+
+		if ( $this->dir_is_empty( $cache_dir ) ) {
+			rmdir( $cache_dir );
+		}
+
+		/**
+		 * Clean up related DB entries.
+		 */
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
 		delete_option( 'plausible_analytics_proxy_speed_module_installed' );
 		delete_option( 'plausible_analytics_proxy_resources' );
