@@ -47,7 +47,7 @@ This repository is not suitable for support. Please don't use GitHub issues for 
 Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If you're using a custom plugin, make sure its code is loaded before this plugin.
 
 - `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible, this constant allows you to specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the plugin's setting. So, if this constant is defined, changing the setting won't have any effect.
-- `plausible_proxy`: This `GET`-parameter will force enable the proxy. This'll allow you to test your proxy in the frontend, before enabling the option.
+- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This'll allow you to test your proxy in the frontend, before enabling the option.
 
 ## Local Development 
 
