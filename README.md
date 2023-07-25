@@ -26,7 +26,6 @@ In the search field type "Plausible Analytics" and click Search Plugins. Once yo
 
 The manual installation method involves downloading our donation plugin and uploading it to your server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
-
 ### Support
 This repository is not suitable for support. Please don't use GitHub issues for support requests. To get support please use the following channels:
 
@@ -54,15 +53,10 @@ Using constants, you can modify the behavior of the plugin. `wp-config.php` is t
 To get started developing on the Plausible Analytics WordPress Plugin you will need to perform the following steps:
 
 1. Create a new WordPress site with `plausible.test` as the URL
-
 2. `cd` into your local plugins directory: `/path/to/wp-content/plugins/`
-
 3. Clone this repository from GitHub into your plugins directory: `https://github.com/plausible/wordpress.git`
-
 4. Run composer to set up dependencies: `composer install`
-
 5. Run npm install to get the necessary npm packages: `npm install`
-
 6. Activate the plugin in WordPress
 
 That's it. You're now ready to start development.
