@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,68 +155,4 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
-= 1.3.1 =
-- Added: 404 error pages option to Enhanced Measurements
-- Added: Autoptimize compatibility
-- Fixed: remove `defer` attribute from script when Proxy is enabled.
-  - Fixes 404 tracking error when Proxy is enabled.
-
-= 1.3.0 =
-- Added: Bypass Ad Blockers option.
-- Added: The `PLAUSIBLE_SELF_HOSTED_DOMAIN` constant can be used to define the Self-hosted URL (this is convenient for Multisites)
-- Added: uninstall script.
-- Improved: All user roles (including custom ones) are now shown in the *Track analytics for user roles* and *Show the stats dashboard to specific user roles* options.
-- UX: when hovering over button, a pointer is now shown
-- Added: SG Optimizer compatibility
-- Added: WP Optimize compatibility
-- Added: LS Cache compatibility
-- Improved: only load CSS stylesheet on Plausible's configuration screen
-- Improved: Labels for checkboxes are now clickable. (Thanks, @joshwgd!)
-
-
-= 1.2.6 =
-- Added migration script to remove "example.com" default from DB for Self Hosted Domain option.
-
-= 1.2.5 =
-- 40-45% reduction in JS code
-- Improved: specify which user roles to track [#11](https://github.com/plausible/wordpress/issues/11)
-- Added: specify which user roles can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
-- Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
-- Added: compatibility for WP Rocket
-- Removed: Custom Domains options
-- Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility. (thanks, @jdevalk!)
-- Several code optimizations.
-
-Props @sadmansh and @davidehuey for the contributions.
-
-= 1.2.4 =
-- More Security Improvements.
-
-= 1.2.3 = 
-- Security Improvements. Thanks for additional help with your PR - Props to [Ankur Modi](https://github.com/ankur0812)
-
-= 1.2.2 =
-- Resolve conflicts with WP Rocket plugin.
-
-= 1.2.1 =
-- Toggling the setting for the analytics dashboard doesn't work [#29](https://github.com/plausible/wordpress/issues/29)
-- Update to Version 1.2.0 sets wordpress into troubleshooting mode [#31](https://github.com/plausible/wordpress/issues/31)
-- Admin settings page container breaks out of viewport on smaller screens [#28](https://github.com/plausible/wordpress/issues/28) - Props to [Csaba Varszegi](https://github.com/LittleBigThing)
-- Minor Admin UI Improvements
-
-= 1.2.0 =
-- Stats within WP dashboard [#17](https://github.com/plausible/wordpress/issues/17)
-- Allows middle-click and ctrl+click outbound clicks to properly open as user intended? [#15](https://github.com/plausible/wordpress/issues/15)
-
-= 1.1.0 =
-- add support for self-hosted plausible analytics script [#2](https://github.com/plausible/wordpress/issues/2)
-- add support for custom events tracking [#3](https://github.com/plausible/wordpress/issues/3)
-- add support for outbound link click tracking [#4](https://github.com/plausible/wordpress/issues/4)
-- add support for 404 error pages tracking [#6](https://github.com/plausible/wordpress/issues/6)
-
-= 1.0.1 =
-- Fixed the broken link for "Report a bug" button
-- Improved the description of the important settings and linked them to some Plausible docs for better explanation.
-
-= 1.0.0 =
-- Initial plugin release.
+For the full changelog, check out [our Github repository](https://github.com/plausible/wordpress/releases).
