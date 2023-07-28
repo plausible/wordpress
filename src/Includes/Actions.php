@@ -63,9 +63,9 @@ class Actions {
 		// Goal tracking inline script (Don't disable this as it is required by 404).
 		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
 
-		// Track 404 pages.
+		// Track 404 pages (if enabled)
 		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( '404', $settings['enhanced_measurements'] ) && is_404() ) {
-			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
+			wp_add_inline_script( 'plausible-analytics', "document.addEventListener('DOMContentLoaded', function () { plausible('404', { props: { path: document.location.pathname } }); });" );
 		}
 
 		// This action allows you to add your own custom scripts!
