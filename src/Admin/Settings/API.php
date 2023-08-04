@@ -147,7 +147,7 @@ class API {
 		$settings = Helpers::get_settings();
 		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
 		$id       = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
-		$checked  = is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false );
+		$checked  = ! empty( $field['checked'] ) ? 'checked="checked"' : ( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
 		$disabled = ! empty( $field['disabled'] ) ? 'disabled' : '';
 
 		?>

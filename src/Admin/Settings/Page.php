@@ -206,7 +206,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => esc_html__( 'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.', 'plausible-analytics' ),
 					'toggle' => false,
-					'fields' => $this->build_user_roles_array( 'expand_dashboard_access', [ 'administrator' ] ),
+					'fields' => $this->build_user_roles_array( 'expand_dashboard_access', [ 'administrator' => true ] ),
 				],
 				[
 					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
@@ -514,6 +514,13 @@ class Page extends API {
 		}
 	}
 
+	/**
+	 * Renders the Self-hosted warning if the Proxy is enabled.
+	 *
+	 * @since 1.3.3
+	 *
+	 * @return void
+	 */
 	public function maybe_render_self_hosted_warning() {
 		if ( Helpers::proxy_enabled() ) {
 			echo wp_kses( __( 'This option is disabled, because the <strong>Proxy</strong> setting is enabled under <em>General</em> settings.', 'plausible-analytics' ), 'post' );
@@ -527,20 +534,24 @@ class Page extends API {
 	 *
 	 * @return array
 	 */
-	private function build_user_roles_array( $slug, $filter_elements = [] ) {
+	private function build_user_roles_array( $slug, $disable_elements = [] ) {
 		$wp_roles = wp_roles()->roles ?? [];
 
 		foreach ( $wp_roles as $id => $role ) {
-			if ( in_array( $id, $filter_elements, true ) ) {
-				continue;
-			}
-
 			$roles_array[ $id ] = [
 				'label' => $role['name'] ?? '',
 				'slug'  => $slug,
 				'type'  => 'checkbox',
 				'value' => $id,
 			];
+
+			if ( in_array( $id, array_keys( $disable_elements ), true ) ) {
+				$roles_array[ $id ]['disabled'] = true;
+
+				if ( ! empty( $disable_elements[ $id ] ) ) {
+					$roles_array[ $id ]['checked'] = $disable_elements[ $id ];
+				}
+			}
 		}
 
 		ksort( $roles_array, SORT_STRING );
