@@ -33,9 +33,6 @@ class Page extends API {
 		$self_hosted_domain = defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
-		$is_shared_link     = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : false;
-		$is_exclude_pages   = ! empty( $settings['is_exclude_pages'] ) ? (bool) $settings['is_exclude_pages'] : false;
-		$is_selfhosted      = ! empty( $settings['is_self_hosted'] ) ? (bool) $settings['is_self_hosted'] : false;
 
 		$this->fields = [
 			'general'     => [
@@ -163,7 +160,7 @@ class Page extends API {
 						admin_url( 'index.php?page=plausible_analytics_statistics' ),
 						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => $is_shared_link,
+					'toggle' => '',
 					'fields' => [
 						[
 							'label'       => esc_html__( 'Shared Link', 'plausible-analytics' ),
@@ -184,7 +181,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-exclude-specific-pages-from-being-tracked' ),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => $is_exclude_pages,
+					'toggle' => '',
 					'fields' => [
 						[
 							'label'       => esc_html__( 'Excluded pages', 'plausible-analytics' ),
@@ -239,7 +236,7 @@ class Page extends API {
 						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
 						esc_html__( 'Learn more about Plausible Self-Hosted.', 'plausible-analytics' )
 					),
-					'toggle' => $is_selfhosted,
+					'toggle' => '',
 					'fields' => [
 						[
 							'label'       => esc_html__( 'Domain Name', 'plausible-analytics' ),
@@ -430,40 +427,33 @@ class Page extends API {
 	public function statistics_page() {
 		global $current_user;
 
-		$settings                  = Helpers::get_settings();
-		$domain                    = Helpers::get_domain();
-		$is_shared_link            = ! empty( $settings['is_shared_link'] ) ? (bool) $settings['is_shared_link'] : 'false';
-		$shared_link               = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
-		$can_access_analytics_page = ! empty( $settings['can_access_analytics_page'] ) ?
-		$settings['can_access_analytics_page'] :
-		false;
+		$settings               = Helpers::get_settings();
+		$domain                 = Helpers::get_domain();
+		$shared_link            = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
+		$has_access             = false;
+		$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? array_merge( [ 'administrator' ], $settings['expand_dashboard_access'] ) : [ 'administrator' ];
 
-		if ( $can_access_analytics_page ) {
-			$has_access             = false;
-			$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? $settings['expand_dashboard_access'] : [ 'administrator' ];
-
-			foreach ( $current_user->roles as $role ) {
-				if ( in_array( $role, $user_roles_have_access, true ) ) {
-					$has_access = true;
-				}
-			}
-
-			// Show error, if not having access.
-			if ( ! $has_access ) {
-				?>
-				<div class="plausible-analytics-statistics-not-loaded">
-				<?php
-				echo sprintf(
-					'%1$s',
-					esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
-				);
-
-				return;
-				?>
-				</div>
-				<?php
+		foreach ( $current_user->roles as $role ) {
+			if ( in_array( $role, $user_roles_have_access, true ) ) {
+				$has_access = true;
 			}
 		}
+
+			// Show error, if not having access.
+		if ( ! $has_access ) :
+			?>
+			<div class="plausible-analytics-statistics-not-loaded">
+			<?php
+			echo sprintf(
+				'%1$s',
+				esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
+			);
+
+			return;
+			?>
+				</div>
+			<?php
+		endif;
 
 		/**
 		 * Prior to this version, the default value would contain an example "auth" key, i.e. XXXXXXXXX.
@@ -475,10 +465,12 @@ class Page extends API {
 		 *
 		 * @since v1.2.5
 		 */
-		if ( $is_shared_link && ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) ) {
+		if ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
+			$page_url = isset( $_GET['page-url'] ) ? esc_url( $_GET['page-url'] ) : '';
+
 			// Append individual page URL if it exists.
-			if ( $shared_link && isset( $_GET['page-url'] ) ) {
-				$shared_link .= "&page={$_GET[ 'page-url' ]}";
+			if ( $shared_link && $page_url ) {
+				$shared_link .= "&page={$page_url}";
 			}
 			?>
 			<iframe plausible-embed=""

@@ -101,11 +101,8 @@ class API {
 	 * @return string
 	 */
 	public function render_group_field( array $group ) {
-		$settings    = Helpers::get_settings();
-		$toggle      = $group['toggle'] ?? [];
-		$fields      = $group['fields'];
-		$field_value = ! empty( $settings[ $group['slug'] ] ) ? $settings[ $group['slug'] ] : false;
-		$is_checked  = ! is_array( $toggle ) ? checked( $toggle, true, false ) : '';
+		$toggle = $group['toggle'] ?? [];
+		$fields = $group['fields'];
 		ob_start();
 		?>
 		<div class="plausible-analytics-admin-field <?php echo str_replace( '_', '-', $group['slug'] ); ?>">
@@ -113,16 +110,11 @@ class API {
 				<label for="">
 				<?php echo $group['label']; ?>
 				</label>
-			<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) { ?>
+				<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) : ?>
 					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle['anchor']; ?>">
 						<?php echo $toggle['label']; ?>
 					</a>
-				<?php } elseif ( ! empty( $toggle ) ) { ?>
-				<label class="plausible-analytics-switch">
-					<input <?php echo $is_checked; ?> class="plausible-analytics-switch-checkbox" name="plausible_analytics_settings[<?php echo $group['slug']; ?>]" value="1" type="checkbox">
-					<span class="plausible-analytics-switch-slider"></span>
-				</label>
-				<?php } ?>
+				<?php endif; ?>
 			</div>
 			<div class="plausible-analytics-admin-field-body">
 			<?php
@@ -134,7 +126,7 @@ class API {
 			?>
 			</div>
 			<div class="plausible-analytics-description">
-			<?php echo wp_kses_post( $group['desc'] ); ?>
+				<?php echo wp_kses_post( $group['desc'] ); ?>
 			</div>
 		</div>
 			<?php
