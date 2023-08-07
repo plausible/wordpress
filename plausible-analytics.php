@@ -5,7 +5,7 @@
  * Description: Simple and privacy-friendly alternative to Google Analytics.
  * Author: Plausible.io
  * Author URI: https://plausible.io
- * Version: 1.3.3
+ * Version: 1.3.4
  * Text Domain: plausible-analytics
  * Domain Path: /languages
  *
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin version here for convenience.
-define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.3.0' );
+define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.3.4' );
 
 require_once __DIR__ . '/config/constants.php';
 
