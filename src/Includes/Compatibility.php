@@ -38,11 +38,12 @@ class Compatibility {
 		}
 
 		// SG Optimizer
-		if ( defined( 'SiteGround_Optimizer\VERSION' ) ) {
+		if ( defined( '\SiteGround_Optimizer\VERSION' ) ) {
 			add_filter( 'sgo_javascript_combine_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_js_minify_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_js_async_exclude', [ $this, 'exclude_js_by_handle' ] );
 			add_filter( 'sgo_javascript_combine_excluded_inline_content', [ $this, 'exclude_plausible_inline_js' ] );
+			add_filter( 'sgo_javascript_combine_excluded_external_paths', [ $this, 'exclude_plausible_js' ] );
 		}
 
 		// WP Optimize
