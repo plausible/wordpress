@@ -38,7 +38,8 @@ class Helpers {
 	 * Get Analytics URL.
 	 *
 	 * @since  1.0.0
-	 * @access public
+	 *
+	 * @param bool $local Return the Local JS file IF proxy is enabled.
 	 *
 	 * @return string
 	 */
@@ -235,6 +236,13 @@ class Helpers {
 			$resources = get_option( 'plausible_analytics_proxy_resources', [] );
 		}
 
+		/**
+		 * Force a refresh of our resources if the user recently switched to SSL and we still have non-SSL resources stored.
+		 */
+		if ( ! empty( $resources ) && is_ssl() && isset( $resources['cache_url'] ) && ( strpos( $resources['cache_url'], 'http:' ) !== false ) ) {
+			$resources = [];
+		}
+
 		if ( empty( $resources ) ) {
 			$cache_dir  = bin2hex( random_bytes( 5 ) );
 			$upload_dir = wp_get_upload_dir();
@@ -243,7 +251,7 @@ class Helpers {
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
 				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => str_replace( [ 'https:', 'http:' ], '', trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ) ),
+				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
