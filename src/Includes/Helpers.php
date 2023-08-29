@@ -306,7 +306,7 @@ class Helpers {
 		$uri = "$namespace/v1/$base/$endpoint";
 
 		if ( $abs_url ) {
-			return str_replace( [ 'https:', 'http:' ], '', get_rest_url( null, $uri ) );
+			return get_rest_url( null, $uri );
 		}
 
 		return '/' . rest_get_url_prefix() . '/' . $uri;
