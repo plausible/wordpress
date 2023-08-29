@@ -10,6 +10,8 @@
 
 namespace Plausible\Analytics\WP\Includes;
 
+use Exception;
+
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,6 +28,7 @@ class Filters {
 	 */
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
+		add_filter( 'rest_url', [ $this, 'wpml_compatibility' ], 10, 1 );
 	}
 
 	/**
@@ -63,5 +66,25 @@ class Filters {
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );
+	}
+
+	/**
+	 * WPML overrides the REST API URL to include the language 'subdirectory', which leads to 404s.
+	 * This forces it back to default behavior.
+	 *
+	 * @param mixed $url
+	 *
+	 * @return string|void
+	 *
+	 * @throws Exception
+	 */
+	public function wpml_compatibility( $url ) {
+		$rest_endpoint = Helpers::get_rest_endpoint( false );
+
+		if ( strpos( $url, $rest_endpoint ) !== false ) {
+			return get_option( 'home' ) . $rest_endpoint;
+		}
+
+		return $url;
 	}
 }

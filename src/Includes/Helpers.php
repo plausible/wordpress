@@ -309,7 +309,7 @@ class Helpers {
 			return str_replace( [ 'https:', 'http:' ], '', get_rest_url( null, $uri ) );
 		}
 
-		return '/wp-json/' . $uri;
+		return '/' . rest_get_url_prefix() . '/' . $uri;
 	}
 
 	/**
