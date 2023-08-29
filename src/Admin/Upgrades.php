@@ -10,6 +10,7 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Exception;
 use Plausible\Analytics\WP\Includes\Helpers;
 
 // Bailout, if accessed directly.
@@ -61,12 +62,52 @@ class Upgrades {
 			$this->upgrade_to_126();
 		}
 
-		// Upgrade to version 1.3.0.
-		// if ( version_compare( $plausible_analytics_version, '1.3.0', '<' ) ) {
-		// 	$this->upgrade_to_130();
-		// }
+		if ( version_compare( $plausible_analytics_version, '1.3.1', '<' ) ) {
+			$this->upgrade_to_131();
+		}
+
+		if ( version_compare( $plausible_analytics_version, '1.3.2', '<' ) ) {
+			$this->upgrade_to_132();
+		}
 
 		// Add required upgrade routines for future versions here.
+	}
+
+	/**
+	 * Upgrade to 1.3.2
+	 *
+	 * - Updates the Proxy Resource, Cache URL to be protocol relative.
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private function upgrade_to_132() {
+		$proxy_resources = Helpers::get_proxy_resources();
+
+		$proxy_resources['cache_url'] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources['cache_url'] );
+
+		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
+
+		update_option( 'plausible_analytics_version', '1.3.2' );
+	}
+
+	/**
+	 * Upgrade to 1.3.1
+	 *
+	 * - Enables 404 pages tracking by default.
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_131() {
+		$settings = Helpers::get_settings();
+
+		if ( ! in_array( '404', $settings['enhanced_measurements'], true ) ) {
+			array_unshift( $settings['enhanced_measurements'], '404' );
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		update_option( 'plausible_analytics_version', '1.3.1' );
 	}
 
 	/**
@@ -120,34 +161,12 @@ class Upgrades {
 		$new_settings['enhanced_measurements'] = [ 'outbound-links' ];
 
 		if ( ! empty( $old_settings['track_administrator'] )
-			&& $old_settings['track_administrator'] ) {
+			&& $old_settings['track_administrator'] === 'true' ) {
 			$new_settings['tracked_user_roles'] = [ 'administrator' ];
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
 
 		update_option( 'plausible_analytics_version', '1.2.5' );
-	}
-
-	/**
-	 * Upgrade routine for 1.3.0
-	 *
-	 * @since  1.3.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function upgrade_to_130() {
-		$old_settings = Helpers::get_settings();
-		$new_settings = $old_settings;
-
-		$old_embed_analytics            = ! empty( $old_settings['embed_analytics'] ) ? $old_settings['embed_analytics'] : '';
-		$new_settings['is_shared_link'] = $old_embed_analytics;
-
-		// Update the new settings.
-		update_option( 'plausible_analytics_settings', $new_settings );
-
-		// Update the version in DB to the latest as upgrades completed.
-		update_option( 'plausible_analytics_version', '1.3.0' );
 	}
 }

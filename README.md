@@ -26,26 +26,37 @@ In the search field type "Plausible Analytics" and click Search Plugins. Once yo
 
 The manual installation method involves downloading our donation plugin and uploading it to your server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
-
 ### Support
 This repository is not suitable for support. Please don't use GitHub issues for support requests. To get support please use the following channels:
 
 * [WP.org Support Forums](https://wordpress.org/support/plugin/plausible-analytics) - for all users
+
+## Available Actions, Filters and Toggles
+
+### Filters
+- `plausible_load_js_in_footer`: Allows you to load the JS code snippet in the footer.
+- `plausible_analytics_script_params`: Allows you to modify the `script` element, loading the Plausible JS library.
+  - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types when File Downloads tracking is enabled.
+
+### Actions
+- `plausible_analytics_settings_saved`: Trigger additional tasks directly after settings are saved.
+- `plausible_analytics_after_register_assets`: This action allows you to trigger additional tasks or add custom JS (e.g. events) to the tracking code.
+
+### Toggles
+Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If you're using a custom plugin, make sure its code is loaded before this plugin.
+
+- `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible, this constant allows you to specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the plugin's setting. So, if this constant is defined, changing the setting won't have any effect.
+- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This'll allow you to test your proxy in the frontend, before enabling the option.
 
 ## Local Development 
 
 To get started developing on the Plausible Analytics WordPress Plugin you will need to perform the following steps:
 
 1. Create a new WordPress site with `plausible.test` as the URL
-
 2. `cd` into your local plugins directory: `/path/to/wp-content/plugins/`
-
 3. Clone this repository from GitHub into your plugins directory: `https://github.com/plausible/wordpress.git`
-
 4. Run composer to set up dependencies: `composer install`
-
 5. Run npm install to get the necessary npm packages: `npm install`
-
 6. Activate the plugin in WordPress
 
 That's it. You're now ready to start development.

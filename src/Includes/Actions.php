@@ -57,15 +57,19 @@ class Actions {
 			return;
 		}
 
-		wp_enqueue_script( 'plausible-analytics', Helpers::get_analytics_url(), '', PLAUSIBLE_ANALYTICS_VERSION );
+		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
+		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
 		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
 
-		// Track 404 pages.
-		if ( apply_filters( 'plausible_analytics_enable_404', true ) && is_404() ) {
-			wp_add_inline_script( 'plausible-analytics', 'plausible("404",{ props: { path: document.location.pathname } });' );
+		// Track 404 pages (if enabled)
+		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( '404', $settings['enhanced_measurements'] ) && is_404() ) {
+			wp_add_inline_script( 'plausible-analytics', "document.addEventListener('DOMContentLoaded', function () { plausible('404', { props: { path: document.location.pathname } }); });" );
 		}
+
+		// This action allows you to add your own custom scripts!
+		do_action( 'plausible_analytics_after_register_assets', $settings );
 	}
 
 	/**
@@ -78,6 +82,12 @@ class Actions {
 	 * @access public
 	 */
 	public function admin_bar_node( $admin_bar ) {
+		$disable = ! empty( Helpers::get_settings()['disable_toolbar_menu'][0] );
+
+		if ( $disable ) {
+			return;
+		}
+
 		// Add main admin bar node.
 		$args = [
 			'id'    => 'plausible-admin-bar',
@@ -95,7 +105,7 @@ class Actions {
 		];
 
 		// Add link to individual page stats.
-		if ( ! is_admin() ) {
+		if ( is_singular() ) {
 			global $post;
 			$args[] = [
 				'id'     => 'view-page-analytics',

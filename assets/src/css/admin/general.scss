@@ -13,9 +13,14 @@
 		width: 100%;
 	}
 
-	.plausible-checkbox-list {
-		margin: 3px 0;
+	.plausible-checkbox-list,
+	.plausible-text-field {
+		margin: .5em 1em .5em 0;
 		display: inline-block;
+	}
+
+	.plausible-hook {
+		padding: 1em 0 0 2em;
 	}
 
 	.plausible-analytics-content {
@@ -26,6 +31,34 @@
 		background-color: #fff;
 		margin-bottom: 20px;
 		padding: 15px;
+
+		&.enhanced-measurements {
+			.plausible-checkbox-list {
+				display: block;
+			}
+		}
+
+		&.bypass-ad-blockers {
+			.plausible-hook {
+				border: 1px solid #2271b1;
+				border-radius: 3px;
+				background-color: #c1d7e9;
+				padding: 1em 2em;
+			}
+		}
+
+		&.is-self-hosted {
+			.plausible-hook {
+				border: 1px solid #2271b1;
+				border-radius: 3px;
+				background-color: #c1d7e9;
+				padding: 1em 2em;
+
+				&:empty {
+					display: none;
+				}
+			}
+		}
 
 		label {
 			font-weight: 700;
@@ -53,6 +86,10 @@
 			margin: 15px 0;
 			border-top: 1px dashed #e5e5e5;
 			border-bottom: 1px dashed #e5e5e5;
+
+			.plausible-analytics-admin-field-row {
+				margin: 5px 0 0;
+			}
 		}
 
 		.plausible-analytics-description {

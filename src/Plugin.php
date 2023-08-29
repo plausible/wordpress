@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 final class Plugin {
-
 	/**
 	 * Registers functionality with WordPress hooks.
 	 *
@@ -51,11 +50,14 @@ final class Plugin {
 			new Admin\Settings\Page();
 			new Admin\Filters();
 			new Admin\Actions();
+			new Admin\Module();
 		}
 
 		new Includes\Actions();
 		new Includes\Compatibility();
 		new Includes\Filters();
+		new Includes\Proxy();
+		new Includes\Setup();
 	}
 
 	/**

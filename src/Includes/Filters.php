@@ -10,6 +10,8 @@
 
 namespace Plausible\Analytics\WP\Includes;
 
+use Exception;
+
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,6 +28,7 @@ class Filters {
 	 */
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
+		add_filter( 'rest_url', [ $this, 'wpml_compatibility' ], 10, 1 );
 	}
 
 	/**
@@ -45,19 +48,14 @@ class Filters {
 			return $tag;
 		}
 
-		$settings       = Helpers::get_settings();
-		$api_url        = Helpers::get_data_api_url();
-		$domain_name    = esc_html( $settings['domain_name'] );
-		$id_replacement = '';
+		$settings    = Helpers::get_settings();
+		$api_url     = Helpers::get_data_api_url();
+		$domain_name = esc_html( $settings['domain_name'] );
 
-		// If we're loading the compat script, we need the correct id attribute. If not, we can just remove it.
-		if ( isset( $settings['compat'] ) && $settings['compat'][0] === '1' ) {
-			$id_replacement = " id='plausible'";
-		}
-
-		$tag = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
-
-		$params = "async defer data-domain='{$domain_name}' data-api='{$api_url}'";
+		// We need the correct id attribute for IE compatibility.
+		$id_replacement = " id='plausible'";
+		$tag            = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
+		$params         = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
@@ -65,6 +63,28 @@ class Filters {
 			$params        .= " data-exclude='{$excluded_pages}'";
 		}
 
+		$params = apply_filters( 'plausible_analytics_script_params', $params );
+
 		return str_replace( ' src', " {$params} src", $tag );
+	}
+
+	/**
+	 * WPML overrides the REST API URL to include the language 'subdirectory', which leads to 404s.
+	 * This forces it back to default behavior.
+	 *
+	 * @param mixed $url
+	 *
+	 * @return string|void
+	 *
+	 * @throws Exception
+	 */
+	public function wpml_compatibility( $url ) {
+		$rest_endpoint = Helpers::get_rest_endpoint( false );
+
+		if ( strpos( $url, $rest_endpoint ) !== false ) {
+			return get_option( 'home' ) . $rest_endpoint;
+		}
+
+		return $url;
 	}
 }

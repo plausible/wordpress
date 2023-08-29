@@ -5,11 +5,11 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.2.6
+Stable tag: 1.3.4
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
-Plausible Analytics is a simple, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is an easy to use, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
 
 == Description ==
 
@@ -21,7 +21,7 @@ Take a look at [the live demo](https://plausible.io/plausible.io).
 
 **You need a subscription to Plausible Analytics to track your stats. There's a free 30-day trial with unlimited usage and no credit card required.**
 
-We're completely independent, self-funded, bootstrapped and debt-free. We're not interested in raising funds or taking investment. We choose the subscription business model rather than surveillance capitalism. We're operating a sustainable project funded solely by the fees that our subscribers pay us. And we donate 5% of our revenue. 
+We're completely independent, self-funded, bootstrapped and debt-free. We're not interested in raising funds or taking investment. We choose the subscription business model rather than surveillance capitalism. We're operating a sustainable project funded solely by the fees that our subscribers pay us.
 
 [Visit our website](https://plausible.io/) for full details.
 
@@ -29,7 +29,7 @@ We're completely independent, self-funded, bootstrapped and debt-free. We're not
 
 Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics, a simple but powerful, lightweight, open source and privacy-friendly alternative. 
 
-Here's what makes Plausible a great Google Analytics alternative and why over 9,000 paying subscribers trust us with their website and business insights:
+Here's what makes Plausible a great Google Analytics alternative and why over 10,000 paying subscribers trust us with their website and business insights:
 
 ### Smooth transition from Universal Analytics
 
@@ -47,11 +47,11 @@ Plausible is lightweight analytics. Our script is 45 times smaller than Google A
 
 Plausible is privacy-friendly analytics. All the site measurement is carried out absolutely anonymously. Cookies are not used and no personal data is collected. There are no persistent identifiers. No cross-site or cross-device tracking either. Your site data is not used for any other purposes. All visitor data is exclusively processed with servers owned and operated by European companies and it never leaves the EU. 
 
-### Track events, goal conversions and campaigns
+### Track goal conversions, revenue and campaigns
 
-Plausible is useful. Segment your audience by any metric you click on. Answer the important questions about your visitors, content and referral sources. Analyze paid campaigns and dark traffic using UTM parameters. Track outbound link clicks, file downloads and 404 error pages. Create custom events with custom dimensions using CSS class names to track conversions and attribution. 
+Plausible is useful. Segment your audience by any metric you click on. Answer the important questions about your visitors, content and referral sources. Analyze paid campaigns using UTM parameters. Track WooCommerce revenue, outbound link clicks, file downloads and 404 error pages. Create custom events with custom dimensions to track conversions and attribution. Increase conversions using funnel analysis.
 
-### Open and share your web analytics dashboard
+### Invite team members and share your dashboard
 
 Plausible is shareable. Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them. You can also share your stats privately by generating a secure link. This link is impossible to guess but you can add password protection for extra security. You can invite team members and assign user roles too.
 
@@ -64,11 +64,13 @@ Plausible is open source analytics. Our source code is available and accessible 
 * Our product is updated several times per week and with our WordPress plugin you always have access to all the latest features
 * Automatically includes tracking code in the header of your site
 * Simple plugin settings page with easy options
+* Get more accurate stats by running the Plausible script as a first-party connection from your domain name
 * View your Plausible stats directly in your WordPress dashboard (you can grant access to other user roles too)
 * Tracking of admin users is disabled by default (you can also disable tracking of other user roles)
 * File downloads, external link clicks and 404 error pages are tracked by default 
 * Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
+* Import your historical Google Analytics stats
 * Keep an eye on your traffic with weekly and/or monthly email and Slack reports
 * Get traffic spike notifications via email or Slack so you don't miss being on the Hacker News
 * Tag your paid ads, emails and social media posts with UTM tags and analyze your ecommerce and marketing campaigns from click to conversion
@@ -154,49 +156,4 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
-= 1.2.6 =
-- Added migration script to remove "example.com" default from DB for Self Hosted Domain option.
-
-= 1.2.5 =
-- 40-45% reduction in JS code
-- Improved: specify which user roles to track [#11](https://github.com/plausible/wordpress/issues/11)
-- Added: specify which user roles can access the analytics dashboard [#35](https://github.com/plausible/wordpress/issues/35)
-- Don't allow people to enable stats dashboard without pasting their shared link [#34](https://github.com/plausible/wordpress/issues/34)
-- Added: compatibility for WP Rocket
-- Removed: Custom Domains options
-- Added: Enhanced Measurements, i.e. Outbound Links, File Downloads, Custom Events, Hash-based Routing and IE compatibility. (thanks, @jdevalk!)
-- Several code optimizations.
-
-Props @sadmansh and @davidehuey for the contributions.
-
-= 1.2.4 =
-- More Security Improvements.
-
-= 1.2.3 = 
-- Security Improvements. Thanks for additional help with your PR - Props to [Ankur Modi](https://github.com/ankur0812)
-
-= 1.2.2 =
-- Resolve conflicts with WP Rocket plugin.
-
-= 1.2.1 =
-- Toggling the setting for the analytics dashboard doesn't work [#29](https://github.com/plausible/wordpress/issues/29)
-- Update to Version 1.2.0 sets wordpress into troubleshooting mode [#31](https://github.com/plausible/wordpress/issues/31)
-- Admin settings page container breaks out of viewport on smaller screens [#28](https://github.com/plausible/wordpress/issues/28) - Props to [Csaba Varszegi](https://github.com/LittleBigThing)
-- Minor Admin UI Improvements
-
-= 1.2.0 =
-- Stats within WP dashboard [#17](https://github.com/plausible/wordpress/issues/17)
-- Allows middle-click and ctrl+click outbound clicks to properly open as user intended? [#15](https://github.com/plausible/wordpress/issues/15)
-
-= 1.1.0 =
-- add support for self-hosted plausible analytics script [#2](https://github.com/plausible/wordpress/issues/2)
-- add support for custom events tracking [#3](https://github.com/plausible/wordpress/issues/3)
-- add support for outbound link click tracking [#4](https://github.com/plausible/wordpress/issues/4)
-- add support for 404 error pages tracking [#6](https://github.com/plausible/wordpress/issues/6)
-
-= 1.0.1 =
-- Fixed the broken link for "Report a bug" button
-- Improved the description of the important settings and linked them to some Plausible docs for better explanation.
-
-= 1.0.0 =
-- Initial plugin release.
+For the full changelog, check out [our Github repository](https://github.com/plausible/wordpress/releases).

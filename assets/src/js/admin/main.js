@@ -1,4 +1,22 @@
 document.addEventListener( 'DOMContentLoaded', () => {
+	document.addEventListener( 'click', ( e ) => {
+		const dismissButton = e.target.closest( '.notice-dismiss' );
+
+		if ( dismissButton ) {
+			const form = new FormData();
+
+			form.append( 'action', 'plausible_analytics_notice_dismissed' );
+
+			fetch(
+				ajaxurl,
+				{
+					method: 'POST',
+					body: form,
+				}
+			);
+		}
+	} );
+
 	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
 
 	// Bailout, if `formElement` doesn't exist.
@@ -42,6 +60,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				saveSettings.removeAttribute( 'disabled' );
 				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-default-text' );
 			}, 500 );
+
+			document.location.reload();
 		} );
 	} );
 } );

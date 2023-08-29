@@ -29,6 +29,7 @@ class Actions {
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_speed_module_notice' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_admin_settings', [ $this, 'save_admin_settings' ] );
 	}
 
@@ -36,13 +37,27 @@ class Actions {
 	 * Register Assets.
 	 *
 	 * @since  1.0.0
+	 * @since  1.3.0 Don't load CSS admin-wide. JS needs to load admin-wide, since we're throwing admin-wide, dismissable notices.
+	 *
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function register_assets() {
-		\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ), 'all' );
+	public function register_assets( $current_page ) {
+		if ( $current_page === 'settings_page_plausible_analytics' || $current_page === 'dashboard_page_plausible_analytics_statistics' ) {
+			\wp_enqueue_style( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ), 'all' );
+		}
+
 		\wp_enqueue_script( 'plausible-admin', PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js', '', filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ), true );
+	}
+
+	/**
+	 * Marks the Speed Module notice as dismissed.
+	 *
+	 * @return void
+	 */
+	public function dismiss_speed_module_notice() {
+		set_transient( 'plausible_analytics_notice_dismissed', true );
 	}
 
 	/**
@@ -68,7 +83,8 @@ class Actions {
 		) {
 			if (
 				! empty( $post_data['plausible_analytics_settings']['domain_name'] )
-				|| isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] ) ) {
+				|| isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] )
+			) {
 				$current_settings = array_replace( $current_settings, $post_data['plausible_analytics_settings'] );
 
 				// Update all the options to plausible settings.
@@ -80,6 +96,8 @@ class Actions {
 				$status  = 'error';
 				$message = esc_html__( 'Something went wrong.', 'plausible-analytics' );
 			}
+
+			do_action( 'plausible_analytics_settings_saved' );
 
 			// Send response.
 			wp_send_json_success(

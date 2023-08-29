@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Plausible Analytics
+# Copyright (C) 2023 Plausible Analytics
 # This file is distributed under the same license as the Plausible Analytics package.
 msgid ""
 msgstr ""
@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Plausible Analytics Team <hello@plausible.io>\n"
-"POT-Creation-Date: 2022-10-27 05:17+0000\n"
+"POT-Creation-Date: 2023-05-18 14:11+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/plausible/wordpress/issues/new\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Admin/Actions.php:83
-msgid "Something gone a wrong."
+#: src/Admin/Actions.php:97
+msgid "Something went wrong."
 msgstr ""
 
-#: src/Admin/Actions.php:80
+#: src/Admin/Actions.php:94
 msgid "Settings saved successfully."
 msgstr ""
 
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Thanks :)"
 msgstr ""
 
-#: src/Admin/Filters.php:67, src/Includes/Actions.php:106, src/Admin/Settings/Page.php:332
+#: src/Admin/Filters.php:67, src/Includes/Actions.php:118, src/Admin/Settings/Page.php:312
 msgid "Settings"
 msgstr ""
 
@@ -41,27 +41,35 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Includes/Actions.php:87
+#: src/Admin/Module.php:60
+msgid "Plausible's proxy is enabled, but the Proxy Speed Module failed to install. Try <a href=\"%s\" target=\"_blank\">installing it manually</a>."
+msgstr ""
+
+#: src/Admin/Module.php:203
+msgid "Plausible's proxy couldn't be enabled, because the WordPress API is inaccessable. This might be due to a conflicting setting in a (security) plugin or server firewall. Make sure you whitelist requests to the Proxy's endpoint: <code>%1$s</code>. <a href=\"%2$s\" target=\"_blank\">Contact support</a> if you need help locating the issue."
+msgstr ""
+
+#: src/Includes/Actions.php:99
 msgid "View Analytics"
 msgstr ""
 
-#: src/Includes/Actions.php:97
+#: src/Includes/Actions.php:109
 msgid "View Page Analytics"
 msgstr ""
 
-#: src/Includes/Helpers.php:169, src/Admin/Settings/Page.php:103, src/Admin/Settings/Page.php:125, src/Admin/Settings/Page.php:133
+#: src/Includes/Helpers.php:293, src/Admin/Settings/Page.php:102, src/Admin/Settings/Page.php:110
 msgid "Documentation"
 msgstr ""
 
-#: src/Includes/Helpers.php:173
+#: src/Includes/Helpers.php:297
 msgid "Report an issue"
 msgstr ""
 
-#: src/Includes/Helpers.php:177
+#: src/Includes/Helpers.php:301
 msgid "Translate Plugin"
 msgstr ""
 
-#: src/Includes/Helpers.php:200
+#: src/Includes/Helpers.php:324
 msgid "Quick Links"
 msgstr ""
 
@@ -73,195 +81,183 @@ msgstr ""
 msgid "Saved!"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:46
+#: src/Admin/Settings/Page.php:45
 msgid "Connect your website with Plausible Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:51
+#: src/Admin/Settings/Page.php:50
 msgid "We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:53
+#: src/Admin/Settings/Page.php:52
 msgid "Follow these instructions"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:54
+#: src/Admin/Settings/Page.php:53
 msgid "to add your site to Plausible."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:58
+#: src/Admin/Settings/Page.php:57
 msgid "Open Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:62, src/Admin/Settings/Page.php:259
+#: src/Admin/Settings/Page.php:61, src/Admin/Settings/Page.php:237
 msgid "Domain Name"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:70
-msgid "Setup custom domain with Plausible Analytics"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:75
-msgid "Enable the custom domain functionality in your Plausible account."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:77, src/Admin/Settings/Page.php:148
-msgid "See how &raquo;"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:78
-msgid "Enable this setting and configure it to link with Plausible Analytics on your custom domain."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:79
-msgid "For example,"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:81
-msgid "or"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:87
-msgid "Custom Domain"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:95
+#: src/Admin/Settings/Page.php:69
 msgid "Enhanced measurements"
 msgstr ""
 
 #. translators: %1$s replaced with <code>outbound-links</code>.
-#: src/Admin/Settings/Page.php:99
-msgid "Note:"
+#: src/Admin/Settings/Page.php:73
+msgid "To complete the setup process of a particular enhanced measurement, click on the \"Additional action required\" link and follow the instructions."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:99
-msgid "for each of these extensions, you have to set the goals manually!"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:100
-msgid "By default, we load just the %1$s extension, you can enable other extensions here."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:107
+#: src/Admin/Settings/Page.php:76
 msgid "Outbound links"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:109, src/Admin/Settings/Page.php:117
-msgid "Goal setup"
+#: src/Admin/Settings/Page.php:78, src/Admin/Settings/Page.php:86, src/Admin/Settings/Page.php:94
+msgid "Additional action required"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:115
+#: src/Admin/Settings/Page.php:84
 msgid "File downloads"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:123
+#: src/Admin/Settings/Page.php:92
+msgid "Custom events"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:100
 msgid "Hash-based routing"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:131
+#: src/Admin/Settings/Page.php:108
 msgid "IE compatibility"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:141
+#: src/Admin/Settings/Page.php:118
+msgid "Bypass ad blockers"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:123
+msgid "Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress' API with a randomly generated endpoint, starting with %1$s. <a href=\"%2$s\" target=\"_blank\">Learn more &raquo;</a>"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:132
+msgid "Enable proxy"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:145
 msgid "View your stats in your WordPress dashboard"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:146
+#: src/Admin/Settings/Page.php:150
 msgid "Create a secure & private shared link in your Plausible account. Make sure the link is not password protected."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:149
+#: src/Admin/Settings/Page.php:152
+msgid "See how &raquo;"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:153
 msgid "Enable this setting and paste your shared link to view your stats in your WordPress dashboard."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:150
+#: src/Admin/Settings/Page.php:154
 msgid "View your site statistics within your WordPress Dashboard."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:152
+#: src/Admin/Settings/Page.php:156
 msgid "View Statistics &raquo;"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:157
+#: src/Admin/Settings/Page.php:161
 msgid "Shared Link"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:165
-msgid "Exclude specific pages from being tracked"
+#: src/Admin/Settings/Page.php:165, src/Admin/Settings/Page.php:186
+msgid "E.g."
 msgstr ""
 
 #: src/Admin/Settings/Page.php:170
-msgid "Exclude certain pages from being tracked"
+msgid "Exclude specific pages from being tracked"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:172
-msgid "See syntax &raquo;"
+#: src/Admin/Settings/Page.php:175
+msgid "Exclude certain pages from being tracked. Wildcards are supported."
 msgstr ""
 
 #: src/Admin/Settings/Page.php:177
+msgid "See syntax &raquo;"
+msgstr ""
+
+#: src/Admin/Settings/Page.php:182
 msgid "Excluded pages"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:185
+#: src/Admin/Settings/Page.php:191
 msgid "Track analytics for user roles"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:188
-msgid "By default, we won't be tracking visits of any of the user roles listed above. If you want to track analytics for specific user roles then please check the specific user role setting."
+#: src/Admin/Settings/Page.php:194
+msgid "By default, visits from logged-in users aren't tracked. If you want to track visits for certain user roles then please specify them above."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:192
-msgid "Administrator"
+#: src/Admin/Settings/Page.php:199
+msgid "Show stats dashboard to additional user roles"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:198, src/Admin/Settings/Page.php:225
-msgid "Editor"
+#: src/Admin/Settings/Page.php:202
+msgid "By default, the stats dashboard is only available to admin users. If you want the dashboard to be available for other user roles, then please specify them above."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:204, src/Admin/Settings/Page.php:231
-msgid "Author"
+#: src/Admin/Settings/Page.php:207
+msgid "Disable menu in toolbar"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:210, src/Admin/Settings/Page.php:237
-msgid "Contributor"
+#: src/Admin/Settings/Page.php:210
+msgid "Check this option if you don't want the Plausible Analytics menu item to be added to the toolbar at the top of the screen."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:218
-msgid "Show the stats dashboard to specific user roles"
+#: src/Admin/Settings/Page.php:215
+msgid "Disable toolbar menu"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:221
-msgid "By default, we are only showing the stats dashboard to admin users. If you want to allow the dashboard to be displayed for specific user roles, then please check them above."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:247
+#: src/Admin/Settings/Page.php:225
 msgid "Self-hosted Plausible Analytics?"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:252
+#: src/Admin/Settings/Page.php:230
 msgid "If you're self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Learn more"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:254
+#: src/Admin/Settings/Page.php:232
 msgid "about Plausible Self-Hosted."
 msgstr ""
 
-#: src/Admin/Settings/Page.php:284, src/Admin/Settings/Page.php:285
+#: src/Admin/Settings/Page.php:264, src/Admin/Settings/Page.php:265
 msgid "Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:293, src/Admin/Settings/Page.php:294, src/Admin/Settings/Page.php:328
+#: src/Admin/Settings/Page.php:273, src/Admin/Settings/Page.php:274, src/Admin/Settings/Page.php:308
 msgid "Plausible Analytics"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:361
+#: src/Admin/Settings/Page.php:341
 msgid "General"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:366
+#: src/Admin/Settings/Page.php:346
 msgid "Self Hosted"
 msgstr ""
 
-#: src/Admin/Settings/Page.php:436
+#: src/Admin/Settings/Page.php:416
 msgid "You don't have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access."
+msgstr ""
+
+#: src/Admin/Settings/Page.php:476
+msgid "After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href=\"%s\" target=\"_blank\">reach out to us</a>. We're here to help!"
 msgstr ""
