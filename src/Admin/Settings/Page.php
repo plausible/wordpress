@@ -244,7 +244,7 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $self_hosted_domain,
 							'placeholder' => 'e.g. ' . Helpers::get_domain(),
-							'disabled'    => ! empty( Helpers::get_settings()['proxy_enabled'][0] ),
+							'disabled'    => ! empty( Helpers::get_settings()['proxy_enabled'][0] ) || defined('PLAUSIBLE_SELF_HOSTED_DOMAIN'),
 						],
 						[
 							'label' => '',
