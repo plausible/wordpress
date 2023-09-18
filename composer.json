@@ -1,45 +1,45 @@
 {
-  "name": "plausible/analytics-wp",
-  "description": "Simple and privacy-friendly alternative to Google Analytics.",
-  "authors": [
-    {
-      "name": "PlausibleHQ",
-      "email": "hello@plausible.io"
+    "name": "plausible/analytics-wp",
+    "description": "Simple and privacy-friendly alternative to Google Analytics.",
+    "authors": [
+        {
+            "name": "Plausible.io",
+            "email": "hello@plausible.io"
+        },
+        {
+            "name": "Daan van den Bergh",
+            "email": "help@daan.dev"
+        }
+    ],
+    "require": {
+        "composer/installers": "*"
     },
-    {
-      "name": "Daan van den Bergh",
-      "email": "support@daan.dev"
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "phpcompatibility/phpcompatibility-wp": "*",
+        "wp-coding-standards/wpcs": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true",
+            "@install-codestandards"
+        ],
+        "post-update-cmd": [
+            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true"
+        ],
+        "install-codestandards": [
+            "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Plausible\\Analytics\\WP\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
-  ],
-  "require": {
-    "composer/installers": "*"
-  },
-  "require-dev": {
-    "dealerdirect/phpcodesniffer-composer-installer": "*",
-    "phpcompatibility/phpcompatibility-wp": "*",
-    "wp-coding-standards/wpcs": "*"
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true",
-      "@install-codestandards"
-    ],
-    "post-update-cmd": [
-      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true"
-    ],
-    "install-codestandards": [
-      "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
-    ]
-  },
-  "autoload": {
-    "psr-4": {
-      "Plausible\\Analytics\\WP\\": "src/"
-    }
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/installers": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
-  }
 }
