@@ -99,6 +99,14 @@ class Page extends API {
 							'type'       => 'checkbox',
 							'value'      => 'tagged-events',
 						],
+						'pageview-props'  => [
+							'label'      => esc_html__( 'Pageview props', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/docs/custom-props/for-pageviews',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
+							'slug'       => 'enhanced_measurements',
+							'type'       => 'checkbox',
+							'value'      => 'pageview-props',
+						],
 						'hash'           => [
 							'label'      => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
