@@ -19,16 +19,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Helpers {
-
 	/**
-	 * Get Plain Domain (without protocol or www. subdomain)
+	 * Get entered Domain Name or provide alternative if not entered.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_domain() {
+		$settings = self::get_settings();
+
+		if ( ! empty( $settings['domain_name'] ) ) {
+			return $settings['domain_name'];
+		}
+
 		$url = home_url();
 
 		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $url );
@@ -37,11 +42,11 @@ class Helpers {
 	/**
 	 * Get Analytics URL.
 	 *
-	 * @since  1.0.0
-	 *
 	 * @param bool $local Return the Local JS file IF proxy is enabled.
 	 *
 	 * @return string
+	 * @since  1.0.0
+	 *
 	 */
 	public static function get_js_url( $local = false ) {
 		$settings       = self::get_settings();
@@ -53,9 +58,7 @@ class Helpers {
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
 		if ( $local && self::proxy_enabled() ) {
-			return esc_url(
-				self::get_proxy_resource( 'cache_url' ) . $file_name . '.js'
-			);
+			return esc_url( self::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
 		}
 
 		// Allows for hard-coding the self-hosted domain.
@@ -67,9 +70,7 @@ class Helpers {
 		/**
 		 * Set $domain to self_hosted_domain if it exists.
 		 */
-		if (
-			! empty( $settings['self_hosted_domain'] ) && $domain === $default_domain
-		) {
+		if ( ! empty( $settings['self_hosted_domain'] ) && $domain === $default_domain ) {
 			$domain = $settings['self_hosted_domain'];
 		}
 
@@ -102,9 +103,9 @@ class Helpers {
 	/**
 	 * Get filename (without file extension)
 	 *
+	 * @return string
 	 * @since 1.3.0
 	 *
-	 * @return string
 	 */
 	public static function get_filename( $local = false ) {
 		$settings  = self::get_settings();
@@ -131,15 +132,15 @@ class Helpers {
 	/**
 	 * Downloads the plausible.js file to this server.
 	 *
-	 * @since 1.3.0
-	 *
 	 * @param string $remote_file Full URL to file to download.
-	 * @param string $local_file  Absolutate path to where to store the $remote_file.
+	 * @param string $local_file Absolutate path to where to store the $remote_file.
 	 *
 	 * @return bool True when successfull. False if it fails.
 	 *
 	 * @throws InvalidArgument
 	 * @throws Exception
+	 * @since 1.3.0
+	 *
 	 */
 	public static function download_file( $remote_file, $local_file ) {
 		$file_contents = wp_remote_get( $remote_file );
@@ -164,14 +165,13 @@ class Helpers {
 	/**
 	 * Get Dashboard URL.
 	 *
+	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_analytics_dashboard_url() {
-		$settings = self::get_settings();
-		$domain   = $settings['domain_name'];
+		$domain = self::get_domain();
 
 		return esc_url( "https://plausible.io/{$domain}" );
 	}
@@ -179,14 +179,14 @@ class Helpers {
 	/**
 	 * Get Settings.
 	 *
+	 * @return array
 	 * @since  1.0.0
 	 * @access public
-	 *
-	 * @return array
 	 */
 	public static function get_settings() {
 		$defaults = [
 			'domain_name'             => '',
+			'api_key'                 => '',
 			'enhanced_measurements'   => [],
 			'proxy_enabled'           => '',
 			'shared_link'             => '',
@@ -264,10 +264,10 @@ class Helpers {
 	/**
 	 * Get Data API URL.
 	 *
+	 * @return string
 	 * @since  1.2.2
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_data_api_url() {
 		$settings = self::get_settings();
@@ -281,9 +281,7 @@ class Helpers {
 		}
 
 		// Triggered when self-hosted analytics is enabled.
-		if (
-			! empty( $settings['self_hosted_domain'] )
-		) {
+		if ( ! empty( $settings['self_hosted_domain'] ) ) {
 			$default_domain = $settings['self_hosted_domain'];
 			$url            = "https://{$default_domain}/api/event";
 		}
@@ -315,10 +313,10 @@ class Helpers {
 	/**
 	 * Get Quick Actions.
 	 *
+	 * @return array
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return array
 	 */
 	public static function get_quick_actions() {
 		return [
@@ -340,38 +338,39 @@ class Helpers {
 	/**
 	 * Render Quick Actions
 	 *
+	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function render_quick_actions() {
 		ob_start();
 		$quick_actions = self::get_quick_actions();
 		?>
 		<div class="plausible-analytics-quick-actions">
-		<?php
-		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
-			?>
-			<div class="plausible-analytics-quick-actions-title">
-				<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
-			</div>
-			<ul>
 			<?php
-			foreach ( $quick_actions as $quick_action ) {
+			if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
 				?>
-				<li>
-					<a target="_blank" href="<?php echo $quick_action['url']; ?>" title="<?php echo $quick_action['label']; ?>">
-						<?php echo $quick_action['label']; ?>
-					</a>
-				</li>
+				<div class="plausible-analytics-quick-actions-title">
+					<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
+				</div>
+				<ul>
+					<?php
+					foreach ( $quick_actions as $quick_action ) {
+						?>
+						<li>
+							<a target="_blank" href="<?php echo $quick_action['url']; ?>"
+							   title="<?php echo $quick_action['label']; ?>">
+								<?php echo $quick_action['label']; ?>
+							</a>
+						</li>
+						<?php
+					}
+					?>
+				</ul>
 				<?php
 			}
 			?>
-			</ul>
-			<?php
-		}
-		?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -383,10 +382,10 @@ class Helpers {
 	 *
 	 * @param string|array $var Sanitize the variable.
 	 *
+	 * @return string|array
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string|array
 	 */
 	public static function clean( $var ) {
 		// If the variable is an array, recursively apply the function to each element of the array.
@@ -402,6 +401,7 @@ class Helpers {
 			if ( isset( $parsed['scheme'] ) ) {
 				return esc_url_raw( wp_unslash( $var ), [ $parsed['scheme'] ] );
 			}
+
 			// If the variable does not have a scheme, sanitize the variable using the sanitize_text_field function.
 			return sanitize_text_field( wp_unslash( $var ) );
 		}
@@ -413,10 +413,10 @@ class Helpers {
 	/**
 	 * Get user role for the logged-in user.
 	 *
+	 * @return string
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return string
 	 */
 	public static function get_user_role() {
 		global $current_user;
