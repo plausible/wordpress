@@ -18,18 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Page extends API {
-
 	/**
 	 * Constructor.
 	 *
+	 * @return void
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		$settings           = Helpers::get_settings();
-		$domain             = ! empty( $settings['domain_name'] ) ? $settings['domain_name'] : Helpers::get_domain();
+		$domain             = Helpers::get_domain();
+		$api_token          = ! empty( $settings['api_key'] ) ? $settings['api_key'] : '';
 		$self_hosted_domain = defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
 		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
@@ -40,13 +40,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Connect your website with Plausible Analytics', 'plausible-analytics' ),
 					'slug'   => 'connect_to_plausible_analytics',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						'%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s',
-						esc_html__( 'We have fetched the domain name for which Plausible Analytics will be used. We assume that you have already setup the domain on our website.', 'plausible-analytics' ),
-						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics' ),
-						esc_html__( 'Follow these instructions', 'plausible-analytics' ),
-						esc_html__( 'to add your site to Plausible.', 'plausible-analytics' )
-					),
+					'desc'   => '<ol><li>' . sprintf( wp_kses( __( 'We\'ve retrieved the domain name for which Plausible will be used. If you haven\'t already added this site to your Plausible account, please <a href="%s" target="_blank">follow these instructions</a>.', 'plausible-analytics' ), 'post' ), 'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics' ) . '</li><li>' . __( 'To automate the plugin setup, <a href="#" target="_blank">generate an API token</a> and paste it into the API token field.', 'plausible-analytics' ) . '</li>',
 					'toggle' => [
 						'anchor' => 'https://plausible.io/' . $domain,
 						'label'  => esc_html__( 'Open Analytics', 'plausible-analytics' ),
@@ -57,6 +51,12 @@ class Page extends API {
 							'slug'  => 'domain_name',
 							'type'  => 'text',
 							'value' => $domain,
+						],
+						[
+							'label' => esc_html__( 'API Token', 'plausible-analytics' ),
+							'slug'  => 'api_token',
+							'type'  => 'text',
+							'value' => $api_token,
 						],
 					],
 				],
@@ -121,15 +121,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Bypass ad blockers', 'plausible-analytics' ),
 					'slug'   => 'bypass_ad_blockers',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						wp_kses(
-							__( 'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with <code>%1$s</code> and %2$s. <a href="%3$s" target="_blank">Learn more &raquo;</a>', 'plausible-analytics' ),
-							wp_kses_allowed_html( 'post' )
-						),
-						get_site_url( null, rest_get_url_prefix() ),
-						empty( Helpers::get_settings()['proxy_enabled'][0] ) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace( ABSPATH, '', Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource( 'file_alias' ) . '.js</code>' ),
-						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
-					),
+					'desc'   => sprintf( wp_kses( __( 'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with <code>%1$s</code> and %2$s. <a href="%3$s" target="_blank">Learn more &raquo;</a>', 'plausible-analytics' ), wp_kses_allowed_html( 'post' ) ), get_site_url( null, rest_get_url_prefix() ), empty( Helpers::get_settings()['proxy_enabled'][0] ) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace( ABSPATH, '', Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource( 'file_alias' ) . '.js</code>' ), 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats' ),
 					'toggle' => '',
 					'fields' => [
 						[
@@ -150,16 +142,7 @@ class Page extends API {
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
-						esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ),
-						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard' ),
-						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-						esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ),
-						esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ),
-						admin_url( 'index.php?page=plausible_analytics_statistics' ),
-						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
-					),
+					'desc'   => sprintf( '<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>', esc_html__( 'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.', 'plausible-analytics' ), esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard' ), esc_html__( 'See how &raquo;', 'plausible-analytics' ), esc_html__( 'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.', 'plausible-analytics' ), esc_html__( 'View your site statistics within your WordPress Dashboard.', 'plausible-analytics' ), admin_url( 'index.php?page=plausible_analytics_statistics' ), esc_html__( 'View Statistics &raquo;', 'plausible-analytics' ) ),
 					'toggle' => '',
 					'fields' => [
 						[
@@ -175,12 +158,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Exclude specific pages from being tracked', 'plausible-analytics' ),
 					'slug'   => 'is_exclude_pages',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-						esc_html__( 'Exclude certain pages from being tracked. Wildcards are supported.', 'plausible-analytics' ),
-						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-exclude-specific-pages-from-being-tracked' ),
-						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
-					),
+					'desc'   => sprintf( '%1$s <a href="%2$s" target="_blank">%3$s</a>', esc_html__( 'Exclude certain pages from being tracked. Wildcards are supported.', 'plausible-analytics' ), esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-exclude-specific-pages-from-being-tracked' ), esc_html__( 'See syntax &raquo;', 'plausible-analytics' ) ),
 					'toggle' => '',
 					'fields' => [
 						[
@@ -230,12 +208,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Self-hosted Plausible Analytics', 'plausible-analytics' ),
 					'slug'   => 'is_self_hosted',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
-						wp_kses( __( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Multisites can use the <code>PLAUSIBLE_SELF_HOSTED_DOMAIN</code> constant to define the URL for all subsites at once.', 'plausible-analytics' ), 'post' ),
-						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
-						esc_html__( 'Learn more about Plausible Self-Hosted.', 'plausible-analytics' )
-					),
+					'desc'   => sprintf( '%1$s <a href="%2$s" target="_blank">%3$s</a>', wp_kses( __( 'If you\'re self-hosting Plausible on your own infrastructure, enter the domain name where you installed it to enable the integration with your self-hosted instance. Multisites can use the <code>PLAUSIBLE_SELF_HOSTED_DOMAIN</code> constant to define the URL for all subsites at once.', 'plausible-analytics' ), 'post' ), esc_url( 'https://plausible.io/self-hosted-web-analytics/' ), esc_html__( 'Learn more about Plausible Self-Hosted.', 'plausible-analytics' ) ),
 					'toggle' => '',
 					'fields' => [
 						[
@@ -258,17 +231,18 @@ class Page extends API {
 
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
 		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
-		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'render_proxy_warning' ] );
-		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'maybe_render_self_hosted_warning' ] );
+		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
+		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
+		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
 	}
 
 	/**
 	 * Register Menu.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function register_menu() {
 		$user       = wp_get_current_user();
@@ -301,58 +275,47 @@ class Page extends API {
 		}
 
 		// Setup `Analytics` page under Dashboard.
-		add_dashboard_page(
-			esc_html__( 'Analytics', 'plausible-analytics' ),
-			esc_html__( 'Analytics', 'plausible-analytics' ),
-			$capabilities,
-			'plausible_analytics_statistics',
-			[ $this, 'statistics_page' ]
-		);
+		add_dashboard_page( esc_html__( 'Analytics', 'plausible-analytics' ), esc_html__( 'Analytics', 'plausible-analytics' ), $capabilities, 'plausible_analytics_statistics', [
+			$this,
+			'statistics_page',
+		] );
 
 		// Setup `Plausible Analytics` page under Settings.
-		add_options_page(
-			esc_html__( 'Plausible Analytics', 'plausible-analytics' ),
-			esc_html__( 'Plausible Analytics', 'plausible-analytics' ),
-			'manage_options',
-			'plausible_analytics',
-			[ $this, 'settings_page' ]
-		);
+		add_options_page( esc_html__( 'Plausible Analytics', 'plausible-analytics' ), esc_html__( 'Plausible Analytics', 'plausible-analytics' ), 'manage_options', 'plausible_analytics', [
+			$this,
+			'settings_page',
+		] );
 	}
 
 	/**
 	 * Render Admin Page Header.
 	 *
+	 * @return void
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function render_page_header() {
 		$screen = get_current_screen();
 
 		// Bailout, if screen id doesn't match.
-		if (
-		! in_array(
-			$screen->id,
-			[
-				'settings_page_plausible_analytics',
-				'dashboard_page_plausible_analytics_statistics',
-			],
-			true
-		)
-		) {
+		if ( ! in_array( $screen->id, [
+			'settings_page_plausible_analytics',
+			'dashboard_page_plausible_analytics_statistics',
+		],               true ) ) {
 			return;
 		}
 		?>
 		<div class="plausible-analytics-header">
 			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>" alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
+				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"
+					 alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
 			</div>
 			<div class="plausible-analytics-header-content">
 				<div class="plausible-analytics-title">
 					<h1><?php esc_html_e( 'Settings', 'plausible-analytics' ); ?></h1>
 				</div>
-		<?php $this->render_header_navigation(); ?>
+				<?php $this->render_header_navigation(); ?>
 			</div>
 		</div>
 		<?php
@@ -361,10 +324,10 @@ class Page extends API {
 	/**
 	 * Render Header Navigation.
 	 *
+	 * @return void
 	 * @since  1.3.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function render_header_navigation() {
 		$screen = get_current_screen();
@@ -375,26 +338,23 @@ class Page extends API {
 		}
 
 		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : '';
-		$tabs        = apply_filters(
-			'plausible_analytics_settings_navigation_tabs',
-			[
-				'general'     => [
-					'name'  => esc_html__( 'General', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
-					'class' => '' === $current_tab ? 'active' : '',
-				],
-				'self-hosted' => [
-					'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
-					'class' => 'self-hosted' === $current_tab ? 'active' : '',
-				],
-				// 'advanced'    => [
-				//  'name'  => esc_html__( 'Advanced', 'plausible-analytics' ),
-				//  'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=advanced' ),
-				//  'class' => 'advanced' === $current_tab ? 'active' : '',
-				// ],
-			]
-		);
+		$tabs        = apply_filters( 'plausible_analytics_settings_navigation_tabs', [
+			'general'     => [
+				'name'  => esc_html__( 'General', 'plausible-analytics' ),
+				'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
+				'class' => '' === $current_tab ? 'active' : '',
+			],
+			'self-hosted' => [
+				'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
+				'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
+				'class' => 'self-hosted' === $current_tab ? 'active' : '',
+			],
+			// 'advanced'    => [
+			//  'name'  => esc_html__( 'Advanced', 'plausible-analytics' ),
+			//  'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=advanced' ),
+			//  'class' => 'advanced' === $current_tab ? 'active' : '',
+			// ],
+		] );
 
 		// Don't print any markup if we only have one tab.
 		if ( count( $tabs ) === 1 ) {
@@ -402,16 +362,11 @@ class Page extends API {
 		}
 		?>
 		<div class="plausible-analytics-header-navigation">
-		<?php
-		foreach ( $tabs as $tab ) {
-			printf(
-				'<a href="%1$s" class="%2$s">%3$s</a>',
-				esc_url( $tab['url'] ),
-				esc_attr( $tab['class'] ),
-				esc_html( $tab['name'] )
-			);
-		}
-		?>
+			<?php
+			foreach ( $tabs as $tab ) {
+				printf( '<a href="%1$s" class="%2$s">%3$s</a>', esc_url( $tab['url'] ), esc_attr( $tab['class'] ), esc_html( $tab['name'] ) );
+			}
+			?>
 		</div>
 		<?php
 	}
@@ -419,10 +374,10 @@ class Page extends API {
 	/**
 	 * Statistics Page via Embed feature.
 	 *
+	 * @return void
 	 * @since  1.2.0
 	 * @access public
 	 *
-	 * @return void
 	 */
 	public function statistics_page() {
 		global $current_user;
@@ -439,20 +394,17 @@ class Page extends API {
 			}
 		}
 
-			// Show error, if not having access.
+		// Show error, if not having access.
 		if ( ! $has_access ) :
 			?>
 			<div class="plausible-analytics-statistics-not-loaded">
-			<?php
-			echo sprintf(
-				'%1$s',
-				esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' )
-			);
+				<?php
+				echo sprintf( '%1$s', esc_html__( 'You don\'t have sufficient privileges to access the analytics dashboard. Please contact administrator of the website to grant you the access.', 'plausible-analytics' ) );
 
-			return;
-			?>
-				</div>
-			<?php
+				return;
+				?>
+			</div>
+		<?php
 		endif;
 
 		/**
@@ -481,32 +433,31 @@ class Page extends API {
 		} else {
 			?>
 			<div class="plausible-analytics-statistics-not-loaded">
-			<?php
-			echo sprintf(
-				'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
-				esc_html( 'Please', 'plausible-analytics' ),
-				esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
-				esc_html( 'click here', 'plausible-analytics' ),
-				esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ),
-				esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-				admin_url( 'options-general.php?page=plausible_analytics' ),
-				esc_html( 'paste here', 'plausible-analytics' ),
-				esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' )
-			);
-			?>
+				<?php
+				echo sprintf( '%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s', esc_html( 'Please', 'plausible-analytics' ), esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ), esc_html( 'click here', 'plausible-analytics' ), esc_html( 'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.', 'plausible-analytics' ), esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ), admin_url( 'options-general.php?page=plausible_analytics' ), esc_html( 'paste here', 'plausible-analytics' ), esc_html( 'under Shared Link to view Plausible Analytics dashboard within your WordPress site.', 'plausible-analytics' ) );
+				?>
 			</div>
 			<?php
 		}
 	}
 
+	public function connect_button() {
+		$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
+		?>
+		<a href="<?php esc_attr_e( $url ); ?>" target="_blank" class="plausible-analytics-btn">
+			<?php esc_html_e( 'Connect to Plausible', 'plausible-analytics' ); ?>
+		</a>
+		<?php
+	}
+
 	/**
 	 * Renders the warning for the Enable Proxy option.
 	 *
+	 * @return void
 	 * @since 1.3.0
 	 *
-	 * @return void
 	 */
-	public function render_proxy_warning() {
+	public function proxy_warning() {
 		if ( ! empty( Helpers::get_settings()['self_hosted_domain'] ) ) {
 			echo wp_kses( __( 'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.', 'plausible-analytics' ), 'post' );
 		} else {
@@ -517,11 +468,11 @@ class Page extends API {
 	/**
 	 * Renders the Self-hosted warning if the Proxy is enabled.
 	 *
+	 * @return void
 	 * @since 1.3.3
 	 *
-	 * @return void
 	 */
-	public function maybe_render_self_hosted_warning() {
+	public function self_hosted_warning() {
 		if ( Helpers::proxy_enabled() ) {
 			echo wp_kses( __( 'This option is disabled, because the <strong>Proxy</strong> setting is enabled under <em>General</em> settings.', 'plausible-analytics' ), 'post' );
 		}
