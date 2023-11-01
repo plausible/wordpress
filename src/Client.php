@@ -6,6 +6,7 @@ use Exception;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\Model\SharedLink;
 use Plausible\Analytics\WP\Includes\Helpers;
 
 /**
@@ -33,13 +34,25 @@ class Client {
 	 * @return void
 	 */
 	public function create_shared_link() {
+		$shared_link = (object) [];
+
 		try {
-			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate();
+			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
+				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
+			);
 		} catch ( Exception $e ) {
 			echo sprintf(
 				__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
 				$e->getMessage()
 			);
+		}
+
+		if ( $result instanceof SharedLink ) {
+			$shared_link = $result->getSharedLink();
+		}
+
+		if ( ! empty( $shared_link->getHref() ) ) {
+			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
 		}
 	}
 }

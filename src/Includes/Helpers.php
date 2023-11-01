@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Helpers
- *
  * @since      1.0.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -20,33 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Helpers {
 	/**
-	 * Get entered Domain Name or provide alternative if not entered.
-	 *
-	 * @return string
-	 * @since  1.0.0
-	 * @access public
-	 *
-	 */
-	public static function get_domain() {
-		$settings = self::get_settings();
-
-		if ( ! empty( $settings['domain_name'] ) ) {
-			return $settings['domain_name'];
-		}
-
-		$url = home_url();
-
-		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $url );
-	}
-
-	/**
 	 * Get Analytics URL.
+	 * @since  1.0.0
 	 *
 	 * @param bool $local Return the Local JS file IF proxy is enabled.
 	 *
 	 * @return string
-	 * @since  1.0.0
-	 *
 	 */
 	public static function get_js_url( $local = false ) {
 		$settings       = self::get_settings();
@@ -80,32 +57,35 @@ class Helpers {
 	}
 
 	/**
-	 * Is the proxy enabled?
-	 *
-	 * @return bool
+	 * Get Settings.
+	 * @since  1.0.0
+	 * @access public
+	 * @return array
 	 */
-	public static function proxy_enabled() {
-		$settings = self::get_settings();
+	public static function get_settings() {
+		$defaults = [
+			'domain_name'                => '',
+			'api_token'                  => '',
+			'enhanced_measurements'      => [],
+			'proxy_enabled'              => '',
+			'enable_analytics_dashboard' => '',
+			'shared_link'                => '',
+			'excluded_pages'             => '',
+			'tracked_user_roles'         => [],
+			'expand_dashboard_access'    => [],
+			'disable_toolbar_menu'       => '',
+			'self_hosted_domain'         => '',
+		];
 
-		return ! empty( $settings['proxy_enabled'][0] ) || isset( $_GET['plausible_proxy'] );
-	}
+		$settings = get_option( 'plausible_analytics_settings', [] );
 
-	/**
-	 * A convenient way to retrieve the absolute path to the local JS file.
-	 *
-	 * @return string
-	 * @throws Exception
-	 */
-	public static function get_js_path() {
-		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename( true ) . '.js';
+		return wp_parse_args( $settings, $defaults );
 	}
 
 	/**
 	 * Get filename (without file extension)
-	 *
-	 * @return string
 	 * @since 1.3.0
-	 *
+	 * @return string
 	 */
 	public static function get_filename( $local = false ) {
 		$settings  = self::get_settings();
@@ -130,17 +110,107 @@ class Helpers {
 	}
 
 	/**
-	 * Downloads the plausible.js file to this server.
+	 * Is the proxy enabled?
+	 * @return bool
+	 */
+	public static function proxy_enabled() {
+		$settings = self::get_settings();
+
+		return ! empty( $settings['proxy_enabled'][0] ) || isset( $_GET['plausible_proxy'] );
+	}
+
+	/**
+	 * Get a proxy resource by name.
 	 *
-	 * @param string $remote_file Full URL to file to download.
-	 * @param string $local_file Absolutate path to where to store the $remote_file.
+	 * @param string $resource_name
 	 *
-	 * @return bool True when successfull. False if it fails.
-	 *
-	 * @throws InvalidArgument
+	 * @return string Value of resource from DB or empty string if Bypass ad blockers option is disabled.
 	 * @throws Exception
+	 */
+	public static function get_proxy_resource( $resource_name = '' ) {
+		$resources = self::get_proxy_resources();
+
+		/**
+		 * Create the cache directory if it doesn't exist.
+		 */
+		if ( $resource_name === 'cache_dir' && ! is_dir( $resources[ $resource_name ] ) ) {
+			wp_mkdir_p( $resources[ $resource_name ] );
+		}
+
+		return isset( $resources[ $resource_name ] ) ? $resources[ $resource_name ] : '';
+	}
+
+	/**
+	 * Get (and generate/store if non-existent) proxy resources.
+	 * @return array
+	 */
+	public static function get_proxy_resources() {
+		static $resources;
+
+		if ( $resources === null ) {
+			$resources = get_option( 'plausible_analytics_proxy_resources', [] );
+		}
+
+		/**
+		 * Force a refresh of our resources if the user recently switched to SSL and we still have non-SSL resources stored.
+		 */
+		if ( ! empty( $resources ) &&
+			is_ssl() &&
+			isset( $resources['cache_url'] ) &&
+			( strpos( $resources['cache_url'], 'http:' ) !== false ) ) {
+			$resources = [];
+		}
+
+		if ( empty( $resources ) ) {
+			$cache_dir  = bin2hex( random_bytes( 5 ) );
+			$upload_dir = wp_get_upload_dir();
+			$resources  = [
+				'namespace'  => bin2hex( random_bytes( 3 ) ),
+				'base'       => bin2hex( random_bytes( 2 ) ),
+				'endpoint'   => bin2hex( random_bytes( 4 ) ),
+				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
+				'file_alias' => bin2hex( random_bytes( 4 ) ),
+			];
+
+			update_option( 'plausible_analytics_proxy_resources', $resources );
+		}
+
+		return $resources;
+	}
+
+	/**
+	 * @param $option_name
+	 * @param $option_value
+	 *
+	 * @return void
+	 */
+	public static function update_setting( $option_name, $option_value ) {
+		$settings                 = self::get_settings();
+		$settings[ $option_name ] = $option_value;
+
+		update_option( 'plausible_analytics_settings', $settings );
+	}
+
+	/**
+	 * A convenient way to retrieve the absolute path to the local JS file.
+	 * @return string
+	 * @throws Exception
+	 */
+	public static function get_js_path() {
+		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename( true ) . '.js';
+	}
+
+	/**
+	 * Downloads the plausible.js file to this server.
 	 * @since 1.3.0
 	 *
+	 * @param string $local_file  Absolutate path to where to store the $remote_file.
+	 * @param string $remote_file Full URL to file to download.
+	 *
+	 * @return bool True when successfull. False if it fails.
+	 * @throws Exception
+	 * @throws InvalidArgument
 	 */
 	public static function download_file( $remote_file, $local_file ) {
 		$file_contents = wp_remote_get( $remote_file );
@@ -164,11 +234,9 @@ class Helpers {
 
 	/**
 	 * Get Dashboard URL.
-	 *
-	 * @return string
 	 * @since  1.0.0
 	 * @access public
-	 *
+	 * @return string
 	 */
 	public static function get_analytics_dashboard_url() {
 		$domain = self::get_domain();
@@ -177,97 +245,28 @@ class Helpers {
 	}
 
 	/**
-	 * Get Settings.
-	 *
-	 * @return array
+	 * Get entered Domain Name or provide alternative if not entered.
 	 * @since  1.0.0
 	 * @access public
+	 * @return string
 	 */
-	public static function get_settings() {
-		$defaults = [
-			'domain_name'             => '',
-			'api_key'                 => '',
-			'enhanced_measurements'   => [],
-			'proxy_enabled'           => '',
-			'shared_link'             => '',
-			'excluded_pages'          => '',
-			'tracked_user_roles'      => [],
-			'expand_dashboard_access' => [],
-			'disable_toolbar_menu'    => '',
-			'self_hosted_domain'      => '',
-		];
+	public static function get_domain() {
+		$settings = self::get_settings();
 
-		$settings = get_option( 'plausible_analytics_settings', [] );
-
-		return wp_parse_args( $settings, $defaults );
-	}
-
-	/**
-	 * Get a proxy resource by name.
-	 *
-	 * @param string $resource_name
-	 *
-	 * @return string Value of resource from DB or empty string if Bypass ad blockers option is disabled.
-	 *
-	 * @throws Exception
-	 */
-	public static function get_proxy_resource( $resource_name = '' ) {
-		$resources = self::get_proxy_resources();
-
-		/**
-		 * Create the cache directory if it doesn't exist.
-		 */
-		if ( $resource_name === 'cache_dir' && ! is_dir( $resources[ $resource_name ] ) ) {
-			wp_mkdir_p( $resources[ $resource_name ] );
+		if ( ! empty( $settings['domain_name'] ) ) {
+			return $settings['domain_name'];
 		}
 
-		return isset( $resources[ $resource_name ] ) ? $resources[ $resource_name ] : '';
-	}
+		$url = home_url();
 
-	/**
-	 * Get (and generate/store if non-existent) proxy resources.
-	 *
-	 * @return array
-	 */
-	public static function get_proxy_resources() {
-		static $resources;
-
-		if ( $resources === null ) {
-			$resources = get_option( 'plausible_analytics_proxy_resources', [] );
-		}
-
-		/**
-		 * Force a refresh of our resources if the user recently switched to SSL and we still have non-SSL resources stored.
-		 */
-		if ( ! empty( $resources ) && is_ssl() && isset( $resources['cache_url'] ) && ( strpos( $resources['cache_url'], 'http:' ) !== false ) ) {
-			$resources = [];
-		}
-
-		if ( empty( $resources ) ) {
-			$cache_dir  = bin2hex( random_bytes( 5 ) );
-			$upload_dir = wp_get_upload_dir();
-			$resources  = [
-				'namespace'  => bin2hex( random_bytes( 3 ) ),
-				'base'       => bin2hex( random_bytes( 2 ) ),
-				'endpoint'   => bin2hex( random_bytes( 4 ) ),
-				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
-				'file_alias' => bin2hex( random_bytes( 4 ) ),
-			];
-
-			update_option( 'plausible_analytics_proxy_resources', $resources );
-		}
-
-		return $resources;
+		return preg_replace( '/^http(s?)\:\/\/(www\.)?/i', '', $url );
 	}
 
 	/**
 	 * Get Data API URL.
-	 *
-	 * @return string
 	 * @since  1.2.2
 	 * @access public
-	 *
+	 * @return string
 	 */
 	public static function get_data_api_url() {
 		$settings = self::get_settings();
@@ -291,9 +290,7 @@ class Helpers {
 
 	/**
 	 * Returns the Proxy's REST endpoint.
-	 *
 	 * @return string
-	 *
 	 * @throws Exception
 	 */
 	public static function get_rest_endpoint( $abs_url = true ) {
@@ -311,37 +308,10 @@ class Helpers {
 	}
 
 	/**
-	 * Get Quick Actions.
-	 *
-	 * @return array
-	 * @since  1.3.0
-	 * @access public
-	 *
-	 */
-	public static function get_quick_actions() {
-		return [
-			'view-docs'        => [
-				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://docs.plausible.io/' ),
-			],
-			'report-issue'     => [
-				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
-			],
-			'translate-plugin' => [
-				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
-			],
-		];
-	}
-
-	/**
 	 * Render Quick Actions
-	 *
-	 * @return string
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return string
 	 */
 	public static function render_quick_actions() {
 		ob_start();
@@ -377,15 +347,37 @@ class Helpers {
 	}
 
 	/**
+	 * Get Quick Actions.
+	 * @since  1.3.0
+	 * @access public
+	 * @return array
+	 */
+	public static function get_quick_actions() {
+		return [
+			'view-docs'        => [
+				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://docs.plausible.io/' ),
+			],
+			'report-issue'     => [
+				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+			],
+			'translate-plugin' => [
+				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
+			],
+		];
+	}
+
+	/**
 	 * Clean variables using `sanitize_text_field`.
 	 * Arrays are cleaned recursively. Non-scalar values are ignored.
+	 * @since  1.3.0
+	 * @access public
 	 *
 	 * @param string|array $var Sanitize the variable.
 	 *
 	 * @return string|array
-	 * @since  1.3.0
-	 * @access public
-	 *
 	 */
 	public static function clean( $var ) {
 		// If the variable is an array, recursively apply the function to each element of the array.
@@ -412,11 +404,9 @@ class Helpers {
 
 	/**
 	 * Get user role for the logged-in user.
-	 *
-	 * @return string
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return string
 	 */
 	public static function get_user_role() {
 		global $current_user;
