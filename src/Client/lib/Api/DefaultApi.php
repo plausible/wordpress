@@ -361,7 +361,7 @@ class DefaultApi {
 	 *                                                                                    to see the possible values
 	 *                                                                                    for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsCreateRequest(
@@ -386,7 +386,7 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $goal_create_request )
 				);
 			} else {
@@ -409,7 +409,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -473,7 +473,7 @@ class DefaultApi {
 	 *                                                                                    to see the possible values
 	 *                                                                                    for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsCreateAsync(
@@ -501,7 +501,7 @@ class DefaultApi {
 	 *                                                                                    to see the possible values
 	 *                                                                                    for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsCreateAsyncWithHttpInfo(
@@ -644,7 +644,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteRequest(
@@ -699,7 +699,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -744,7 +744,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteAsync(
@@ -767,7 +767,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo(
@@ -1014,7 +1014,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsGetRequest(
@@ -1069,7 +1069,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1114,7 +1114,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsGetAsync(
@@ -1137,7 +1137,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo(
@@ -1362,7 +1362,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsIndexRequest(
@@ -1440,7 +1440,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1487,7 +1487,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsIndexAsync(
@@ -1519,7 +1519,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible
 	 *                            values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo(
@@ -1790,7 +1790,7 @@ class DefaultApi {
 	 *                                                                                                 for this
 	 *                                                                                                 operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksCreateRequest(
@@ -1815,7 +1815,7 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
 				);
 			} else {
@@ -1838,7 +1838,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1890,7 +1890,7 @@ class DefaultApi {
 	 *                                                                                                 for this
 	 *                                                                                                 operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsync(
@@ -1923,7 +1923,7 @@ class DefaultApi {
 	 *                                                                                                 for this
 	 *                                                                                                 operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo(
@@ -2190,7 +2190,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksGetRequest(
@@ -2245,7 +2245,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -2290,7 +2290,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksGetAsync(
@@ -2313,7 +2313,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo(
@@ -2543,7 +2543,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Psr7\Request
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksIndexRequest(
@@ -2621,7 +2621,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -2668,7 +2668,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsync(
@@ -2700,7 +2700,7 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the
 	 *                            possible values for this operation
 	 *
-	 * @return \GuzzleHttp\Promise\PromiseInterface
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo(
