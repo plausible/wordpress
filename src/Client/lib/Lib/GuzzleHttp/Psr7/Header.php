@@ -4,131 +4,128 @@ declare(strict_types=1);
 
 namespace Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7;
 
-final class Header
-{
-    /**
-     * Parse an array of header values containing ";" separated data into an
-     * array of associative arrays representing the header key value pair data
-     * of the header. When a parameter does not contain a value, but just
-     * contains a key, this function will inject a key with a '' string value.
-     *
-     * @param string|array $header Header to parse into components.
-     */
-    public static function parse($header): array
-    {
-        static $trimmed = "\"'  \n\t\r";
-        $params = $matches = [];
+final class Header {
 
-        foreach ((array) $header as $value) {
-            foreach (self::splitList($value) as $val) {
-                $part = [];
-                foreach (preg_split('/;(?=([^"]*"[^"]*")*[^"]*$)/', $val) as $kvp) {
-                    if (preg_match_all('/<[^>]+>|[^=]+/', $kvp, $matches)) {
-                        $m = $matches[0];
-                        if (isset($m[1])) {
-                            $part[trim($m[0], $trimmed)] = trim($m[1], $trimmed);
-                        } else {
-                            $part[] = trim($m[0], $trimmed);
-                        }
-                    }
-                }
-                if ($part) {
-                    $params[] = $part;
-                }
-            }
-        }
+	/**
+	 * Parse an array of header values containing ";" separated data into an
+	 * array of associative arrays representing the header key value pair data
+	 * of the header. When a parameter does not contain a value, but just
+	 * contains a key, this function will inject a key with a '' string value.
+	 *
+	 * @param string|array $header Header to parse into components.
+	 */
+	public static function parse( $header ): array {
+		static $trimmed = "\"'  \n\t\r";
+		$params         = $matches = [];
 
-        return $params;
-    }
+		foreach ( (array) $header as $value ) {
+			foreach ( self::splitList( $value ) as $val ) {
+				$part = [];
+				foreach ( preg_split( '/;(?=([^"]*"[^"]*")*[^"]*$)/', $val ) as $kvp ) {
+					if ( preg_match_all( '/<[^>]+>|[^=]+/', $kvp, $matches ) ) {
+						$m = $matches[0];
+						if ( isset( $m[1] ) ) {
+							$part[ trim( $m[0], $trimmed ) ] = trim( $m[1], $trimmed );
+						} else {
+							$part[] = trim( $m[0], $trimmed );
+						}
+					}
+				}
+				if ( $part ) {
+					$params[] = $part;
+				}
+			}
+		}
 
-    /**
-     * Converts an array of header values that may contain comma separated
-     * headers into an array of headers with no comma separated values.
-     *
-     * @param string|array $header Header to normalize.
-     *
-     * @deprecated Use self::splitList() instead.
-     */
-    public static function normalize($header): array
-    {
-        $result = [];
-        foreach ((array) $header as $value) {
-            foreach (self::splitList($value) as $parsed) {
-                $result[] = $parsed;
-            }
-        }
+		return $params;
+	}
 
-        return $result;
-    }
+	/**
+	 * Converts an array of header values that may contain comma separated
+	 * headers into an array of headers with no comma separated values.
+	 *
+	 * @param string|array $header Header to normalize.
+	 *
+	 * @deprecated Use self::splitList() instead.
+	 */
+	public static function normalize( $header ): array {
+		$result = [];
+		foreach ( (array) $header as $value ) {
+			foreach ( self::splitList( $value ) as $parsed ) {
+				$result[] = $parsed;
+			}
+		}
 
-    /**
-     * Splits a HTTP header defined to contain a comma-separated list into
-     * each individual value. Empty values will be removed.
-     *
-     * Example headers include 'accept', 'cache-control' and 'if-none-match'.
-     *
-     * This method must not be used to parse headers that are not defined as
-     * a list, such as 'user-agent' or 'set-cookie'.
-     *
-     * @param string|string[] $values Header value as returned by MessageInterface::getHeader()
-     *
-     * @return string[]
-     */
-    public static function splitList($values): array
-    {
-        if (!\is_array($values)) {
-            $values = [$values];
-        }
+		return $result;
+	}
 
-        $result = [];
-        foreach ($values as $value) {
-            if (!\is_string($value)) {
-                throw new \TypeError('$header must either be a string or an array containing strings.');
-            }
+	/**
+	 * Splits a HTTP header defined to contain a comma-separated list into
+	 * each individual value. Empty values will be removed.
+	 *
+	 * Example headers include 'accept', 'cache-control' and 'if-none-match'.
+	 *
+	 * This method must not be used to parse headers that are not defined as
+	 * a list, such as 'user-agent' or 'set-cookie'.
+	 *
+	 * @param string|string[] $values Header value as returned by MessageInterface::getHeader()
+	 *
+	 * @return string[]
+	 */
+	public static function splitList( $values ): array {
+		if ( ! \is_array( $values ) ) {
+			$values = [ $values ];
+		}
 
-            $v = '';
-            $isQuoted = false;
-            $isEscaped = false;
-            for ($i = 0, $max = \strlen($value); $i < $max; ++$i) {
-                if ($isEscaped) {
-                    $v .= $value[$i];
-                    $isEscaped = false;
+		$result = [];
+		foreach ( $values as $value ) {
+			if ( ! \is_string( $value ) ) {
+				throw new \TypeError( '$header must either be a string or an array containing strings.' );
+			}
 
-                    continue;
-                }
+			$v         = '';
+			$isQuoted  = false;
+			$isEscaped = false;
+			for ( $i = 0, $max = \strlen( $value ); $i < $max; ++$i ) {
+				if ( $isEscaped ) {
+					$v        .= $value[ $i ];
+					$isEscaped = false;
 
-                if (!$isQuoted && $value[$i] === ',') {
-                    $v = \trim($v);
-                    if ($v !== '') {
-                        $result[] = $v;
-                    }
+					continue;
+				}
 
-                    $v = '';
-                    continue;
-                }
+				if ( ! $isQuoted && $value[ $i ] === ',' ) {
+					$v = \trim( $v );
+					if ( $v !== '' ) {
+						$result[] = $v;
+					}
 
-                if ($isQuoted && $value[$i] === '\\') {
-                    $isEscaped = true;
-                    $v .= $value[$i];
+					$v = '';
+					continue;
+				}
 
-                    continue;
-                }
-                if ($value[$i] === '"') {
-                    $isQuoted = !$isQuoted;
-                    $v .= $value[$i];
+				if ( $isQuoted && $value[ $i ] === '\\' ) {
+					$isEscaped = true;
+					$v        .= $value[ $i ];
 
-                    continue;
-                }
+					continue;
+				}
+				if ( $value[ $i ] === '"' ) {
+					$isQuoted = ! $isQuoted;
+					$v       .= $value[ $i ];
 
-                $v .= $value[$i];
-            }
+					continue;
+				}
 
-            $v = \trim($v);
-            if ($v !== '') {
-                $result[] = $v;
-            }
-        }
+				$v .= $value[ $i ];
+			}
 
-        return $result;
-    }
+			$v = \trim( $v );
+			if ( $v !== '' ) {
+				$result[] = $v;
+			}
+		}
+
+		return $result;
+	}
 }

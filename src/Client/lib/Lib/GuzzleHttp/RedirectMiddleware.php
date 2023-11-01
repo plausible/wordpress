@@ -17,212 +17,208 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\UriInterface;
  *
  * @final
  */
-class RedirectMiddleware
-{
-    public const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
+class RedirectMiddleware {
 
-    public const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
+	public const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
 
-    /**
-     * @var array
-     */
-    public static $defaultSettings = [
-        'max' => 5,
-        'protocols' => ['http', 'https'],
-        'strict' => false,
-        'referer' => false,
-        'track_redirects' => false,
-    ];
+	public const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
 
-    /**
-     * @var callable(RequestInterface, array): PromiseInterface
-     */
-    private $nextHandler;
+	/**
+	 * @var array
+	 */
+	public static $defaultSettings = [
+		'max'             => 5,
+		'protocols'       => [ 'http', 'https' ],
+		'strict'          => false,
+		'referer'         => false,
+		'track_redirects' => false,
+	];
 
-    /**
-     * @param callable(RequestInterface, array): PromiseInterface $nextHandler Next handler to invoke.
-     */
-    public function __construct(callable $nextHandler)
-    {
-        $this->nextHandler = $nextHandler;
-    }
+	/**
+	 * @var callable(RequestInterface, array): PromiseInterface
+	 */
+	private $nextHandler;
 
-    public function __invoke(RequestInterface $request, array $options): PromiseInterface
-    {
-        $fn = $this->nextHandler;
+	/**
+	 * @param callable(RequestInterface, array): PromiseInterface $nextHandler Next handler to invoke.
+	 */
+	public function __construct( callable $nextHandler ) {
+		$this->nextHandler = $nextHandler;
+	}
 
-        if (empty($options['allow_redirects'])) {
-            return $fn($request, $options);
-        }
+	public function __invoke( RequestInterface $request, array $options ): PromiseInterface {
+		$fn = $this->nextHandler;
 
-        if ($options['allow_redirects'] === true) {
-            $options['allow_redirects'] = self::$defaultSettings;
-        } elseif (!\is_array($options['allow_redirects'])) {
-            throw new \InvalidArgumentException('allow_redirects must be true, false, or array');
-        } else {
-            // Merge the default settings with the provided settings
-            $options['allow_redirects'] += self::$defaultSettings;
-        }
+		if ( empty( $options['allow_redirects'] ) ) {
+			return $fn( $request, $options );
+		}
 
-        if (empty($options['allow_redirects']['max'])) {
-            return $fn($request, $options);
-        }
+		if ( $options['allow_redirects'] === true ) {
+			$options['allow_redirects'] = self::$defaultSettings;
+		} elseif ( ! \is_array( $options['allow_redirects'] ) ) {
+			throw new \InvalidArgumentException( 'allow_redirects must be true, false, or array' );
+		} else {
+			// Merge the default settings with the provided settings
+			$options['allow_redirects'] += self::$defaultSettings;
+		}
 
-        return $fn($request, $options)
-            ->then(function (ResponseInterface $response) use ($request, $options) {
-                return $this->checkRedirect($request, $options, $response);
-            });
-    }
+		if ( empty( $options['allow_redirects']['max'] ) ) {
+			return $fn( $request, $options );
+		}
 
-    /**
-     * @return ResponseInterface|PromiseInterface
-     */
-    public function checkRedirect(RequestInterface $request, array $options, ResponseInterface $response)
-    {
-        if (\strpos((string) $response->getStatusCode(), '3') !== 0
-            || !$response->hasHeader('Location')
-        ) {
-            return $response;
-        }
+		return $fn( $request, $options )
+			->then(
+				function ( ResponseInterface $response ) use ( $request, $options ) {
+					return $this->checkRedirect( $request, $options, $response );
+				}
+			);
+	}
 
-        $this->guardMax($request, $response, $options);
-        $nextRequest = $this->modifyRequest($request, $options, $response);
+	/**
+	 * @return ResponseInterface|PromiseInterface
+	 */
+	public function checkRedirect( RequestInterface $request, array $options, ResponseInterface $response ) {
+		if ( \strpos( (string) $response->getStatusCode(), '3' ) !== 0
+			|| ! $response->hasHeader( 'Location' )
+		) {
+			return $response;
+		}
 
-        // If authorization is handled by curl, unset it if URI is cross-origin.
-        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && defined('\CURLOPT_HTTPAUTH')) {
-            unset(
-                $options['curl'][\CURLOPT_HTTPAUTH],
-                $options['curl'][\CURLOPT_USERPWD]
-            );
-        }
+		$this->guardMax( $request, $response, $options );
+		$nextRequest = $this->modifyRequest( $request, $options, $response );
 
-        if (isset($options['allow_redirects']['on_redirect'])) {
-            ($options['allow_redirects']['on_redirect'])(
-                $request,
-                $response,
-                $nextRequest->getUri()
-            );
-        }
+		// If authorization is handled by curl, unset it if URI is cross-origin.
+		if ( Psr7\UriComparator::isCrossOrigin( $request->getUri(), $nextRequest->getUri() ) && defined( '\CURLOPT_HTTPAUTH' ) ) {
+			unset(
+				$options['curl'][ \CURLOPT_HTTPAUTH ],
+				$options['curl'][ \CURLOPT_USERPWD ]
+			);
+		}
 
-        $promise = $this($nextRequest, $options);
+		if ( isset( $options['allow_redirects']['on_redirect'] ) ) {
+			( $options['allow_redirects']['on_redirect'] )(
+				$request,
+				$response,
+				$nextRequest->getUri()
+			);
+		}
 
-        // Add headers to be able to track history of redirects.
-        if (!empty($options['allow_redirects']['track_redirects'])) {
-            return $this->withTracking(
-                $promise,
-                (string) $nextRequest->getUri(),
-                $response->getStatusCode()
-            );
-        }
+		$promise = $this( $nextRequest, $options );
 
-        return $promise;
-    }
+		// Add headers to be able to track history of redirects.
+		if ( ! empty( $options['allow_redirects']['track_redirects'] ) ) {
+			return $this->withTracking(
+				$promise,
+				(string) $nextRequest->getUri(),
+				$response->getStatusCode()
+			);
+		}
 
-    /**
-     * Enable tracking on promise.
-     */
-    private function withTracking(PromiseInterface $promise, string $uri, int $statusCode): PromiseInterface
-    {
-        return $promise->then(
-            static function (ResponseInterface $response) use ($uri, $statusCode) {
-                // Note that we are pushing to the front of the list as this
-                // would be an earlier response than what is currently present
-                // in the history header.
-                $historyHeader = $response->getHeader(self::HISTORY_HEADER);
-                $statusHeader = $response->getHeader(self::STATUS_HISTORY_HEADER);
-                \array_unshift($historyHeader, $uri);
-                \array_unshift($statusHeader, (string) $statusCode);
+		return $promise;
+	}
 
-                return $response->withHeader(self::HISTORY_HEADER, $historyHeader)
-                                ->withHeader(self::STATUS_HISTORY_HEADER, $statusHeader);
-            }
-        );
-    }
+	/**
+	 * Enable tracking on promise.
+	 */
+	private function withTracking( PromiseInterface $promise, string $uri, int $statusCode ): PromiseInterface {
+		return $promise->then(
+			static function ( ResponseInterface $response ) use ( $uri, $statusCode ) {
+				// Note that we are pushing to the front of the list as this
+				// would be an earlier response than what is currently present
+				// in the history header.
+				$historyHeader = $response->getHeader( self::HISTORY_HEADER );
+				$statusHeader  = $response->getHeader( self::STATUS_HISTORY_HEADER );
+				\array_unshift( $historyHeader, $uri );
+				\array_unshift( $statusHeader, (string) $statusCode );
 
-    /**
-     * Check for too many redirects.
-     *
-     * @throws TooManyRedirectsException Too many redirects.
-     */
-    private function guardMax(RequestInterface $request, ResponseInterface $response, array &$options): void
-    {
-        $current = $options['__redirect_count']
-            ?? 0;
-        $options['__redirect_count'] = $current + 1;
-        $max = $options['allow_redirects']['max'];
+				return $response->withHeader( self::HISTORY_HEADER, $historyHeader )
+								->withHeader( self::STATUS_HISTORY_HEADER, $statusHeader );
+			}
+		);
+	}
 
-        if ($options['__redirect_count'] > $max) {
-            throw new TooManyRedirectsException("Will not follow more than {$max} redirects", $request, $response);
-        }
-    }
+	/**
+	 * Check for too many redirects.
+	 *
+	 * @throws TooManyRedirectsException Too many redirects.
+	 */
+	private function guardMax( RequestInterface $request, ResponseInterface $response, array &$options ): void {
+		$current                     = $options['__redirect_count']
+			?? 0;
+		$options['__redirect_count'] = $current + 1;
+		$max                         = $options['allow_redirects']['max'];
 
-    public function modifyRequest(RequestInterface $request, array $options, ResponseInterface $response): RequestInterface
-    {
-        // Request modifications to apply.
-        $modify = [];
-        $protocols = $options['allow_redirects']['protocols'];
+		if ( $options['__redirect_count'] > $max ) {
+			throw new TooManyRedirectsException( "Will not follow more than {$max} redirects", $request, $response );
+		}
+	}
 
-        // Use a GET request if this is an entity enclosing request and we are
-        // not forcing RFC compliance, but rather emulating what all browsers
-        // would do.
-        $statusCode = $response->getStatusCode();
-        if ($statusCode == 303
-            || ($statusCode <= 302 && !$options['allow_redirects']['strict'])
-        ) {
-            $safeMethods = ['GET', 'HEAD', 'OPTIONS'];
-            $requestMethod = $request->getMethod();
+	public function modifyRequest( RequestInterface $request, array $options, ResponseInterface $response ): RequestInterface {
+		// Request modifications to apply.
+		$modify    = [];
+		$protocols = $options['allow_redirects']['protocols'];
 
-            $modify['method'] = in_array($requestMethod, $safeMethods) ? $requestMethod : 'GET';
-            $modify['body'] = '';
-        }
+		// Use a GET request if this is an entity enclosing request and we are
+		// not forcing RFC compliance, but rather emulating what all browsers
+		// would do.
+		$statusCode = $response->getStatusCode();
+		if ( $statusCode == 303
+			|| ( $statusCode <= 302 && ! $options['allow_redirects']['strict'] )
+		) {
+			$safeMethods   = [ 'GET', 'HEAD', 'OPTIONS' ];
+			$requestMethod = $request->getMethod();
 
-        $uri = self::redirectUri($request, $response, $protocols);
-        if (isset($options['idn_conversion']) && ($options['idn_conversion'] !== false)) {
-            $idnOptions = ($options['idn_conversion'] === true) ? \IDNA_DEFAULT : $options['idn_conversion'];
-            $uri = Utils::idnUriConvert($uri, $idnOptions);
-        }
+			$modify['method'] = in_array( $requestMethod, $safeMethods ) ? $requestMethod : 'GET';
+			$modify['body']   = '';
+		}
 
-        $modify['uri'] = $uri;
-        Psr7\Message::rewindBody($request);
+		$uri = self::redirectUri( $request, $response, $protocols );
+		if ( isset( $options['idn_conversion'] ) && ( $options['idn_conversion'] !== false ) ) {
+			$idnOptions = ( $options['idn_conversion'] === true ) ? \IDNA_DEFAULT : $options['idn_conversion'];
+			$uri        = Utils::idnUriConvert( $uri, $idnOptions );
+		}
 
-        // Add the Referer header if it is told to do so and only
-        // add the header if we are not redirecting from https to http.
-        if ($options['allow_redirects']['referer']
-            && $modify['uri']->getScheme() === $request->getUri()->getScheme()
-        ) {
-            $uri = $request->getUri()->withUserInfo('');
-            $modify['set_headers']['Referer'] = (string) $uri;
-        } else {
-            $modify['remove_headers'][] = 'Referer';
-        }
+		$modify['uri'] = $uri;
+		Psr7\Message::rewindBody( $request );
 
-        // Remove Authorization and Cookie headers if URI is cross-origin.
-        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
-            $modify['remove_headers'][] = 'Authorization';
-            $modify['remove_headers'][] = 'Cookie';
-        }
+		// Add the Referer header if it is told to do so and only
+		// add the header if we are not redirecting from https to http.
+		if ( $options['allow_redirects']['referer']
+			&& $modify['uri']->getScheme() === $request->getUri()->getScheme()
+		) {
+			$uri                              = $request->getUri()->withUserInfo( '' );
+			$modify['set_headers']['Referer'] = (string) $uri;
+		} else {
+			$modify['remove_headers'][] = 'Referer';
+		}
 
-        return Psr7\Utils::modifyRequest($request, $modify);
-    }
+		// Remove Authorization and Cookie headers if URI is cross-origin.
+		if ( Psr7\UriComparator::isCrossOrigin( $request->getUri(), $modify['uri'] ) ) {
+			$modify['remove_headers'][] = 'Authorization';
+			$modify['remove_headers'][] = 'Cookie';
+		}
 
-    /**
-     * Set the appropriate URL on the request based on the location header.
-     */
-    private static function redirectUri(
-        RequestInterface $request,
-        ResponseInterface $response,
-        array $protocols
-    ): UriInterface {
-        $location = Psr7\UriResolver::resolve(
-            $request->getUri(),
-            new Psr7\Uri($response->getHeaderLine('Location'))
-        );
+		return Psr7\Utils::modifyRequest( $request, $modify );
+	}
 
-        // Ensure that the redirect URI is allowed based on the protocols.
-        if (!\in_array($location->getScheme(), $protocols)) {
-            throw new BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);
-        }
+	/**
+	 * Set the appropriate URL on the request based on the location header.
+	 */
+	private static function redirectUri(
+		RequestInterface $request,
+		ResponseInterface $response,
+		array $protocols
+	): UriInterface {
+		$location = Psr7\UriResolver::resolve(
+			$request->getUri(),
+			new Psr7\Uri( $response->getHeaderLine( 'Location' ) )
+		);
 
-        return $location;
-    }
+		// Ensure that the redirect URI is allowed based on the protocols.
+		if ( ! \in_array( $location->getScheme(), $protocols ) ) {
+			throw new BadResponseException( \sprintf( 'Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode( ', ', $protocols ) ), $request, $response );
+		}
+
+		return $location;
+	}
 }

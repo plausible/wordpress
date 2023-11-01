@@ -10,144 +10,136 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  * Stream decorator that can cache previously read bytes from a sequentially
  * read stream.
  */
-final class CachingStream implements StreamInterface
-{
-    use StreamDecoratorTrait;
+final class CachingStream implements StreamInterface {
 
-    /** @var StreamInterface Stream being wrapped */
-    private $remoteStream;
+	use StreamDecoratorTrait;
 
-    /** @var int Number of bytes to skip reading due to a write on the buffer */
-    private $skipReadBytes = 0;
+	/** @var StreamInterface Stream being wrapped */
+	private $remoteStream;
 
-    /**
-     * @var StreamInterface
-     */
-    private $stream;
+	/** @var int Number of bytes to skip reading due to a write on the buffer */
+	private $skipReadBytes = 0;
 
-    /**
-     * We will treat the buffer object as the body of the stream
-     *
-     * @param StreamInterface $stream Stream to cache. The cursor is assumed to be at the beginning of the stream.
-     * @param StreamInterface $target Optionally specify where data is cached
-     */
-    public function __construct(
-        StreamInterface $stream,
-        StreamInterface $target = null
-    ) {
-        $this->remoteStream = $stream;
-        $this->stream = $target ?: new Stream(Utils::tryFopen('php://temp', 'r+'));
-    }
+	/**
+	 * @var StreamInterface
+	 */
+	private $stream;
 
-    public function getSize(): ?int
-    {
-        $remoteSize = $this->remoteStream->getSize();
+	/**
+	 * We will treat the buffer object as the body of the stream
+	 *
+	 * @param StreamInterface $stream Stream to cache. The cursor is assumed to be at the beginning of the stream.
+	 * @param StreamInterface $target Optionally specify where data is cached
+	 */
+	public function __construct(
+		StreamInterface $stream,
+		StreamInterface $target = null
+	) {
+		$this->remoteStream = $stream;
+		$this->stream       = $target ?: new Stream( Utils::tryFopen( 'php://temp', 'r+' ) );
+	}
 
-        if (null === $remoteSize) {
-            return null;
-        }
+	public function getSize(): ?int {
+		$remoteSize = $this->remoteStream->getSize();
 
-        return max($this->stream->getSize(), $remoteSize);
-    }
+		if ( null === $remoteSize ) {
+			return null;
+		}
 
-    public function rewind(): void
-    {
-        $this->seek(0);
-    }
+		return max( $this->stream->getSize(), $remoteSize );
+	}
 
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        if ($whence === SEEK_SET) {
-            $byte = $offset;
-        } elseif ($whence === SEEK_CUR) {
-            $byte = $offset + $this->tell();
-        } elseif ($whence === SEEK_END) {
-            $size = $this->remoteStream->getSize();
-            if ($size === null) {
-                $size = $this->cacheEntireStream();
-            }
-            $byte = $size + $offset;
-        } else {
-            throw new \InvalidArgumentException('Invalid whence');
-        }
+	public function rewind(): void {
+		$this->seek( 0 );
+	}
 
-        $diff = $byte - $this->stream->getSize();
+	public function seek( $offset, $whence = SEEK_SET ): void {
+		if ( $whence === SEEK_SET ) {
+			$byte = $offset;
+		} elseif ( $whence === SEEK_CUR ) {
+			$byte = $offset + $this->tell();
+		} elseif ( $whence === SEEK_END ) {
+			$size = $this->remoteStream->getSize();
+			if ( $size === null ) {
+				$size = $this->cacheEntireStream();
+			}
+			$byte = $size + $offset;
+		} else {
+			throw new \InvalidArgumentException( 'Invalid whence' );
+		}
 
-        if ($diff > 0) {
-            // Read the remoteStream until we have read in at least the amount
-            // of bytes requested, or we reach the end of the file.
-            while ($diff > 0 && !$this->remoteStream->eof()) {
-                $this->read($diff);
-                $diff = $byte - $this->stream->getSize();
-            }
-        } else {
-            // We can just do a normal seek since we've already seen this byte.
-            $this->stream->seek($byte);
-        }
-    }
+		$diff = $byte - $this->stream->getSize();
 
-    public function read($length): string
-    {
-        // Perform a regular read on any previously read data from the buffer
-        $data = $this->stream->read($length);
-        $remaining = $length - strlen($data);
+		if ( $diff > 0 ) {
+			// Read the remoteStream until we have read in at least the amount
+			// of bytes requested, or we reach the end of the file.
+			while ( $diff > 0 && ! $this->remoteStream->eof() ) {
+				$this->read( $diff );
+				$diff = $byte - $this->stream->getSize();
+			}
+		} else {
+			// We can just do a normal seek since we've already seen this byte.
+			$this->stream->seek( $byte );
+		}
+	}
 
-        // More data was requested so read from the remote stream
-        if ($remaining) {
-            // If data was written to the buffer in a position that would have
-            // been filled from the remote stream, then we must skip bytes on
-            // the remote stream to emulate overwriting bytes from that
-            // position. This mimics the behavior of other PHP stream wrappers.
-            $remoteData = $this->remoteStream->read(
-                $remaining + $this->skipReadBytes
-            );
+	public function read( $length ): string {
+		// Perform a regular read on any previously read data from the buffer
+		$data      = $this->stream->read( $length );
+		$remaining = $length - strlen( $data );
 
-            if ($this->skipReadBytes) {
-                $len = strlen($remoteData);
-                $remoteData = substr($remoteData, $this->skipReadBytes);
-                $this->skipReadBytes = max(0, $this->skipReadBytes - $len);
-            }
+		// More data was requested so read from the remote stream
+		if ( $remaining ) {
+			// If data was written to the buffer in a position that would have
+			// been filled from the remote stream, then we must skip bytes on
+			// the remote stream to emulate overwriting bytes from that
+			// position. This mimics the behavior of other PHP stream wrappers.
+			$remoteData = $this->remoteStream->read(
+				$remaining + $this->skipReadBytes
+			);
 
-            $data .= $remoteData;
-            $this->stream->write($remoteData);
-        }
+			if ( $this->skipReadBytes ) {
+				$len                 = strlen( $remoteData );
+				$remoteData          = substr( $remoteData, $this->skipReadBytes );
+				$this->skipReadBytes = max( 0, $this->skipReadBytes - $len );
+			}
 
-        return $data;
-    }
+			$data .= $remoteData;
+			$this->stream->write( $remoteData );
+		}
 
-    public function write($string): int
-    {
-        // When appending to the end of the currently read stream, you'll want
-        // to skip bytes from being read from the remote stream to emulate
-        // other stream wrappers. Basically replacing bytes of data of a fixed
-        // length.
-        $overflow = (strlen($string) + $this->tell()) - $this->remoteStream->tell();
-        if ($overflow > 0) {
-            $this->skipReadBytes += $overflow;
-        }
+		return $data;
+	}
 
-        return $this->stream->write($string);
-    }
+	public function write( $string ): int {
+		// When appending to the end of the currently read stream, you'll want
+		// to skip bytes from being read from the remote stream to emulate
+		// other stream wrappers. Basically replacing bytes of data of a fixed
+		// length.
+		$overflow = ( strlen( $string ) + $this->tell() ) - $this->remoteStream->tell();
+		if ( $overflow > 0 ) {
+			$this->skipReadBytes += $overflow;
+		}
 
-    public function eof(): bool
-    {
-        return $this->stream->eof() && $this->remoteStream->eof();
-    }
+		return $this->stream->write( $string );
+	}
 
-    /**
-     * Close both the remote stream and buffer stream
-     */
-    public function close(): void
-    {
-        $this->remoteStream->close();
-        $this->stream->close();
-    }
+	public function eof(): bool {
+		return $this->stream->eof() && $this->remoteStream->eof();
+	}
 
-    private function cacheEntireStream(): int
-    {
-        $target = new FnStream(['write' => 'strlen']);
-        Utils::copyToStream($this, $target);
+	/**
+	 * Close both the remote stream and buffer stream
+	 */
+	public function close(): void {
+		$this->remoteStream->close();
+		$this->stream->close();
+	}
 
-        return $this->tell();
-    }
+	private function cacheEntireStream(): int {
+		$target = new FnStream( [ 'write' => 'strlen' ] );
+		Utils::copyToStream( $this, $target );
+
+		return $this->tell();
+	}
 }

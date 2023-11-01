@@ -13,100 +13,98 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  *
  * @internal
  */
-final class EasyHandle
-{
-    /**
-     * @var resource|\CurlHandle cURL resource
-     */
-    public $handle;
+final class EasyHandle {
 
-    /**
-     * @var StreamInterface Where data is being written
-     */
-    public $sink;
+	/**
+	 * @var resource|\CurlHandle cURL resource
+	 */
+	public $handle;
 
-    /**
-     * @var array Received HTTP headers so far
-     */
-    public $headers = [];
+	/**
+	 * @var StreamInterface Where data is being written
+	 */
+	public $sink;
 
-    /**
-     * @var ResponseInterface|null Received response (if any)
-     */
-    public $response;
+	/**
+	 * @var array Received HTTP headers so far
+	 */
+	public $headers = [];
 
-    /**
-     * @var RequestInterface Request being sent
-     */
-    public $request;
+	/**
+	 * @var ResponseInterface|null Received response (if any)
+	 */
+	public $response;
 
-    /**
-     * @var array Request options
-     */
-    public $options = [];
+	/**
+	 * @var RequestInterface Request being sent
+	 */
+	public $request;
 
-    /**
-     * @var int cURL error number (if any)
-     */
-    public $errno = 0;
+	/**
+	 * @var array Request options
+	 */
+	public $options = [];
 
-    /**
-     * @var \Throwable|null Exception during on_headers (if any)
-     */
-    public $onHeadersException;
+	/**
+	 * @var int cURL error number (if any)
+	 */
+	public $errno = 0;
 
-    /**
-     * @var \Exception|null Exception during createResponse (if any)
-     */
-    public $createResponseException;
+	/**
+	 * @var \Throwable|null Exception during on_headers (if any)
+	 */
+	public $onHeadersException;
 
-    /**
-     * Attach a response to the easy handle based on the received headers.
-     *
-     * @throws \RuntimeException if no headers have been received or the first
-     *                           header line is invalid.
-     */
-    public function createResponse(): void
-    {
-        [$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders($this->headers);
+	/**
+	 * @var \Exception|null Exception during createResponse (if any)
+	 */
+	public $createResponseException;
 
-        $normalizedKeys = Utils::normalizeHeaderKeys($headers);
+	/**
+	 * Attach a response to the easy handle based on the received headers.
+	 *
+	 * @throws \RuntimeException if no headers have been received or the first
+	 *                           header line is invalid.
+	 */
+	public function createResponse(): void {
+		[$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders( $this->headers );
 
-        if (!empty($this->options['decode_content']) && isset($normalizedKeys['content-encoding'])) {
-            $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];
-            unset($headers[$normalizedKeys['content-encoding']]);
-            if (isset($normalizedKeys['content-length'])) {
-                $headers['x-encoded-content-length'] = $headers[$normalizedKeys['content-length']];
+		$normalizedKeys = Utils::normalizeHeaderKeys( $headers );
 
-                $bodyLength = (int) $this->sink->getSize();
-                if ($bodyLength) {
-                    $headers[$normalizedKeys['content-length']] = $bodyLength;
-                } else {
-                    unset($headers[$normalizedKeys['content-length']]);
-                }
-            }
-        }
+		if ( ! empty( $this->options['decode_content'] ) && isset( $normalizedKeys['content-encoding'] ) ) {
+			$headers['x-encoded-content-encoding'] = $headers[ $normalizedKeys['content-encoding'] ];
+			unset( $headers[ $normalizedKeys['content-encoding'] ] );
+			if ( isset( $normalizedKeys['content-length'] ) ) {
+				$headers['x-encoded-content-length'] = $headers[ $normalizedKeys['content-length'] ];
 
-        // Attach a response to the easy handle with the parsed headers.
-        $this->response = new Response(
-            $status,
-            $headers,
-            $this->sink,
-            $ver,
-            $reason
-        );
-    }
+				$bodyLength = (int) $this->sink->getSize();
+				if ( $bodyLength ) {
+					$headers[ $normalizedKeys['content-length'] ] = $bodyLength;
+				} else {
+					unset( $headers[ $normalizedKeys['content-length'] ] );
+				}
+			}
+		}
 
-    /**
-     * @param string $name
-     *
-     * @return void
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __get($name)
-    {
-        $msg = $name === 'handle' ? 'The EasyHandle has been released' : 'Invalid property: '.$name;
-        throw new \BadMethodCallException($msg);
-    }
+		// Attach a response to the easy handle with the parsed headers.
+		$this->response = new Response(
+			$status,
+			$headers,
+			$this->sink,
+			$ver,
+			$reason
+		);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return void
+	 *
+	 * @throws \BadMethodCallException
+	 */
+	public function __get( $name ) {
+		$msg = $name === 'handle' ? 'The EasyHandle has been released' : 'Invalid property: ' . $name;
+		throw new \BadMethodCallException( $msg );
+	}
 }

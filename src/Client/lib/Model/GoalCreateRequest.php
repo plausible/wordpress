@@ -145,8 +145,8 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
 		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null(
-				$fields[ $variableName ]
-			) ) {
+			$fields[ $variableName ]
+		) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -275,10 +275,10 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 		}
 		$allowedValues = $this->getGoalTypeAllowableValues();
 		if ( ! is_null( $this->container['goal_type'] ) && ! in_array(
-				$this->container['goal_type'],
-				$allowedValues,
-				true
-			) ) {
+			$this->container['goal_type'],
+			$allowedValues,
+			true
+		) ) {
 			$invalidProperties[] = sprintf(
 				"invalid value '%s' for 'goal_type', must be one of '%s'",
 				$this->container['goal_type'],

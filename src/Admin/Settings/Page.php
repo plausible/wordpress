@@ -39,18 +39,18 @@ class Page extends API {
 					'slug'   => 'connect_to_plausible_analytics',
 					'type'   => 'group',
 					'desc'   => '<ol><li>' . sprintf(
-							wp_kses(
-								__(
-									'We\'ve retrieved the domain name for which Plausible will be used. If you haven\'t already added this site to your Plausible account, please <a href="%s" target="_blank">follow these instructions</a>.',
-									'plausible-analytics'
-								),
-								'post'
+						wp_kses(
+							__(
+								'We\'ve retrieved the domain name for which Plausible will be used. If you haven\'t already added this site to your Plausible account, please <a href="%s" target="_blank">follow these instructions</a>.',
+								'plausible-analytics'
 							),
-							'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics'
-						) . '</li><li>' . __(
-									'To automate the plugin setup, <a href="#" target="_blank">generate an API token</a> and paste it into the API token field.',
-									'plausible-analytics'
-								) . '</li>',
+							'post'
+						),
+						'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics'
+					) . '</li><li>' . __(
+						'To automate the plugin setup, <a href="#" target="_blank">generate an API token</a> and paste it into the API token field.',
+						'plausible-analytics'
+					) . '</li>',
 					'toggle' => [
 						'anchor' => 'https://plausible.io/' . $domain,
 						'label'  => esc_html__( 'Open Analytics', 'plausible-analytics' ),
@@ -144,14 +144,14 @@ class Page extends API {
 						),
 						get_site_url( null, rest_get_url_prefix() ),
 						empty(
-						Helpers::get_settings()['proxy_enabled'][0]
+							Helpers::get_settings()['proxy_enabled'][0]
 						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
-								ABSPATH,
-								'',
-								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource(
-									'file_alias'
-								) . '.js</code>'
-							),
+							ABSPATH,
+							'',
+							Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource(
+								'file_alias'
+							) . '.js</code>'
+						),
 						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),
 					'toggle' => '',
@@ -203,9 +203,9 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $shared_link,
 							'placeholder' => esc_html__(
-												 'E.g.',
-												 'plausible-analytics'
-											 ) . "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
+								'E.g.',
+								'plausible-analytics'
+							) . "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
 						],
 					],
 				],
@@ -232,9 +232,9 @@ class Page extends API {
 							'type'        => 'textarea',
 							'value'       => $excluded_pages,
 							'placeholder' => esc_html__(
-												 'E.g.',
-												 'plausible-analytics'
-											 ) . '**hello-world**, /example-page/, *another-example-page',
+								'E.g.',
+								'plausible-analytics'
+							) . '**hello-world**, /example-page/, *another-example-page',
 						],
 					],
 				],
@@ -550,7 +550,7 @@ class Page extends API {
 				return;
 				?>
 			</div>
-		<?php
+			<?php
 		endif;
 
 		/**
@@ -603,7 +603,7 @@ class Page extends API {
 	public function connect_button() {
 		$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
 		?>
-		<a href="<?php esc_attr_e( $url ); ?>" target="_blank" class="plausible-analytics-btn">
+		<a href="<?php esc_attr_e( $url, 'plausible-analytics' ); ?>" target="_blank" class="plausible-analytics-btn">
 			<?php esc_html_e( 'Connect to Plausible', 'plausible-analytics' ); ?>
 		</a>
 		<?php

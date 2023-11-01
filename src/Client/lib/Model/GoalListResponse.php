@@ -136,8 +136,8 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
 		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null(
-				$fields[ $variableName ]
-			) ) {
+			$fields[ $variableName ]
+		) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 

@@ -22,7 +22,7 @@ class Client {
 	 * Setup basic authorization, basic_auth.
 	 */
 	public function __construct() {
-		$config             = Configuration::getDefaultConfiguration()->setUsername( 'wordpress' )->setPassword(
+		$config             = Configuration::getDefaultConfiguration()->setUsername( 'WordPress' )->setPassword(
 			Helpers::get_settings()['api_token']
 		);
 		$this->api_instance = new DefaultApi( new GuzzleClient(), $config );
@@ -37,7 +37,7 @@ class Client {
 			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate();
 		} catch ( Exception $e ) {
 			echo sprintf(
-				__( "Something went wrong while creating Shared Link: %s", 'plausible-analytics' ),
+				__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
 				$e->getMessage()
 			);
 		}

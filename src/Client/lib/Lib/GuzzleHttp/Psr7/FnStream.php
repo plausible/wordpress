@@ -13,167 +13,161 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  * to create a concrete class for a simple extension point.
  */
 #[\AllowDynamicProperties]
-final class FnStream implements StreamInterface
-{
-    private const SLOTS = [
-        '__toString', 'close', 'detach', 'rewind',
-        'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write',
-        'isReadable', 'read', 'getContents', 'getMetadata',
-    ];
+final class FnStream implements StreamInterface {
 
-    /** @var array<string, callable> */
-    private $methods;
+	private const SLOTS = [
+		'__toString',
+		'close',
+		'detach',
+		'rewind',
+		'getSize',
+		'tell',
+		'eof',
+		'isSeekable',
+		'seek',
+		'isWritable',
+		'write',
+		'isReadable',
+		'read',
+		'getContents',
+		'getMetadata',
+	];
 
-    /**
-     * @param array<string, callable> $methods Hash of method name to a callable.
-     */
-    public function __construct(array $methods)
-    {
-        $this->methods = $methods;
+	/** @var array<string, callable> */
+	private $methods;
 
-        // Create the functions on the class
-        foreach ($methods as $name => $fn) {
-            $this->{'_fn_'.$name} = $fn;
-        }
-    }
+	/**
+	 * @param array<string, callable> $methods Hash of method name to a callable.
+	 */
+	public function __construct( array $methods ) {
+		$this->methods = $methods;
 
-    /**
-     * Lazily determine which methods are not implemented.
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __get(string $name): void
-    {
-        throw new \BadMethodCallException(str_replace('_fn_', '', $name)
-            .'() is not implemented in the FnStream');
-    }
+		// Create the functions on the class
+		foreach ( $methods as $name => $fn ) {
+			$this->{'_fn_' . $name} = $fn;
+		}
+	}
 
-    /**
-     * The close method is called on the underlying stream only if possible.
-     */
-    public function __destruct()
-    {
-        if (isset($this->_fn_close)) {
-            call_user_func($this->_fn_close);
-        }
-    }
+	/**
+	 * Lazily determine which methods are not implemented.
+	 *
+	 * @throws \BadMethodCallException
+	 */
+	public function __get( string $name ): void {
+		throw new \BadMethodCallException(
+			str_replace( '_fn_', '', $name )
+			. '() is not implemented in the FnStream'
+		);
+	}
 
-    /**
-     * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
-     *
-     * @throws \LogicException
-     */
-    public function __wakeup(): void
-    {
-        throw new \LogicException('FnStream should never be unserialized');
-    }
+	/**
+	 * The close method is called on the underlying stream only if possible.
+	 */
+	public function __destruct() {
+		if ( isset( $this->_fn_close ) ) {
+			call_user_func( $this->_fn_close );
+		}
+	}
 
-    /**
-     * Adds custom functionality to an underlying stream by intercepting
-     * specific method calls.
-     *
-     * @param StreamInterface         $stream  Stream to decorate
-     * @param array<string, callable> $methods Hash of method name to a closure
-     *
-     * @return FnStream
-     */
-    public static function decorate(StreamInterface $stream, array $methods)
-    {
-        // If any of the required methods were not provided, then simply
-        // proxy to the decorated stream.
-        foreach (array_diff(self::SLOTS, array_keys($methods)) as $diff) {
-            /** @var callable $callable */
-            $callable = [$stream, $diff];
-            $methods[$diff] = $callable;
-        }
+	/**
+	 * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
+	 *
+	 * @throws \LogicException
+	 */
+	public function __wakeup(): void {
+		throw new \LogicException( 'FnStream should never be unserialized' );
+	}
 
-        return new self($methods);
-    }
+	/**
+	 * Adds custom functionality to an underlying stream by intercepting
+	 * specific method calls.
+	 *
+	 * @param StreamInterface         $stream  Stream to decorate
+	 * @param array<string, callable> $methods Hash of method name to a closure
+	 *
+	 * @return FnStream
+	 */
+	public static function decorate( StreamInterface $stream, array $methods ) {
+		// If any of the required methods were not provided, then simply
+		// proxy to the decorated stream.
+		foreach ( array_diff( self::SLOTS, array_keys( $methods ) ) as $diff ) {
+			/** @var callable $callable */
+			$callable         = [ $stream, $diff ];
+			$methods[ $diff ] = $callable;
+		}
 
-    public function __toString(): string
-    {
-        try {
-            return call_user_func($this->_fn___toString);
-        } catch (\Throwable $e) {
-            if (\PHP_VERSION_ID >= 70400) {
-                throw $e;
-            }
-            trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), E_USER_ERROR);
+		return new self( $methods );
+	}
 
-            return '';
-        }
-    }
+	public function __toString(): string {
+		try {
+			return call_user_func( $this->_fn___toString );
+		} catch ( \Throwable $e ) {
+			if ( \PHP_VERSION_ID >= 70400 ) {
+				throw $e;
+			}
+			trigger_error( sprintf( '%s::__toString exception: %s', self::class, (string) $e ), E_USER_ERROR );
 
-    public function close(): void
-    {
-        call_user_func($this->_fn_close);
-    }
+			return '';
+		}
+	}
 
-    public function detach()
-    {
-        return call_user_func($this->_fn_detach);
-    }
+	public function close(): void {
+		call_user_func( $this->_fn_close );
+	}
 
-    public function getSize(): ?int
-    {
-        return call_user_func($this->_fn_getSize);
-    }
+	public function detach() {
+		return call_user_func( $this->_fn_detach );
+	}
 
-    public function tell(): int
-    {
-        return call_user_func($this->_fn_tell);
-    }
+	public function getSize(): ?int {
+		return call_user_func( $this->_fn_getSize );
+	}
 
-    public function eof(): bool
-    {
-        return call_user_func($this->_fn_eof);
-    }
+	public function tell(): int {
+		return call_user_func( $this->_fn_tell );
+	}
 
-    public function isSeekable(): bool
-    {
-        return call_user_func($this->_fn_isSeekable);
-    }
+	public function eof(): bool {
+		return call_user_func( $this->_fn_eof );
+	}
 
-    public function rewind(): void
-    {
-        call_user_func($this->_fn_rewind);
-    }
+	public function isSeekable(): bool {
+		return call_user_func( $this->_fn_isSeekable );
+	}
 
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        call_user_func($this->_fn_seek, $offset, $whence);
-    }
+	public function rewind(): void {
+		call_user_func( $this->_fn_rewind );
+	}
 
-    public function isWritable(): bool
-    {
-        return call_user_func($this->_fn_isWritable);
-    }
+	public function seek( $offset, $whence = SEEK_SET ): void {
+		call_user_func( $this->_fn_seek, $offset, $whence );
+	}
 
-    public function write($string): int
-    {
-        return call_user_func($this->_fn_write, $string);
-    }
+	public function isWritable(): bool {
+		return call_user_func( $this->_fn_isWritable );
+	}
 
-    public function isReadable(): bool
-    {
-        return call_user_func($this->_fn_isReadable);
-    }
+	public function write( $string ): int {
+		return call_user_func( $this->_fn_write, $string );
+	}
 
-    public function read($length): string
-    {
-        return call_user_func($this->_fn_read, $length);
-    }
+	public function isReadable(): bool {
+		return call_user_func( $this->_fn_isReadable );
+	}
 
-    public function getContents(): string
-    {
-        return call_user_func($this->_fn_getContents);
-    }
+	public function read( $length ): string {
+		return call_user_func( $this->_fn_read, $length );
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getMetadata($key = null)
-    {
-        return call_user_func($this->_fn_getMetadata, $key);
-    }
+	public function getContents(): string {
+		return call_user_func( $this->_fn_getContents );
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMetadata( $key = null ) {
+		return call_user_func( $this->_fn_getMetadata, $key );
+	}
 }

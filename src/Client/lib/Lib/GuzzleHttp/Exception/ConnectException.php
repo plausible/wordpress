@@ -10,47 +10,45 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\RequestInterface;
  *
  * Note that no response is present for a ConnectException
  */
-class ConnectException extends TransferException implements NetworkExceptionInterface
-{
-    /**
-     * @var RequestInterface
-     */
-    private $request;
+class ConnectException extends TransferException implements NetworkExceptionInterface {
 
-    /**
-     * @var array
-     */
-    private $handlerContext;
+	/**
+	 * @var RequestInterface
+	 */
+	private $request;
 
-    public function __construct(
-        string $message,
-        RequestInterface $request,
-        \Throwable $previous = null,
-        array $handlerContext = []
-    ) {
-        parent::__construct($message, 0, $previous);
-        $this->request = $request;
-        $this->handlerContext = $handlerContext;
-    }
+	/**
+	 * @var array
+	 */
+	private $handlerContext;
 
-    /**
-     * Get the request that caused the exception
-     */
-    public function getRequest(): RequestInterface
-    {
-        return $this->request;
-    }
+	public function __construct(
+		string $message,
+		RequestInterface $request,
+		\Throwable $previous = null,
+		array $handlerContext = []
+	) {
+		parent::__construct( $message, 0, $previous );
+		$this->request        = $request;
+		$this->handlerContext = $handlerContext;
+	}
 
-    /**
-     * Get contextual information about the error from the underlying handler.
-     *
-     * The contents of this array will vary depending on which handler you are
-     * using. It may also be just an empty array. Relying on this data will
-     * couple you to a specific handler, but can give more debug information
-     * when needed.
-     */
-    public function getHandlerContext(): array
-    {
-        return $this->handlerContext;
-    }
+	/**
+	 * Get the request that caused the exception
+	 */
+	public function getRequest(): RequestInterface {
+		return $this->request;
+	}
+
+	/**
+	 * Get contextual information about the error from the underlying handler.
+	 *
+	 * The contents of this array will vary depending on which handler you are
+	 * using. It may also be just an empty array. Relying on this data will
+	 * couple you to a specific handler, but can give more debug information
+	 * when needed.
+	 */
+	public function getHandlerContext(): array {
+		return $this->handlerContext;
+	}
 }

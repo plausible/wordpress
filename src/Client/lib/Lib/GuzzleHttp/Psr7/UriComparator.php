@@ -11,42 +11,39 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\UriInterface;
  *
  * @author Graham Campbell
  */
-final class UriComparator
-{
-    /**
-     * Determines if a modified URL should be considered cross-origin with
-     * respect to an original URL.
-     */
-    public static function isCrossOrigin(UriInterface $original, UriInterface $modified): bool
-    {
-        if (\strcasecmp($original->getHost(), $modified->getHost()) !== 0) {
-            return true;
-        }
+final class UriComparator {
 
-        if ($original->getScheme() !== $modified->getScheme()) {
-            return true;
-        }
+	/**
+	 * Determines if a modified URL should be considered cross-origin with
+	 * respect to an original URL.
+	 */
+	public static function isCrossOrigin( UriInterface $original, UriInterface $modified ): bool {
+		if ( \strcasecmp( $original->getHost(), $modified->getHost() ) !== 0 ) {
+			return true;
+		}
 
-        if (self::computePort($original) !== self::computePort($modified)) {
-            return true;
-        }
+		if ( $original->getScheme() !== $modified->getScheme() ) {
+			return true;
+		}
 
-        return false;
-    }
+		if ( self::computePort( $original ) !== self::computePort( $modified ) ) {
+			return true;
+		}
 
-    private static function computePort(UriInterface $uri): int
-    {
-        $port = $uri->getPort();
+		return false;
+	}
 
-        if (null !== $port) {
-            return $port;
-        }
+	private static function computePort( UriInterface $uri ): int {
+		$port = $uri->getPort();
 
-        return 'https' === $uri->getScheme() ? 443 : 80;
-    }
+		if ( null !== $port ) {
+			return $port;
+		}
 
-    private function __construct()
-    {
-        // cannot be instantiated
-    }
+		return 'https' === $uri->getScheme() ? 443 : 80;
+	}
+
+	private function __construct() {
+		// cannot be instantiated
+	}
 }

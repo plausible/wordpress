@@ -11,146 +11,127 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  *
  * @property StreamInterface $stream
  */
-trait StreamDecoratorTrait
-{
-    /**
-     * @param StreamInterface $stream Stream to decorate
-     */
-    public function __construct(StreamInterface $stream)
-    {
-        $this->stream = $stream;
-    }
+trait StreamDecoratorTrait {
 
-    /**
-     * Magic method used to create a new stream if streams are not added in
-     * the constructor of a decorator (e.g., LazyOpenStream).
-     *
-     * @return StreamInterface
-     */
-    public function __get(string $name)
-    {
-        if ($name === 'stream') {
-            $this->stream = $this->createStream();
+	/**
+	 * @param StreamInterface $stream Stream to decorate
+	 */
+	public function __construct( StreamInterface $stream ) {
+		$this->stream = $stream;
+	}
 
-            return $this->stream;
-        }
+	/**
+	 * Magic method used to create a new stream if streams are not added in
+	 * the constructor of a decorator (e.g., LazyOpenStream).
+	 *
+	 * @return StreamInterface
+	 */
+	public function __get( string $name ) {
+		if ( $name === 'stream' ) {
+			$this->stream = $this->createStream();
 
-        throw new \UnexpectedValueException("$name not found on class");
-    }
+			return $this->stream;
+		}
 
-    public function __toString(): string
-    {
-        try {
-            if ($this->isSeekable()) {
-                $this->seek(0);
-            }
+		throw new \UnexpectedValueException( "$name not found on class" );
+	}
 
-            return $this->getContents();
-        } catch (\Throwable $e) {
-            if (\PHP_VERSION_ID >= 70400) {
-                throw $e;
-            }
-            trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), E_USER_ERROR);
+	public function __toString(): string {
+		try {
+			if ( $this->isSeekable() ) {
+				$this->seek( 0 );
+			}
 
-            return '';
-        }
-    }
+			return $this->getContents();
+		} catch ( \Throwable $e ) {
+			if ( \PHP_VERSION_ID >= 70400 ) {
+				throw $e;
+			}
+			trigger_error( sprintf( '%s::__toString exception: %s', self::class, (string) $e ), E_USER_ERROR );
 
-    public function getContents(): string
-    {
-        return Utils::copyToString($this);
-    }
+			return '';
+		}
+	}
 
-    /**
-     * Allow decorators to implement custom methods
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $args)
-    {
-        /** @var callable $callable */
-        $callable = [$this->stream, $method];
-        $result = call_user_func_array($callable, $args);
+	public function getContents(): string {
+		return Utils::copyToString( $this );
+	}
 
-        // Always return the wrapped object if the result is a return $this
-        return $result === $this->stream ? $this : $result;
-    }
+	/**
+	 * Allow decorators to implement custom methods
+	 *
+	 * @return mixed
+	 */
+	public function __call( string $method, array $args ) {
+		/** @var callable $callable */
+		$callable = [ $this->stream, $method ];
+		$result   = call_user_func_array( $callable, $args );
 
-    public function close(): void
-    {
-        $this->stream->close();
-    }
+		// Always return the wrapped object if the result is a return $this
+		return $result === $this->stream ? $this : $result;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getMetadata($key = null)
-    {
-        return $this->stream->getMetadata($key);
-    }
+	public function close(): void {
+		$this->stream->close();
+	}
 
-    public function detach()
-    {
-        return $this->stream->detach();
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getMetadata( $key = null ) {
+		return $this->stream->getMetadata( $key );
+	}
 
-    public function getSize(): ?int
-    {
-        return $this->stream->getSize();
-    }
+	public function detach() {
+		return $this->stream->detach();
+	}
 
-    public function eof(): bool
-    {
-        return $this->stream->eof();
-    }
+	public function getSize(): ?int {
+		return $this->stream->getSize();
+	}
 
-    public function tell(): int
-    {
-        return $this->stream->tell();
-    }
+	public function eof(): bool {
+		return $this->stream->eof();
+	}
 
-    public function isReadable(): bool
-    {
-        return $this->stream->isReadable();
-    }
+	public function tell(): int {
+		return $this->stream->tell();
+	}
 
-    public function isWritable(): bool
-    {
-        return $this->stream->isWritable();
-    }
+	public function isReadable(): bool {
+		return $this->stream->isReadable();
+	}
 
-    public function isSeekable(): bool
-    {
-        return $this->stream->isSeekable();
-    }
+	public function isWritable(): bool {
+		return $this->stream->isWritable();
+	}
 
-    public function rewind(): void
-    {
-        $this->seek(0);
-    }
+	public function isSeekable(): bool {
+		return $this->stream->isSeekable();
+	}
 
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        $this->stream->seek($offset, $whence);
-    }
+	public function rewind(): void {
+		$this->seek( 0 );
+	}
 
-    public function read($length): string
-    {
-        return $this->stream->read($length);
-    }
+	public function seek( $offset, $whence = SEEK_SET ): void {
+		$this->stream->seek( $offset, $whence );
+	}
 
-    public function write($string): int
-    {
-        return $this->stream->write($string);
-    }
+	public function read( $length ): string {
+		return $this->stream->read( $length );
+	}
 
-    /**
-     * Implement in subclasses to dynamically create streams when requested.
-     *
-     * @throws \BadMethodCallException
-     */
-    protected function createStream(): StreamInterface
-    {
-        throw new \BadMethodCallException('Not implemented');
-    }
+	public function write( $string ): int {
+		return $this->stream->write( $string );
+	}
+
+	/**
+	 * Implement in subclasses to dynamically create streams when requested.
+	 *
+	 * @throws \BadMethodCallException
+	 */
+	protected function createStream(): StreamInterface {
+		throw new \BadMethodCallException( 'Not implemented' );
+	}
 }

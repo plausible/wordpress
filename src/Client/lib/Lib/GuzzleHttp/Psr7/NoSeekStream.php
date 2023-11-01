@@ -9,20 +9,18 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator that prevents a stream from being seeked.
  */
-final class NoSeekStream implements StreamInterface
-{
-    use StreamDecoratorTrait;
+final class NoSeekStream implements StreamInterface {
 
-    /** @var StreamInterface */
-    private $stream;
+	use StreamDecoratorTrait;
 
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        throw new \RuntimeException('Cannot seek a NoSeekStream');
-    }
+	/** @var StreamInterface */
+	private $stream;
 
-    public function isSeekable(): bool
-    {
-        return false;
-    }
+	public function seek( $offset, $whence = SEEK_SET ): void {
+		throw new \RuntimeException( 'Cannot seek a NoSeekStream' );
+	}
+
+	public function isSeekable(): bool {
+		return false;
+	}
 }

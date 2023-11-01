@@ -14,36 +14,34 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\RequestInterface;
  *
  * @final
  */
-class CurlHandler
-{
-    /**
-     * @var CurlFactoryInterface
-     */
-    private $factory;
+class CurlHandler {
 
-    /**
-     * Accepts an associative array of options:
-     *
-     * - handle_factory: Optional curl factory used to create cURL handles.
-     *
-     * @param array{handle_factory?: ?CurlFactoryInterface} $options Array of options to use with the handler
-     */
-    public function __construct(array $options = [])
-    {
-        $this->factory = $options['handle_factory']
-            ?? new CurlFactory(3);
-    }
+	/**
+	 * @var CurlFactoryInterface
+	 */
+	private $factory;
 
-    public function __invoke(RequestInterface $request, array $options): PromiseInterface
-    {
-        if (isset($options['delay'])) {
-            \usleep($options['delay'] * 1000);
-        }
+	/**
+	 * Accepts an associative array of options:
+	 *
+	 * - handle_factory: Optional curl factory used to create cURL handles.
+	 *
+	 * @param array{handle_factory?: ?CurlFactoryInterface} $options Array of options to use with the handler
+	 */
+	public function __construct( array $options = [] ) {
+		$this->factory = $options['handle_factory']
+			?? new CurlFactory( 3 );
+	}
 
-        $easy = $this->factory->create($request, $options);
-        \curl_exec($easy->handle);
-        $easy->errno = \curl_errno($easy->handle);
+	public function __invoke( RequestInterface $request, array $options ): PromiseInterface {
+		if ( isset( $options['delay'] ) ) {
+			\usleep( $options['delay'] * 1000 );
+		}
 
-        return CurlFactory::finish($this, $easy, $this->factory);
-    }
+		$easy = $this->factory->create( $request, $options );
+		\curl_exec( $easy->handle );
+		$easy->errno = \curl_errno( $easy->handle );
+
+		return CurlFactory::finish( $this, $easy, $this->factory );
+	}
 }

@@ -81,25 +81,25 @@ class ObjectSerializer {
 					$getter = $data::getters()[ $property ];
 					$value  = $data->$getter();
 					if ( $value !== null && ! in_array(
-							$openAPIType,
-							[
-								'\DateTime',
-								'\SplFileObject',
-								'array',
-								'bool',
-								'boolean',
-								'byte',
-								'float',
-								'int',
-								'integer',
-								'mixed',
-								'number',
-								'object',
-								'string',
-								'void',
-							],
-							true
-						) ) {
+						$openAPIType,
+						[
+							'\DateTime',
+							'\SplFileObject',
+							'array',
+							'bool',
+							'boolean',
+							'byte',
+							'float',
+							'int',
+							'integer',
+							'mixed',
+							'number',
+							'object',
+							'string',
+							'void',
+						],
+						true
+					) ) {
 						$callable = [ $openAPIType, 'getAllowableEnumValues' ];
 						if ( is_callable( $callable ) ) {
 							/** array $callable */
@@ -113,8 +113,8 @@ class ObjectSerializer {
 						}
 					}
 					if ( ( $data::isNullable( $property ) && $data->isNullableSetToNull(
-								$property
-							) ) || $value !== null ) {
+						$property
+					) ) || $value !== null ) {
 						$values[ $data::attributeMap()[ $property ] ] = self::sanitizeForSerialization(
 							$value,
 							$openAPIType,
@@ -201,7 +201,7 @@ class ObjectSerializer {
 		}
 
 		# Handle DateTime objects in query
-		if ( $openApiType === "\\DateTime" && $value instanceof \DateTime ) {
+		if ( $openApiType === '\\DateTime' && $value instanceof \DateTime ) {
 			return [ "{$paramName}" => $value->format( self::$dateTimeFormat ) ];
 		}
 
@@ -299,7 +299,7 @@ class ObjectSerializer {
 	 */
 	public static function convertBoolToQueryStringFormat( bool $value ) {
 		if ( Configuration::BOOLEAN_FORMAT_STRING == Configuration::getDefaultConfiguration(
-			)->getBooleanFormatForQueryString() ) {
+		)->getBooleanFormatForQueryString() ) {
 			return $value ? 'true' : 'false';
 		}
 
@@ -413,7 +413,7 @@ class ObjectSerializer {
 			settype( $data, 'array' );
 			$inner        = substr( $class, 4, - 1 );
 			$deserialized = [];
-			if ( strrpos( $inner, "," ) !== false ) {
+			if ( strrpos( $inner, ',' ) !== false ) {
 				$subClass_array = explode( ',', $inner, 2 );
 				$subClass       = $subClass_array[1];
 				foreach ( $data as $key => $value ) {
@@ -462,12 +462,12 @@ class ObjectSerializer {
 
 			// determine file name
 			if ( is_array( $httpHeaders ) && array_key_exists( 'Content-Disposition', $httpHeaders ) && preg_match(
-					'/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i',
-					$httpHeaders['Content-Disposition'],
-					$match
-				) ) {
+				'/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i',
+				$httpHeaders['Content-Disposition'],
+				$match
+			) ) {
 				$filename = Configuration::getDefaultConfiguration()->getTempFolderPath(
-					) . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[1] );
+				) . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[1] );
 			} else {
 				$filename = tempnam( Configuration::getDefaultConfiguration()->getTempFolderPath(), '' );
 			}
@@ -524,8 +524,8 @@ class ObjectSerializer {
 			// If a discriminator is defined and points to a valid subclass, use it.
 			$discriminator = $class::DISCRIMINATOR;
 			if ( ! empty( $discriminator ) && isset( $data->{$discriminator} ) && is_string(
-					$data->{$discriminator}
-				) ) {
+				$data->{$discriminator}
+			) ) {
 				$subclass = '\Plausible\Analytics\WP\Client\Model\\' . $data->{$discriminator};
 				if ( is_subclass_of( $subclass, $class ) ) {
 					$class = $subclass;
@@ -583,7 +583,7 @@ class ObjectSerializer {
 	 * @return string the sanitized filename
 	 */
 	public static function sanitizeFilename( $filename ) {
-		if ( preg_match( "/.*[\/\\\\](.*)$/", $filename, $match ) ) {
+		if ( preg_match( '/.*[\/\\\\](.*)$/', $filename, $match ) ) {
 			return $match[1];
 		} else {
 			return $filename;

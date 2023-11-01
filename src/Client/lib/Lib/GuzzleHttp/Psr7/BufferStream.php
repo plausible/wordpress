@@ -14,134 +14,118 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  * what the configured high water mark of the stream is, or the maximum
  * preferred size of the buffer.
  */
-final class BufferStream implements StreamInterface
-{
-    /** @var int */
-    private $hwm;
+final class BufferStream implements StreamInterface {
 
-    /** @var string */
-    private $buffer = '';
+	/** @var int */
+	private $hwm;
 
-    /**
-     * @param int $hwm High water mark, representing the preferred maximum
-     *                 buffer size. If the size of the buffer exceeds the high
-     *                 water mark, then calls to write will continue to succeed
-     *                 but will return 0 to inform writers to slow down
-     *                 until the buffer has been drained by reading from it.
-     */
-    public function __construct(int $hwm = 16384)
-    {
-        $this->hwm = $hwm;
-    }
+	/** @var string */
+	private $buffer = '';
 
-    public function __toString(): string
-    {
-        return $this->getContents();
-    }
+	/**
+	 * @param int $hwm High water mark, representing the preferred maximum
+	 *                 buffer size. If the size of the buffer exceeds the high
+	 *                 water mark, then calls to write will continue to succeed
+	 *                 but will return 0 to inform writers to slow down
+	 *                 until the buffer has been drained by reading from it.
+	 */
+	public function __construct( int $hwm = 16384 ) {
+		$this->hwm = $hwm;
+	}
 
-    public function getContents(): string
-    {
-        $buffer = $this->buffer;
-        $this->buffer = '';
+	public function __toString(): string {
+		return $this->getContents();
+	}
 
-        return $buffer;
-    }
+	public function getContents(): string {
+		$buffer       = $this->buffer;
+		$this->buffer = '';
 
-    public function close(): void
-    {
-        $this->buffer = '';
-    }
+		return $buffer;
+	}
 
-    public function detach()
-    {
-        $this->close();
+	public function close(): void {
+		$this->buffer = '';
+	}
 
-        return null;
-    }
+	public function detach() {
+		$this->close();
 
-    public function getSize(): ?int
-    {
-        return strlen($this->buffer);
-    }
+		return null;
+	}
 
-    public function isReadable(): bool
-    {
-        return true;
-    }
+	public function getSize(): ?int {
+		return strlen( $this->buffer );
+	}
 
-    public function isWritable(): bool
-    {
-        return true;
-    }
+	public function isReadable(): bool {
+		return true;
+	}
 
-    public function isSeekable(): bool
-    {
-        return false;
-    }
+	public function isWritable(): bool {
+		return true;
+	}
 
-    public function rewind(): void
-    {
-        $this->seek(0);
-    }
+	public function isSeekable(): bool {
+		return false;
+	}
 
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        throw new \RuntimeException('Cannot seek a BufferStream');
-    }
+	public function rewind(): void {
+		$this->seek( 0 );
+	}
 
-    public function eof(): bool
-    {
-        return strlen($this->buffer) === 0;
-    }
+	public function seek( $offset, $whence = SEEK_SET ): void {
+		throw new \RuntimeException( 'Cannot seek a BufferStream' );
+	}
 
-    public function tell(): int
-    {
-        throw new \RuntimeException('Cannot determine the position of a BufferStream');
-    }
+	public function eof(): bool {
+		return strlen( $this->buffer ) === 0;
+	}
 
-    /**
-     * Reads data from the buffer.
-     */
-    public function read($length): string
-    {
-        $currentLength = strlen($this->buffer);
+	public function tell(): int {
+		throw new \RuntimeException( 'Cannot determine the position of a BufferStream' );
+	}
 
-        if ($length >= $currentLength) {
-            // No need to slice the buffer because we don't have enough data.
-            $result = $this->buffer;
-            $this->buffer = '';
-        } else {
-            // Slice up the result to provide a subset of the buffer.
-            $result = substr($this->buffer, 0, $length);
-            $this->buffer = substr($this->buffer, $length);
-        }
+	/**
+	 * Reads data from the buffer.
+	 */
+	public function read( $length ): string {
+		$currentLength = strlen( $this->buffer );
 
-        return $result;
-    }
+		if ( $length >= $currentLength ) {
+			// No need to slice the buffer because we don't have enough data.
+			$result       = $this->buffer;
+			$this->buffer = '';
+		} else {
+			// Slice up the result to provide a subset of the buffer.
+			$result       = substr( $this->buffer, 0, $length );
+			$this->buffer = substr( $this->buffer, $length );
+		}
 
-    /**
-     * Writes data to the buffer.
-     */
-    public function write($string): int
-    {
-        $this->buffer .= $string;
+		return $result;
+	}
 
-        if (strlen($this->buffer) >= $this->hwm) {
-            return 0;
-        }
+	/**
+	 * Writes data to the buffer.
+	 */
+	public function write( $string ): int {
+		$this->buffer .= $string;
 
-        return strlen($string);
-    }
+		if ( strlen( $this->buffer ) >= $this->hwm ) {
+			return 0;
+		}
 
-    /**
-     * @return mixed
-     */
-    public function getMetadata($key = null)
-    {
-        if ($key === 'hwm') {
-            return $this->hwm;
-        }
+		return strlen( $string );
+	}
 
-        return $key ? null : [];
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getMetadata( $key = null ) {
+		if ( $key === 'hwm' ) {
+			return $this->hwm;
+		}
+
+		return $key ? null : [];
+	}
 }

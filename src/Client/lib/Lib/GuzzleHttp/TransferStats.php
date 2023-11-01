@@ -10,124 +10,116 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\UriInterface;
  * Represents data at the point after it was transferred either successfully
  * or after a network error.
  */
-final class TransferStats
-{
-    /**
-     * @var RequestInterface
-     */
-    private $request;
+final class TransferStats {
 
-    /**
-     * @var ResponseInterface|null
-     */
-    private $response;
+	/**
+	 * @var RequestInterface
+	 */
+	private $request;
 
-    /**
-     * @var float|null
-     */
-    private $transferTime;
+	/**
+	 * @var ResponseInterface|null
+	 */
+	private $response;
 
-    /**
-     * @var array
-     */
-    private $handlerStats;
+	/**
+	 * @var float|null
+	 */
+	private $transferTime;
 
-    /**
-     * @var mixed|null
-     */
-    private $handlerErrorData;
+	/**
+	 * @var array
+	 */
+	private $handlerStats;
 
-    /**
-     * @param RequestInterface       $request          Request that was sent.
-     * @param ResponseInterface|null $response         Response received (if any)
-     * @param float|null             $transferTime     Total handler transfer time.
-     * @param mixed                  $handlerErrorData Handler error data.
-     * @param array                  $handlerStats     Handler specific stats.
-     */
-    public function __construct(
-        RequestInterface $request,
-        ResponseInterface $response = null,
-        float $transferTime = null,
-        $handlerErrorData = null,
-        array $handlerStats = []
-    ) {
-        $this->request = $request;
-        $this->response = $response;
-        $this->transferTime = $transferTime;
-        $this->handlerErrorData = $handlerErrorData;
-        $this->handlerStats = $handlerStats;
-    }
+	/**
+	 * @var mixed|null
+	 */
+	private $handlerErrorData;
 
-    public function getRequest(): RequestInterface
-    {
-        return $this->request;
-    }
+	/**
+	 * @param RequestInterface       $request          Request that was sent.
+	 * @param ResponseInterface|null $response         Response received (if any)
+	 * @param float|null             $transferTime     Total handler transfer time.
+	 * @param mixed                  $handlerErrorData Handler error data.
+	 * @param array                  $handlerStats     Handler specific stats.
+	 */
+	public function __construct(
+		RequestInterface $request,
+		ResponseInterface $response = null,
+		float $transferTime = null,
+		$handlerErrorData = null,
+		array $handlerStats = []
+	) {
+		$this->request          = $request;
+		$this->response         = $response;
+		$this->transferTime     = $transferTime;
+		$this->handlerErrorData = $handlerErrorData;
+		$this->handlerStats     = $handlerStats;
+	}
 
-    /**
-     * Returns the response that was received (if any).
-     */
-    public function getResponse(): ?ResponseInterface
-    {
-        return $this->response;
-    }
+	public function getRequest(): RequestInterface {
+		return $this->request;
+	}
 
-    /**
-     * Returns true if a response was received.
-     */
-    public function hasResponse(): bool
-    {
-        return $this->response !== null;
-    }
+	/**
+	 * Returns the response that was received (if any).
+	 */
+	public function getResponse(): ?ResponseInterface {
+		return $this->response;
+	}
 
-    /**
-     * Gets handler specific error data.
-     *
-     * This might be an exception, a integer representing an error code, or
-     * anything else. Relying on this value assumes that you know what handler
-     * you are using.
-     *
-     * @return mixed
-     */
-    public function getHandlerErrorData()
-    {
-        return $this->handlerErrorData;
-    }
+	/**
+	 * Returns true if a response was received.
+	 */
+	public function hasResponse(): bool {
+		return $this->response !== null;
+	}
 
-    /**
-     * Get the effective URI the request was sent to.
-     */
-    public function getEffectiveUri(): UriInterface
-    {
-        return $this->request->getUri();
-    }
+	/**
+	 * Gets handler specific error data.
+	 *
+	 * This might be an exception, a integer representing an error code, or
+	 * anything else. Relying on this value assumes that you know what handler
+	 * you are using.
+	 *
+	 * @return mixed
+	 */
+	public function getHandlerErrorData() {
+		return $this->handlerErrorData;
+	}
 
-    /**
-     * Get the estimated time the request was being transferred by the handler.
-     *
-     * @return float|null Time in seconds.
-     */
-    public function getTransferTime(): ?float
-    {
-        return $this->transferTime;
-    }
+	/**
+	 * Get the effective URI the request was sent to.
+	 */
+	public function getEffectiveUri(): UriInterface {
+		return $this->request->getUri();
+	}
 
-    /**
-     * Gets an array of all of the handler specific transfer data.
-     */
-    public function getHandlerStats(): array
-    {
-        return $this->handlerStats;
-    }
+	/**
+	 * Get the estimated time the request was being transferred by the handler.
+	 *
+	 * @return float|null Time in seconds.
+	 */
+	public function getTransferTime(): ?float {
+		return $this->transferTime;
+	}
 
-    /**
-     * Get a specific handler statistic from the handler by name.
-     *
-     * @param string $stat Handler specific transfer stat to retrieve.
-     *
-     * @return mixed|null
-     */
-    public function getHandlerStat(string $stat)
-    {
-        return $this->handlerStats[$stat] ?? null;
-    }
+	/**
+	 * Gets an array of all of the handler specific transfer data.
+	 */
+	public function getHandlerStats(): array {
+		return $this->handlerStats;
+	}
+
+	/**
+	 * Get a specific handler statistic from the handler by name.
+	 *
+	 * @param string $stat Handler specific transfer stat to retrieve.
+	 *
+	 * @return mixed|null
+	 */
+	public function getHandlerStat( string $stat ) {
+		return $this->handlerStats[ $stat ] ?? null;
+	}
 }

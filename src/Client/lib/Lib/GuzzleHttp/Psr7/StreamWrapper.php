@@ -11,165 +11,157 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface;
  *
  * @see https://www.php.net/streamwrapper
  */
-final class StreamWrapper
-{
-    /** @var resource */
-    public $context;
+final class StreamWrapper {
 
-    /** @var StreamInterface */
-    private $stream;
+	/** @var resource */
+	public $context;
 
-    /** @var string r, r+, or w */
-    private $mode;
+	/** @var StreamInterface */
+	private $stream;
 
-    /**
-     * Returns a resource representing the stream.
-     *
-     * @param StreamInterface $stream The stream to get a resource for
-     *
-     * @return resource
-     *
-     * @throws \InvalidArgumentException if stream is not readable or writable
-     */
-    public static function getResource(StreamInterface $stream)
-    {
-        self::register();
+	/** @var string r, r+, or w */
+	private $mode;
 
-        if ($stream->isReadable()) {
-            $mode = $stream->isWritable() ? 'r+' : 'r';
-        } elseif ($stream->isWritable()) {
-            $mode = 'w';
-        } else {
-            throw new \InvalidArgumentException('The stream must be readable, '
-                .'writable, or both.');
-        }
+	/**
+	 * Returns a resource representing the stream.
+	 *
+	 * @param StreamInterface $stream The stream to get a resource for
+	 *
+	 * @return resource
+	 *
+	 * @throws \InvalidArgumentException if stream is not readable or writable
+	 */
+	public static function getResource( StreamInterface $stream ) {
+		self::register();
 
-        return fopen('guzzle://stream', $mode, false, self::createStreamContext($stream));
-    }
+		if ( $stream->isReadable() ) {
+			$mode = $stream->isWritable() ? 'r+' : 'r';
+		} elseif ( $stream->isWritable() ) {
+			$mode = 'w';
+		} else {
+			throw new \InvalidArgumentException(
+				'The stream must be readable, '
+				. 'writable, or both.'
+			);
+		}
 
-    /**
-     * Creates a stream context that can be used to open a stream as a php stream resource.
-     *
-     * @return resource
-     */
-    public static function createStreamContext(StreamInterface $stream)
-    {
-        return stream_context_create([
-            'guzzle' => ['stream' => $stream],
-        ]);
-    }
+		return fopen( 'guzzle://stream', $mode, false, self::createStreamContext( $stream ) );
+	}
 
-    /**
-     * Registers the stream wrapper if needed
-     */
-    public static function register(): void
-    {
-        if (!in_array('guzzle', stream_get_wrappers())) {
-            stream_wrapper_register('guzzle', __CLASS__);
-        }
-    }
+	/**
+	 * Creates a stream context that can be used to open a stream as a php stream resource.
+	 *
+	 * @return resource
+	 */
+	public static function createStreamContext( StreamInterface $stream ) {
+		return stream_context_create(
+			[
+				'guzzle' => [ 'stream' => $stream ],
+			]
+		);
+	}
 
-    public function stream_open(string $path, string $mode, int $options, string &$opened_path = null): bool
-    {
-        $options = stream_context_get_options($this->context);
+	/**
+	 * Registers the stream wrapper if needed
+	 */
+	public static function register(): void {
+		if ( ! in_array( 'guzzle', stream_get_wrappers() ) ) {
+			stream_wrapper_register( 'guzzle', __CLASS__ );
+		}
+	}
 
-        if (!isset($options['guzzle']['stream'])) {
-            return false;
-        }
+	public function stream_open( string $path, string $mode, int $options, string &$opened_path = null ): bool {
+		$options = stream_context_get_options( $this->context );
 
-        $this->mode = $mode;
-        $this->stream = $options['guzzle']['stream'];
+		if ( ! isset( $options['guzzle']['stream'] ) ) {
+			return false;
+		}
 
-        return true;
-    }
+		$this->mode   = $mode;
+		$this->stream = $options['guzzle']['stream'];
 
-    public function stream_read(int $count): string
-    {
-        return $this->stream->read($count);
-    }
+		return true;
+	}
 
-    public function stream_write(string $data): int
-    {
-        return $this->stream->write($data);
-    }
+	public function stream_read( int $count ): string {
+		return $this->stream->read( $count );
+	}
 
-    public function stream_tell(): int
-    {
-        return $this->stream->tell();
-    }
+	public function stream_write( string $data ): int {
+		return $this->stream->write( $data );
+	}
 
-    public function stream_eof(): bool
-    {
-        return $this->stream->eof();
-    }
+	public function stream_tell(): int {
+		return $this->stream->tell();
+	}
 
-    public function stream_seek(int $offset, int $whence): bool
-    {
-        $this->stream->seek($offset, $whence);
+	public function stream_eof(): bool {
+		return $this->stream->eof();
+	}
 
-        return true;
-    }
+	public function stream_seek( int $offset, int $whence ): bool {
+		$this->stream->seek( $offset, $whence );
 
-    /**
-     * @return resource|false
-     */
-    public function stream_cast(int $cast_as)
-    {
-        $stream = clone $this->stream;
-        $resource = $stream->detach();
+		return true;
+	}
 
-        return $resource ?? false;
-    }
+	/**
+	 * @return resource|false
+	 */
+	public function stream_cast( int $cast_as ) {
+		$stream   = clone $this->stream;
+		$resource = $stream->detach();
 
-    /**
-     * @return array<int|string, int>
-     */
-    public function stream_stat(): array
-    {
-        static $modeMap = [
-            'r' => 33060,
-            'rb' => 33060,
-            'r+' => 33206,
-            'w' => 33188,
-            'wb' => 33188,
-        ];
+		return $resource ?? false;
+	}
 
-        return [
-            'dev' => 0,
-            'ino' => 0,
-            'mode' => $modeMap[$this->mode],
-            'nlink' => 0,
-            'uid' => 0,
-            'gid' => 0,
-            'rdev' => 0,
-            'size' => $this->stream->getSize() ?: 0,
-            'atime' => 0,
-            'mtime' => 0,
-            'ctime' => 0,
-            'blksize' => 0,
-            'blocks' => 0,
-        ];
-    }
+	/**
+	 * @return array<int|string, int>
+	 */
+	public function stream_stat(): array {
+		static $modeMap = [
+			'r'  => 33060,
+			'rb' => 33060,
+			'r+' => 33206,
+			'w'  => 33188,
+			'wb' => 33188,
+		];
 
-    /**
-     * @return array<int|string, int>
-     */
-    public function url_stat(string $path, int $flags): array
-    {
-        return [
-            'dev' => 0,
-            'ino' => 0,
-            'mode' => 0,
-            'nlink' => 0,
-            'uid' => 0,
-            'gid' => 0,
-            'rdev' => 0,
-            'size' => 0,
-            'atime' => 0,
-            'mtime' => 0,
-            'ctime' => 0,
-            'blksize' => 0,
-            'blocks' => 0,
-        ];
-    }
+		return [
+			'dev'     => 0,
+			'ino'     => 0,
+			'mode'    => $modeMap[ $this->mode ],
+			'nlink'   => 0,
+			'uid'     => 0,
+			'gid'     => 0,
+			'rdev'    => 0,
+			'size'    => $this->stream->getSize() ?: 0,
+			'atime'   => 0,
+			'mtime'   => 0,
+			'ctime'   => 0,
+			'blksize' => 0,
+			'blocks'  => 0,
+		];
+	}
+
+	/**
+	 * @return array<int|string, int>
+	 */
+	public function url_stat( string $path, int $flags ): array {
+		return [
+			'dev'     => 0,
+			'ino'     => 0,
+			'mode'    => 0,
+			'nlink'   => 0,
+			'uid'     => 0,
+			'gid'     => 0,
+			'rdev'    => 0,
+			'size'    => 0,
+			'atime'   => 0,
+			'mtime'   => 0,
+			'ctime'   => 0,
+			'blksize' => 0,
+			'blocks'  => 0,
+		];
+	}
 }

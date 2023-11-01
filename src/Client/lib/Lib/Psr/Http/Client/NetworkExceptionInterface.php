@@ -11,14 +11,14 @@ use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\RequestInterface;
  *
  * Example: the target host name can not be resolved or the connection failed.
  */
-interface NetworkExceptionInterface extends ClientExceptionInterface
-{
-    /**
-     * Returns the request.
-     *
-     * The request object MAY be a different object from the one passed to ClientInterface::sendRequest()
-     *
-     * @return RequestInterface
-     */
-    public function getRequest(): RequestInterface;
+interface NetworkExceptionInterface extends ClientExceptionInterface {
+
+	/**
+	 * Returns the request.
+	 *
+	 * The request object MAY be a different object from the one passed to ClientInterface::sendRequest()
+	 *
+	 * @return RequestInterface
+	 */
+	public function getRequest(): RequestInterface;
 }

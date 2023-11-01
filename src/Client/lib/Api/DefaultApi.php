@@ -46,25 +46,25 @@ use Plausible\Analytics\WP\Client\ObjectSerializer;
 class DefaultApi {
 	/** @var string[] $contentTypes * */
 	public const contentTypes = [
-		'plausibleWebPluginsAPIControllersGoalsCreate'       => [
+		'plausibleWebPluginsAPIControllersGoalsCreate'    => [
 			'application/json',
 		],
-		'plausibleWebPluginsAPIControllersGoalsDelete'       => [
+		'plausibleWebPluginsAPIControllersGoalsDelete'    => [
 			'application/json',
 		],
-		'plausibleWebPluginsAPIControllersGoalsGet'          => [
+		'plausibleWebPluginsAPIControllersGoalsGet'       => [
 			'application/json',
 		],
-		'plausibleWebPluginsAPIControllersGoalsIndex'        => [
+		'plausibleWebPluginsAPIControllersGoalsIndex'     => [
 			'application/json',
 		],
 		'plausibleWebPluginsAPIControllersSharedLinksCreate' => [
 			'application/json',
 		],
-		'plausibleWebPluginsAPIControllersSharedLinksGet'    => [
+		'plausibleWebPluginsAPIControllersSharedLinksGet' => [
 			'application/json',
 		],
-		'plausibleWebPluginsAPIControllersSharedLinksIndex'  => [
+		'plausibleWebPluginsAPIControllersSharedLinksIndex' => [
 			'application/json',
 		],
 	];
@@ -195,7 +195,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -207,7 +210,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -371,7 +377,7 @@ class DefaultApi {
 		$multipart    = false;
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -413,8 +419,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -432,7 +438,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -527,7 +536,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -585,7 +597,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -597,7 +612,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -658,7 +676,7 @@ class DefaultApi {
 		}
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -691,8 +709,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -710,7 +728,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'DELETE', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'DELETE',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -768,7 +789,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -830,7 +854,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -842,7 +869,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1016,7 +1046,7 @@ class DefaultApi {
 		}
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -1049,8 +1079,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -1068,7 +1098,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -1139,7 +1172,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -1214,7 +1250,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1226,7 +1265,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1375,7 +1417,7 @@ class DefaultApi {
 		);
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -1408,8 +1450,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -1427,7 +1469,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -1516,7 +1561,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -1598,7 +1646,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1610,7 +1661,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1752,7 +1806,7 @@ class DefaultApi {
 		$multipart    = false;
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -1794,8 +1848,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -1813,7 +1867,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -1904,7 +1961,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -1966,7 +2026,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1978,7 +2041,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2156,7 +2222,7 @@ class DefaultApi {
 		}
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -2189,8 +2255,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -2208,7 +2274,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -2279,7 +2348,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);
@@ -2359,7 +2431,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -2371,7 +2446,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2520,7 +2598,7 @@ class DefaultApi {
 		);
 
 		$headers = $this->headerSelector->selectHeaders(
-			[ 'application/json', ],
+			[ 'application/json' ],
 			$contentType,
 			$multipart
 		);
@@ -2553,8 +2631,8 @@ class DefaultApi {
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
 			$headers['Authorization'] = 'Basic ' . base64_encode(
-					$this->config->getUsername() . ":" . $this->config->getPassword()
-				);
+				$this->config->getUsername() . ':' . $this->config->getPassword()
+			);
 		}
 
 		$defaultHeaders = [];
@@ -2572,7 +2650,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -2661,7 +2742,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 		);

@@ -33,7 +33,7 @@ namespace Plausible\Analytics\WP\Client;
  * @link     https://openapi-generator.tech
  */
 class Configuration {
-	public const BOOLEAN_FORMAT_INT    = 'int';
+	public const BOOLEAN_FORMAT_INT = 'int';
 
 	public const BOOLEAN_FORMAT_STRING = 'string';
 
@@ -120,7 +120,7 @@ class Configuration {
 	 * @return string The report for debugging
 	 */
 	public static function toDebugReport() {
-		$report = 'PHP SDK (Plausible\Analytics\WP\Client) Debug Report:' . PHP_EOL;
+		$report  = 'PHP SDK (Plausible\Analytics\WP\Client) Debug Report:' . PHP_EOL;
 		$report .= '    OS: ' . php_uname() . PHP_EOL;
 		$report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
 		$report .= '    The version of the OpenAPI document: 1.0-rc' . PHP_EOL;
@@ -455,28 +455,28 @@ class Configuration {
 		}
 
 		$host = $hostsSettings[ $hostIndex ];
-		$url  = $host["url"];
+		$url  = $host['url'];
 
 		// go through variable and assign a value
-		foreach ( $host["variables"] ?? [] as $name => $variable ) {
+		foreach ( $host['variables'] ?? [] as $name => $variable ) {
 			if ( array_key_exists( $name, $variables ) ) { // check to see if it's in the variables provided by the user
 				if ( ! isset( $variable['enum_values'] ) || in_array(
-						$variables[ $name ],
-						$variable["enum_values"],
-						true
-					) ) { // check to see if the value is in the enum
-					$url = str_replace( "{" . $name . "}", $variables[ $name ], $url );
+					$variables[ $name ],
+					$variable['enum_values'],
+					true
+				) ) { // check to see if the value is in the enum
+					$url = str_replace( '{' . $name . '}', $variables[ $name ], $url );
 				} else {
 					throw new \InvalidArgumentException(
-						"The variable `$name` in the host URL has invalid value " . $variables[ $name ] . ". Must be " . join(
+						"The variable `$name` in the host URL has invalid value " . $variables[ $name ] . '. Must be ' . join(
 							',',
-							$variable["enum_values"]
-						) . "."
+							$variable['enum_values']
+						) . '.'
 					);
 				}
 			} else {
 				// use default value
-				$url = str_replace( "{" . $name . "}", $variable["default_value"], $url );
+				$url = str_replace( '{' . $name . '}', $variable['default_value'], $url );
 			}
 		}
 
@@ -490,8 +490,8 @@ class Configuration {
 	public function getHostSettings() {
 		return [
 			[
-				"url"         => "https://plausible.io/api/plugins",
-				"description" => "This server",
+				'url'         => 'https://plausible.io/api/plugins',
+				'description' => 'This server',
 			],
 		];
 	}

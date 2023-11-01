@@ -43,120 +43,111 @@ use Throwable;
  *
  * @see https://github.com/petkaantonov/bluebird/blob/master/API.md#generators inspiration
  */
-final class Coroutine implements PromiseInterface
-{
-    /**
-     * @var PromiseInterface|null
-     */
-    private $currentPromise;
+final class Coroutine implements PromiseInterface {
 
-    /**
-     * @var Generator
-     */
-    private $generator;
+	/**
+	 * @var PromiseInterface|null
+	 */
+	private $currentPromise;
 
-    /**
-     * @var Promise
-     */
-    private $result;
+	/**
+	 * @var Generator
+	 */
+	private $generator;
 
-    public function __construct(callable $generatorFn)
-    {
-        $this->generator = $generatorFn();
-        $this->result = new Promise(function (): void {
-            while (isset($this->currentPromise)) {
-                $this->currentPromise->wait();
-            }
-        });
-        try {
-            $this->nextCoroutine($this->generator->current());
-        } catch (Throwable $throwable) {
-            $this->result->reject($throwable);
-        }
-    }
+	/**
+	 * @var Promise
+	 */
+	private $result;
 
-    /**
-     * Create a new coroutine.
-     */
-    public static function of(callable $generatorFn): self
-    {
-        return new self($generatorFn);
-    }
+	public function __construct( callable $generatorFn ) {
+		$this->generator = $generatorFn();
+		$this->result    = new Promise(
+			function (): void {
+				while ( isset( $this->currentPromise ) ) {
+					$this->currentPromise->wait();
+				}
+			}
+		);
+		try {
+			$this->nextCoroutine( $this->generator->current() );
+		} catch ( Throwable $throwable ) {
+			$this->result->reject( $throwable );
+		}
+	}
 
-    public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ): PromiseInterface {
-        return $this->result->then($onFulfilled, $onRejected);
-    }
+	/**
+	 * Create a new coroutine.
+	 */
+	public static function of( callable $generatorFn ): self {
+		return new self( $generatorFn );
+	}
 
-    public function otherwise(callable $onRejected): PromiseInterface
-    {
-        return $this->result->otherwise($onRejected);
-    }
+	public function then(
+		callable $onFulfilled = null,
+		callable $onRejected = null
+	): PromiseInterface {
+		return $this->result->then( $onFulfilled, $onRejected );
+	}
 
-    public function wait(bool $unwrap = true)
-    {
-        return $this->result->wait($unwrap);
-    }
+	public function otherwise( callable $onRejected ): PromiseInterface {
+		return $this->result->otherwise( $onRejected );
+	}
 
-    public function getState(): string
-    {
-        return $this->result->getState();
-    }
+	public function wait( bool $unwrap = true ) {
+		return $this->result->wait( $unwrap );
+	}
 
-    public function resolve($value): void
-    {
-        $this->result->resolve($value);
-    }
+	public function getState(): string {
+		return $this->result->getState();
+	}
 
-    public function reject($reason): void
-    {
-        $this->result->reject($reason);
-    }
+	public function resolve( $value ): void {
+		$this->result->resolve( $value );
+	}
 
-    public function cancel(): void
-    {
-        $this->currentPromise->cancel();
-        $this->result->cancel();
-    }
+	public function reject( $reason ): void {
+		$this->result->reject( $reason );
+	}
 
-    private function nextCoroutine($yielded): void
-    {
-        $this->currentPromise = Create::promiseFor($yielded)
-            ->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
-    }
+	public function cancel(): void {
+		$this->currentPromise->cancel();
+		$this->result->cancel();
+	}
 
-    /**
-     * @internal
-     */
-    public function _handleSuccess($value): void
-    {
-        unset($this->currentPromise);
-        try {
-            $next = $this->generator->send($value);
-            if ($this->generator->valid()) {
-                $this->nextCoroutine($next);
-            } else {
-                $this->result->resolve($value);
-            }
-        } catch (Throwable $throwable) {
-            $this->result->reject($throwable);
-        }
-    }
+	private function nextCoroutine( $yielded ): void {
+		$this->currentPromise = Create::promiseFor( $yielded )
+			->then( [ $this, '_handleSuccess' ], [ $this, '_handleFailure' ] );
+	}
 
-    /**
-     * @internal
-     */
-    public function _handleFailure($reason): void
-    {
-        unset($this->currentPromise);
-        try {
-            $nextYield = $this->generator->throw(Create::exceptionFor($reason));
-            // The throw was caught, so keep iterating on the coroutine
-            $this->nextCoroutine($nextYield);
-        } catch (Throwable $throwable) {
-            $this->result->reject($throwable);
-        }
-    }
+	/**
+	 * @internal
+	 */
+	public function _handleSuccess( $value ): void {
+		unset( $this->currentPromise );
+		try {
+			$next = $this->generator->send( $value );
+			if ( $this->generator->valid() ) {
+				$this->nextCoroutine( $next );
+			} else {
+				$this->result->resolve( $value );
+			}
+		} catch ( Throwable $throwable ) {
+			$this->result->reject( $throwable );
+		}
+	}
+
+	/**
+	 * @internal
+	 */
+	public function _handleFailure( $reason ): void {
+		unset( $this->currentPromise );
+		try {
+			$nextYield = $this->generator->throw( Create::exceptionFor( $reason ) );
+			// The throw was caught, so keep iterating on the coroutine
+			$this->nextCoroutine( $nextYield );
+		} catch ( Throwable $throwable ) {
+			$this->result->reject( $throwable );
+		}
+	}
 }
