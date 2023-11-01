@@ -34,8 +34,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Plausible\\Analytics\\WP\\Client\\": "src/Client/lib/",
-            "Plausible\\Analytics\\WP\\": "src/"
+            "Plausible\\Analytics\\WP\\": "src/",
+            "Plausible\\Analytics\\WP\\Client\\": "src/Client/lib/"
         }
     },
     "config": {
