@@ -29,7 +29,6 @@ class Page extends API {
 		$self_hosted_domain = defined(
 			'PLAUSIBLE_SELF_HOSTED_DOMAIN'
 		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
-		$shared_link        = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
 
 		$this->fields = [
@@ -198,14 +197,10 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label'       => esc_html__( 'Shared Link', 'plausible-analytics' ),
-							'slug'        => 'shared_link',
-							'type'        => 'text',
-							'value'       => $shared_link,
-							'placeholder' => esc_html__(
-								'E.g.',
-								'plausible-analytics'
-							) . "https://plausible.io/share/{$domain}?auth=XXXXXXXXXXXX",
+							'label' => esc_html__( 'Enable analytics in WP Dashboard', 'plausible-analytics' ),
+							'slug'  => 'shared_link',
+							'type'  => 'checkbox',
+							'value' => 'enable',
 						],
 					],
 				],
@@ -568,10 +563,10 @@ class Page extends API {
 				$shared_link .= "&page={$page_url}";
 			}
 			?>
-			<iframe plausible-embed=""
-					src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>" scrolling="no"
-					frameborder="0" loading="lazy" style="width: 100%; height: 1750px; "></iframe>
-			<script async="" src="https://plausible.io/js/embed.host.js"></script>
+			<iframe plausible-embed
+					src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>"
+					scrolling="no" loading="lazy" style="border: 0; width: 100%; height: 1750px; "></iframe>
+			<script async src="https://plausible.io/js/embed.host.js"></script>
 			<?php
 		} else {
 			?>
