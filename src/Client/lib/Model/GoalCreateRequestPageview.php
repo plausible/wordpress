@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalCreateRequestPageview Class Doc Comment
  *
  * @category Class
  * @description Pageview Goal creation params
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,7 +58,7 @@ class GoalCreateRequestPageview implements ModelInterface, ArrayAccess, \JsonSer
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal' => '\OpenAPI\Client\Model\GoalCreateRequestPageviewGoal',
+        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal',
         'goal_type' => 'string'
     ];
 
@@ -328,7 +328,7 @@ class GoalCreateRequestPageview implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Gets goal
      *
-     * @return \OpenAPI\Client\Model\GoalCreateRequestPageviewGoal
+     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal
      */
     public function getGoal()
     {
@@ -338,7 +338,7 @@ class GoalCreateRequestPageview implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets goal
      *
-     * @param \OpenAPI\Client\Model\GoalCreateRequestPageviewGoal $goal goal
+     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal $goal goal
      *
      * @return self
      */

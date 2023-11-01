@@ -30,9 +30,21 @@
         "friendsofphp/php-cs-fixer": "^3.5"
     },
     "autoload": {
-        "psr-4": { "OpenAPI\\Client\\" : "lib/" }
+        "psr-4": {
+            "Plausible\\Analytics\\WP\\Client\\": "lib/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "OpenAPI\\Client\\Test\\" : "test/" }
+        "psr-4": {
+            "Plausible\\Analytics\\WP\\Client\\Test\\": "test/"
+        }
+    },
+    "extra": {
+        "mozart": {
+            "dep_namespace": "Plausible\\Analytics\\WP\\Client\\Lib",
+            "dep_directory": "/lib/Lib/",
+            "classmap_directory": "",
+            "delete_vendor_directories": true
+        }
     }
 }

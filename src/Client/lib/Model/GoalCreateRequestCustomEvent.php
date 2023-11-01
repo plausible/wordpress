@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalCreateRequestCustomEvent Class Doc Comment
  *
  * @category Class
  * @description Custom Event Goal creation params
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,7 +58,7 @@ class GoalCreateRequestCustomEvent implements ModelInterface, ArrayAccess, \Json
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal' => '\OpenAPI\Client\Model\GoalCreateRequestCustomEventGoal',
+        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEventGoal',
         'goal_type' => 'string'
     ];
 
@@ -328,7 +328,7 @@ class GoalCreateRequestCustomEvent implements ModelInterface, ArrayAccess, \Json
     /**
      * Gets goal
      *
-     * @return \OpenAPI\Client\Model\GoalCreateRequestCustomEventGoal
+     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEventGoal
      */
     public function getGoal()
     {
@@ -338,7 +338,7 @@ class GoalCreateRequestCustomEvent implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets goal
      *
-     * @param \OpenAPI\Client\Model\GoalCreateRequestCustomEventGoal $goal goal
+     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEventGoal $goal goal
      *
      * @return self
      */

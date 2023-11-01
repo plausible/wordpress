@@ -50,18 +50,18 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure HTTP basic authorization: basic_auth
-$config = OpenAPI\Client\Configuration::getDefaultConfiguration()
+$config = Plausible\Analytics\WP\Client\Configuration::getDefaultConfiguration()
               ->setUsername('YOUR_USERNAME')
               ->setPassword('YOUR_PASSWORD');
 
 
-$apiInstance = new OpenAPI\Client\Api\DefaultApi(
+$apiInstance = new Plausible\Analytics\WP\Client\Api\DefaultApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$goal_create_request = new \OpenAPI\Client\Model\GoalCreateRequest(); // \OpenAPI\Client\Model\GoalCreateRequest | Goal params
+$goal_create_request = new \Plausible\Analytics\WP\Client\Model\GoalCreateRequest(); // \Plausible\Analytics\WP\Client\Model\GoalCreateRequest | Goal params
 
 try {
     $result = $apiInstance->plausibleWebPluginsAPIControllersGoalsCreate($goal_create_request);

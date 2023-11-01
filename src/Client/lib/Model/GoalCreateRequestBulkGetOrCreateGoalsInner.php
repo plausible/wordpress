@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,16 +26,16 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalCreateRequestBulkGetOrCreateGoalsInner Class Doc Comment
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -57,7 +57,7 @@ class GoalCreateRequestBulkGetOrCreateGoalsInner implements ModelInterface, Arra
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal' => '\OpenAPI\Client\Model\GoalCreateRequestPageviewGoal',
+        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal',
         'goal_type' => 'string'
     ];
 
@@ -327,7 +327,7 @@ class GoalCreateRequestBulkGetOrCreateGoalsInner implements ModelInterface, Arra
     /**
      * Gets goal
      *
-     * @return \OpenAPI\Client\Model\GoalCreateRequestPageviewGoal
+     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal
      */
     public function getGoal()
     {
@@ -337,7 +337,7 @@ class GoalCreateRequestBulkGetOrCreateGoalsInner implements ModelInterface, Arra
     /**
      * Sets goal
      *
-     * @param \OpenAPI\Client\Model\GoalCreateRequestPageviewGoal $goal goal
+     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal $goal goal
      *
      * @return self
      */

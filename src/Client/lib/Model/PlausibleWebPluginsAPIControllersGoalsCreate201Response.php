@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,16 +26,16 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * PlausibleWebPluginsAPIControllersGoalsCreate201Response Class Doc Comment
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -57,8 +57,8 @@ class PlausibleWebPluginsAPIControllersGoalsCreate201Response implements ModelIn
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goals' => '\OpenAPI\Client\Model\Goal[]',
-        'meta' => '\OpenAPI\Client\Model\PaginationMetadata[]'
+        'goals' => '\Plausible\Analytics\WP\Client\Model\Goal[]',
+        'meta' => '\Plausible\Analytics\WP\Client\Model\PaginationMetadata[]'
     ];
 
     /**
@@ -305,7 +305,7 @@ class PlausibleWebPluginsAPIControllersGoalsCreate201Response implements ModelIn
     /**
      * Gets goals
      *
-     * @return \OpenAPI\Client\Model\Goal[]
+     * @return \Plausible\Analytics\WP\Client\Model\Goal[]
      */
     public function getGoals()
     {
@@ -315,7 +315,7 @@ class PlausibleWebPluginsAPIControllersGoalsCreate201Response implements ModelIn
     /**
      * Sets goals
      *
-     * @param \OpenAPI\Client\Model\Goal[] $goals goals
+     * @param \Plausible\Analytics\WP\Client\Model\Goal[] $goals goals
      *
      * @return self
      */
@@ -332,7 +332,7 @@ class PlausibleWebPluginsAPIControllersGoalsCreate201Response implements ModelIn
     /**
      * Gets meta
      *
-     * @return \OpenAPI\Client\Model\PaginationMetadata[]
+     * @return \Plausible\Analytics\WP\Client\Model\PaginationMetadata[]
      */
     public function getMeta()
     {
@@ -342,7 +342,7 @@ class PlausibleWebPluginsAPIControllersGoalsCreate201Response implements ModelIn
     /**
      * Sets meta
      *
-     * @param \OpenAPI\Client\Model\PaginationMetadata[] $meta meta
+     * @param \Plausible\Analytics\WP\Client\Model\PaginationMetadata[] $meta meta
      *
      * @return self
      */

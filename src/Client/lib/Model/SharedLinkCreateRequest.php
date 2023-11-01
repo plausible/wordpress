@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * SharedLinkCreateRequest Class Doc Comment
  *
  * @category Class
  * @description Shared Links creation params
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,7 +58,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
       * @var string[]
       */
     protected static $openAPITypes = [
-        'shared_link' => '\OpenAPI\Client\Model\SharedLinkCreateRequestSharedLink'
+        'shared_link' => '\Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink'
     ];
 
     /**
@@ -296,7 +296,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets shared_link
      *
-     * @return \OpenAPI\Client\Model\SharedLinkCreateRequestSharedLink
+     * @return \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink
      */
     public function getSharedLink()
     {
@@ -306,7 +306,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets shared_link
      *
-     * @param \OpenAPI\Client\Model\SharedLinkCreateRequestSharedLink $shared_link shared_link
+     * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink $shared_link shared_link
      *
      * @return self
      */

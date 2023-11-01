@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Plausible\Analytics\WP\Client\Model;
 
 use \ArrayAccess;
-use \OpenAPI\Client\ObjectSerializer;
+use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalRevenue Class Doc Comment
  *
  * @category Class
  * @description Revenue Goal object
- * @package  OpenAPI\Client
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -59,7 +59,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'goal_type' => 'string',
-        'goal' => '\OpenAPI\Client\Model\GoalRevenueAllOfGoal'
+        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal'
     ];
 
     /**
@@ -333,7 +333,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets goal
      *
-     * @return \OpenAPI\Client\Model\GoalRevenueAllOfGoal
+     * @return \Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal
      */
     public function getGoal()
     {
@@ -343,7 +343,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets goal
      *
-     * @param \OpenAPI\Client\Model\GoalRevenueAllOfGoal $goal goal
+     * @param \Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal $goal goal
      *
      * @return self
      */
