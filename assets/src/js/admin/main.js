@@ -1,3 +1,8 @@
+/**
+ * Plausible Analytics
+ *
+ * Admin JS
+ */
 document.addEventListener( 'DOMContentLoaded', () => {
 	document.addEventListener( 'click', ( e ) => {
 		const dismissButton = e.target.closest( '.notice-dismiss' );
@@ -6,6 +11,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const form = new FormData();
 
 			form.append( 'action', 'plausible_analytics_notice_dismissed' );
+			form.append( 'id', dismissButton.parentElement.id );
 
 			fetch(
 				ajaxurl,

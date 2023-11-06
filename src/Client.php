@@ -3,9 +3,12 @@
 namespace Plausible\Analytics\WP;
 
 use Exception;
+use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\Model\Goal;
+use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
 use Plausible\Analytics\WP\Includes\Helpers;
 
@@ -41,9 +44,13 @@ class Client {
 				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
 			);
 		} catch ( Exception $e ) {
-			echo sprintf(
-				__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
-				$e->getMessage()
+			Notice::set_notice(
+				sprintf(
+					__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
+					$e->getMessage()
+				),
+				Notice::NOTICE_ERROR_SHARED_LINK_FAILED,
+				'error'
 			);
 		}
 
@@ -53,6 +60,28 @@ class Client {
 
 		if ( ! empty( $shared_link->getHref() ) ) {
 			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+		}
+	}
+
+	/**
+	 * Create Custom Goal Event in Plausible Dashboard.
+	 *
+	 * @param $args
+	 *
+	 * @return void
+	 */
+	public function create_goal( $args ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $args );
+		} catch ( Exception $e ) {
+			Notice::set_notice(
+				sprintf(
+					__( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ),
+					$e->getMessage()
+				),
+				Notice::NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED,
+				'error'
+			);
 		}
 	}
 }

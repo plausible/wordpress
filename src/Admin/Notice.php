@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Settings API.
- *
- * @since 1.3.0
- *
+ * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -13,7 +11,15 @@ namespace Plausible\Analytics\WP\Admin;
 defined( 'ABSPATH' ) || exit;
 
 class Notice {
-	const TRANSIENT_NAME = 'plausible_analytics_notice';
+	const TRANSIENT_NAME                        = 'plausible_analytics_notice';
+
+	const NOTICE_ERROR_MODULE_INSTALL_FAILED    = 'module-install-failed';
+
+	const NOTICE_ERROR_PROXY_TEST_FAILED        = 'proxy-test-failed';
+
+	const NOTICE_ERROR_SHARED_LINK_FAILED       = 'shared-link-failed';
+
+	const NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED = 'custom-event-goal-failed';
 
 	/** @var array $notices */
 	public static $notices = [];
@@ -25,14 +31,14 @@ class Notice {
 	 * @param bool   $json
 	 * @param int    $code
 	 */
-	public static function set_notice( $message, $message_id = '', $type = 'success', $screen_id = 'all' ) {
+	public static function set_notice( $message, $notice_id = '', $type = 'success', $screen_id = 'all' ) {
 		self::$notices = get_transient( self::TRANSIENT_NAME );
 
 		if ( ! self::$notices ) {
 			self::$notices = [];
 		}
 
-		self::$notices[ $screen_id ][ $type ][ $message_id ] = $message;
+		self::$notices[ $screen_id ][ $type ][ 'plausible-analytics-' . $notice_id ] = $message;
 
 		set_transient( self::TRANSIENT_NAME, self::$notices );
 	}
@@ -51,13 +57,13 @@ class Notice {
 					continue;
 				}
 
-				foreach ( $notice as $type => $message ) {
+				foreach ( $notice as $type => $messages ) {
 					?>
-					<div id="plausible-analytics-message" class="notice notice-<?php echo $type; ?> is-dismissible">
-						<?php foreach ( $message as $line ) : ?>
+					<?php foreach ( $messages as $id => $line ) : ?>
+						<div id="<?php echo $id; ?>" class="notice notice-<?php echo $type; ?> is-dismissible">
 							<p><strong><?php echo $line; ?></strong></p>
-						<?php endforeach; ?>
-					</div>
+						</div>
+					<?php endforeach; ?>
 					<?php
 				}
 			}

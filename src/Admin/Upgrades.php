@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Upgrades
- *
  * @since      1.3.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -20,16 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Class Upgrades
- *
  * @since 1.3.0
  */
 class Upgrades {
 	/**
 	 * Constructor for Upgrades.
-	 *
 	 * @since  1.3.0
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -38,12 +33,9 @@ class Upgrades {
 
 	/**
 	 * Register routines for upgrades.
-	 *
 	 * This is intended for automatic upgrade routines having less resource intensive tasks.
-	 *
 	 * @since  1.3.0
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function register_routines() {
@@ -70,75 +62,18 @@ class Upgrades {
 			$this->upgrade_to_132();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.0.0', '<' ) ) {
+			$this->upgrade_to_200();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
 	/**
-	 * Upgrade to 1.3.2
-	 *
-	 * - Updates the Proxy Resource, Cache URL to be protocol relative.
-	 *
-	 * @return void
-	 * @throws Exception
-	 */
-	private function upgrade_to_132() {
-		$proxy_resources = Helpers::get_proxy_resources();
-
-		$proxy_resources['cache_url'] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources['cache_url'] );
-
-		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
-
-		update_option( 'plausible_analytics_version', '1.3.2' );
-	}
-
-	/**
-	 * Upgrade to 1.3.1
-	 *
-	 * - Enables 404 pages tracking by default.
-	 *
-	 * @return void
-	 */
-	public function upgrade_to_131() {
-		$settings = Helpers::get_settings();
-
-		if ( ! in_array( '404', $settings['enhanced_measurements'], true ) ) {
-			array_unshift( $settings['enhanced_measurements'], '404' );
-		}
-
-		update_option( 'plausible_analytics_settings', $settings );
-
-		update_option( 'plausible_analytics_version', '1.3.1' );
-	}
-
-	/**
-	 * Get rid of the previous "example.com" default for self_hosted_domain.
-	 *
-	 * @since 1.2.6
-	 *
-	 * @return void
-	 */
-	public function upgrade_to_126() {
-		$old_settings = Helpers::get_settings();
-		$new_settings = $old_settings;
-
-		if ( ! empty( $old_settings['self_hosted_domain'] )
-			&& strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
-				$new_settings['self_hosted_domain'] = '';
-		}
-
-		update_option( 'plausible_analytics_settings', $new_settings );
-
-		update_option( 'plausible_analytics_version', '1.2.6' );
-	}
-
-	/**
 	 * Upgrade routine for 1.2.5
-	 *
 	 * Cleans Custom Domain related options from database, as it was removed in this version.
-	 *
 	 * @since  1.2.5
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function upgrade_to_125() {
@@ -160,13 +95,78 @@ class Upgrades {
 		// Enable Outbound links by default.
 		$new_settings['enhanced_measurements'] = [ 'outbound-links' ];
 
-		if ( ! empty( $old_settings['track_administrator'] )
-			&& $old_settings['track_administrator'] === 'true' ) {
+		if ( ! empty( $old_settings['track_administrator'] ) && $old_settings['track_administrator'] === 'true' ) {
 			$new_settings['tracked_user_roles'] = [ 'administrator' ];
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
 
 		update_option( 'plausible_analytics_version', '1.2.5' );
+	}
+
+	/**
+	 * Get rid of the previous "example.com" default for self_hosted_domain.
+	 * @since 1.2.6
+	 * @return void
+	 */
+	public function upgrade_to_126() {
+		$old_settings = Helpers::get_settings();
+		$new_settings = $old_settings;
+
+		if ( ! empty( $old_settings['self_hosted_domain'] ) && strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
+			$new_settings['self_hosted_domain'] = '';
+		}
+
+		update_option( 'plausible_analytics_settings', $new_settings );
+
+		update_option( 'plausible_analytics_version', '1.2.6' );
+	}
+
+	/**
+	 * Upgrade to 1.3.1
+	 * - Enables 404 pages tracking by default.
+	 * @return void
+	 */
+	public function upgrade_to_131() {
+		$settings = Helpers::get_settings();
+
+		if ( ! in_array( '404', $settings['enhanced_measurements'], true ) ) {
+			array_unshift( $settings['enhanced_measurements'], '404' );
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		update_option( 'plausible_analytics_version', '1.3.1' );
+	}
+
+	/**
+	 * Upgrade to 1.3.2
+	 * - Updates the Proxy Resource, Cache URL to be protocol relative.
+	 * @return void
+	 * @throws Exception
+	 */
+	private function upgrade_to_132() {
+		$proxy_resources = Helpers::get_proxy_resources();
+
+		$proxy_resources['cache_url'] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources['cache_url'] );
+
+		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
+
+		update_option( 'plausible_analytics_version', '1.3.2' );
+	}
+
+	/**
+	 * Upgrade DB to 2.0.0
+	 * - If the Proxy notice was dismissed before, this makes sure it stays dismissed.
+	 * @return void
+	 */
+	private function upgrade_to_200() {
+		$proxy_notice_dismissed = get_transient( 'plausible_analytics_notice_dismissed' );
+
+		if ( $proxy_notice_dismissed ) {
+			set_transient( 'plausible_analytics_' . str_replace( '-', '_', Notice::NOTICE_ERROR_MODULE_INSTALL_FAILED ) . '_notice_dismissed', true );
+
+			delete_transient( 'plausible_analytics_notice_dismissed' );
+		}
 	}
 }
