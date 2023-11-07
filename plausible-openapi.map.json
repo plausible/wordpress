@@ -1,0 +1,1 @@
+use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;

@@ -449,7 +449,7 @@ class ObjectSerializer {
 		if ( $class === '\SplFileObject' ) {
 			$data = Utils::streamFor( $data );
 
-			/** @var \Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface $data */
+			/** @var \Psr\Http\Message\StreamInterface $data */
 
 			// determine file name
 			if ( is_array( $httpHeaders ) &&

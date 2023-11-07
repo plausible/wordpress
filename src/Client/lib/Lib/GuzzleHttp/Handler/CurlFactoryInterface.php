@@ -4,22 +4,22 @@ namespace Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Handler;
 
 use Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\RequestInterface;
 
-interface CurlFactoryInterface {
+interface CurlFactoryInterface
+{
+    /**
+     * Creates a cURL handle resource.
+     *
+     * @param RequestInterface $request Request
+     * @param array            $options Transfer options
+     *
+     * @throws \RuntimeException when an option cannot be applied
+     */
+    public function create(RequestInterface $request, array $options): EasyHandle;
 
-	/**
-	 * Creates a cURL handle resource.
-	 *
-	 * @param RequestInterface $request Request
-	 * @param array            $options Transfer options
-	 *
-	 * @throws \RuntimeException when an option cannot be applied
-	 */
-	public function create( RequestInterface $request, array $options): EasyHandle;
-
-	/**
-	 * Release an easy handle, allowing it to be reused or closed.
-	 *
-	 * This function must call unset on the easy handle's "handle" property.
-	 */
-	public function release( EasyHandle $easy): void;
+    /**
+     * Release an easy handle, allowing it to be reused or closed.
+     *
+     * This function must call unset on the easy handle's "handle" property.
+     */
+    public function release(EasyHandle $easy): void;
 }
