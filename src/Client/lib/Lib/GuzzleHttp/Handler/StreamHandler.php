@@ -107,7 +107,7 @@ class StreamHandler {
 		}
 
 		[$stream, $headers] = $this->checkDecode( $options, $headers, $stream );
-		$stream             = Psr7\Utils::streamFor( $stream );
+		$stream             = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::streamFor( $stream );
 		$sink               = $stream;
 
 		if ( \strcasecmp( 'HEAD', $request->getMethod() ) ) {
@@ -115,7 +115,7 @@ class StreamHandler {
 		}
 
 		try {
-			$response = new Psr7\Response( $status, $headers, $sink, $ver, $reason );
+			$response = new Plausible\Analytics\WP\Client\Lib\Psr7\Response( $status, $headers, $sink, $ver, $reason );
 		} catch ( \Exception $e ) {
 			return P\Create::rejectionFor(
 				new RequestException( 'An error was encountered while creating the response', $request, null, $e )
@@ -148,9 +148,9 @@ class StreamHandler {
 			return $stream;
 		}
 
-		$sink = $options['sink'] ?? Psr7\Utils::tryFopen( 'php://temp', 'r+' );
+		$sink = $options['sink'] ?? Plausible\Analytics\WP\Client\Lib\Psr7\Utils::tryFopen( 'php://temp', 'r+' );
 
-		return \is_string( $sink ) ? new Psr7\LazyOpenStream( $sink, 'w+' ) : Psr7\Utils::streamFor( $sink );
+		return \is_string( $sink ) ? new Plausible\Analytics\WP\Client\Lib\Psr7\LazyOpenStream( $sink, 'w+' ) : Plausible\Analytics\WP\Client\Lib\Psr7\Utils::streamFor( $sink );
 	}
 
 	/**
@@ -163,7 +163,7 @@ class StreamHandler {
 			if ( isset( $normalizedKeys['content-encoding'] ) ) {
 				$encoding = $headers[ $normalizedKeys['content-encoding'] ];
 				if ( $encoding[0] === 'gzip' || $encoding[0] === 'deflate' ) {
-					$stream                                = new Psr7\InflateStream( Psr7\Utils::streamFor( $stream ) );
+					$stream                                = new Plausible\Analytics\WP\Client\Lib\Psr7\InflateStream( Plausible\Analytics\WP\Client\Lib\Psr7\Utils::streamFor( $stream ) );
 					$headers['x-encoded-content-encoding'] = $headers[ $normalizedKeys['content-encoding'] ];
 
 					// Remove content-encoding header

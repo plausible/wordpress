@@ -81,10 +81,10 @@ class MessageFormatter implements MessageFormatterInterface {
 				$result = '';
 				switch ( $matches[1] ) {
 					case 'request':
-						$result = Psr7\Message::toString( $request );
+						$result = Plausible\Analytics\WP\Client\Lib\Psr7\Message::toString( $request );
 						break;
 					case 'response':
-						$result = $response ? Psr7\Message::toString( $response ) : '';
+						$result = $response ? Plausible\Analytics\WP\Client\Lib\Psr7\Message::toString( $response ) : '';
 						break;
 					case 'req_headers':
 						$result = \trim(

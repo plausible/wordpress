@@ -39,10 +39,10 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 	 * Client configuration settings include the following options:
 	 *
 	 * - handler: (callable) Function that transfers HTTP requests over the
-	 *   wire. The function is called with a Psr7\Http\Message\RequestInterface
+	 *   wire. The function is called with a Plausible\Analytics\WP\Client\Lib\Psr7\Http\Message\RequestInterface
 	 *   and array of transfer options, and must return a
 	 *   Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface that is fulfilled with a
-	 *   Psr7\Http\Message\ResponseInterface on success.
+	 *   Plausible\Analytics\WP\Client\Lib\Psr7\Http\Message\ResponseInterface on success.
 	 *   If no handler is provided, a default handler will be created
 	 *   that enables all of the request options below by attaching all of the
 	 *   default middleware to the handler.
@@ -63,7 +63,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 
 		// Convert the base_uri to a UriInterface
 		if ( isset( $config['base_uri'] ) ) {
-			$config['base_uri'] = Psr7\Utils::uriFor( $config['base_uri'] );
+			$config['base_uri'] = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::uriFor( $config['base_uri'] );
 		}
 
 		$this->configureDefaults( $config );
@@ -152,11 +152,11 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 		$body    = $options['body'] ?? null;
 		$version = $options['version'] ?? '1.1';
 		// Merge the URI into the base URI.
-		$uri = $this->buildUri( Psr7\Utils::uriFor( $uri ), $options );
+		$uri = $this->buildUri( Plausible\Analytics\WP\Client\Lib\Psr7\Utils::uriFor( $uri ), $options );
 		if ( \is_array( $body ) ) {
 			throw $this->invalidBody();
 		}
-		$request = new Psr7\Request( $method, $uri, $headers, $body, $version );
+		$request = new Plausible\Analytics\WP\Client\Lib\Psr7\Request( $method, $uri, $headers, $body, $version );
 		// Remove the option so that they are not doubly-applied.
 		unset( $options['headers'], $options['body'], $options['version'] );
 
@@ -203,7 +203,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 
 	private function buildUri( UriInterface $uri, array $config ): UriInterface {
 		if ( isset( $config['base_uri'] ) ) {
-			$uri = Psr7\UriResolver::resolve( Psr7\Utils::uriFor( $config['base_uri'] ), $uri );
+			$uri = Plausible\Analytics\WP\Client\Lib\Psr7\UriResolver::resolve( Plausible\Analytics\WP\Client\Lib\Psr7\Utils::uriFor( $config['base_uri'] ), $uri );
 		}
 
 		if ( isset( $config['idn_conversion'] ) && ( $config['idn_conversion'] !== false ) ) {
@@ -353,12 +353,12 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			$options['body'] = \http_build_query( $options['form_params'], '', '&' );
 			unset( $options['form_params'] );
 			// Ensure that we don't have the header in different case and set the new value.
-			$options['_conditional']                 = Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
+			$options['_conditional']                 = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
 			$options['_conditional']['Content-Type'] = 'application/x-www-form-urlencoded';
 		}
 
 		if ( isset( $options['multipart'] ) ) {
-			$options['body'] = new Psr7\MultipartStream( $options['multipart'] );
+			$options['body'] = new Plausible\Analytics\WP\Client\Lib\Psr7\MultipartStream( $options['multipart'] );
 			unset( $options['multipart'] );
 		}
 
@@ -366,7 +366,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			$options['body'] = Utils::jsonEncode( $options['json'] );
 			unset( $options['json'] );
 			// Ensure that we don't have the header in different case and set the new value.
-			$options['_conditional']                 = Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
+			$options['_conditional']                 = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
 			$options['_conditional']['Content-Type'] = 'application/json';
 		}
 
@@ -374,7 +374,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			&& $options['decode_content'] !== true
 		) {
 			// Ensure that we don't have the header in different case and set the new value.
-			$options['_conditional']                  = Psr7\Utils::caselessRemove( [ 'Accept-Encoding' ], $options['_conditional'] );
+			$options['_conditional']                  = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::caselessRemove( [ 'Accept-Encoding' ], $options['_conditional'] );
 			$modify['set_headers']['Accept-Encoding'] = $options['decode_content'];
 		}
 
@@ -382,7 +382,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			if ( \is_array( $options['body'] ) ) {
 				throw $this->invalidBody();
 			}
-			$modify['body'] = Psr7\Utils::streamFor( $options['body'] );
+			$modify['body'] = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::streamFor( $options['body'] );
 			unset( $options['body'] );
 		}
 
@@ -392,7 +392,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			switch ( $type ) {
 				case 'basic':
 					// Ensure that we don't have the header in different case and set the new value.
-					$modify['set_headers']                  = Psr7\Utils::caselessRemove( [ 'Authorization' ], $modify['set_headers'] );
+					$modify['set_headers']                  = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::caselessRemove( [ 'Authorization' ], $modify['set_headers'] );
 					$modify['set_headers']['Authorization'] = 'Basic '
 						. \base64_encode( "$value[0]:$value[1]" );
 					break;
@@ -432,11 +432,11 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 			$modify['version'] = $options['version'];
 		}
 
-		$request = Psr7\Utils::modifyRequest( $request, $modify );
-		if ( $request->getBody() instanceof Psr7\MultipartStream ) {
+		$request = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::modifyRequest( $request, $modify );
+		if ( $request->getBody() instanceof Plausible\Analytics\WP\Client\Lib\Psr7\MultipartStream ) {
 			// Use a multipart/form-data POST if a Content-Type is not set.
 			// Ensure that we don't have the header in different case and set the new value.
-			$options['_conditional']                 = Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
+			$options['_conditional']                 = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::caselessRemove( [ 'Content-Type' ], $options['_conditional'] );
 			$options['_conditional']['Content-Type'] = 'multipart/form-data; boundary='
 				. $request->getBody()->getBoundary();
 		}
@@ -450,7 +450,7 @@ class Client implements ClientInterface, \Plausible\Analytics\WP\Client\Lib\Psr\
 					$modify['set_headers'][ $k ] = $v;
 				}
 			}
-			$request = Psr7\Utils::modifyRequest( $request, $modify );
+			$request = Plausible\Analytics\WP\Client\Lib\Psr7\Utils::modifyRequest( $request, $modify );
 			// Don't pass this internal value along to middleware/handlers.
 			unset( $options['_conditional'] );
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalPageview
+ * GoalListResponseMeta
  *
  * PHP version 7.4
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
- * GoalPageview Class Doc Comment
+ * GoalListResponseMeta Class Doc Comment
  *
  * @category Class
- * @description Pageview Goal object
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
+class GoalListResponseMeta implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal.Pageview';
+    protected static $openAPIModelName = 'Goal_ListResponse_meta';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +57,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal_type' => 'string',
-        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal'
+        'pagination' => '\Plausible\Analytics\WP\Client\Model\PaginationMetadata'
     ];
 
     /**
@@ -70,8 +68,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'goal_type' => null,
-        'goal' => null
+        'pagination' => null
     ];
 
     /**
@@ -80,8 +77,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'goal_type' => false,
-		'goal' => false
+        'pagination' => false
     ];
 
     /**
@@ -170,8 +166,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'goal_type' => 'goal_type',
-        'goal' => 'goal'
+        'pagination' => 'pagination'
     ];
 
     /**
@@ -180,8 +175,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'goal_type' => 'setGoalType',
-        'goal' => 'setGoal'
+        'pagination' => 'setPagination'
     ];
 
     /**
@@ -190,8 +184,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'goal_type' => 'getGoalType',
-        'goal' => 'getGoal'
+        'pagination' => 'getPagination'
     ];
 
     /**
@@ -251,8 +244,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('goal_type', $data ?? [], null);
-        $this->setIfExists('goal', $data ?? [], null);
+        $this->setIfExists('pagination', $data ?? [], null);
     }
 
     /**
@@ -282,11 +274,8 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['goal_type'] === null) {
-            $invalidProperties[] = "'goal_type' can't be null";
-        }
-        if ($this->container['goal'] === null) {
-            $invalidProperties[] = "'goal' can't be null";
+        if ($this->container['pagination'] === null) {
+            $invalidProperties[] = "'pagination' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,55 +293,28 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets goal_type
+     * Gets pagination
      *
-     * @return string
+     * @return \Plausible\Analytics\WP\Client\Model\PaginationMetadata
      */
-    public function getGoalType()
+    public function getPagination()
     {
-        return $this->container['goal_type'];
+        return $this->container['pagination'];
     }
 
     /**
-     * Sets goal_type
+     * Sets pagination
      *
-     * @param string $goal_type goal_type
+     * @param \Plausible\Analytics\WP\Client\Model\PaginationMetadata $pagination pagination
      *
      * @return self
      */
-    public function setGoalType($goal_type)
+    public function setPagination($pagination)
     {
-        if (is_null($goal_type)) {
-            throw new \InvalidArgumentException('non-nullable goal_type cannot be null');
+        if (is_null($pagination)) {
+            throw new \InvalidArgumentException('non-nullable pagination cannot be null');
         }
-        $this->container['goal_type'] = $goal_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets goal
-     *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal
-     */
-    public function getGoal()
-    {
-        return $this->container['goal'];
-    }
-
-    /**
-     * Sets goal
-     *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal $goal goal
-     *
-     * @return self
-     */
-    public function setGoal($goal)
-    {
-        if (is_null($goal)) {
-            throw new \InvalidArgumentException('non-nullable goal cannot be null');
-        }
-        $this->container['goal'] = $goal;
+        $this->container['pagination'] = $pagination;
 
         return $this;
     }

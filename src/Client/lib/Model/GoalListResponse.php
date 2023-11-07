@@ -51,7 +51,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	protected static $openAPITypes = [
 		'goals' => '\Plausible\Analytics\WP\Client\Model\Goal[]',
-		'meta'  => '\Plausible\Analytics\WP\Client\Model\PaginationMetadata[]',
+		'meta'  => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta',
 	];
 
 	/**
@@ -135,9 +135,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 * @param mixed  $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null(
-			$fields[ $variableName ]
-		) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -283,7 +281,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 
 	/**
 	 * Gets meta
-	 * @return \Plausible\Analytics\WP\Client\Model\PaginationMetadata[]
+	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
 	 */
 	public function getMeta() {
 		return $this->container['meta'];
@@ -292,7 +290,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	/**
 	 * Sets meta
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\PaginationMetadata[] $meta meta
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
 	 *
 	 * @return self
 	 */

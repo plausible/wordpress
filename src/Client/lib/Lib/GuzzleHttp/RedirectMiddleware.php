@@ -88,7 +88,7 @@ class RedirectMiddleware {
 		$nextRequest = $this->modifyRequest( $request, $options, $response );
 
 		// If authorization is handled by curl, unset it if URI is cross-origin.
-		if ( Psr7\UriComparator::isCrossOrigin( $request->getUri(), $nextRequest->getUri() ) && defined( '\CURLOPT_HTTPAUTH' ) ) {
+		if ( Plausible\Analytics\WP\Client\Lib\Psr7\UriComparator::isCrossOrigin( $request->getUri(), $nextRequest->getUri() ) && defined( '\CURLOPT_HTTPAUTH' ) ) {
 			unset(
 				$options['curl'][ \CURLOPT_HTTPAUTH ],
 				$options['curl'][ \CURLOPT_USERPWD ]
@@ -193,12 +193,12 @@ class RedirectMiddleware {
 		}
 
 		// Remove Authorization and Cookie headers if URI is cross-origin.
-		if ( Psr7\UriComparator::isCrossOrigin( $request->getUri(), $modify['uri'] ) ) {
+		if ( Plausible\Analytics\WP\Client\Lib\Psr7\UriComparator::isCrossOrigin( $request->getUri(), $modify['uri'] ) ) {
 			$modify['remove_headers'][] = 'Authorization';
 			$modify['remove_headers'][] = 'Cookie';
 		}
 
-		return Psr7\Utils::modifyRequest( $request, $modify );
+		return Plausible\Analytics\WP\Client\Lib\Psr7\Utils::modifyRequest( $request, $modify );
 	}
 
 	/**
@@ -209,9 +209,9 @@ class RedirectMiddleware {
 		ResponseInterface $response,
 		array $protocols
 	): UriInterface {
-		$location = Psr7\UriResolver::resolve(
+		$location = Plausible\Analytics\WP\Client\Lib\Psr7\UriResolver::resolve(
 			$request->getUri(),
-			new Psr7\Uri( $response->getHeaderLine( 'Location' ) )
+			new Plausible\Analytics\WP\Client\Lib\Psr7\Uri( $response->getHeaderLine( 'Location' ) )
 		);
 
 		// Ensure that the redirect URI is allowed based on the protocols.

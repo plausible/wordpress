@@ -21,6 +21,7 @@ lib/Model/GoalCreateRequestRevenueGoal.php
 lib/Model/GoalCustomEvent.php
 lib/Model/GoalCustomEventAllOfGoal.php
 lib/Model/GoalListResponse.php
+lib/Model/GoalListResponseMeta.php
 lib/Model/GoalPageview.php
 lib/Model/GoalPageviewAllOfGoal.php
 lib/Model/GoalRevenue.php
