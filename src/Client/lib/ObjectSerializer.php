@@ -200,7 +200,7 @@ class ObjectSerializer {
 		$query = [];
 		$value = ( in_array( $openApiType, [ 'object', 'array' ], true ) ) ? (array) $value : $value;
 
-		// since \GuzzleHttp\Psr7\Query::build fails with nested arrays
+		// since \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Query::build fails with nested arrays
 		// need to flatten array first
 		$flattenArray = function ( $arr, $name, &$result = [] ) use ( &$flattenArray, $style, $explode ) {
 			if ( ! is_array( $arr ) ) {
@@ -449,7 +449,7 @@ class ObjectSerializer {
 		if ( $class === '\SplFileObject' ) {
 			$data = Utils::streamFor( $data );
 
-			/** @var \Psr\Http\Message\StreamInterface $data */
+			/** @var \Plausible\Analytics\WP\Client\Lib\Psr\Http\Message\StreamInterface $data */
 
 			// determine file name
 			if ( is_array( $httpHeaders ) &&
@@ -594,6 +594,6 @@ class ObjectSerializer {
 		?string $arg_separator = null,
 		int $encoding_type = \PHP_QUERY_RFC3986
 	): string {
-		return \GuzzleHttp\Psr7\Query::build( $data, $encoding_type );
+		return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Query::build( $data, $encoding_type );
 	}
 }
