@@ -66,7 +66,7 @@ class Client {
 	/**
 	 * Create Custom Goal Event in Plausible Dashboard.
 	 *
-	 * @param $args
+	 * @param array $args
 	 *
 	 * @return void
 	 */
@@ -80,6 +80,50 @@ class Client {
 					$e->getMessage()
 				),
 				Notice::NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED,
+				'error'
+			);
+		}
+	}
+
+	/**
+	 * Delete a Custom Event Goal by ID.
+	 *
+	 * @param int $id
+	 *
+	 * @return void
+	 */
+	public function delete_goal( $id ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersGoalsDelete( $id );
+		} catch ( Exception $e ) {
+			Notice::set_notice(
+				sprintf(
+					__(
+						'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
+						'plausible-analytics'
+					),
+					$e->getMessage()
+				),
+				Notice::NOTICE_ERROR_DELETE_CUSTOM_EVENT_GOAL_FAILED,
+				'error'
+			);
+		}
+	}
+
+	/**
+	 * Retrieve Goals
+	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse
+	 */
+	public function retrieve_goals() {
+		try {
+			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex();
+		} catch ( Exception $e ) {
+			Notice::set_notice(
+				sprintf(
+					__( 'Something went wrong while retrieving your Custom Event Goals: %s', 'plausible-analytics' ),
+					$e->getMessage()
+				),
+				Notice::NOTICE_ERROR_RETRIEVE_CUSTOM_EVENT_GOALS_FAILED,
 				'error'
 			);
 		}

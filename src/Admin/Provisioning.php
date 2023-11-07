@@ -41,6 +41,7 @@ class Provisioning {
 	private function init() {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_goals' ], 10, 2 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
 	}
 
 	/**
@@ -66,7 +67,6 @@ class Provisioning {
 	 * @param $settings
 	 *
 	 * @return void
-	 * @todo Add error handling and throw a notice if creating the goal failed.
 	 */
 	public function create_goals( $old_settings, $settings ) {
 		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
@@ -77,7 +77,7 @@ class Provisioning {
 
 		$custom_event_keys = array_keys( $this->custom_event_goals );
 
-		foreach ( $enhanced_measurements as $i => $measurement ) {
+		foreach ( $enhanced_measurements as $measurement ) {
 			if ( ! in_array( $measurement, $custom_event_keys ) ) {
 				continue;
 			}
@@ -92,6 +92,36 @@ class Provisioning {
 			);
 
 			$this->client->create_goal( $goal );
+		}
+	}
+
+	/**
+	 * Delete Custom Event Goals when an Enhanced Measurement is disabled.
+	 *
+	 * @param $old_settings
+	 * @param $settings
+	 *
+	 * @return void
+	 */
+	public function maybe_delete_goals( $old_settings, $settings ) {
+		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
+		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
+
+		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+
+		if ( empty( $disabled_settings ) ) {
+			return;
+		}
+
+		// $goals             = $this->client->retrieve_goals();
+		$custom_event_keys = array_keys( $this->custom_event_goals );
+
+		foreach ( $disabled_settings as $disabled_setting ) {
+			if ( ! in_array( $disabled_setting, $custom_event_keys ) ) {
+				continue;
+			}
+
+			// $this->client->delete_goal( $id );
 		}
 	}
 }

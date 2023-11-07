@@ -11,15 +11,19 @@ namespace Plausible\Analytics\WP\Admin;
 defined( 'ABSPATH' ) || exit;
 
 class Notice {
-	const TRANSIENT_NAME                        = 'plausible_analytics_notice';
+	const TRANSIENT_NAME                                  = 'plausible_analytics_notice';
 
-	const NOTICE_ERROR_MODULE_INSTALL_FAILED    = 'module-install-failed';
+	const NOTICE_ERROR_MODULE_INSTALL_FAILED              = 'module-install-failed';
 
-	const NOTICE_ERROR_PROXY_TEST_FAILED        = 'proxy-test-failed';
+	const NOTICE_ERROR_PROXY_TEST_FAILED                  = 'proxy-test-failed';
 
-	const NOTICE_ERROR_SHARED_LINK_FAILED       = 'shared-link-failed';
+	const NOTICE_ERROR_SHARED_LINK_FAILED                 = 'shared-link-failed';
 
-	const NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED = 'custom-event-goal-failed';
+	const NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED           = 'custom-event-goal-failed';
+
+	const NOTICE_ERROR_DELETE_CUSTOM_EVENT_GOAL_FAILED    = 'delete-custom-event-goal-failed';
+
+	const NOTICE_ERROR_RETRIEVE_CUSTOM_EVENT_GOALS_FAILED = 'retrieve-custom-event-goals-failed';
 
 	/** @var array $notices */
 	public static $notices = [];
