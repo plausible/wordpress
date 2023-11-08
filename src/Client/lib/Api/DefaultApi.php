@@ -358,9 +358,10 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $goal_create_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $goal_create_request )
+					);
 			} else {
 				$httpBody = $goal_create_request;
 			}
@@ -1634,9 +1635,10 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
+					);
 			} else {
 				$httpBody = $shared_link_create_request;
 			}

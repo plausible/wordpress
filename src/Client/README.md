@@ -50,18 +50,18 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure HTTP basic authorization: basic_auth
-$config = PlausibleAnalyticsWPClient\Configuration::getDefaultConfiguration()
+$config = Plausible\Analytics\WP\Client\Configuration::getDefaultConfiguration()
               ->setUsername('YOUR_USERNAME')
               ->setPassword('YOUR_PASSWORD');
 
 
-$apiInstance = new PlausibleAnalyticsWPClient\Api\DefaultApi(
+$apiInstance = new Plausible\Analytics\WP\Client\Api\DefaultApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$goal_create_request = new \PlausibleAnalyticsWPClient\Model\GoalCreateRequest(); // \PlausibleAnalyticsWPClient\Model\GoalCreateRequest | Goal params
+$goal_create_request = new \Plausible\Analytics\WP\Client\Model\GoalCreateRequest(); // \Plausible\Analytics\WP\Client\Model\GoalCreateRequest | Goal params
 
 try {
     $result = $apiInstance->plausibleWebPluginsAPIControllersGoalsCreate($goal_create_request);
@@ -111,6 +111,7 @@ Class | Method | HTTP request | Description
 - [Link](docs/Model/Link.md)
 - [NotFoundError](docs/Model/NotFoundError.md)
 - [PaginationMetadata](docs/Model/PaginationMetadata.md)
+- [PaginationMetadataLinks](docs/Model/PaginationMetadataLinks.md)
 - [PaymentRequiredError](docs/Model/PaymentRequiredError.md)
 - [PlausibleWebPluginsAPIControllersGoalsCreate201Response](docs/Model/PlausibleWebPluginsAPIControllersGoalsCreate201Response.md)
 - [SharedLink](docs/Model/SharedLink.md)
