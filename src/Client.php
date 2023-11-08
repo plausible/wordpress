@@ -7,8 +7,6 @@ use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
-use Plausible\Analytics\WP\Client\Model\Goal;
-use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
 use Plausible\Analytics\WP\Includes\Helpers;
 
@@ -112,11 +110,11 @@ class Client {
 
 	/**
 	 * Retrieve Goals
-	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse
+	 * @return \Plausible\Ánalytics\WP\Client\Model\Goal[]
 	 */
 	public function retrieve_goals() {
 		try {
-			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex();
+			$result = $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex();
 		} catch ( Exception $e ) {
 			Notice::set_notice(
 				sprintf(
@@ -127,5 +125,7 @@ class Client {
 				'error'
 			);
 		}
+
+		return $result->getGoals();
 	}
 }

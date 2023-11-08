@@ -106,22 +106,24 @@ class Provisioning {
 	public function maybe_delete_goals( $old_settings, $settings ) {
 		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
 		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
-
-		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
 			return;
 		}
 
-		// $goals             = $this->client->retrieve_goals();
-		$custom_event_keys = array_keys( $this->custom_event_goals );
+		$goals = $this->client->retrieve_goals();
 
-		foreach ( $disabled_settings as $disabled_setting ) {
-			if ( ! in_array( $disabled_setting, $custom_event_keys ) ) {
+		foreach ( $goals as $goal ) {
+			$goal = $goal->getGoal();
+			$name = $goal->getDisplayName();
+			$key  = array_search( $name, $this->custom_event_goals );
+
+			if ( ! in_array( $key, $disabled_settings ) ) {
 				continue;
 			}
 
-			// $this->client->delete_goal( $id );
+			$this->client->delete_goal( $goal->getId() );
 		}
 	}
 }
