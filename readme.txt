@@ -19,7 +19,7 @@ Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA
 
 Take a look at [the live demo](https://plausible.io/plausible.io).
 
-**You need a subscription to Plausible Analytics to track your stats. There's a free 30-day trial with unlimited usage and no credit card required.**
+**You need a subscription to Plausible Analytics to track your stats. There's a free 30-day trial with no credit card required.**
 
 We're completely independent, self-funded, bootstrapped and debt-free. We're not interested in raising funds or taking investment. We choose the subscription business model rather than surveillance capitalism. We're operating a sustainable project funded solely by the fees that our subscribers pay us.
 
@@ -29,11 +29,11 @@ We're completely independent, self-funded, bootstrapped and debt-free. We're not
 
 Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics, a simple but powerful, lightweight, open source and privacy-friendly alternative. 
 
-Here's what makes Plausible a great Google Analytics alternative and why over 10,000 paying subscribers trust us with their website and business insights:
+Here's what makes Plausible a great Google Analytics alternative and why over 12,000 paying subscribers trust us with their website and business insights:
 
-### Smooth transition from Universal Analytics
+### Smooth transition from Google Analytics
 
-Plausible features a realtime dashboard, entry pages report and integration with Search Console. You can track your paid campaigns and conversions. You can invite team members. You can even [import your historical stats from Universal Analytics](https://plausible.io/docs/google-analytics-import). Learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience) and join thousands who have already migrated from Universal Analytics.
+Plausible features a realtime dashboard, entry pages report and integration with Search Console. You can track your paid campaigns and conversions. You can invite team members. You can even [import your historical stats from Universal Analytics](https://plausible.io/docs/google-analytics-import). Learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience) and join thousands who have already migrated from Google Analytics.
 
 ### Simple analytics at a glance
 
@@ -55,7 +55,7 @@ Plausible is useful. Segment your audience by any metric you click on. Answer th
 
 Plausible is shareable. Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them. You can also share your stats privately by generating a secure link. This link is impossible to guess but you can add password protection for extra security. You can invite team members and assign user roles too.
 
-### Transparent and fully open source software
+### Transparent and open source software
 
 Plausible is open source analytics. Our source code is available and accessible on GitHub so anyone can read it, inspect it and review it to verify that our actions match with our words. We welcome feedback and have a public roadmap. If you're happy to manage your own infrastructure, you can self-host Plausible too. 
 
@@ -67,10 +67,10 @@ Plausible is open source analytics. Our source code is available and accessible 
 * Get more accurate stats by running the Plausible script as a first-party connection from your domain name
 * View your Plausible stats directly in your WordPress dashboard (you can grant access to other user roles too)
 * Tracking of admin users is disabled by default (you can also disable tracking of other user roles)
-* File downloads, external link clicks and 404 error pages are tracked by default 
+* Enable file downloads, external link clicks and 404 error pages tracking 
 * Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
-* Import your historical Google Analytics stats
+* Import your historical Google Universal Analytics stats
 * Keep an eye on your traffic with weekly and/or monthly email and Slack reports
 * Get traffic spike notifications via email or Slack so you don't miss being on the Hacker News
 * Tag your paid ads, emails and social media posts with UTM tags and analyze your ecommerce and marketing campaigns from click to conversion
@@ -123,7 +123,7 @@ Google Analytics is free because Google has built their company and their wealth
 
 With Plausible, you 100% own and control all of your website data. This data is not being shared with or sold to any third-parties. Since we don't make money from targeted advertisement, we must charge a subscription fee.
 
-Revenue from subscriptions is used to pay our rent, further develop Plausible and allow us to commit to Plausible and open source full time. It also enables us to give back 5% of our gross revenue to the environmental causes and open source projects that we rely on.
+Revenue from subscriptions is used to pay our rent, further develop Plausible and allow us to commit to Plausible and open source full time.
 
 = Is there a demo available? = 
 
