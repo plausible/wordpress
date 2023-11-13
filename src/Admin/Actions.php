@@ -37,7 +37,7 @@ class Actions {
 	 * @return void
 	 */
 	public function print_notices() {
-		$notices = get_transient( Notice::TRANSIENT_NAME );
+		$notices = get_transient( Notice::TRANSIENT_NAME ) ?: [];
 		$unset   = false;
 
 		foreach ( $this->get_all_notices() as $notice_key => $notice_id ) {

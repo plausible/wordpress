@@ -28,8 +28,7 @@ class Page extends API {
 		$api_token          = ! empty( $settings['api_token'] ) ? $settings['api_token'] : '';
 		$self_hosted_domain = defined(
 			'PLAUSIBLE_SELF_HOSTED_DOMAIN'
-		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN :
-			( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
+		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
 		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
 
 		$this->fields = [
@@ -112,8 +111,8 @@ class Page extends API {
 							'type'       => 'checkbox',
 							'value'      => 'tagged-events',
 						],
-						'pageview-props'  => [
-							'label'      => esc_html__( 'Pageview props', 'plausible-analytics' ),
+						'pageview-props' => [
+							'label'      => esc_html__( 'Pageview Properties', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/docs/custom-props/for-pageviews',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'enhanced_measurements',
@@ -153,8 +152,7 @@ class Page extends API {
 						get_site_url( null, rest_get_url_prefix() ),
 						empty(
 						Helpers::get_settings()['proxy_enabled'][0]
-						) ? 'a random directory/file for storing the JS file' :
-							'a JS file, called <code>' . str_replace(
+						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
 								ABSPATH,
 								'',
 								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource(
