@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Filters.
- *
  * @since      1.0.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -20,10 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Filters {
 	/**
 	 * Constructor.
-	 *
 	 * @since  1.0.0
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -33,12 +29,11 @@ class Filters {
 
 	/**
 	 * Add Plausible Analytics attributes.
-	 *
-	 * @param string $tag    Script tag.
-	 * @param string $handle Script handle.
-	 *
 	 * @since  1.0.0
 	 * @access public
+	 *
+	 * @param string $handle Script handle.
+	 * @param string $tag    Script tag.
 	 *
 	 * @return string
 	 */
@@ -53,14 +48,13 @@ class Filters {
 		$domain_name = esc_html( $settings['domain_name'] );
 
 		// We need the correct id attribute for IE compatibility.
-		$id_replacement = " id='plausible'";
-		$tag            = str_replace( " id='plausible-analytics-js'", $id_replacement, $tag );
-		$params         = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
+		$tag    = preg_replace( "/\sid=(['\"])plausible-analytics-js(['\"])/", " id=$1plausible$2", $tag );
+		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
 			$excluded_pages = $settings['excluded_pages'];
-			$params        .= " data-exclude='{$excluded_pages}'";
+			$params         .= " data-exclude='{$excluded_pages}'";
 		}
 
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
@@ -75,7 +69,6 @@ class Filters {
 	 * @param mixed $url
 	 *
 	 * @return string|void
-	 *
 	 * @throws Exception
 	 */
 	public function wpml_compatibility( $url ) {
