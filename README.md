@@ -113,6 +113,7 @@ this is a WordPress plugin, some manual modifications need to be done to make su
   dependencies: `composer install --no-dev`
 - (When regenerating the PHP client this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make sure Mozart is installed
   globally)
-- In the `Client/lib` directory, replace ` GuzzleHttp` (mind the space) with ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (again, mind the space at
-  the beginning)
-- In the same directory, replace ` \GuzzleHttp` (mind the space and backslash) with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.
+- In the `Client/lib` directory, replace all occurences of ` GuzzleHttp` (mind the space) with ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (again,
+  mind the space at the beginning)
+- In the same directory, replace all occurences of ` \GuzzleHttp` (mind the space and backslash)
+  with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.
