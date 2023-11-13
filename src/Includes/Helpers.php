@@ -95,7 +95,7 @@ class Helpers {
 			return self::get_proxy_resource( 'file_alias' );
 		}
 
-		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'compat', 'hash' ] as $extension ) {
+		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'pageview-props', 'compat', 'hash' ] as $extension ) {
 			if ( in_array( $extension, $settings['enhanced_measurements'], true ) ) {
 				$file_name .= '.' . $extension;
 			}
