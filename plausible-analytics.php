@@ -5,25 +5,9 @@
  * Description: Simple and privacy-friendly alternative to Google Analytics.
  * Author: Plausible.io
  * Author URI: https://plausible.io
- * Version: 1.3.5
+ * Version: 1.3.6
  * Text Domain: plausible-analytics
  * Domain Path: /languages
- *
- * A Tribute to Open Source:
- *
- * "Open source software is software that can be freely used, changed, and shared (in modified or unmodified form) by
- * anyone. Open source software is made by many people, and distributed under licenses that comply with the Open Source
- * Definition."
- *
- * -- The Open Source Initiative
- *
- * Plausible Analytics is a tribute to the spirit and philosophy of Open Source. We at PlausibleHQ gladly embrace the Open Source
- * philosophy both in how Plausible Analytics itself was developed, and how we hope to see others build more from our code base.
- *
- * Plausible Analytics would not have been possible without the tireless efforts of WordPress and the surrounding Open Source projects
- * and their talented developers. Thank you all for your contribution to WordPress.
- *
- * - The Plausible Analytics Team
  */
 
 namespace Plausible\Analytics\WP;
@@ -34,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin version here for convenience.
-define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.3.4' );
+define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.3.6' );
 
 require_once __DIR__ . '/config/constants.php';
 
