@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Actions.
- *
  * @since      1.0.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -18,13 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Actions {
-
 	/**
 	 * Constructor.
-	 *
 	 * @since  1.0.0
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -34,10 +29,8 @@ class Actions {
 
 	/**
 	 * Register Assets.
-	 *
 	 * @since  1.0.0
 	 * @access public
-	 *
 	 * @return void
 	 */
 	public function maybe_register_assets() {
@@ -48,24 +41,27 @@ class Actions {
 		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or,
 		 * if current role should not be tracked.
 		 */
-		if (
-			( ! empty( $user_role )
-				&& ! isset( $settings['tracked_user_roles'] ) )
-			|| ( ! empty( $user_role )
-				&& ! in_array( $user_role, $settings['tracked_user_roles'], true ) )
-			) {
+		if ( ( ! empty( $user_role ) && ! isset( $settings['tracked_user_roles'] ) ) ||
+			( ! empty( $user_role ) && ! in_array( $user_role, $settings['tracked_user_roles'], true ) ) ) {
 			return;
 		}
 
-		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
+		$version =
+			Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
 		wp_enqueue_script( 'plausible-analytics', Helpers::get_js_url( true ), '', $version, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
-		wp_add_inline_script( 'plausible-analytics', 'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }' );
+		wp_add_inline_script(
+			'plausible-analytics',
+			'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }'
+		);
 
 		// Track 404 pages (if enabled)
 		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( '404', $settings['enhanced_measurements'] ) && is_404() ) {
-			wp_add_inline_script( 'plausible-analytics', "document.addEventListener('DOMContentLoaded', function () { plausible('404', { props: { path: document.location.pathname } }); });" );
+			wp_add_inline_script(
+				'plausible-analytics',
+				"document.addEventListener('DOMContentLoaded', function () { plausible('404', { props: { path: document.location.pathname } }); });"
+			);
 		}
 
 		// This action allows you to add your own custom scripts!
@@ -74,12 +70,12 @@ class Actions {
 
 	/**
 	 * Create admin bar nodes.
+	 * @since  1.3.0
+	 * @access public
 	 *
 	 * @param \WP_Admin_Bar $admin_bar Admin bar object.
 	 *
 	 * @return void
-	 * @since  1.3.0
-	 * @access public
 	 */
 	public function admin_bar_node( $admin_bar ) {
 		$disable = ! empty( Helpers::get_settings()['disable_toolbar_menu'][0] );
@@ -107,10 +103,16 @@ class Actions {
 		// Add link to individual page stats.
 		if ( is_singular() ) {
 			global $post;
+			$uri = wp_make_link_relative( get_permalink( $post->ID ) );
+
 			$args[] = [
 				'id'     => 'view-page-analytics',
 				'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
-				'href'   => add_query_arg( 'page-url', is_home() ? '' : trailingslashit( urlencode( '/' . $post->post_name ) ), admin_url( 'index.php?page=plausible_analytics_statistics' ) ),
+				'href'   => add_query_arg(
+					'page-url',
+					is_home() ? '' : $uri,
+					admin_url( 'index.php?page=plausible_analytics_statistics' )
+				),
 				'parent' => 'plausible-admin-bar',
 			];
 		}
