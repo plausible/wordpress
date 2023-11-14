@@ -7,6 +7,7 @@ use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreate;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
 use Plausible\Analytics\WP\Includes\Helpers;
 
@@ -62,15 +63,15 @@ class Client {
 	}
 
 	/**
-	 * Create Custom Goal Event in Plausible Dashboard.
+	 * Allows creating Custom Event Goals in bulk.
 	 *
-	 * @param array $args
+	 * @param GoalCreateRequestBulkGetOrCreate $goals
 	 *
-	 * @return void
+	 * @return Client\Model\PaymentRequiredError|Client\Model\PlausibleWebPluginsAPIControllersGoalsCreate201Response|Client\Model\UnauthorizedError|Client\Model\UnprocessableEntityError|void
 	 */
-	public function create_goal( $args ) {
+	public function create_goals( $goals ) {
 		try {
-			$this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $args );
+			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $goals );
 		} catch ( Exception $e ) {
 			Notice::set_notice(
 				sprintf(
@@ -106,26 +107,5 @@ class Client {
 				'error'
 			);
 		}
-	}
-
-	/**
-	 * Retrieve Goals
-	 * @return \Plausible\Ánalytics\WP\Client\Model\Goal[]
-	 */
-	public function retrieve_goals() {
-		try {
-			$result = $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex();
-		} catch ( Exception $e ) {
-			Notice::set_notice(
-				sprintf(
-					__( 'Something went wrong while retrieving your Custom Event Goals: %s', 'plausible-analytics' ),
-					$e->getMessage()
-				),
-				Notice::NOTICE_ERROR_RETRIEVE_CUSTOM_EVENT_GOALS_FAILED,
-				'error'
-			);
-		}
-
-		return $result->getGoals();
 	}
 }

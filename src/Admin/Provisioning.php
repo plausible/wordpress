@@ -76,13 +76,15 @@ class Provisioning {
 		}
 
 		$custom_event_keys = array_keys( $this->custom_event_goals );
+		$create_request    = new Client\Model\GoalCreateRequestBulkGetOrCreate();
+		$goals             = [];
 
 		foreach ( $enhanced_measurements as $measurement ) {
 			if ( ! in_array( $measurement, $custom_event_keys ) ) {
 				continue;
 			}
 
-			$goal = new Client\Model\GoalCreateRequestCustomEvent(
+			$goals[] = new Client\Model\GoalCreateRequestCustomEvent(
 				[
 					'goal'      => [
 						'event_name' => $this->custom_event_goals[ $measurement ],
@@ -90,8 +92,23 @@ class Provisioning {
 					'goal_type' => 'Goal.CustomEvent',
 				]
 			);
+		}
 
-			$this->client->create_goal( $goal );
+		$create_request->setGoals( $goals );
+		$response = $this->client->create_goals( $create_request );
+
+		if ( $response->valid() ) {
+			$goals = $response->getGoals();
+			$ids   = [];
+
+			foreach ( $goals as $goal ) {
+				$goal                  = $goal->getGoal();
+				$ids[ $goal->getId() ] = $goal->getDisplayName();
+			}
+
+			if ( ! empty( $ids ) ) {
+				update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $ids );
+			}
 		}
 	}
 
@@ -112,18 +129,16 @@ class Provisioning {
 			return;
 		}
 
-		$goals = $this->client->retrieve_goals();
+		$goals = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
 
-		foreach ( $goals as $goal ) {
-			$goal = $goal->getGoal();
-			$name = $goal->getDisplayName();
-			$key  = array_search( $name, $this->custom_event_goals );
+		foreach ( $goals as $id => $name ) {
+			$key = array_search( $name, $this->custom_event_goals );
 
 			if ( ! in_array( $key, $disabled_settings ) ) {
 				continue;
 			}
 
-			$this->client->delete_goal( $goal->getId() );
+			$this->client->delete_goal( $id() );
 		}
 	}
 }
