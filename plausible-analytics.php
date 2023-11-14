@@ -19,8 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Define plugin version here for convenience.
 define( 'PLAUSIBLE_ANALYTICS_VERSION', '1.3.6' );
-
-require_once __DIR__ . '/config/constants.php';
+define( 'PLAUSIBLE_ANALYTICS_PLUGIN_FILE', __FILE__ );
+define( 'PLAUSIBLE_ANALYTICS_PLUGIN_BASENAME', plugin_basename( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) );
+define( 'PLAUSIBLE_ANALYTICS_PLUGIN_DIR', plugin_dir_path( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) );
+define( 'PLAUSIBLE_ANALYTICS_PLUGIN_URL', plugin_dir_url( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) );
 
 // Automatically loads files used throughout the plugin.
 require_once PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'vendor/autoload.php';
