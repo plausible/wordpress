@@ -117,7 +117,7 @@ class Page extends API {
 							'value'      => 'tagged-events',
 						],
 						'revenue'        => [
-							'label'      => esc_html__( 'Ecommerce Revenue', 'plausible-analytics' ),
+							'label'      => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'enhanced_measurements',
@@ -125,7 +125,7 @@ class Page extends API {
 							'value'      => 'revenue',
 						],
 						'pageview-props' => [
-							'label'      => esc_html__( 'Pageview Properties', 'plausible-analytics' ),
+							'label'      => esc_html__( 'Pageview properties', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/docs/custom-props/for-pageviews',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'enhanced_measurements',
