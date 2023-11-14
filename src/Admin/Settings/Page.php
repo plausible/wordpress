@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Page extends API {
 	/**
+	 * @var array|array[] $fields
+	 */
+	public $fields = [];
+
+	/**
 	 * Constructor.
 	 * @since  1.3.0
 	 * @access public
@@ -110,6 +115,14 @@ class Page extends API {
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
 							'value'      => 'tagged-events',
+						],
+						'revenue'        => [
+							'label'      => esc_html__( 'Ecommerce Revenue', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
+							'slug'       => 'enhanced_measurements',
+							'type'       => 'checkbox',
+							'value'      => 'revenue',
 						],
 						'pageview-props' => [
 							'label'      => esc_html__( 'Pageview Properties', 'plausible-analytics' ),
@@ -320,11 +333,7 @@ class Page extends API {
 			],
 		];
 
-		add_action( 'admin_menu', [ $this, 'register_menu' ] );
-		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
-		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
-		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
-		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
+		$this->init();
 	}
 
 	/**
@@ -358,6 +367,18 @@ class Page extends API {
 		ksort( $roles_array, SORT_STRING );
 
 		return $roles_array;
+	}
+
+	/**
+	 * Action hooks.
+	 * @return void
+	 */
+	private function init() {
+		add_action( 'admin_menu', [ $this, 'register_menu' ] );
+		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
+		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
+		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
+		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
 	}
 
 	/**
