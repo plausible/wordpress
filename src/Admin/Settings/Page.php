@@ -126,7 +126,7 @@ class Page extends API {
 						],
 						'pageview-props' => [
 							'label'      => esc_html__( 'Pageview properties', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/custom-props/for-pageviews',
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
 							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
