@@ -127,7 +127,7 @@ class Actions {
 	 */
 	public function save_admin_settings() {
 		// Sanitize all the post data before using.
-		$post_data        = Helpers::clean( $_POST );
+		$post_data        = $this->clean( $_POST );
 		$current_settings = Helpers::get_settings();
 
 		// Security: Roadblock to check for unauthorized access.
@@ -158,5 +158,38 @@ class Actions {
 				]
 			);
 		}
+	}
+
+	/**
+	 * Clean variables using `sanitize_text_field`.
+	 * Arrays are cleaned recursively. Non-scalar values are ignored.
+	 * @since  1.3.0
+	 * @access public
+	 *
+	 * @param string|array $var Sanitize the variable.
+	 *
+	 * @return string|array
+	 */
+	private function clean( $var ) {
+		// If the variable is an array, recursively apply the function to each element of the array.
+		if ( is_array( $var ) ) {
+			return array_map( [ $this, 'clean' ], $var );
+		}
+
+		// If the variable is a scalar value (string, integer, float, boolean).
+		if ( is_scalar( $var ) ) {
+			// Parse the variable using the wp_parse_url function.
+			$parsed = wp_parse_url( $var );
+			// If the variable has a scheme (e.g. http:// or https://), sanitize the variable using the esc_url_raw function.
+			if ( isset( $parsed['scheme'] ) ) {
+				return esc_url_raw( wp_unslash( $var ), [ $parsed['scheme'] ] );
+			}
+
+			// If the variable does not have a scheme, sanitize the variable using the sanitize_text_field function.
+			return sanitize_text_field( wp_unslash( $var ) );
+		}
+
+		// If the variable is not an array or a scalar value, return the variable unchanged.
+		return $var;
 	}
 }
