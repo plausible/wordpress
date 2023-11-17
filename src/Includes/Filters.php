@@ -57,9 +57,56 @@ class Filters {
 			$params         .= " data-exclude='{$excluded_pages}'";
 		}
 
+		// Triggered when custom properties is enabled.
+		if ( ! empty( $settings['enhanced_measurements'] ) && in_array( 'pageview-props', $settings['enhanced_measurements'] ) ) {
+			$params .= ' event-page-type="' . $this->get_page_type() . '"';
+		}
+
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );
+	}
+
+	/**
+	 * Get page type.
+	 * 
+	 * @return string The page type.
+	 */
+	private function get_page_type() {
+		global $wp_query;
+		$page_type = 'notfound';
+
+		if ( $wp_query->is_page ) {
+			$page_type = is_front_page() ? 'front' : 'page';
+		} elseif ( $wp_query->is_home ) {
+			$page_type = 'home';
+		} elseif ( $wp_query->is_single ) {
+			$page_type = get_post_type();
+		} elseif ( $wp_query->is_category ) {
+			$page_type = 'category';
+		} elseif ( $wp_query->is_tag ) {
+			$page_type = 'tag';
+		} elseif ( $wp_query->is_tax ) {
+			$page_type = 'tax';
+		} elseif ( $wp_query->is_archive ) {
+			if ( $wp_query->is_day ) {
+				$page_type = 'day';
+			} elseif ( $wp_query->is_month ) {
+				$page_type = 'month';
+			} elseif ( $wp_query->is_year ) {
+				$page_type = 'year';
+			} elseif ( $wp_query->is_author ) {
+				$page_type = 'author';
+			} else {
+				$page_type = 'archive';
+			}
+		} elseif ( $wp_query->is_search ) {
+			$page_type = 'search';
+		} elseif ( $wp_query->is_404 ) {
+			$page_type = 'notfound';
+		}
+
+		return $page_type;
 	}
 
 	/**

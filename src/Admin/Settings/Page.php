@@ -91,6 +91,14 @@ class Page extends API {
 							'type'       => 'checkbox',
 							'value'      => 'file-downloads',
 						],
+						'pageview-props' => [
+							'label'      => esc_html__( 'Page types (as custom properties)', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-page-types',
+							'docs_label' => esc_html__( 'Additional action required', 'plausible-analytics' ),
+							'slug'       => 'enhanced_measurements',
+							'type'       => 'checkbox',
+							'value'      => 'pageview-props',
+						],
 						'tagged-events'  => [
 							'label'      => esc_html__( 'Custom events', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
