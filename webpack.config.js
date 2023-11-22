@@ -12,7 +12,7 @@ const config = {
 	devtool: inProduction ? 'inline-source-map' : 'eval-cheap-module-source-map',
 	mode,
 	entry: {
-		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
+		'plausible-admin': [ './assets/src/css/admin/main.css', './assets/src/js/admin/main.js' ],
 	},
 	output: {
 		path: path.join( __dirname, './assets/dist/' ),
@@ -26,6 +26,16 @@ const config = {
 				test: /\.js$/,
 				exclude: /node_modules/,
 				loader: 'babel-loader',
+			},
+
+			// Tailwind CSS.
+			{
+				test: /\.css$/,
+				use: [
+					MiniCSSExtractPlugin.loader,
+					'css-loader',
+					'postcss-loader',
+				],
 			},
 
 			// Image files.
