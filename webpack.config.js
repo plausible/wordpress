@@ -3,7 +3,6 @@ const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
-const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const wpPot = require( 'wp-pot' );
 
 const inProduction = ( 'production' === process.env.NODE_ENV );
@@ -27,35 +26,6 @@ const config = {
 				test: /\.js$/,
 				exclude: /node_modules/,
 				loader: 'babel-loader',
-			},
-
-			// Create RTL styles.
-			{
-				test: /\.css$/,
-				use: [
-					'style-loader',
-					'css-loader',
-				],
-			},
-
-			// SASS to CSS.
-			{
-				test: /\.scss$/,
-				use: [
-					MiniCSSExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: 'sass-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
-				],
 			},
 
 			// Image files.
@@ -85,7 +55,7 @@ const config = {
 		} ),
 
 		new CopyWebpackPlugin(
-			{ 
+			{
 				patterns: [
 					{ from: 'assets/src/images', to: 'images' },
 				],
@@ -96,12 +66,6 @@ const config = {
 };
 
 if ( inProduction ) {
-	// Create RTL css.
-	config.plugins.push( new WebpackRTLPlugin( {
-		suffix: '-rtl',
-		minify: true,
-	} ) );
-
 	// Minify images.
 	// Must go after CopyWebpackPlugin above: https://github.com/Klathmon/imagemin-webpack-plugin#example-usage
 	config.plugins.push( new ImageminPlugin( { test: /\.(jpe?g|png|gif|svg)$/i } ) );
