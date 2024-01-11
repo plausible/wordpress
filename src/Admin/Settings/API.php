@@ -62,7 +62,7 @@ class API {
 							</div>
 							<div class="space-y-6 lg:col-span-9 lg:mt-4">
 								<?php foreach ( $this->fields[ $current_tab ] as $tab => $field ): ?>
-									<div class="px-4 py-6 bg-white shadow dark:bg-gray-800 sm:rounded-md sm:overflow-hidden sm:p-6">
+									<div class="plausible-analytics-section shadow sm:rounded-md sm:overflow-hidden">
 										<?php
 										$type = $field[ 'type' ] ?? '';
 
@@ -139,7 +139,7 @@ class API {
 		$fields = $group[ 'fields' ];
 		ob_start();
 		?>
-		<div class="<?php echo str_replace( '_', '-', $group[ 'slug' ] ); ?>">
+		<div class="bg-white dark:bg-gray-800 py-6 px-4 space-y-6 sm:p-6 <?php echo str_replace( '_', '-', $group[ 'slug' ] ); ?>">
 			<header class="relative">
 				<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" for=""><?php echo $group[ 'label' ]; ?></label>
 				<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
@@ -151,7 +151,6 @@ class API {
 					</a>
 				<?php endif; ?>
 			</header>
-			<?php $is_list = false; ?>
 			<?php if ( ! empty( $fields ) ): ?>
 				<?php $is_list = count( $fields ) > 1; ?>
 				<?php if ( $is_list ) {
@@ -191,9 +190,31 @@ class API {
 				<input
 					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2 px-3"
 					id="<?php echo $field[ 'slug' ]; ?>" placeholder="<?php echo $placeholder; ?>" type="text"
-					name="plausible_analytics_settings[<?php echo $field[ 'slug' ]; ?>]"
+					name="<?php echo $field[ 'slug' ]; ?>"
 					value="<?php echo $value; ?>" <?php echo $disabled; ?> />
 			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Renders a button.
+	 *
+	 * @param array $field
+	 *
+	 * @return false|string
+	 */
+	public function render_button_field( array $field ) {
+		ob_start();
+		?>
+		<div>
+			<button
+				class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800"
+				id="<?php esc_attr_e( $field[ 'slug' ] ); ?>"
+				type="submit">
+				<?php esc_attr_e( $field[ 'label' ] ); ?>
+			</button>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -256,7 +277,7 @@ class API {
 				class="block w-full max-w-xl border-gray-300 dark:border-gray-700 resize-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-900 dark:text-gray-300"
 				rows="5" id="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
 				placeholder="<?php echo esc_attr( $placeholder ); ?>"
-				name="plausible_analytics_settings[<?php echo esc_attr( $field[ 'slug' ] ); ?>]"><?php echo $value; ?></textarea>
+				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"><?php echo $value; ?></textarea>
 			</div>
 		</div>
 		<?php
@@ -278,7 +299,7 @@ class API {
 			<div class="rounded-md p-4 mt-4 relative bg-yellow-50 dark:bg-yellow-100 rounded-t-md rounded-b-none">
 				<div class="flex">
 					<div class="flex-shrink-0">
-						<svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+						<svg class="h-12 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 							<path fill-rule="evenodd"
 								  d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
 								  clip-rule="evenodd"></path>

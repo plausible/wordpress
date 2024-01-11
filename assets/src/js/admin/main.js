@@ -3,7 +3,40 @@
  *
  * Admin JS
  */
+
 document.addEventListener( 'DOMContentLoaded', () => {
+	document.addEventListener( 'click', ( e ) => {
+		if ( ! e.target.classList.contains( 'plausible-analytics-button' ) ) {
+			return;
+		}
+
+		const button = e.target;
+		const section = button.closest( '.plausible-analytics-section' );
+		const inputs = section.querySelectorAll( 'input, textarea' );
+		const form = new FormData();
+		const options = [];
+
+		inputs.forEach( function( input ) {
+			options.push( { name: input.name, value: input.value } );
+		} );
+
+		console.log( options );
+
+		form.append( 'action', 'plausible_analytics_save_options' );
+		form.append( 'options', JSON.stringify( options ) );
+		form.append( '_nonce', document.getElementById( '_wpnonce' ).value );
+
+		fetch(
+			ajaxurl,
+			{
+				method: 'POST',
+				body: form,
+			}
+		).then( response => {
+			return response.status;
+		} );
+	} );
+
 	document.addEventListener( 'click', ( e ) => {
 		if ( ! e.target.classList.contains( 'plausible-analytics-toggle' ) ) {
 			return;
@@ -69,53 +102,5 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				}
 			);
 		}
-	} );
-
-	const formElement = document.getElementById( 'plausible-analytics-settings-form' );
-
-	// Bailout, if `formElement` doesn't exist.
-	if ( null === formElement ) {
-		return;
-	}
-
-	const saveSettings = document.getElementById( 'plausible-analytics-save-btn' );
-
-	saveSettings.addEventListener( 'click', ( e ) => {
-		e.preventDefault();
-		const formData = new FormData( formElement );
-
-		saveSettings.setAttribute( 'disabled', 'disabled' );
-
-		formData.append( 'action', 'plausible_analytics_save_admin_settings' );
-
-		fetch(
-			ajaxurl,
-			{
-				method: 'POST',
-				body: formData,
-			}
-		).then( response => {
-			if ( 200 === response.status ) {
-				return response.json();
-			}
-
-			return false;
-		} ).then( response => {
-			if ( response.error ) {
-				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-saved-error' );
-			}
-
-			if ( response.success ) {
-				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-saved-text' );
-				saveSettings.removeAttribute( 'disabled' );
-			}
-
-			setTimeout( () => {
-				saveSettings.removeAttribute( 'disabled' );
-				saveSettings.querySelector( 'span' ).innerText = saveSettings.getAttribute( 'data-default-text' );
-			}, 500 );
-
-			document.location.reload();
-		} );
 	} );
 } );

@@ -68,6 +68,11 @@ class Page extends API {
 							'type'  => 'text',
 							'value' => $api_token,
 						],
+						[
+							'label' => esc_html__( 'Connect', 'plausible-analytics' ),
+							'slug'  => 'connect_plausible_analytics',
+							'type'  => 'button',
+						],
 					],
 				],
 				[
@@ -247,6 +252,11 @@ class Page extends API {
 									'E.g.',
 									'plausible-analytics'
 								) . '**hello-world**, /example-page/, *another-example-page',
+						],
+						[
+							'label' => __( 'Save', 'plausible-analytics' ),
+							'slug'  => 'save-excluded-pages',
+							'type'  => 'button',
 						],
 					],
 				],

@@ -27,6 +27,7 @@ class Actions {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_notice' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
+		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
 	}
 
 	/**
@@ -196,5 +197,35 @@ class Actions {
 
 		// If the variable is not an array or a scalar value, return the variable unchanged.
 		return $var;
+	}
+
+	/**
+	 * Save Options
+	 * @return void
+	 */
+	public function save_options() {
+		// Sanitize all the post data before using.
+		$post_data = $this->clean( $_POST );
+		$settings  = Helpers::get_settings();
+
+		if ( $post_data[ 'action' ] !== 'plausible_analytics_save_options' ||
+			! current_user_can( 'manage_options' ) ||
+			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+			return;
+		}
+
+		$options = json_decode( $post_data[ 'options' ] );
+
+		if ( empty( $options ) ) {
+			return;
+		}
+
+		foreach ( $options as $option ) {
+			$settings[ $option->name ] = $option->value;
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		wp_send_json_success();
 	}
 }
