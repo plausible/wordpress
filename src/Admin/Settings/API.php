@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Settings API.
- *
- * @since 1.3.0
- *
+ * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -20,118 +18,181 @@ if ( ! defined( 'ABSPATH' ) ) {
 class API {
 	/**
 	 * Admin Setting Fields.
-	 *
 	 * @since  1.3.0
 	 * @access public
-	 *
 	 * @var array
 	 */
 	public $fields = [];
 
 	/**
 	 * Render Fields.
-	 *
-	 * @return void
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return void
 	 */
 	public function settings_page() {
-		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'general';
+		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
+		wp_nonce_field( 'plausible_analytics_toggle_option' );
 		?>
-		<div class="wrap plausible-analytics-wrap">
-			<div class="plausible-analytics-content">
-				<?php echo Helpers::render_quick_actions(); ?>
-				<form id="plausible-analytics-settings-form" class="plausible-analytics-form">
-					<?php
-					foreach ( $this->fields[ $current_tab ] as $tab => $field ) {
-						$type = $field['type'] ?? '';
-
-						if ( $type ) {
-							echo call_user_func( [ $this, "render_{$type}_field" ], $field );
-						}
-					}
-					?>
-					<div class="plausible-analytics-settings-action-wrap">
-						<button
-							id="plausible-analytics-save-btn"
-							class="plausible-analytics-btn plausible-analytics-save-btn"
-							data-default-text="<?php esc_attr_e( 'Save Changes', 'plausible-analytics' ); ?>"
-							data-saved-text="<?php esc_attr_e( 'Saved!', 'plausible-analytics' ); ?>"
-						>
-							<span><?php esc_html_e( 'Save Changes', 'plausible-analytics' ); ?></span>
-							<span class="plausible-analytics-spinner">
-							<div class="plausible-analytics-spinner--bounce-1"></div>
-							<div class="plausible-analytics-spinner--bounce-2"></div>
-						</span>
-						</button>
-						<?php wp_nonce_field( 'plausible-analytics-settings-roadblock', 'roadblock' ); ?>
+		<div class="h-full-dark">
+			<!-- body -->
+			<div class="flex flex-col h-full">
+				<nav class="relative z-20 py-8">
+					<div class="container">
+						<nav class="relative flex items-center justify-between sm:h-10 md:justify-center">
+							<div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
+								<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
+									 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+							</div>
+						</nav>
 					</div>
-				</form>
+				</nav>
+				<div class="flex flex-col gap-y-2"></div>
+				<main class="flex-1">
+					<div class="container pt-6">
+						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
+							<h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate">
+								<?php esc_html_e( 'Settings', 'plausible-analytics' ); ?>
+							</h1>
+						</div>
+						<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 lg:mt-4">
+							<div class="py-4 g:py-0 lg:col-span-3">
+								<?php $this->render_navigation(); ?>
+								<?php echo Helpers::render_quick_actions(); ?>
+							</div>
+							<div class="space-y-6 lg:col-span-9 lg:mt-4">
+								<?php foreach ( $this->fields[ $current_tab ] as $tab => $field ): ?>
+									<div class="px-4 py-6 bg-white shadow dark:bg-gray-800 sm:rounded-md sm:overflow-hidden sm:p-6">
+										<?php
+										$type = $field[ 'type' ] ?? '';
+
+										if ( $type ) {
+											echo call_user_func( [ $this, "render_{$type}_field" ], $field );
+										}
+										?>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
+				</main>
 			</div>
+			<!-- /body -->
 		</div>
 		<?php
 	}
 
 	/**
-	 * Render Text Field.
-	 *
-	 * @return string
+	 * Render Header Navigation.
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return void
 	 */
-	public function render_text_field( array $field ) {
-		ob_start();
-		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
-		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
-		$disabled    = ! empty( $field['disabled'] ) ? 'disabled' : '';
+	public function render_navigation() {
+		$screen = get_current_screen();
+
+		// Bailout, if screen id doesn't match.
+		if ( 'settings_page_plausible_analytics' !== $screen->id ) {
+			return;
+		}
+
+		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : '';
+		$tabs        = apply_filters(
+			'plausible_analytics_settings_navigation_tabs',
+			[
+				'general'     => [
+					'name'  => esc_html__( 'General', 'plausible-analytics' ),
+					'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
+					'class' => '' === $current_tab ? 'active' : '',
+				],
+				'self-hosted' => [
+					'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
+					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
+					'class' => 'self-hosted' === $current_tab ? 'active' : '',
+				],
+			]
+		);
 		?>
-		<span class="plausible-text-field">
-			<label for="<?php echo $field['slug']; ?>"><?php echo esc_attr( $field['label'] ); ?></label>
-			<input id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" type="text"
-				   name="plausible_analytics_settings[<?php echo $field['slug']; ?>]"
-				   value="<?php echo $value; ?>" <?php echo $disabled; ?> />
-		</span>
+		<div class="hidden lg:block">
+			<?php
+			foreach ( $tabs as $tab ) {
+				printf(
+					'<a href="%1$s" class="no-underline flex items-center px-3 py-2 text-sm leading-5 font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 transition ease-in-out duration-150 %2$s">%3$s</a>',
+					esc_url( $tab[ 'url' ] ),
+					esc_attr( $tab[ 'class' ] ),
+					esc_html( $tab[ 'name' ] )
+				);
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render Group Field.
+	 * @since  1.3.0
+	 * @access public
+	 * @return string
+	 */
+	public function render_group_field( array $group ) {
+		$toggle = $group[ 'toggle' ] ?? [];
+		$fields = $group[ 'fields' ];
+		ob_start();
+		?>
+		<div class="<?php echo str_replace( '_', '-', $group[ 'slug' ] ); ?>">
+			<header class="relative">
+				<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" for=""><?php echo $group[ 'label' ]; ?></label>
+				<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
+					<?php echo wp_kses_post( $group[ 'desc' ] ); ?>
+				</div>
+				<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) : ?>
+					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle[ 'anchor' ]; ?>">
+						<?php echo $toggle[ 'label' ]; ?>
+					</a>
+				<?php endif; ?>
+			</header>
+			<?php $is_list = false; ?>
+			<?php if ( ! empty( $fields ) ): ?>
+				<?php $is_list = count( $fields ) > 1; ?>
+				<?php if ( $is_list ) {
+					foreach ( $fields as $field ) {
+						if ( $field[ 'type' ] !== 'checkbox' ) {
+							$is_list = false;
+
+							break;
+						}
+					}
+				}
+				foreach ( $fields as $field ): ?>
+					<?php echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list ); ?>
+				<?php endforeach; ?>
+			<?php endif; ?>
+		</div>
 		<?php
 		return ob_get_clean();
 	}
 
 	/**
-	 * Render Group Field.
-	 *
-	 * @return string
+	 * Render Text Field.
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return string
 	 */
-	public function render_group_field( array $group ) {
-		$toggle = $group['toggle'] ?? [];
-		$fields = $group['fields'];
+	public function render_text_field( array $field ) {
 		ob_start();
+		$value       = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : '';
+		$placeholder = ! empty( $field[ 'placeholder' ] ) ? $field[ 'placeholder' ] : '';
+		$disabled    = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
 		?>
-		<div class="plausible-analytics-admin-field <?php echo str_replace( '_', '-', $group['slug'] ); ?>">
-			<div class="plausible-analytics-admin-field-header">
-				<label for="">
-					<?php echo $group['label']; ?>
-				</label>
-				<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) : ?>
-					<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle['anchor']; ?>">
-						<?php echo $toggle['label']; ?>
-					</a>
-				<?php endif; ?>
-			</div>
-			<div class="plausible-analytics-admin-field-body">
-				<?php
-				if ( ! empty( $fields ) ) {
-					foreach ( $fields as $field ) {
-						echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field );
-					}
-				}
-				?>
-			</div>
-			<div class="plausible-analytics-description">
-				<?php echo wp_kses_post( $group['desc'] ); ?>
+		<div class="mt-4">
+			<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300"
+				   for="<?php echo $field[ 'slug' ]; ?>"><?php echo esc_attr( $field[ 'label' ] ); ?></label>
+			<div class="mt-1">
+				<input
+					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2 px-3"
+					id="<?php echo $field[ 'slug' ]; ?>" placeholder="<?php echo $placeholder; ?>" type="text"
+					name="plausible_analytics_settings[<?php echo $field[ 'slug' ]; ?>]"
+					value="<?php echo $value; ?>" <?php echo $disabled; ?> />
 			</div>
 		</div>
 		<?php
@@ -140,78 +201,95 @@ class API {
 
 	/**
 	 * Render Checkbox Field.
-	 *
-	 * @return string
 	 * @since  1.3.0
 	 * @access public
-	 *
+	 * @return string
 	 */
-	public function render_checkbox_field( array $field ) {
+	public function render_checkbox_field( array $field, $is_list = false ) {
 		ob_start();
-		$value    = ! empty( $field['value'] ) ? $field['value'] : 'on';
+		$value    = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : 'on';
 		$settings = Helpers::get_settings();
-		$slug     = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
-		$id       = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
-		$checked  = ! empty( $field['checked'] ) ? 'checked="checked"' : ( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled = ! empty( $field['disabled'] ) ? 'disabled' : '';
+		$slug     = ! empty( $settings[ $field[ 'slug' ] ] ) ? $settings[ $field[ 'slug' ] ] : '';
+		$id       = $field[ 'slug' ] . '_' . str_replace( '-', '_', sanitize_title( $field[ 'label' ] ) );
+		$checked  =
+			! empty( $field[ 'checked' ] ) ? 'checked="checked"' :
+				( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
+		$disabled = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
 
 		?>
-		<span class="plausible-checkbox-list">
-			<input id="<?php echo $id; ?>" type="checkbox"
-				   name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]"
-				   value="<?php echo esc_html( $value ); ?>" <?php echo $checked; ?> <?php echo $disabled; ?> />
-			<?php // This trick'll make our option always show up in $_POST. Even when unchecked. ?>
-			<input id="<?php echo $id; ?>" type="hidden"
-				   name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>][]" value="0"/>
-			<label for="<?php echo $id; ?>"><?php echo $field['label']; ?></label>
-			<?php if ( ! empty( $field['docs'] ) ) { ?>
-				- <a target="_blank" href="<?php echo $field['docs']; ?>"><?php echo $field['docs_label']; ?></a>
-			<?php } ?>
-		</span>
+		<div class="flex items-center mt-4 space-x-3">
+			<button
+				class="plausible-analytics-toggle <?php echo $checked ? 'bg-indigo-600' :
+					'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
+				id="<?php echo $id; ?>" type="checkbox" data-list="<?php echo $is_list ? '1' : ''; ?>"
+				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
+				value="<?php echo esc_html( $value ); ?>">
+		<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
+			'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition ease-in-out duration-200"></span>
+			</button>
+			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo $field[ 'label' ]; ?></span>
+		</div>
 		<?php
 		return ob_get_clean();
 	}
 
 	/**
 	 * Render textarea field.
+	 * @since  1.2.5
+	 * @access public
 	 *
 	 * @param array $field
 	 *
 	 * @return string|false
-	 * @since 1.2.5
-	 * @access public
-	 *
 	 */
 	public function render_textarea_field( array $field ) {
 		ob_start();
-		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
-		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$value       = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : '';
+		$placeholder = ! empty( $field[ 'placeholder' ] ) ? $field[ 'placeholder' ] : '';
 		?>
-		<label for="<?php echo esc_attr( $field['slug'] ); ?>">
-			<?php echo esc_attr( $field['label'] ); ?>
-		</label>
-		<textarea rows="5" id="<?php echo esc_attr( $field['slug'] ); ?>"
-				  placeholder="<?php echo esc_attr( $placeholder ); ?>"
-				  name="plausible_analytics_settings[<?php echo esc_attr( $field['slug'] ); ?>]"><?php echo $value; ?></textarea>
+		<div class="mt-4">
+			<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="<?php echo esc_attr( $field[ 'slug' ] ); ?>">
+				<?php echo esc_attr( $field[ 'label' ] ); ?>
+			</label>
+			<div class="relative mt-1">
+			<textarea
+				class="block w-full max-w-xl border-gray-300 dark:border-gray-700 resize-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-900 dark:text-gray-300"
+				rows="5" id="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
+				placeholder="<?php echo esc_attr( $placeholder ); ?>"
+				name="plausible_analytics_settings[<?php echo esc_attr( $field[ 'slug' ] ); ?>]"><?php echo $value; ?></textarea>
+			</div>
+		</div>
 		<?php
 		return ob_get_clean();
 	}
 
 	/**
 	 * Render just the label, and allow insertion of anything using the hook beside it.
+	 * @since 1.3.0
 	 *
 	 * @param array $field
 	 *
 	 * @return string|false
-	 * @since 1.3.0
-	 *
 	 */
 	public function render_hook_field( array $field ) {
 		ob_start();
 		?>
-		<div class="plausible-hook">
-			<div class="<?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>">
-				<?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?>
+		<div class="">
+			<div class="rounded-md p-4 mt-4 relative bg-yellow-50 dark:bg-yellow-100 rounded-t-md rounded-b-none">
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+							<path fill-rule="evenodd"
+								  d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+								  clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field[ 'slug' ] ) ); ?>">
+						<div class="text-sm text-yellow-700 dark:text-yellow-800">
+							<p><?php do_action( 'plausible_analytics_settings_' . $field[ 'slug' ], $field[ 'slug' ] ); ?></p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<?php

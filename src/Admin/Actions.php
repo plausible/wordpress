@@ -26,7 +26,7 @@ class Actions {
 		add_action( 'admin_notices', [ $this, 'print_notices' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_notice' ] );
-		add_action( 'wp_ajax_plausible_analytics_save_admin_settings', [ $this, 'save_admin_settings' ] );
+		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 	}
 
 	/**
@@ -43,13 +43,13 @@ class Actions {
 		foreach ( $this->get_all_notices() as $notice_key => $notice_id ) {
 			if ( get_transient( 'plausible_analytics_' . str_replace( '-', '_', $notice_id ) . '_notice_dismissed' ) ) {
 				if ( strpos( $notice_key, 'ERROR' ) !== false ) {
-					unset( $notices['all']['error'][ $notice_id ] );
+					unset( $notices[ 'all' ][ 'error' ][ 'plausible-analytics-' . $notice_id ] );
 
 					$unset = true;
 				}
 
 				if ( strpos( $notice_key, 'SUCCESS' ) !== false ) {
-					unset( $notices['all']['success'][ $notice_id ] );
+					unset( $notices[ 'all' ][ 'success' ][ 'plausible-analytics-' . $notice_id ] );
 
 					$unset = true;
 				}
@@ -60,7 +60,7 @@ class Actions {
 			set_transient( Notice::TRANSIENT_NAME, $notices );
 		}
 
-		Notice::print_notices();
+		//		Notice::print_notices();
 	}
 
 	/**
@@ -115,9 +115,9 @@ class Actions {
 	 * @return void
 	 */
 	public function dismiss_notice() {
-		$id = sanitize_key( $_POST['id'] );
+		$id = sanitize_key( $_POST[ 'id' ] );
 
-		set_transient( 'plausible_analytics_' . str_replace( '-', '_', $id ) . '_notice_dismissed', true );
+		set_transient( str_replace( '-', '_', $id ) . '_notice_dismissed', true );
 	}
 
 	/**
@@ -125,39 +125,44 @@ class Actions {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function save_admin_settings() {
+	public function toggle_option() {
 		// Sanitize all the post data before using.
-		$post_data        = $this->clean( $_POST );
-		$current_settings = Helpers::get_settings();
+		$post_data = $this->clean( $_POST );
+		$settings  = Helpers::get_settings();
 
-		// Security: Roadblock to check for unauthorized access.
-		if ( 'plausible_analytics_save_admin_settings' === $post_data['action'] &&
-			current_user_can( 'administrator' ) &&
-			( ! empty( $post_data['roadblock'] ) && wp_verify_nonce( $post_data['roadblock'], 'plausible-analytics-settings-roadblock' ) ) ) {
-			if ( ! empty( $post_data['plausible_analytics_settings']['domain_name'] ) ||
-				isset( $post_data['plausible_analytics_settings']['self_hosted_domain'] ) ) {
-				$current_settings = array_replace( $current_settings, $post_data['plausible_analytics_settings'] );
-
-				// Update all the options to plausible settings.
-				update_option( 'plausible_analytics_settings', $current_settings );
-
-				$status  = 'success';
-				$message = esc_html__( 'Settings saved successfully.', 'plausible-analytics' );
-			} else {
-				$status  = 'error';
-				$message = esc_html__( 'Something went wrong.', 'plausible-analytics' );
-			}
-
-			do_action( 'plausible_analytics_settings_saved' );
-
-			// Send response.
-			wp_send_json_success(
-				[
-					'message' => $message,
-					'status'  => $status,
-				]
-			);
+		if ( $post_data[ 'action' ] !== 'plausible_analytics_toggle_option' ||
+			! current_user_can( 'manage_options' ) ||
+			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+			return;
 		}
+
+		if ( $post_data[ 'is_list' ] ) {
+			/**
+			 * Toggle lists.
+			 */
+			if ( $post_data[ 'toggle_status' ] === 'on' ) {
+				if ( ! in_array( $post_data[ 'option_value' ], $settings[ $post_data[ 'option_name' ] ] ) ) {
+					$settings[ $post_data[ 'option_name' ] ][] = $post_data[ 'option_value' ];
+				}
+			} else {
+				if ( ( $key = array_search( $post_data[ 'option_value' ], $settings[ $post_data[ 'option_name' ] ] ) ) !== false ) {
+					unset( $settings[ $post_data[ 'option_name' ] ][ $key ] );
+				}
+			}
+		} else {
+			/**
+			 * Single toggles.
+			 */
+			$settings[ $post_data[ 'option_name' ] ] = $post_data[ 'toggle_status' ];
+		}
+
+		// Update all the options to plausible settings.
+		update_option( 'plausible_analytics_settings', $settings );
+
+		do_action( 'plausible_analytics_settings_saved' );
+
+		// Send response.
+		wp_send_json_success();
 	}
 
 	/**
@@ -181,8 +186,8 @@ class Actions {
 			// Parse the variable using the wp_parse_url function.
 			$parsed = wp_parse_url( $var );
 			// If the variable has a scheme (e.g. http:// or https://), sanitize the variable using the esc_url_raw function.
-			if ( isset( $parsed['scheme'] ) ) {
-				return esc_url_raw( wp_unslash( $var ), [ $parsed['scheme'] ] );
+			if ( isset( $parsed[ 'scheme' ] ) ) {
+				return esc_url_raw( wp_unslash( $var ), [ $parsed[ 'scheme' ] ] );
 			}
 
 			// If the variable does not have a scheme, sanitize the variable using the sanitize_text_field function.

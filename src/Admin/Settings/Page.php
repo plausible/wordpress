@@ -30,11 +30,11 @@ class Page extends API {
 	public function __construct() {
 		$settings           = Helpers::get_settings();
 		$domain             = Helpers::get_domain();
-		$api_token          = ! empty( $settings['api_token'] ) ? $settings['api_token'] : '';
+		$api_token          = ! empty( $settings[ 'api_token' ] ) ? $settings[ 'api_token' ] : '';
 		$self_hosted_domain = defined(
 			'PLAUSIBLE_SELF_HOSTED_DOMAIN'
-		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings['self_hosted_domain'] ) ? $settings['self_hosted_domain'] : '' );
-		$excluded_pages     = ! empty( $settings['excluded_pages'] ) ? $settings['excluded_pages'] : '';
+		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings[ 'self_hosted_domain' ] ) ? $settings[ 'self_hosted_domain' ] : '' );
+		$excluded_pages     = ! empty( $settings[ 'excluded_pages' ] ) ? $settings[ 'excluded_pages' ] : '';
 
 		$this->fields = [
 			'general'     => [
@@ -55,10 +55,6 @@ class Page extends API {
 							'To automate the plugin setup, <a href="#" target="_blank">generate an API token</a> and paste it into the API token field.',
 							'plausible-analytics'
 						) . '</li>',
-					'toggle' => [
-						'anchor' => 'https://plausible.io/' . $domain,
-						'label'  => esc_html__( 'Open Analytics', 'plausible-analytics' ),
-					],
 					'fields' => [
 						[
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
@@ -164,7 +160,7 @@ class Page extends API {
 						),
 						get_site_url( null, rest_get_url_prefix() ),
 						empty(
-						Helpers::get_settings()['proxy_enabled'][0]
+						Helpers::get_settings()[ 'proxy_enabled' ][ 0 ]
 						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
 								ABSPATH,
 								'',
@@ -180,8 +176,8 @@ class Page extends API {
 							'label'    => esc_html__( 'Enable proxy', 'plausible-analytics' ),
 							'slug'     => 'proxy_enabled',
 							'type'     => 'checkbox',
-							'value'    => 'enable',
-							'disabled' => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
+							'value'    => 'on',
+							'disabled' => ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] ),
 						],
 						[
 							'label' => '',
@@ -221,7 +217,7 @@ class Page extends API {
 							'label' => esc_html__( 'Enable analytics in WP Dashboard', 'plausible-analytics' ),
 							'slug'  => 'enable_analytics_dashboard',
 							'type'  => 'checkbox',
-							'value' => 'enable',
+							'value' => 'on',
 						],
 					],
 				],
@@ -321,7 +317,7 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $self_hosted_domain,
 							'placeholder' => 'e.g. ' . Helpers::get_domain(),
-							'disabled'    => ! empty( Helpers::get_settings()['proxy_enabled'][0] ),
+							'disabled'    => ! empty( Helpers::get_settings()[ 'proxy_enabled' ][ 0 ] ),
 						],
 						[
 							'label' => '',
@@ -349,17 +345,17 @@ class Page extends API {
 
 		foreach ( $wp_roles as $id => $role ) {
 			$roles_array[ $id ] = [
-				'label' => $role['name'] ?? '',
+				'label' => $role[ 'name' ] ?? '',
 				'slug'  => $slug,
 				'type'  => 'checkbox',
 				'value' => $id,
 			];
 
 			if ( in_array( $id, array_keys( $disable_elements ), true ) ) {
-				$roles_array[ $id ]['disabled'] = true;
+				$roles_array[ $id ][ 'disabled' ] = true;
 
 				if ( ! empty( $disable_elements[ $id ] ) ) {
-					$roles_array[ $id ]['checked'] = $disable_elements[ $id ];
+					$roles_array[ $id ][ 'checked' ] = $disable_elements[ $id ];
 				}
 			}
 		}
@@ -375,7 +371,7 @@ class Page extends API {
 	 */
 	private function init() {
 		add_action( 'admin_menu', [ $this, 'register_menu' ] );
-		add_action( 'in_admin_header', [ $this, 'render_page_header' ] );
+		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
 		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
 		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
 		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
@@ -400,7 +396,7 @@ class Page extends API {
 		 * Let's see if current user is allowed to access the Stats page.
 		 */
 		foreach ( $user_roles as $user_role ) {
-			if ( in_array( $user_role, Helpers::get_settings()['expand_dashboard_access'], true ) ) {
+			if ( in_array( $user_role, Helpers::get_settings()[ 'expand_dashboard_access' ], true ) ) {
 				$is_allowed = true;
 
 				break;
@@ -442,96 +438,10 @@ class Page extends API {
 		);
 	}
 
-	/**
-	 * Render Admin Page Header.
-	 * @since  1.3.0
-	 * @access public
-	 * @return void
-	 */
-	public function render_page_header() {
-		$screen = get_current_screen();
-
-		// Bailout, if screen id doesn't match.
-		if ( ! in_array(
-			$screen->id,
-			[
-				'settings_page_plausible_analytics',
-				'dashboard_page_plausible_analytics_statistics',
-			],
-			true
-		) ) {
-			return;
+	public function add_background_color() {
+		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] == 'plausible_analytics' ) {
+			echo "<script>document.getElementById('wpcontent').classList += 'bg-gray-50 dark:bg-gray-85'; </script>";
 		}
-		?>
-		<div class="plausible-analytics-header">
-			<div class="plausible-analytics-logo">
-				<img src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"
-					 alt="<?php esc_html_e( 'Plausible Analytics', 'plausible-analytics' ); ?>"/>
-			</div>
-			<div class="plausible-analytics-header-content">
-				<div class="plausible-analytics-title">
-					<h1><?php esc_html_e( 'Settings', 'plausible-analytics' ); ?></h1>
-				</div>
-				<?php $this->render_header_navigation(); ?>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Render Header Navigation.
-	 * @since  1.3.0
-	 * @access public
-	 * @return void
-	 */
-	public function render_header_navigation() {
-		$screen = get_current_screen();
-
-		// Bailout, if screen id doesn't match.
-		if ( 'settings_page_plausible_analytics' !== $screen->id ) {
-			return;
-		}
-
-		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : '';
-		$tabs        = apply_filters(
-			'plausible_analytics_settings_navigation_tabs',
-			[
-				'general'     => [
-					'name'  => esc_html__( 'General', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
-					'class' => '' === $current_tab ? 'active' : '',
-				],
-				'self-hosted' => [
-					'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
-					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
-					'class' => 'self-hosted' === $current_tab ? 'active' : '',
-				],
-				// 'advanced'    => [
-				//  'name'  => esc_html__( 'Advanced', 'plausible-analytics' ),
-				//  'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=advanced' ),
-				//  'class' => 'advanced' === $current_tab ? 'active' : '',
-				// ],
-			]
-		);
-
-		// Don't print any markup if we only have one tab.
-		if ( count( $tabs ) === 1 ) {
-			return;
-		}
-		?>
-		<div class="plausible-analytics-header-navigation">
-			<?php
-			foreach ( $tabs as $tab ) {
-				printf(
-					'<a href="%1$s" class="%2$s">%3$s</a>',
-					esc_url( $tab['url'] ),
-					esc_attr( $tab['class'] ),
-					esc_html( $tab['name'] )
-				);
-			}
-			?>
-		</div>
-		<?php
 	}
 
 	/**
@@ -545,11 +455,11 @@ class Page extends API {
 
 		$settings               = Helpers::get_settings();
 		$domain                 = Helpers::get_domain();
-		$shared_link            = ! empty( $settings['shared_link'] ) ? $settings['shared_link'] : '';
+		$shared_link            = ! empty( $settings[ 'shared_link' ] ) ? $settings[ 'shared_link' ] : '';
 		$has_access             = false;
-		$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? array_merge(
+		$user_roles_have_access = ! empty( $settings[ 'expand_dashboard_access' ] ) ? array_merge(
 			[ 'administrator' ],
-			$settings['expand_dashboard_access']
+			$settings[ 'expand_dashboard_access' ]
 		) : [ 'administrator' ];
 
 		foreach ( $current_user->roles as $role ) {
@@ -585,7 +495,7 @@ class Page extends API {
 		 * @since v1.2.5
 		 */
 		if ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
-			$page_url = isset( $_GET['page-url'] ) ? esc_url( $_GET['page-url'] ) : '';
+			$page_url = isset( $_GET[ 'page-url' ] ) ? esc_url( $_GET[ 'page-url' ] ) : '';
 
 			// Append individual page URL if it exists.
 			if ( $shared_link && $page_url ) {
@@ -639,7 +549,7 @@ class Page extends API {
 	 * @return void
 	 */
 	public function proxy_warning() {
-		if ( ! empty( Helpers::get_settings()['self_hosted_domain'] ) ) {
+		if ( ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] ) ) {
 			echo wp_kses(
 				__(
 					'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.',

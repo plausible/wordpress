@@ -46,8 +46,8 @@ class Helpers {
 		/**
 		 * Set $domain to self_hosted_domain if it exists.
 		 */
-		if ( ! empty( $settings['self_hosted_domain'] ) && $domain === $default_domain ) {
-			$domain = $settings['self_hosted_domain'];
+		if ( ! empty( $settings[ 'self_hosted_domain' ] ) && $domain === $default_domain ) {
+			$domain = $settings[ 'self_hosted_domain' ];
 		}
 
 		$url = "https://{$domain}/js/{$file_name}.js";
@@ -95,13 +95,13 @@ class Helpers {
 		}
 
 		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'revenue', 'pageview-props', 'compat', 'hash' ] as $extension ) {
-			if ( in_array( $extension, $settings['enhanced_measurements'], true ) ) {
+			if ( in_array( $extension, $settings[ 'enhanced_measurements' ], true ) ) {
 				$file_name .= '.' . $extension;
 			}
 		}
 
 		// Load exclusions.js if any excluded pages are set.
-		if ( ! empty( $settings['excluded_pages'] ) ) {
+		if ( ! empty( $settings[ 'excluded_pages' ] ) ) {
 			$file_name .= '.' . 'exclusions';
 		}
 
@@ -115,7 +115,7 @@ class Helpers {
 	public static function proxy_enabled() {
 		$settings = self::get_settings();
 
-		return ! empty( $settings['proxy_enabled'][0] ) || isset( $_GET['plausible_proxy'] );
+		return ! empty( $settings[ 'proxy_enabled' ][ 0 ] ) || isset( $_GET[ 'plausible_proxy' ] );
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Helpers {
 		/**
 		 * Force a refresh of our resources if the user recently switched to SSL and we still have non-SSL resources stored.
 		 */
-		if ( ! empty( $resources ) && is_ssl() && isset( $resources['cache_url'] ) && ( strpos( $resources['cache_url'], 'http:' ) !== false ) ) {
+		if ( ! empty( $resources ) && is_ssl() && isset( $resources[ 'cache_url' ] ) && ( strpos( $resources[ 'cache_url' ], 'http:' ) !== false ) ) {
 			$resources = [];
 		}
 
@@ -164,8 +164,8 @@ class Helpers {
 				'namespace'  => bin2hex( random_bytes( 3 ) ),
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
-				'cache_dir'  => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
+				'cache_dir'  => trailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => trailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
@@ -237,8 +237,8 @@ class Helpers {
 	public static function get_domain() {
 		$settings = self::get_settings();
 
-		if ( ! empty( $settings['domain_name'] ) ) {
-			return $settings['domain_name'];
+		if ( ! empty( $settings[ 'domain_name' ] ) ) {
+			return $settings[ 'domain_name' ];
 		}
 
 		$url = home_url();
@@ -258,14 +258,14 @@ class Helpers {
 
 		if ( self::proxy_enabled() ) {
 			// This'll make sure the API endpoint is properly registered when we're testing.
-			$append = isset( $_GET['plausible_proxy'] ) ? '?plausible_proxy=1' : '';
+			$append = isset( $_GET[ 'plausible_proxy' ] ) ? '?plausible_proxy=1' : '';
 
 			return self::get_rest_endpoint() . $append;
 		}
 
 		// Triggered when self-hosted analytics is enabled.
-		if ( ! empty( $settings['self_hosted_domain'] ) ) {
-			$default_domain = $settings['self_hosted_domain'];
+		if ( ! empty( $settings[ 'self_hosted_domain' ] ) ) {
+			$default_domain = $settings[ 'self_hosted_domain' ];
 			$url            = "https://{$default_domain}/api/event";
 		}
 
@@ -301,27 +301,25 @@ class Helpers {
 		ob_start();
 		$quick_actions = self::get_quick_actions();
 		?>
-		<div class="plausible-analytics-quick-actions">
+		<div class="hidden lg:block">
 			<?php
 			if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
 				?>
-				<div class="plausible-analytics-quick-actions-title">
+				<div
+					class="flex items-center px-3 py-2 text-sm leading-5 font-bold text-gray-600 dark:text-gray-400 rounded-md outline-none">
 					<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
 				</div>
-				<ul>
-					<?php
-					foreach ( $quick_actions as $quick_action ) {
-						?>
-						<li>
-							<a target="_blank" href="<?php echo $quick_action['url']; ?>"
-							   title="<?php echo $quick_action['label']; ?>">
-								<?php echo $quick_action['label']; ?>
-							</a>
-						</li>
-						<?php
-					}
+				<?php
+				foreach ( $quick_actions as $quick_action ) {
 					?>
-				</ul>
+					<a class="no-underline flex items-center px-3 py-2 text-sm leading-5 font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 transition ease-in-out duration-150"
+					   target="_blank" href="<?php echo $quick_action[ 'url' ]; ?>"
+					   title="<?php echo $quick_action[ 'label' ]; ?>">
+						<?php echo $quick_action[ 'label' ]; ?>
+					</a>
+					<?php
+				}
+				?>
 				<?php
 			}
 			?>

@@ -38,6 +38,7 @@
         "@babel/runtime": "^7.18.9",
         "@es-joy/jsdoccomment": "0.31.0",
         "@prettier/plugin-php": "^0.18.9",
+        "@tailwindcss/forms": "^0.5.7",
         "@wordpress/eslint-plugin": "^12.5.0",
         "@wordpress/stylelint-config": "^20.0.2",
         "autoprefixer": "^10.4.16",

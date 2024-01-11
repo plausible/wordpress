@@ -53,7 +53,7 @@ class Provisioning {
 	 * @return void
 	 */
 	public function create_shared_link( $old_settings, $settings ) {
-		if ( empty( $settings['enable_analytics_dashboard'][0] ) ) {
+		if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
 			return;
 		}
 
@@ -69,7 +69,7 @@ class Provisioning {
 	 * @return void
 	 */
 	public function create_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
+		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return;
@@ -99,7 +99,7 @@ class Provisioning {
 
 		if ( $response->valid() ) {
 			$goals = $response->getGoals();
-			$ids   = [];
+			$ids   = get_option( 'plausible_analytics_enhanced_measurements_goal_ids' );
 
 			foreach ( $goals as $goal ) {
 				$goal                  = $goal->getGoal();
@@ -121,8 +121,8 @@ class Provisioning {
 	 * @return void
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
-		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
-		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
+		$enhanced_measurements_old = array_filter( $old_settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements     = array_filter( $settings[ 'enhanced_measurements' ] );
 		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
@@ -138,7 +138,7 @@ class Provisioning {
 				continue;
 			}
 
-			$this->client->delete_goal( $id() );
+			$this->client->delete_goal( $id );
 		}
 	}
 }
