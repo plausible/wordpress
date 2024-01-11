@@ -20,8 +20,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			options.push( { name: input.name, value: input.value } );
 		} );
 
-		console.log( options );
-
 		form.append( 'action', 'plausible_analytics_save_options' );
 		form.append( 'options', JSON.stringify( options ) );
 		form.append( '_nonce', document.getElementById( '_wpnonce' ).value );
