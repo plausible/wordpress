@@ -226,6 +226,6 @@ class Actions {
 
 		update_option( 'plausible_analytics_settings', $settings );
 
-		wp_send_json_success();
+		wp_send_json_success( __( 'Settings saved.', 'plausible-analytics' ), 200 );
 	}
 }
