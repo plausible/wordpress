@@ -1,8 +1,8 @@
-const colors = require( 'tailwindcss/colors' );
-const plugin = require( 'tailwindcss/plugin' );
+const colors = require('tailwindcss/colors');
+const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-	content: [ "./src/**/*.php" ],
+	content: ["./src/**/*.php", "./assets/src/js/admin/*.js"],
 	theme: {
 		extend: {},
 	},
@@ -42,7 +42,7 @@ module.exports = {
 		},
 	},
 	plugins: [
-		require( '@tailwindcss/forms' ),
+		require('@tailwindcss/forms'),
 	],
 	corePlugins: {
 		preflight: false,
