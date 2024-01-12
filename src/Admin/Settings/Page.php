@@ -320,14 +320,23 @@ class Page extends API {
 							'disabled'    => ! empty( Helpers::get_settings()[ 'proxy_enabled' ][ 0 ] ),
 						],
 						[
-							'label' => '',
-							'slug'  => 'self_hosted_domain_notice',
-							'type'  => 'hook',
+							'label'    => __( 'Save', 'plausible-analytics' ),
+							'slug'     => 'save-self-hosted',
+							'type'     => 'button',
+							'disabled' => Helpers::proxy_enabled(),
 						],
 					],
 				],
 			],
 		];
+
+		if ( Helpers::proxy_enabled() ) {
+			$this->fields[ 'self-hosted' ][ 0 ][ 'fields' ][] = [
+				'label' => '',
+				'slug'  => 'self_hosted_domain_notice',
+				'type'  => 'hook',
+			];
+		}
 
 		$this->init();
 	}
