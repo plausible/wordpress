@@ -34,9 +34,10 @@ class API {
 		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
 		?>
-		<div class="h-full-dark">
+		<div class="h-full">
 			<!-- body -->
 			<div class="flex flex-col h-full">
+				<!-- logo -->
 				<nav class="relative z-20 py-8">
 					<div class="container">
 						<nav class="relative flex items-center justify-between sm:h-10 md:justify-center">
@@ -47,7 +48,49 @@ class API {
 						</nav>
 					</div>
 				</nav>
+				<!-- notices -->
+				<div class="z-50 fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
+					<div class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto" style="display: none;">
+						<div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+							<div class="p-4">
+								<div class="flex items-start">
+									<div class="flex-shrink-0">
+										<svg class="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+											 stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+										</svg>
+									</div>
+									<div class="ml-3 w-0 flex-1 pt-0.5">
+										<!-- icon -->
+										<p class="text-sm leading-5 font-medium text-gray-900 dark:text-gray-100">
+											Success!
+										</p>
+										<!-- message -->
+										<p class="mt-1 text-sm leading-5 text-gray-500 dark:text-gray-200">
+											Stats for plausible.dev.local are now public.
+										</p>
+									</div>
+									<div class="ml-4 flex-shrink-0 flex">
+										<button
+											class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 transition ease-in-out duration-150"
+											@click="show = false">
+											<!-- Heroicon name: x -->
+											<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+												<path fill-rule="evenodd"
+													  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+													  clip-rule="evenodd"></path>
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /notices -->
 				<div class="flex flex-col gap-y-2"></div>
+				<!-- navigation -->
 				<main class="flex-1">
 					<div class="container pt-6">
 						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
@@ -76,6 +119,7 @@ class API {
 						</div>
 					</div>
 				</main>
+				<!-- /navigation -->
 			</div>
 			<!-- /body -->
 		</div>
@@ -211,9 +255,9 @@ class API {
 		<div>
 			<button
 				class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800"
-				id="<?php esc_attr_e( $field[ 'slug' ] ); ?>"
+				id="<?php esc_attr_e( $field[ 'slug' ], 'plausible-analytics' ); ?>"
 				type="submit">
-				<?php esc_attr_e( $field[ 'label' ] ); ?>
+				<?php esc_attr_e( $field[ 'label' ], 'plausible-analytics' ); ?>
 			</button>
 		</div>
 		<?php
@@ -245,10 +289,20 @@ class API {
 				id="<?php echo $id; ?>" type="checkbox" data-list="<?php echo $is_list ? '1' : ''; ?>"
 				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
 				value="<?php echo esc_html( $value ); ?>">
-		<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
-			'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition ease-in-out duration-200"></span>
+				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
+					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition ease-in-out duration-200"></span>
 			</button>
 			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo $field[ 'label' ]; ?></span>
+			<?php if ( isset( $field[ 'docs' ] ) ): ?>
+				<a class="leading-none" href="<?php echo esc_url( $field[ 'docs' ] ); ?>" rel="noreferrer" target="_blank">
+					<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor"
+						 aria-hidden="true"
+						 fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+						<path stroke-linecap="round" stroke-linejoin="round"
+							  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
+					</svg>
+				</a>
+			<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();
