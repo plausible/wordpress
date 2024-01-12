@@ -48,7 +48,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		const button = e.target.closest( 'button' );
 		let toggle = '';
-		let toggleStatus = ';';
+		let toggleStatus = '';
 
 		// The button element is clicked.
 		if ( e.target.type === 'submit' ) {

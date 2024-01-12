@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection HtmlUnknownTarget */
+
 /**
  * Plausible Analytics | Settings API.
  * @since      1.3.0
@@ -73,8 +74,7 @@ class API {
 									</div>
 									<div class="ml-4 flex-shrink-0 flex">
 										<button
-											class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 transition ease-in-out duration-150"
-											@click="show = false">
+											class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 dark:focus:text-gray-200 transition ease-in-out duration-150">
 											<!-- Heroicon name: x -->
 											<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 												<path fill-rule="evenodd"
@@ -286,7 +286,8 @@ class API {
 			<button
 				class="plausible-analytics-toggle <?php echo $checked ? 'bg-indigo-600' :
 					'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
-				id="<?php echo $id; ?>" type="checkbox" data-list="<?php echo $is_list ? '1' : ''; ?>"
+				id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
+				echo $id; ?>" type="checkbox" data-list="<?php echo $is_list ? '1' : ''; ?>"
 				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
 				value="<?php echo esc_html( $value ); ?>">
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :

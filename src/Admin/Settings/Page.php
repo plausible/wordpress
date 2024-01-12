@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection HtmlUnknownTarget */
+
 /**
  * Plausible Analytics | Settings API.
  * @since      1.3.0
