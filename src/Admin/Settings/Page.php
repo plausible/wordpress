@@ -186,19 +186,7 @@ class Page extends API {
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
 					'desc'   => sprintf(
-						'<ol><li>%1$s <a href="%2$s" target="_blank">%3$s</a></li><li>%4$s</li><li>%5$s <a href="%6$s">%7$s</a></li></ol>',
-						esc_html__(
-							'Create a secure & private shared link in your Plausible account. Make sure the link is not password protected.',
-							'plausible-analytics'
-						),
-						esc_url(
-							'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard'
-						),
-						esc_html__( 'See how &raquo;', 'plausible-analytics' ),
-						esc_html__(
-							'Enable this setting and paste your shared link to view your stats in your WordPress dashboard.',
-							'plausible-analytics'
-						),
+						'%1$s <a href="%2$s">%3$s</a>',
 						esc_html__(
 							'View your site statistics within your WordPress Dashboard.',
 							'plausible-analytics'
@@ -209,7 +197,7 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label' => esc_html__( 'Enable analytics in WP Dashboard', 'plausible-analytics' ),
+							'label' => esc_html__( 'Enable analytics', 'plausible-analytics' ),
 							'slug'  => 'enable_analytics_dashboard',
 							'type'  => 'checkbox',
 							'value' => 'on',

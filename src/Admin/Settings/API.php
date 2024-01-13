@@ -168,7 +168,7 @@ class API {
 		$fields = $group[ 'fields' ];
 		ob_start();
 		?>
-		<div class="bg-white dark:bg-gray-800 py-6 px-4 space-y-6 sm:p-6 <?php echo str_replace( '_', '-', $group[ 'slug' ] ); ?>">
+		<div class="plausible-analytics-group bg-white dark:bg-gray-800 py-6 px-4 space-y-6 sm:p-6">
 			<header class="relative">
 				<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" for=""><?php echo $group[ 'label' ]; ?></label>
 				<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
