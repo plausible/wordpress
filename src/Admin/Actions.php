@@ -134,7 +134,7 @@ class Actions {
 		if ( $post_data[ 'action' ] !== 'plausible_analytics_toggle_option' ||
 			! current_user_can( 'manage_options' ) ||
 			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
-			return;
+			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
 		if ( $post_data[ 'is_list' ] ) {
@@ -162,8 +162,9 @@ class Actions {
 
 		do_action( 'plausible_analytics_settings_saved' );
 
-		// Send response.
-		wp_send_json_success();
+		$toggle_status = $post_data[ 'toggle_status' ] === 'on' ? __( 'enabled', 'plausible-analytics' ) : __( 'disabled', 'plausible-analytics' );
+
+		wp_send_json_success( sprintf( '%s %s.', $post_data[ 'option_label' ], $toggle_status ), 200 );
 	}
 
 	/**

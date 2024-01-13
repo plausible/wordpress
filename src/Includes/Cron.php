@@ -1,9 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Cron.
- *
  * @since      1.3.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
@@ -16,7 +14,6 @@ use Exception;
 class Cron {
 	/**
 	 * Build class
-	 *
 	 * @return void
 	 * @throws InvalidArgument
 	 * @throws Exception
@@ -27,28 +24,17 @@ class Cron {
 
 	/**
 	 * Run
-	 *
 	 * @return void
-	 *
 	 * @throws InvalidArgument
 	 * @throws Exception
 	 */
 	private function init() {
-		$download = $this->download();
-
-		if ( ! wp_doing_cron() && $download ) {
-			/**
-			 * Only send a success message if this is an AJAX request.
-			 */
-			wp_send_json_success();
-		}
+		$this->download();
 	}
 
 	/**
 	 * Download the plausible.js file if the Proxy is enabled and downloads it to the uploads directory with an alias.
-	 *
 	 * @return bool
-	 *
 	 * @throws InvalidArgument
 	 * @throws Exception
 	 */

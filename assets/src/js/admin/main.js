@@ -48,17 +48,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			return false;
 		}).then(response => {
-			document.getElementById('plausible-analytics-notice-text').textContent = response.data;
-			document.getElementById('plausible-analytics-notice').classList.replace('opacity-0', 'opacity-100');
-
-			setTimeout(function () {
-				document.getElementById('plausible-analytics-notice').classList.replace('opacity-100', 'opacity-0');
-			}, 2000);
+			showNotice(response.data);
 
 			return response.success;
 		})
 	});
 });
+
+/**
+ * Show notice.
+ *
+ * @param message
+ */
+function showNotice(message) {
+	document.getElementById('plausible-analytics-notice-text').textContent = message;
+	document.getElementById('plausible-analytics-notice').classList.replace('opacity-0', 'opacity-100');
+
+	setTimeout(function () {
+		document.getElementById('plausible-analytics-notice').classList.replace('opacity-100', 'opacity-0');
+	}, 2500);
+}
 
 /**
  * Toggle Options.
@@ -82,9 +91,13 @@ document.addEventListener('click', (e) => {
 
 	if (button.classList.contains('bg-indigo-600')) {
 		// Toggle: off
+		button.classList.replace('bg-indigo-600', 'bg-gray-200');
+		toggle.classList.replace('translate-x-5', 'translate-x-0');
 		toggleStatus = '';
 	} else {
 		// Toggle: on
+		button.classList.replace('bg-gray-200', 'bg-indigo-600');
+		toggle.classList.replace('translate-x-0', 'translate-x-5');
 		toggleStatus = 'on';
 	}
 
@@ -92,6 +105,7 @@ document.addEventListener('click', (e) => {
 	form.append('action', 'plausible_analytics_toggle_option');
 	form.append('option_name', button.name);
 	form.append('option_value', button.value);
+	form.append('option_label', button.nextElementSibling.innerHTML);
 	form.append('toggle_status', toggleStatus);
 	form.append('is_list', button.dataset.list);
 	form.append('_nonce', document.getElementById('_wpnonce').value);
@@ -103,23 +117,15 @@ document.addEventListener('click', (e) => {
 			body: form,
 		}
 	).then(response => {
-		if (response.status !== 200) {
-			// @todo Display error.
-
-			return response.status;
+		if (response.status === 200) {
+			return response.json();
 		}
 
-		if (button.classList.contains('bg-indigo-600')) {
-			// Toggle: off
-			button.classList.replace('bg-indigo-600', 'bg-gray-200');
-			toggle.classList.replace('translate-x-5', 'translate-x-0');
-		} else {
-			// Toggle: on
-			button.classList.replace('bg-gray-200', 'bg-indigo-600');
-			toggle.classList.replace('translate-x-0', 'translate-x-5');
-		}
+		return false;
+	}).then(response => {
+		showNotice(response.data);
 
-		return response.status;
+		return response.success;
 	});
 });
 
