@@ -27,7 +27,7 @@ class Module {
 	 */
 	private function init() {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9, 2 );
-		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 2 );
+		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 1 );
 	}
 
 	/**
@@ -168,15 +168,14 @@ class Module {
 	 * @since 1.3.0
 	 *
 	 * @param mixed $settings
-	 * @param mixed $old_settings
 	 *
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function maybe_enable_proxy( $settings, $old_settings ) {
-		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled() );
+	public function maybe_enable_proxy( $settings ) {
+		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled( $settings ) );
 
-		if ( ! $test_succeeded && Helpers::proxy_enabled() && wp_doing_ajax() ) {
+		if ( ! $test_succeeded && Helpers::proxy_enabled( $settings ) && wp_doing_ajax() ) {
 			wp_send_json_error(
 				sprintf(
 					wp_kses(

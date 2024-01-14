@@ -110,10 +110,15 @@ class Helpers {
 
 	/**
 	 * Is the proxy enabled?
+	 *
+	 * @param array $settings Allows passing a current settings object.
+	 *
 	 * @return bool
 	 */
-	public static function proxy_enabled() {
-		$settings = self::get_settings();
+	public static function proxy_enabled( $settings = [] ) {
+		if ( empty( $settings ) ) {
+			$settings = self::get_settings();
+		}
 
 		return ! empty( $settings[ 'proxy_enabled' ] ) || isset( $_GET[ 'plausible_proxy' ] );
 	}
