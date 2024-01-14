@@ -23,64 +23,10 @@ class Actions {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'admin_notices', [ $this, 'print_notices' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_notice' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
-	}
-
-	/**
-	 * Takes care of printing the notice.
-	 * Notices are now primarily used to display any information related to failures around the Proxy feature introduced in 1.3.0.
-	 * If in the future admin-wide notices are used in different contexts, this function needs to be revised.
-	 * @since 1.3.0
-	 * @return void
-	 */
-	public function print_notices() {
-		$notices = get_transient( Notice::TRANSIENT_NAME ) ?: [];
-		$unset   = false;
-
-		foreach ( $this->get_all_notices() as $notice_key => $notice_id ) {
-			if ( get_transient( 'plausible_analytics_' . str_replace( '-', '_', $notice_id ) . '_notice_dismissed' ) ) {
-				if ( strpos( $notice_key, 'ERROR' ) !== false ) {
-					unset( $notices[ 'all' ][ 'error' ][ 'plausible-analytics-' . $notice_id ] );
-
-					$unset = true;
-				}
-
-				if ( strpos( $notice_key, 'SUCCESS' ) !== false ) {
-					unset( $notices[ 'all' ][ 'success' ][ 'plausible-analytics-' . $notice_id ] );
-
-					$unset = true;
-				}
-			}
-		}
-
-		if ( $unset === true ) {
-			set_transient( Notice::TRANSIENT_NAME, $notices );
-		}
-
-		//		Notice::print_notices();
-	}
-
-	/**
-	 * Get all contants starting with NOTICE_ from the Notice class.
-	 * This creates a unified way to deal with notice dismissal.
-	 * @since 2.0.0
-	 * @return array
-	 */
-	private function get_all_notices() {
-		$reflection = new \ReflectionClass( new Notice() );
-		$constants  = $reflection->getConstants();
-
-		return array_filter(
-			$constants,
-			function ( $key ) {
-				return strpos( $key, 'NOTICE_' ) !== false;
-			},
-			ARRAY_FILTER_USE_KEY
-		);
 	}
 
 	/**
@@ -228,5 +174,24 @@ class Actions {
 		update_option( 'plausible_analytics_settings', $settings );
 
 		wp_send_json_success( __( 'Settings saved.', 'plausible-analytics' ), 200 );
+	}
+
+	/**
+	 * Get all contants starting with NOTICE_ from the Notice class.
+	 * This creates a unified way to deal with notice dismissal.
+	 * @since 2.0.0
+	 * @return array
+	 */
+	private function get_all_notices() {
+		$reflection = new \ReflectionClass( new Notice() );
+		$constants  = $reflection->getConstants();
+
+		return array_filter(
+			$constants,
+			function ( $key ) {
+				return strpos( $key, 'NOTICE_' ) !== false;
+			},
+			ARRAY_FILTER_USE_KEY
+		);
 	}
 }

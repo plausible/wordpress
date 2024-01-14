@@ -62,10 +62,6 @@ class Upgrades {
 			$this->upgrade_to_132();
 		}
 
-		if ( version_compare( $plausible_analytics_version, '2.0.0', '<' ) ) {
-			$this->upgrade_to_200();
-		}
-
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -80,23 +76,23 @@ class Upgrades {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		if ( isset( $old_settings['custom_domain_prefix'] ) ) {
-			unset( $new_settings['custom_domain_prefix'] );
+		if ( isset( $old_settings[ 'custom_domain_prefix' ] ) ) {
+			unset( $new_settings[ 'custom_domain_prefix' ] );
 		}
 
-		if ( isset( $old_settings['custom_domain'] ) ) {
-			unset( $new_settings['custom_domain'] );
+		if ( isset( $old_settings[ 'custom_domain' ] ) ) {
+			unset( $new_settings[ 'custom_domain' ] );
 		}
 
-		if ( isset( $old_settings['is_custom_domain'] ) ) {
-			unset( $new_settings['is_custom_domain'] );
+		if ( isset( $old_settings[ 'is_custom_domain' ] ) ) {
+			unset( $new_settings[ 'is_custom_domain' ] );
 		}
 
 		// Enable Outbound links by default.
-		$new_settings['enhanced_measurements'] = [ 'outbound-links' ];
+		$new_settings[ 'enhanced_measurements' ] = [ 'outbound-links' ];
 
-		if ( ! empty( $old_settings['track_administrator'] ) && $old_settings['track_administrator'] === 'true' ) {
-			$new_settings['tracked_user_roles'] = [ 'administrator' ];
+		if ( ! empty( $old_settings[ 'track_administrator' ] ) && $old_settings[ 'track_administrator' ] === 'true' ) {
+			$new_settings[ 'tracked_user_roles' ] = [ 'administrator' ];
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
@@ -113,8 +109,8 @@ class Upgrades {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		if ( ! empty( $old_settings['self_hosted_domain'] ) && strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
-			$new_settings['self_hosted_domain'] = '';
+		if ( ! empty( $old_settings[ 'self_hosted_domain' ] ) && strpos( $old_settings[ 'self_hosted_domain' ], 'example.com' ) !== false ) {
+			$new_settings[ 'self_hosted_domain' ] = '';
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
@@ -130,8 +126,8 @@ class Upgrades {
 	public function upgrade_to_131() {
 		$settings = Helpers::get_settings();
 
-		if ( ! in_array( '404', $settings['enhanced_measurements'], true ) ) {
-			array_unshift( $settings['enhanced_measurements'], '404' );
+		if ( ! in_array( '404', $settings[ 'enhanced_measurements' ], true ) ) {
+			array_unshift( $settings[ 'enhanced_measurements' ], '404' );
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -148,25 +144,10 @@ class Upgrades {
 	private function upgrade_to_132() {
 		$proxy_resources = Helpers::get_proxy_resources();
 
-		$proxy_resources['cache_url'] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources['cache_url'] );
+		$proxy_resources[ 'cache_url' ] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources[ 'cache_url' ] );
 
 		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
 
 		update_option( 'plausible_analytics_version', '1.3.2' );
-	}
-
-	/**
-	 * Upgrade DB to 2.0.0
-	 * - If the Proxy notice was dismissed before, this makes sure it stays dismissed.
-	 * @return void
-	 */
-	private function upgrade_to_200() {
-		$proxy_notice_dismissed = get_transient( 'plausible_analytics_notice_dismissed' );
-
-		if ( $proxy_notice_dismissed ) {
-			set_transient( 'plausible_analytics_' . str_replace( '-', '_', Notice::NOTICE_ERROR_MODULE_INSTALL_FAILED ) . '_notice_dismissed', true );
-
-			delete_transient( 'plausible_analytics_notice_dismissed' );
-		}
 	}
 }

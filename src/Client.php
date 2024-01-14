@@ -26,7 +26,7 @@ class Client {
 	 */
 	public function __construct() {
 		$config             = Configuration::getDefaultConfiguration()->setUsername( 'WordPress' )->setPassword(
-			Helpers::get_settings()['api_token']
+			Helpers::get_settings()[ 'api_token' ]
 		);
 		$this->api_instance = new DefaultApi( new GuzzleClient(), $config );
 	}
@@ -43,14 +43,14 @@ class Client {
 				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
 			);
 		} catch ( Exception $e ) {
-			Notice::set_notice(
-				sprintf(
-					__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
-					$e->getMessage()
-				),
-				Notice::NOTICE_ERROR_SHARED_LINK_FAILED,
-				'error'
-			);
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					sprintf(
+						__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
+						$e->getMessage()
+					)
+				);
+			}
 		}
 
 		if ( $result instanceof SharedLink ) {
@@ -73,14 +73,14 @@ class Client {
 		try {
 			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $goals );
 		} catch ( Exception $e ) {
-			Notice::set_notice(
-				sprintf(
-					__( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ),
-					$e->getMessage()
-				),
-				Notice::NOTICE_ERROR_CUSTOM_EVENT_GOAL_FAILED,
-				'error'
-			);
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					sprintf(
+						__( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ),
+						$e->getMessage()
+					)
+				);
+			}
 		}
 	}
 
@@ -95,17 +95,17 @@ class Client {
 		try {
 			$this->api_instance->plausibleWebPluginsAPIControllersGoalsDelete( $id );
 		} catch ( Exception $e ) {
-			Notice::set_notice(
-				sprintf(
-					__(
-						'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
-						'plausible-analytics'
-					),
-					$e->getMessage()
-				),
-				Notice::NOTICE_ERROR_DELETE_CUSTOM_EVENT_GOAL_FAILED,
-				'error'
-			);
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					sprintf(
+						__(
+							'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
+							'plausible-analytics'
+						),
+						$e->getMessage()
+					)
+				);
+			}
 		}
 	}
 }

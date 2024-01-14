@@ -136,12 +136,13 @@ class Helpers {
 			wp_mkdir_p( $resources[ $resource_name ] );
 		}
 
-		return isset( $resources[ $resource_name ] ) ? $resources[ $resource_name ] : '';
+		return $resources[ $resource_name ] ?? '';
 	}
 
 	/**
 	 * Get (and generate/store if non-existent) proxy resources.
 	 * @return array
+	 * @throws Exception
 	 */
 	public static function get_proxy_resources() {
 		static $resources;
@@ -201,10 +202,10 @@ class Helpers {
 	 * Downloads the plausible.js file to this server.
 	 * @since 1.3.0
 	 *
-	 * @param string $local_file  Absolutate path to where to store the $remote_file.
+	 * @param string $local_file  Absolute path to where to store the $remote_file.
 	 * @param string $remote_file Full URL to file to download.
 	 *
-	 * @return bool True when successfull. False if it fails.
+	 * @return bool True when successful. False if it fails.
 	 * @throws Exception
 	 * @throws InvalidArgument
 	 */

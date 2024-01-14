@@ -27,7 +27,7 @@ class Module {
 	 */
 	private function init() {
 		add_action( 'admin_init', [ $this, 'maybe_show_notice' ] );
-		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9 );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 2 );
 	}
 
@@ -47,48 +47,46 @@ class Module {
 	 * @return void
 	 */
 	private function throw_notice() {
-		Notice::set_notice(
-			sprintf(
-				wp_kses(
-					__(
-						'Plausible\'s proxy is enabled, but the Proxy Speed Module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
-						'plausible-analytics'
+		if ( wp_doing_ajax() ) {
+			wp_send_json_error(
+				sprintf(
+					wp_kses(
+						__(
+							'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
+							'plausible-analytics'
+						),
+						'post'
 					),
-					'post'
-				),
-				'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
-			),
-			Notice::NOTICE_ERROR_MODULE_INSTALL_FAILED,
-			'error'
-		);
+					'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
+				)
+			);
+		}
 	}
 
 	/**
 	 * Decide whether we should install the module, or not.
 	 * @since 1.3.0
 	 *
-	 * @param array $settings Current settings available in POST. These are not yet written to the database.
+	 * @param array $settings Current settings, already written to the DB.
 	 *
 	 * @return void
 	 */
-	public function maybe_install_module( $settings ) {
-		if ( ! empty( $settings['proxy_enabled'][0] ) ) {
+	public function maybe_install_module( $old_settings, $settings ) {
+		if ( ! empty( $settings[ 'proxy_enabled' ] ) ) {
 			$this->install();
 		} else {
 			$this->uninstall();
 		}
-
-		return $settings;
 	}
 
 	/**
 	 * Takes care of installing the M(ust)U(se) plugin when the Proxy is enabled.
 	 * @since 1.3.0
-	 * @return bool True on success, false on failure.
+	 * @return void.
 	 */
 	public function install() {
 		if ( ! current_user_can( 'install_plugins' ) ) {
-			return false;
+			return;
 		}
 
 		if ( ! function_exists( 'WP_Filesystem' ) ) {
@@ -104,31 +102,25 @@ class Module {
 
 		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
 			$this->throw_notice();
-
-			return false;
 		}
 
 		$results = copy_dir( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'mu-plugin', WPMU_PLUGIN_DIR );
 
 		if ( is_wp_error( $results ) ) {
 			$this->throw_notice();
-
-			return false;
 		}
 
 		add_option( 'plausible_analytics_proxy_speed_module_installed', true );
-
-		return true;
 	}
 
 	/**
 	 * Uninstall the Speed Module, generates JS files and all related settings when the proxy is disabled.
 	 * @since 1.3.0
-	 * @return bool True on success, false on failure.
+	 * @return void.
 	 */
 	public function uninstall() {
 		if ( ! current_user_can( 'install_plugins' ) ) {
-			return false;
+			return;
 		}
 
 		/**
@@ -164,9 +156,6 @@ class Module {
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
 		delete_option( 'plausible_analytics_proxy_speed_module_installed' );
 		delete_option( 'plausible_analytics_proxy_resources' );
-		delete_transient( Notice::NOTICE_ERROR_MODULE_INSTALL_FAILED );
-
-		return true;
 	}
 
 	/**
@@ -199,8 +188,8 @@ class Module {
 	public function maybe_enable_proxy( $settings, $old_settings ) {
 		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled() );
 
-		if ( ! $test_succeeded && Helpers::proxy_enabled() ) {
-			Notice::set_notice(
+		if ( ! $test_succeeded && Helpers::proxy_enabled() && wp_doing_ajax() ) {
+			wp_send_json_error(
 				sprintf(
 					wp_kses(
 						__(
@@ -211,12 +200,8 @@ class Module {
 					),
 					Helpers::get_rest_endpoint( false ),
 					'https://plausible.io/contact'
-				),
-				Notice::NOTICE_ERROR_PROXY_TEST_FAILED,
-				'error'
+				)
 			);
-
-			return $old_settings;
 		}
 
 		return $settings;

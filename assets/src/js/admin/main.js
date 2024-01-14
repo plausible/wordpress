@@ -44,8 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				return response.json();
 			}
 
-			// Display error.
-
 			return false;
 		}).then(response => {
 			showNotice(response.data);
@@ -59,14 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
  * Show notice.
  *
  * @param message
+ * @param timeout
  */
-function showNotice(message) {
+function showNotice(message, timeout = 2500) {
 	document.getElementById('plausible-analytics-notice-text').textContent = message;
 	document.getElementById('plausible-analytics-notice').classList.replace('opacity-0', 'opacity-100');
 
-	setTimeout(function () {
-		document.getElementById('plausible-analytics-notice').classList.replace('opacity-100', 'opacity-0');
-	}, 2500);
+	if (timeout > 0) {
+		setTimeout(function () {
+			document.getElementById('plausible-analytics-notice').classList.replace('opacity-100', 'opacity-0');
+		}, timeout);
+	}
 }
 
 /**
@@ -123,7 +124,11 @@ document.addEventListener('click', (e) => {
 
 		return false;
 	}).then(response => {
-		showNotice(response.data);
+		if (response.success === true) {
+			showNotice(response.data);
+		} else {
+			showNotice(response.data, 0);
+		}
 
 		return response.success;
 	});
