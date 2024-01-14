@@ -155,7 +155,7 @@ class Page extends API {
 						),
 						get_site_url( null, rest_get_url_prefix() ),
 						empty(
-						Helpers::get_settings()[ 'proxy_enabled' ][ 0 ]
+						Helpers::get_settings()[ 'proxy_enabled' ]
 						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
 								ABSPATH,
 								'',
@@ -305,7 +305,7 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $self_hosted_domain,
 							'placeholder' => 'e.g. ' . Helpers::get_domain(),
-							'disabled'    => ! empty( Helpers::get_settings()[ 'proxy_enabled' ][ 0 ] ),
+							'disabled'    => ! empty( Helpers::get_settings()[ 'proxy_enabled' ] ),
 						],
 						[
 							'label'    => __( 'Save', 'plausible-analytics' ),

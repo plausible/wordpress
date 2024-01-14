@@ -115,7 +115,7 @@ class Helpers {
 	public static function proxy_enabled() {
 		$settings = self::get_settings();
 
-		return ! empty( $settings[ 'proxy_enabled' ][ 0 ] ) || isset( $_GET[ 'plausible_proxy' ] );
+		return ! empty( $settings[ 'proxy_enabled' ] ) || isset( $_GET[ 'plausible_proxy' ] );
 	}
 
 	/**

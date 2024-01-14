@@ -26,41 +26,8 @@ class Module {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'admin_init', [ $this, 'maybe_show_notice' ] );
-		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9, 2 );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 2 );
-	}
-
-	/**
-	 * Show an admin-wide notice if the Speed Module failed to install.
-	 * @since 1.3.0
-	 * @return void
-	 */
-	public function maybe_show_notice() {
-		if ( Helpers::proxy_enabled() && ! file_exists( WPMU_PLUGIN_DIR . '/plausible-proxy-speed-module.php' ) ) {
-			$this->throw_notice();
-		}
-	}
-
-	/**
-	 * @since 1.3.0
-	 * @return void
-	 */
-	private function throw_notice() {
-		if ( wp_doing_ajax() ) {
-			wp_send_json_error(
-				sprintf(
-					wp_kses(
-						__(
-							'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
-							'plausible-analytics'
-						),
-						'post'
-					),
-					'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
-				)
-			);
-		}
 	}
 
 	/**
@@ -72,9 +39,9 @@ class Module {
 	 * @return void
 	 */
 	public function maybe_install_module( $old_settings, $settings ) {
-		if ( ! empty( $settings[ 'proxy_enabled' ] ) ) {
+		if ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] !== 'on' ) {
 			$this->install();
-		} else {
+		} elseif ( $settings[ 'proxy_enabled' ] === '' && $old_settings[ 'proxy_enabled' ] === 'on' ) {
 			$this->uninstall();
 		}
 	}
@@ -111,6 +78,27 @@ class Module {
 		}
 
 		add_option( 'plausible_analytics_proxy_speed_module_installed', true );
+	}
+
+	/**
+	 * @since 1.3.0
+	 * @return void
+	 */
+	private function throw_notice() {
+		if ( wp_doing_ajax() ) {
+			wp_send_json_error(
+				sprintf(
+					wp_kses(
+						__(
+							'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
+							'plausible-analytics'
+						),
+						'post'
+					),
+					'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
+				)
+			);
+		}
 	}
 
 	/**

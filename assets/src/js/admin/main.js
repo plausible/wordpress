@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param timeout
  */
 function showNotice(message, timeout = 2500) {
-	document.getElementById('plausible-analytics-notice-text').textContent = message;
+	document.getElementById('plausible-analytics-notice-text').innerHTML = message;
 	document.getElementById('plausible-analytics-notice').classList.replace('opacity-0', 'opacity-100');
 
 	if (timeout > 0) {
