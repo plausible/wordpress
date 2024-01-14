@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			return false;
 		}).then(response => {
-			showNotice(response.data);
+			plausibleShowNotice(response.data);
 
 			return response.success;
 		})
@@ -57,16 +57,24 @@ document.addEventListener('DOMContentLoaded', () => {
  * Show notice.
  *
  * @param message
- * @param timeout
+ * @param isError
  */
-function showNotice(message, timeout = 2500) {
+function plausibleShowNotice(message, isError = false) {
+	if (isError === true) {
+		document.getElementById('icon-error').classList.remove('hidden');
+		document.getElementById('icon-success').classList += ' hidden';
+	} else {
+		document.getElementById('icon-success').classList.remove('hidden');
+		document.getElementById('icon-error').classList += ' hidden';
+	}
+
 	document.getElementById('plausible-analytics-notice-text').innerHTML = message;
 	document.getElementById('plausible-analytics-notice').classList.replace('opacity-0', 'opacity-100');
 
-	if (timeout > 0) {
+	if (isError === false) {
 		setTimeout(function () {
 			document.getElementById('plausible-analytics-notice').classList.replace('opacity-100', 'opacity-0');
-		}, timeout);
+		}, 2500);
 	}
 }
 
@@ -125,9 +133,9 @@ document.addEventListener('click', (e) => {
 		return false;
 	}).then(response => {
 		if (response.success === true) {
-			showNotice(response.data);
+			plausibleShowNotice(response.data);
 		} else {
-			showNotice(response.data, 0);
+			plausibleShowNotice(response.data, true);
 		}
 
 		return response.success;

@@ -57,11 +57,19 @@ class API {
 						<div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
 							<div class="p-4">
 								<div class="flex items-start">
-									<div class="flex-shrink-0">
-										<svg class="h-8 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									<div id="icon-success" class="flex-shrink-0">
+										<svg class="h-8 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+											 viewBox="0 0 24 24"
 											 stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 												  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+										</svg>
+									</div>
+									<div id="icon-error" class="flex-shrink-0 hidden">
+										<svg class="h-9 w-6 text-red-400" xmlns="http://www.w3.org/2000/svg"
+											 viewBox="0 0 593 593" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="#FF4136"
+												  d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"/>
 										</svg>
 									</div>
 									<div class="ml-3 w-0 flex-1 pt-0.5">
