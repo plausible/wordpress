@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		return;
 	}
 
+	if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== undefined) {
+		document.location.hash = 'welcome';
+	}
+
 	let hash = document.location.hash.replace('#', '');
 
 	plausibleToggleWizardStep(document.getElementById('step-' + hash));

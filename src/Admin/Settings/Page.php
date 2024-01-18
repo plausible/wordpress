@@ -235,7 +235,7 @@ class Page extends API {
 				],
 				[
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
-					'slug'   => 'can_role_tracked_user_roles',
+					'slug'   => 'tracked_user_roles',
 					'type'   => 'group',
 					'desc'   => esc_html__(
 						'By default, visits from logged in users aren\'t tracked. If you want to track visits for certain user roles then please specify them above.',
@@ -246,7 +246,7 @@ class Page extends API {
 				],
 				[
 					'label'  => esc_html__( 'Show stats dashboard to additional user roles', 'plausible-analytics' ),
-					'slug'   => 'can_access_analytics_page',
+					'slug'   => 'expand_dashboard_access',
 					'type'   => 'group',
 					'desc'   => esc_html__(
 						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.',
