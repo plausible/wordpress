@@ -360,7 +360,7 @@ class API {
 		$fields = $group[ 'fields' ];
 		ob_start();
 		?>
-		<div class="plausible-analytics-group bg-white dark:bg-gray-800 py-6 px-4 space-y-6 sm:p-6">
+		<div class="<?php echo $hide_header ? '' : 'plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?> bg-white dark:bg-gray-800">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
 					<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" for=""><?php echo $group[ 'label' ]; ?></label>
