@@ -189,7 +189,7 @@ class API {
 	 */
 	private function show_wizard() {
 		?>
-		<div class="h-full">
+		<div class="h-full min-h-screen">
 			<!-- body -->
 			<div class="flex flex-col h-full">
 				<!-- logo -->
@@ -229,7 +229,7 @@ class API {
 							<div class="space-y-6 lg:col-span-9 lg:mt-4 relative">
 								<div class="plausible-analytics-section">
 									<?php foreach ( $this->slides as $id => $title ): ?>
-										<div id="<?php esc_attr_e( $id ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
+										<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
 										 space-y-6 sm:p-6 opacity-0 target:opacity-100 transition-opacity absolute top-0 w-full">
 											<header class="relative">
 												<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
