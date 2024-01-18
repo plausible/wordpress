@@ -24,6 +24,7 @@ class Actions {
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'admin_init', [ $this, 'maybe_redirect_to_wizard' ] );
 		add_action( 'wp_ajax_plausible_analytics_quit_wizard', [ $this, 'quit_wizard' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
@@ -54,6 +55,26 @@ class Actions {
 			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ),
 			true
 		);
+	}
+
+	/**
+	 * Redirect to Configuration Wizard on first boot.
+	 * @return void
+	 */
+	public function maybe_redirect_to_wizard() {
+		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] === 'plausible_analytics' ) {
+			return;
+		}
+		
+		$wizard_done = get_option( 'plausible_analytics_wizard_done', false );
+
+		if ( ! $wizard_done ) {
+			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome' );
+
+			wp_redirect( $url );
+
+			exit;
+		}
 	}
 
 	/**
