@@ -37,6 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		let hash = document.location.hash.replace('#', '');
 
 		if (hash === 'api_token' || hash === 'domain_name') {
+			e.preventDefault();
+
+			let spinner = document.getElementById('plausible-analytics-wizard-next-step-spinner-' + hash);
+
+			spinner.classList.remove('hidden');
+
 			let form = e.target.closest('.plausible-analytics-wizard-step-section');
 			let inputs = form.getElementsByTagName('INPUT');
 			let options = [];
@@ -51,6 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			data.append('options', JSON.stringify(options));
 
 			plausibleAjax(data, null, false);
+
+			spinner.classList += ' hidden';
+
+			document.location.href = e.target.href;
 		}
 	});
 
