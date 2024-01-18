@@ -279,8 +279,6 @@ class API {
 		$checked  =
 			! empty( $field[ 'checked' ] ) ? 'checked="checked"' :
 				( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
-
 		?>
 		<div class="flex items-center mt-4 space-x-3">
 			<button

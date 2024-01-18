@@ -185,14 +185,9 @@ class Page extends API {
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
-					'desc'   => sprintf(
-						'%1$s <a href="%2$s">%3$s</a>',
-						esc_html__(
-							'View your site statistics within your WordPress Dashboard.',
-							'plausible-analytics'
-						),
-						admin_url( 'index.php?page=plausible_analytics_statistics' ),
-						esc_html__( 'View Statistics &raquo;', 'plausible-analytics' )
+					'desc'   => esc_html__(
+						'View your site statistics within your WordPress Dashboard.',
+						'plausible-analytics'
 					),
 					'toggle' => '',
 					'fields' => [
@@ -275,7 +270,7 @@ class Page extends API {
 							'label' => esc_html__( 'Disable toolbar menu', 'plausible-analytics' ),
 							'slug'  => 'disable_toolbar_menu',
 							'type'  => 'checkbox',
-							'value' => '1',
+							'value' => 'on',
 						],
 					],
 				],
