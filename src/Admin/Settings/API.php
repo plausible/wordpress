@@ -234,7 +234,7 @@ class API {
 									?>
 									<?php foreach ( $this->slides as $id => $title ): ?>
 										<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
-										 space-y-6 sm:p-6 invisible target:opacity-100 target:visible transition-opacity absolute top-0 w-full">
+										 space-y-6 sm:p-6 invisible target:opacity-100 target:visible transition-opacity absolute w-5/6">
 											<header class="relative">
 												<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
 													   for=""><?php echo $title; ?></label>

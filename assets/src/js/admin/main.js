@@ -3,8 +3,7 @@
  *
  * Admin JS
  */
-
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
 	if (!document.location.href.includes('plausible_analytics')) {
 		return;
 	}
@@ -27,6 +26,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		plausibleToggleWizardStep(step);
 	});
 
+	/**
+	 * Save Options on Next click.
+	 */
 	document.addEventListener('click', (e) => {
 		if (e.target.classList === undefined || !e.target.classList.contains('plausible-analytics-wizard-next-step')) {
 			return;
@@ -48,7 +50,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 			data.append('_nonce', document.getElementById('_wpnonce').value);
 			data.append('options', JSON.stringify(options));
 
-			plausibleSave(data, null, false);
+			plausibleAjax(data, null, false);
 		}
 	});
 
@@ -101,7 +103,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		button.children[0].classList.remove('hidden');
 		button.setAttribute('disabled', 'disabled');
 
-		plausibleSave(form, button);
+		plausibleAjax(form, button);
 	});
 
 	/**
@@ -145,17 +147,18 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		form.append('is_list', button.dataset.list);
 		form.append('_nonce', document.getElementById('_wpnonce').value);
 
-		plausibleSave(form);
+		plausibleAjax(form);
 	});
 });
 
 /**
+ * Do AJAX request and (optionally) show a notice.
  *
  * @param data
  * @param button
  * @param showNotice
  */
-function plausibleSave(data, button = null, showNotice = true) {
+function plausibleAjax(data, button = null, showNotice = true) {
 	fetch(
 		ajaxurl,
 		{
