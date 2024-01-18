@@ -242,32 +242,32 @@ class API {
 											<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 												<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
 											</div>
-											<?php
-											$field = $this->get_wizard_option_properties( $id );
+											<div class="plausible-analytics-wizard-step-section">
+												<?php
+												$field = $this->get_wizard_option_properties( $id );
 
-											if ( ! empty( $field ) ) {
-												$hide_header = $field[ 'type' ] === 'group';
+												if ( ! empty( $field ) ) {
+													$hide_header = $field[ 'type' ] === 'group';
 
-												echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $hide_header );
-											}
-											?>
-											<?php ++ $i; ?>
-											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
-												<div>
-													<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
-													   class="plausible-analytics-wizard-next-step no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-														<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
-													</a>
+													echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $hide_header );
+												}
+												?>
+												<?php ++ $i; ?>
+												<div class="mt-6">
+													<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
+														<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
+														   class="plausible-analytics-wizard-next-step no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+															<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
+														</a>
+													<?php else: ?>
+														<a id="plausible-analytics-wizard-quit"
+														   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+														   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+															<?php esc_html_e( 'Exit Wizard', 'plausible-analytics' ); ?>
+														</a>
+													<?php endif; ?>
 												</div>
-											<?php else: ?>
-												<div>
-													<a id="plausible-analytics-wizard-quit"
-													   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-													   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-														<?php esc_html_e( 'Exit Wizard', 'plausible-analytics' ); ?>
-													</a>
-												</div>
-											<?php endif; ?>
+											</div>
 										</div>
 									<?php endforeach; ?>
 								</div>

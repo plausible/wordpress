@@ -28,6 +28,34 @@ document.addEventListener('DOMContentLoaded', (e) => {
 	});
 
 	document.addEventListener('click', (e) => {
+		if (e.target.classList === undefined || !e.target.classList.contains('plausible-analytics-wizard-next-step')) {
+			return;
+		}
+
+		let hash = document.location.hash.replace('#', '');
+
+		if (hash === 'api_token' || hash === 'domain_name') {
+			let form = e.target.closest('.plausible-analytics-wizard-step-section');
+			let inputs = form.getElementsByTagName('INPUT');
+			let options = [];
+
+			for (let input of inputs) {
+				options.push({name: input.name, value: input.value});
+			}
+
+			let data = new FormData();
+			data.append('action', 'plausible_analytics_save_options');
+			data.append('_nonce', document.getElementById('_wpnonce').value);
+			data.append('options', JSON.stringify(options));
+
+			plausibleSave(data, null, false);
+		}
+	});
+
+	/**
+	 * Quit Wizard
+	 */
+	document.addEventListener('click', (e) => {
 		if (e.target.id !== 'plausible-analytics-wizard-quit') {
 			return;
 		}
@@ -73,28 +101,90 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		button.children[0].classList.remove('hidden');
 		button.setAttribute('disabled', 'disabled');
 
-		fetch(
-			ajaxurl,
-			{
-				method: 'POST',
-				body: form,
-			}
-		).then(response => {
-			button.children[0].classList += ' hidden';
-			button.removeAttribute('disabled');
+		plausibleSave(form, button);
+	});
 
-			if (response.status === 200) {
-				return response.json();
-			}
+	/**
+	 * Toggle Options.
+	 */
+	document.addEventListener('click', (e) => {
+		if (!e.target.classList.contains('plausible-analytics-toggle')) {
+			return;
+		}
 
-			return false;
-		}).then(response => {
-			plausibleShowNotice(response.data);
+		const button = e.target.closest('button');
+		let toggle = '';
+		let toggleStatus = '';
 
-			return response.success;
-		})
+		// The button element is clicked.
+		if (e.target.type === 'submit') {
+			toggle = button.querySelector('span');
+		} else {
+			// The span element is clicked.
+			toggle = e.target.closest('span');
+		}
+
+		if (button.classList.contains('bg-indigo-600')) {
+			// Toggle: off
+			button.classList.replace('bg-indigo-600', 'bg-gray-200');
+			toggle.classList.replace('translate-x-5', 'translate-x-0');
+			toggleStatus = '';
+		} else {
+			// Toggle: on
+			button.classList.replace('bg-gray-200', 'bg-indigo-600');
+			toggle.classList.replace('translate-x-0', 'translate-x-5');
+			toggleStatus = 'on';
+		}
+
+		const form = new FormData();
+		form.append('action', 'plausible_analytics_toggle_option');
+		form.append('option_name', button.name);
+		form.append('option_value', button.value);
+		form.append('option_label', button.nextElementSibling.innerHTML);
+		form.append('toggle_status', toggleStatus);
+		form.append('is_list', button.dataset.list);
+		form.append('_nonce', document.getElementById('_wpnonce').value);
+
+		plausibleSave(form);
 	});
 });
+
+/**
+ *
+ * @param data
+ * @param button
+ * @param showNotice
+ */
+function plausibleSave(data, button = null, showNotice = true) {
+	fetch(
+		ajaxurl,
+		{
+			method: 'POST',
+			body: data,
+		}
+	).then(response => {
+		if (button) {
+			button.children[0].classList += ' hidden';
+			button.removeAttribute('disabled');
+		}
+
+		if (response.status === 200) {
+			return response.json();
+		}
+
+		return false;
+	}).then(response => {
+		if (showNotice === true) {
+			if (response.success === true) {
+				plausibleShowNotice(response.data);
+			} else {
+				plausibleShowNotice(response.data, true);
+			}
+		}
+
+		return response.success;
+	});
+}
 
 /**
  * Show notice.
@@ -120,70 +210,6 @@ function plausibleShowNotice(message, isError = false) {
 		}, 2500);
 	}
 }
-
-/**
- * Toggle Options.
- */
-document.addEventListener('click', (e) => {
-	if (!e.target.classList.contains('plausible-analytics-toggle')) {
-		return;
-	}
-
-	const button = e.target.closest('button');
-	let toggle = '';
-	let toggleStatus = '';
-
-	// The button element is clicked.
-	if (e.target.type === 'submit') {
-		toggle = button.querySelector('span');
-	} else {
-		// The span element is clicked.
-		toggle = e.target.closest('span');
-	}
-
-	if (button.classList.contains('bg-indigo-600')) {
-		// Toggle: off
-		button.classList.replace('bg-indigo-600', 'bg-gray-200');
-		toggle.classList.replace('translate-x-5', 'translate-x-0');
-		toggleStatus = '';
-	} else {
-		// Toggle: on
-		button.classList.replace('bg-gray-200', 'bg-indigo-600');
-		toggle.classList.replace('translate-x-0', 'translate-x-5');
-		toggleStatus = 'on';
-	}
-
-	const form = new FormData();
-	form.append('action', 'plausible_analytics_toggle_option');
-	form.append('option_name', button.name);
-	form.append('option_value', button.value);
-	form.append('option_label', button.nextElementSibling.innerHTML);
-	form.append('toggle_status', toggleStatus);
-	form.append('is_list', button.dataset.list);
-	form.append('_nonce', document.getElementById('_wpnonce').value);
-
-	fetch(
-		ajaxurl,
-		{
-			method: 'POST',
-			body: form,
-		}
-	).then(response => {
-		if (response.status === 200) {
-			return response.json();
-		}
-
-		return false;
-	}).then(response => {
-		if (response.success === true) {
-			plausibleShowNotice(response.data);
-		} else {
-			plausibleShowNotice(response.data, true);
-		}
-
-		return response.success;
-	});
-});
 
 /**
  * Toggles the font-weight of the wizard's steps.
