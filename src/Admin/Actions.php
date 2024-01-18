@@ -24,7 +24,6 @@ class Actions {
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
-		add_action( 'wp_ajax_plausible_analytics_notice_dismissed', [ $this, 'dismiss_notice' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
 	}
@@ -54,17 +53,6 @@ class Actions {
 			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ),
 			true
 		);
-	}
-
-	/**
-	 * Marks a notice as dismissed.
-	 * @since v2.0.0 This logic has been revised to generate transients for each available notice separately.
-	 * @return void
-	 */
-	public function dismiss_notice() {
-		$id = sanitize_key( $_POST[ 'id' ] );
-
-		set_transient( str_replace( '-', '_', $id ) . '_notice_dismissed', true );
 	}
 
 	/**
@@ -174,24 +162,5 @@ class Actions {
 		update_option( 'plausible_analytics_settings', $settings );
 
 		wp_send_json_success( __( 'Settings saved.', 'plausible-analytics' ), 200 );
-	}
-
-	/**
-	 * Get all contants starting with NOTICE_ from the Notice class.
-	 * This creates a unified way to deal with notice dismissal.
-	 * @since 2.0.0
-	 * @return array
-	 */
-	private function get_all_notices() {
-		$reflection = new \ReflectionClass( new Notice() );
-		$constants  = $reflection->getConstants();
-
-		return array_filter(
-			$constants,
-			function ( $key ) {
-				return strpos( $key, 'NOTICE_' ) !== false;
-			},
-			ARRAY_FILTER_USE_KEY
-		);
 	}
 }

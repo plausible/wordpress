@@ -26,14 +26,77 @@ class API {
 	public $fields = [];
 
 	/**
+	 * Slide IDs and Titles
+	 * @since v2.0.0
+	 * @var string[] $slides
+	 */
+	private $slides = [];
+
+	/**
+	 * Slide IDs and Descriptions
+	 * @since v2.0.0
+	 * @var array $slides_description
+	 */
+	private $slides_description = [];
+
+	/**
 	 * Render Fields.
 	 * @since  1.3.0
 	 * @access public
 	 * @return void
 	 */
 	public function settings_page() {
-		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
+		$followed_wizard = get_option( 'plausible_analytics_wizard_followed' );
+
+		$this->slides = [
+			'welcome'               => __( 'Welcome to Plausible Analytics v2!', 'plausible-analytics' ),
+			'domain'                => __( 'Confirm domain', 'plausible-analytics' ),
+			'api-token'             => __( 'Create API token', 'plausible-analytics' ),
+			'stats'                 => __( 'Stats in WP', 'plausible-analytics' ),
+			'enhanced-measurements' => __( 'Enhanced measurements', 'plausible-analytics' ),
+			'proxy'                 => __( 'Enable proxy', 'plausible-analytics' ),
+			'success'               => __( 'Success!', 'plausible-analytics' ),
+		];
+
+		$this->slides_description = [
+			'welcome'               => sprintf(
+				__(
+					'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight (< 1 KB) and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
+					'plausible-analytics'
+				),
+				'https://plausible.io/?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
+				'https://plausible.io/register?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
+			),
+			'domain'                => __( 'Confirm your domain name as you\'ve added it to your Plausible account.', 'plausible-analytics' ),
+			'api-token'             => __(
+				'Create the API token that we\'ll use to automate part of the remaining setup process',
+				'plausible-analytics'
+			),
+			'stats'                 => __(
+				'Would you like to view your site\'s stats right here in your WordPress dashboard?',
+				'plausible-analytics'
+			),
+			'enhanced-measurements' => __( 'Enable enhanced measurements', 'plausible-analytics' ),
+			'proxy'                 => __(
+				'Run our scripts as a 1st party connection from your domain name to count visitors who use adblockers',
+				'plausible-analytics'
+			),
+			'success'               => sprintf(
+				__(
+					'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out your intuitive, fast-loading and privacy-friendly dashboard.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them here.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+					'plausible-analytics'
+				),
+				'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
+				'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
+			),
+		];
+
+		if ( ! $followed_wizard ) {
+			return $this->show_wizard();
+		}
+
+		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
 		?>
 		<div class="h-full">
 			<!-- body -->
@@ -114,6 +177,74 @@ class API {
 					</div>
 				</main>
 				<!-- /navigation -->
+			</div>
+			<!-- /body -->
+		</div>
+		<?php
+	}
+
+	/**
+	 * Renders the configuration wizard on the Settings page.
+	 * @return void
+	 */
+	private function show_wizard() {
+		?>
+		<div class="h-full">
+			<!-- body -->
+			<div class="flex flex-col h-full">
+				<!-- logo -->
+				<nav class="relative z-20 py-8">
+					<div class="container">
+						<nav class="relative flex items-center justify-between sm:h-10 md:justify-center">
+							<div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
+								<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
+									 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+							</div>
+						</nav>
+					</div>
+				</nav>
+				<div class="flex flex-col gap-y-2"></div>
+				<!-- navigation -->
+				<main class="flex-1">
+					<div class="container pt-6">
+						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
+							<h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate">
+								<?php esc_html_e( 'Configuration Wizard', 'plausible-analytics' ); ?>
+							</h1>
+						</div>
+						<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 lg:mt-4">
+							<div class="py-4 g:py-0 lg:col-span-3">
+								<?php foreach ( $this->slides as $id => $title ): ?>
+									<div class="lg:block">
+										<?php
+										printf(
+											'<a id="step-%1$s" href="#%1$s" class="plausible-analytics-wizard-step no-underline flex items-center px-3 py-2 text-sm leading-5 text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 ease-in-out duration-150">%2$s</a>',
+											esc_attr( $id ),
+											esc_html( $title )
+										);
+										?>
+									</div>
+								<?php endforeach; ?>
+							</div>
+							<div class="space-y-6 lg:col-span-9 lg:mt-4 relative">
+								<div class="plausible-analytics-section">
+									<?php foreach ( $this->slides as $id => $title ): ?>
+										<div id="<?php esc_attr_e( $id ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
+										 space-y-6 sm:p-6 opacity-0 target:opacity-100 transition-opacity absolute top-0 w-full">
+											<header class="relative">
+												<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
+													   for=""><?php echo $title; ?></label>
+												<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
+													<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
+												</div>
+											</header>
+										</div>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
 			</div>
 			<!-- /body -->
 		</div>

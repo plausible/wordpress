@@ -4,7 +4,20 @@
  * Admin JS
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (e) => {
+	if (!document.location.href.includes('plausible_analytics')) {
+		return;
+	}
+
+	plausibleToggleWizardStep(document.getElementById('step-welcome'));
+
+	/**
+	 * Toggle bold state for wizard menu item.
+	 */
+	document.addEventListener('click', (e) => {
+		plausibleToggleWizardStep(e.target);
+	});
+
 	/**
 	 * Save Options.
 	 */
@@ -142,24 +155,16 @@ document.addEventListener('click', (e) => {
 	});
 });
 
-/**
- * Dismiss Notices.
- */
-document.addEventListener('click', (e) => {
-	const dismissButton = e.target.closest('.notice-dismiss');
-
-	if (dismissButton) {
-		const form = new FormData();
-
-		form.append('action', 'plausible_analytics_notice_dismissed');
-		form.append('id', dismissButton.parentElement.id);
-
-		fetch(
-			ajaxurl,
-			{
-				method: 'POST',
-				body: form,
-			}
-		);
+function plausibleToggleWizardStep(target) {
+	if (target.classList === undefined || !target.classList.contains('plausible-analytics-wizard-step')) {
+		return;
 	}
-});
+
+	let steps = document.querySelectorAll('.plausible-analytics-wizard-step');
+
+	steps.forEach(function (step) {
+		step.classList.remove('font-bold');
+	});
+
+	target.classList += ' font-bold';
+}
