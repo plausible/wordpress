@@ -289,7 +289,7 @@ class API {
 				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
 				value="<?php echo esc_html( $value ); ?>">
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
-					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition ease-in-out duration-200"></span>
+					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
 			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo $field[ 'label' ]; ?></span>
 			<?php if ( isset( $field[ 'docs' ] ) ): ?>
