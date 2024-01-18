@@ -9,13 +9,18 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		return;
 	}
 
-	plausibleToggleWizardStep(document.getElementById('step-welcome'));
+	let hash = document.location.hash.replace('#', '');
+
+	plausibleToggleWizardStep(document.getElementById('step-' + hash));
 
 	/**
 	 * Toggle bold state for wizard menu item.
 	 */
-	document.addEventListener('click', (e) => {
-		plausibleToggleWizardStep(e.target);
+	window.addEventListener('hashchange', (e) => {
+		let hash = document.location.hash.replace('#', '');
+		let step = document.getElementById('step-' + hash);
+
+		plausibleToggleWizardStep(step);
 	});
 
 	/**
@@ -155,6 +160,10 @@ document.addEventListener('click', (e) => {
 	});
 });
 
+/**
+ * Toggles the font-weight of the wizard's steps.
+ * @param target
+ */
 function plausibleToggleWizardStep(target) {
 	if (target.classList === undefined || !target.classList.contains('plausible-analytics-wizard-step')) {
 		return;

@@ -228,16 +228,36 @@ class API {
 							</div>
 							<div class="space-y-6 lg:col-span-9 lg:mt-4 relative">
 								<div class="plausible-analytics-section">
+									<?php
+									$slide_ids = array_keys( $this->slides );
+									$i         = 0;
+									?>
 									<?php foreach ( $this->slides as $id => $title ): ?>
 										<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
-										 space-y-6 sm:p-6 opacity-0 target:opacity-100 transition-opacity absolute top-0 w-full">
+										 space-y-6 sm:p-6 opacity-0 invisible target:opacity-100 target:visible transition-opacity absolute top-0 w-full">
 											<header class="relative">
 												<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
 													   for=""><?php echo $title; ?></label>
-												<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
-													<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
-												</div>
 											</header>
+											<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
+												<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
+											</div>
+											<?php ++ $i; ?>
+											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
+												<div>
+													<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
+													   class="plausible-analytics-wizard-next-step no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+														<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
+													</a>
+												</div>
+											<?php else: ?>
+												<div>
+													<a id="plausible-analytics-wizard-quit"
+													   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+														<?php esc_html_e( 'Exit Wizard', 'plausible-analytics' ); ?>
+													</a>
+												</div>
+											<?php endif; ?>
 										</div>
 									<?php endforeach; ?>
 								</div>
