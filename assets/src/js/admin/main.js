@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		return;
 	}
 
-	if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== undefined) {
+	if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
 		document.location.hash = 'welcome';
 	}
 
@@ -25,6 +25,27 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		let step = document.getElementById('step-' + hash);
 
 		plausibleToggleWizardStep(step);
+	});
+
+	document.addEventListener('click', (e) => {
+		if (e.target.id !== 'plausible-analytics-wizard-quit') {
+			return;
+		}
+
+		const form = new FormData();
+
+		form.append('action', 'plausible_analytics_quit_wizard');
+		form.append('_nonce', e.target.dataset.nonce);
+
+		fetch(
+			ajaxurl,
+			{
+				method: 'POST',
+				body: form,
+			}
+		).then(response => {
+			window.location.reload();
+		});
 	});
 
 	/**

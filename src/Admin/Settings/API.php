@@ -47,7 +47,7 @@ class API {
 	 */
 	public function settings_page() {
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
-		$followed_wizard = get_option( 'plausible_analytics_wizard_followed' );
+		$followed_wizard = get_option( 'plausible_analytics_wizard_done' );
 
 		$this->slides = [
 			'welcome'                    => __( 'Welcome to Plausible Analytics v2!', 'plausible-analytics' ),
@@ -262,6 +262,7 @@ class API {
 											<?php else: ?>
 												<div>
 													<a id="plausible-analytics-wizard-quit"
+													   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
 													   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 														<?php esc_html_e( 'Exit Wizard', 'plausible-analytics' ); ?>
 													</a>
