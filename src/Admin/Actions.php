@@ -62,10 +62,16 @@ class Actions {
 	 * @return void
 	 */
 	public function maybe_redirect_to_wizard() {
+		// Make sure it only runs when requested by a browser.
+		if ( wp_doing_ajax() || wp_doing_cron() ) {
+			return;
+		}
+
+		// If we're already on the Settings page, there's no need to redirect.
 		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] === 'plausible_analytics' ) {
 			return;
 		}
-		
+
 		$wizard_done = get_option( 'plausible_analytics_wizard_done', false );
 
 		if ( ! $wizard_done ) {
