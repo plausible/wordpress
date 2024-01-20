@@ -219,7 +219,7 @@ function plausibleShowNotice(message, isError = false) {
  * @param target
  */
 function plausibleToggleWizardStep(target) {
-	if (target.classList === undefined || !target.classList.contains('plausible-analytics-wizard-step')) {
+	if (target === null || target.classList === undefined || !target.classList.contains('plausible-analytics-wizard-step')) {
 		return;
 	}
 

@@ -88,18 +88,21 @@ class Page extends API {
 					'fields' => [
 						'404'            => [
 							'label' => esc_html__( '404 error pages', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => '404',
 						],
 						'outbound-links' => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => 'outbound-links',
 						],
 						'file-downloads' => [
 							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => 'file-downloads',
@@ -192,7 +195,7 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label' => esc_html__( 'Enable analytics', 'plausible-analytics' ),
+							'label' => esc_html__( 'View stats in WordPress', 'plausible-analytics' ),
 							'slug'  => 'enable_analytics_dashboard',
 							'type'  => 'checkbox',
 							'value' => 'on',

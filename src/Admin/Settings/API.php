@@ -48,12 +48,13 @@ class API {
 	public function settings_page() {
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
 		$followed_wizard = get_option( 'plausible_analytics_wizard_done' );
+		$domain          = Helpers::get_domain();
 
 		$this->slides = [
-			'welcome'                    => __( 'Welcome to Plausible Analytics v2!', 'plausible-analytics' ),
+			'welcome'                    => __( 'Welcome to Plausible Analytics', 'plausible-analytics' ),
 			'domain_name'                => __( 'Confirm domain', 'plausible-analytics' ),
 			'api_token'                  => __( 'Create API token', 'plausible-analytics' ),
-			'enable_analytics_dashboard' => __( 'Stats in WP', 'plausible-analytics' ),
+			'enable_analytics_dashboard' => __( 'View the stats in your WP dashboard', 'plausible-analytics' ),
 			'enhanced_measurements'      => __( 'Enhanced measurements', 'plausible-analytics' ),
 			'proxy_enabled'              => __( 'Enable proxy', 'plausible-analytics' ),
 			'success'                    => __( 'Success!', 'plausible-analytics' ),
@@ -69,9 +70,12 @@ class API {
 				'https://plausible.io/register?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
 			),
 			'domain_name'                => __( 'Confirm your domain name as you\'ve added it to your Plausible account.', 'plausible-analytics' ),
-			'api_token'                  => __(
-				'Create the API token that we\'ll use to automate part of the remaining setup process',
-				'plausible-analytics'
+			'api_token'                  => sprintf(
+				__(
+					'<a href="%s" target="_blank">Create the API token</a> that we\'ll use to automate the remaining setup process. Paste the API token in the field below and click "Next".',
+					'plausible-analytics'
+				),
+				"https://plausible.io/$domain/settings/integrations?new_token=WordPress"
 			),
 			'enable_analytics_dashboard' => __(
 				'Would you like to view your site\'s stats right here in your WordPress dashboard?',
@@ -209,7 +213,10 @@ class API {
 					<div class="container pt-6">
 						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
 							<h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate">
-								<?php esc_html_e( 'Configuration Wizard', 'plausible-analytics' ); ?>
+								<?php esc_html_e(
+									'Plausible Analytics Getting Started Guide',
+									'plausible-analytics'
+								); ?>
 							</h1>
 						</div>
 						<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 lg:mt-4">
@@ -259,11 +266,16 @@ class API {
 														   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 															<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 														</a>
+														<a id="plausible-analytics-wizard-quit"
+														   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+														   class="inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
+															<?php esc_html_e( 'Skip wizard', 'plausible-analytics' ); ?>
+														</a>
 													<?php else: ?>
 														<a id="plausible-analytics-wizard-quit"
 														   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
 														   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-															<?php esc_html_e( 'Exit Wizard', 'plausible-analytics' ); ?>
+															<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
 														</a>
 													<?php endif; ?>
 												</div>
