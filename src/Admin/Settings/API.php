@@ -97,7 +97,9 @@ class API {
 		];
 
 		if ( ! $followed_wizard ) {
-			return $this->show_wizard();
+			$this->show_wizard();
+
+			return;
 		}
 
 		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
