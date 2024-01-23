@@ -12,18 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.location.hash = 'welcome';
 	}
 
-	let hash = document.location.hash.replace('#', '');
-
-	plausibleToggleWizardStep(document.getElementById('step-' + hash));
+	plausibleToggleWizardStep();
 
 	/**
-	 * Toggle bold state for wizard menu item.
+	 * Toggle active state for wizard menu item.
 	 */
 	window.addEventListener('hashchange', (e) => {
-		let hash = document.location.hash.replace('#', '');
-		let step = document.getElementById('step-' + hash);
+		let previousHash = e.oldURL.match('#(.*)$')[1];
 
-		plausibleToggleWizardStep(step);
+		plausibleToggleWizardStep(previousHash);
 	});
 
 	/**
@@ -216,18 +213,25 @@ function plausibleShowNotice(message, isError = false) {
 
 /**
  * Toggles the font-weight of the wizard's steps.
- * @param target
  */
-function plausibleToggleWizardStep(target) {
-	if (target === null || target.classList === undefined || !target.classList.contains('plausible-analytics-wizard-step')) {
-		return;
-	}
-
-	let steps = document.querySelectorAll('.plausible-analytics-wizard-step');
+function plausibleToggleWizardStep(previousHash = null) {
+	let hash = document.location.hash.substring(1);
+	let activeStep = document.getElementById('active-step-' + hash);
+	let hiddenStep = document.getElementById('step-' + hash);
+	let steps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
 
 	steps.forEach(function (step) {
-		step.classList.remove('font-bold');
+		step.classList += ' hidden';
 	});
 
-	target.classList += ' font-bold';
+	activeStep.classList.remove('hidden');
+	hiddenStep.classList += ' hidden';
+
+	if (previousHash !== null) {
+		let previousActiveStep = document.getElementById('active-step-' + previousHash);
+		let previousStep = document.getElementById('step-' + previousHash);
+
+		previousActiveStep.classList += ' hidden';
+		previousStep.classList.remove('hidden');
+	}
 }

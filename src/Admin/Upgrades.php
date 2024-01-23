@@ -28,7 +28,7 @@ class Upgrades {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'admin_init', [ $this, 'register_routines' ] );
+		add_action( 'init', [ $this, 'register_routines' ] );
 	}
 
 	/**
@@ -160,28 +160,36 @@ class Upgrades {
 	 * @return void
 	 */
 	private function upgrade_to_200() {
-		$settings = Helpers::get_settings();
+		$settings     = Helpers::get_settings();
+		$toggle_lists = [
+			'enhanced_measurements',
+			'tracked_user_roles',
+			'expand_dashboard_access',
+		];
 
 		foreach ( $settings as $option_name => $option_value ) {
 			if ( ! is_array( $option_value ) ) {
 				continue;
 			}
 
-			// If this is a list of toggles, let's clean the 0's needed < 2.0.0.
-			if ( count( $option_value ) > 1 ) {
+			// For toggle lists, we only need to clean out the no longer needed zero values.
+			if ( in_array( $option_name, $toggle_lists ) ) {
 				$settings[ $option_name ] = array_filter( $option_value );
 
 				continue;
 			}
 
+			// Single toggle.
 			$clean_value = array_filter( $option_value );
 
+			// Disabled options are now stored as (more sensible) empty strings instead of empty arrays.
 			if ( empty( $clean_value ) ) {
 				$settings[ $option_name ] = '';
 
 				continue;
 			}
 
+			// Any other value will now default to 'on'.
 			$settings[ $option_name ] = 'on';
 		}
 

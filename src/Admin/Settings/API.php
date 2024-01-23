@@ -199,96 +199,111 @@ class API {
 			<!-- body -->
 			<div class="flex flex-col h-full">
 				<!-- logo -->
-				<nav class="relative z-20 py-8">
-					<div class="container">
-						<nav class="relative flex items-center justify-between sm:h-10 md:justify-center">
-							<div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-								<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
-									 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
-							</div>
-						</nav>
-					</div>
-				</nav>
-				<div class="flex flex-col gap-y-2"></div>
+				<div class="w-full my-8 text-center">
+					<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
+						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+				</div>
+				<!-- title -->
+				<div class="mx-auto mt-6 text-center">
+					<h1 class="text-3xl font-black">
+						<?php esc_html_e(
+							'Plausible Analytics Getting Started Guide',
+							'plausible-analytics'
+						); ?>
+					</h1>
+				</div>
 				<!-- navigation -->
-				<main class="flex-1">
-					<div class="container pt-6">
-						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
-							<h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate">
-								<?php esc_html_e(
-									'Plausible Analytics Getting Started Guide',
-									'plausible-analytics'
-								); ?>
-							</h1>
-						</div>
-						<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 lg:mt-4">
-							<div class="py-4 g:py-0 lg:col-span-3">
-								<?php foreach ( $this->slides as $id => $title ): ?>
-									<div class="lg:block">
-										<?php
-										printf(
-											'<a id="step-%1$s" href="#%1$s" class="plausible-analytics-wizard-step no-underline flex items-center px-3 py-2 text-sm leading-5 text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 ease-in-out duration-150">%2$s</a>',
-											esc_attr( $id ),
-											esc_html( $title )
-										);
-										?>
+				<div class="w-full max-w-4xl mt-4 mx-auto flex flex-shrink-0">
+					<div class="w-full min-w-2xl max-w-l mx-auto mb-4 mt-8 relative">
+						<div class="plausible-analytics-section">
+							<?php
+							$slide_ids = array_keys( $this->slides );
+							$i         = 0;
+							?>
+							<?php foreach ( $this->slides as $id => $title ): ?>
+								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
+										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute min-w-full">
+									<header class="relative">
+										<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
+											   for=""><?php echo $title; ?></label>
+									</header>
+									<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
+										<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
 									</div>
-								<?php endforeach; ?>
-							</div>
-							<div class="space-y-6 lg:col-span-9 lg:mt-4 relative">
-								<div class="plausible-analytics-section">
-									<?php
-									$slide_ids = array_keys( $this->slides );
-									$i         = 0;
-									?>
-									<?php foreach ( $this->slides as $id => $title ): ?>
-										<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group shadow sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800 py-6 px-4
-										 space-y-6 sm:p-6 invisible target:opacity-100 target:visible transition-opacity absolute w-5/6">
-											<header class="relative">
-												<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
-													   for=""><?php echo $title; ?></label>
-											</header>
-											<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
-												<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
-											</div>
-											<div class="plausible-analytics-wizard-step-section">
-												<?php
-												$field = $this->get_wizard_option_properties( $id );
+									<div class="plausible-analytics-wizard-step-section">
+										<?php
+										$field = $this->get_wizard_option_properties( $id );
 
-												if ( ! empty( $field ) ) {
-													$hide_header = $field[ 'type' ] === 'group';
+										if ( ! empty( $field ) ) {
+											$hide_header = $field[ 'type' ] === 'group';
 
-													echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $hide_header );
-												}
-												?>
-												<?php ++ $i; ?>
-												<div class="mt-6">
-													<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
-														<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
-														   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-															<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
-														</a>
-														<a id="plausible-analytics-wizard-quit"
-														   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-														   class="inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
-															<?php esc_html_e( 'Skip wizard', 'plausible-analytics' ); ?>
-														</a>
-													<?php else: ?>
-														<a id="plausible-analytics-wizard-quit"
-														   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-														   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-															<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
-														</a>
-													<?php endif; ?>
-												</div>
-											</div>
+											echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $hide_header );
+										}
+										?>
+										<?php ++ $i; ?>
+										<div class="mt-6">
+											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
+												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
+												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
+												</a>
+												<a id="plausible-analytics-wizard-quit"
+												   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+												   class="inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
+													<?php esc_html_e( 'Skip wizard', 'plausible-analytics' ); ?>
+												</a>
+											<?php else: ?>
+												<a id="plausible-analytics-wizard-quit"
+												   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+												   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+													<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
+												</a>
+											<?php endif; ?>
 										</div>
-									<?php endforeach; ?>
+									</div>
 								</div>
-							</div>
+							<?php endforeach; ?>
 						</div>
 					</div>
-				</main>
+					<div class="pl-8 hidden md:block">
+						<div class="pt-6 px-4 sm:px-6 lg:px-8">
+							<nav class="flex justify-center">
+								<ol class="mt-8 ml-4">
+									<?php foreach ( $this->slides as $id => $title ): ?>
+										<li id="step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-wizard-step flex items-start mb-6">
+											<div class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
+												<div class="h-2 w-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+											</div>
+											<?php
+											printf(
+												'<span href="#%1$s" class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">%2$s</span>',
+												esc_attr( $id ),
+												esc_html( $title )
+											);
+											?>
+										</li>
+										<li id="active-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+											class="plausible-analytics-wizard-step flex hidden items-start mb-6">
+											<!-- Hidden -->
+											<span class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
+              									<span class="absolute h-4 w-4 rounded-full bg-indigo-200 dark:bg-indigo-100"></span>
+              									<span class="relative block w-2 h-2 bg-indigo-600 dark:bg-indigo-500 rounded-full"></span>
+			            					</span>
+											<?php
+											printf(
+												'<span href="#%1$s" class="ml-3 text-sm font-medium text-indigo-600 dark:text-indigo-500">%2$s</span>',
+												esc_attr( $id ),
+												esc_html( $title )
+											);
+											?>
+											<!-- Hidden -->
+										</li>
+									<?php endforeach; ?>
+								</ol>
+							</nav>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!-- /body -->
 		</div>
