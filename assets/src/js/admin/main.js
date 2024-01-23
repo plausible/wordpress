@@ -213,7 +213,7 @@ function plausibleShowNotice(message, isError = false) {
  * Toggles the font-weight of the wizard's steps.
  */
 function plausibleToggleWizardStep() {
-	let hash = document.location.hash.substring(1);
+	const hash = document.location.hash.substring(1);
 	let activeStep = document.getElementById('active-step-' + hash);
 	let hiddenStep = document.getElementById('step-' + hash);
 
@@ -226,8 +226,9 @@ function plausibleToggleWizardStep() {
 	 * @type {string[]}
 	 */
 	let completedSteps = activeStep.dataset.completedSteps.split(',');
+	completedSteps = completedSteps.filter(n => n);
 
-	if (completedSteps.length === 1) {
+	if (completedSteps.length < 1) {
 		return;
 	}
 
@@ -254,7 +255,7 @@ function plausibleToggleWizardStep() {
 
 	nextSteps.forEach(function (step) {
 		let completedStep = document.getElementById('completed-step-' + step);
-		let activeStep = document.getElementById('active-step' + step);
+		let activeStep = document.getElementById('active-step-' + step);
 		let inactiveStep = document.getElementById('step-' + step);
 
 		completedStep.classList += ' hidden';
