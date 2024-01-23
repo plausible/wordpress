@@ -53,7 +53,7 @@ class Page extends API {
 							),
 							'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics'
 						) . '</li><li>' . __(
-							'To automate the plugin setup, <a href="#" target="_blank">generate an API token</a> and paste it into the API token field.',
+							'To automate the plugin setup, <a href="#" id="plausible-create-api-token">generate an API token</a> (link opens in a new window) and paste it into the API token field.',
 							'plausible-analytics'
 						) . '</li>',
 					'fields' => [

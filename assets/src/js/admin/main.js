@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		plausibleToggleWizardStep();
 	});
 
+	document.addEventListener('click', (e) => {
+		if (e.target.id !== 'plausible-create-api-token') {
+			return;
+		}
+
+		plausibleCreateAPIToken(e);
+	});
+
 	/**
 	 * Save Options on Next click.
 	 */
@@ -182,6 +190,17 @@ function plausibleAjax(data, button = null, showNotice = true) {
 
 		return response.success;
 	});
+}
+
+/**
+ * Open Create API Token dialog.
+ */
+function plausibleCreateAPIToken(e) {
+	e.preventDefault();
+
+	let domain = document.querySelector('#domain_name input').value;
+
+	window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
 }
 
 /**

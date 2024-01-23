@@ -71,12 +71,9 @@ class API {
 				'https://plausible.io/register?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
 			),
 			'domain_name'                => __( 'Confirm your domain name as you\'ve added it to your Plausible account.', 'plausible-analytics' ),
-			'api_token'                  => sprintf(
-				__(
-					'<a href="%s" target="_blank">Create the API token</a> that we\'ll use to automate the remaining setup process. Paste the API token in the field below and click "Next".',
-					'plausible-analytics'
-				),
-				"https://plausible.io/$domain/settings/integrations?new_token=WordPress"
+			'api_token'                  => __(
+				'<a href="#" id="plausible-create-api-token">Create the API token</a> (link opens in a new window) that we\'ll use to automate the remaining setup process. Paste the API token in the field below and click "Next".',
+				'plausible-analytics'
 			),
 			'enable_analytics_dashboard' => __(
 				'Would you like to view your site\'s stats right here in your WordPress dashboard?',
