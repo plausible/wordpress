@@ -213,6 +213,10 @@ function plausibleShowNotice(message, isError = false) {
  * Toggles the font-weight of the wizard's steps.
  */
 function plausibleToggleWizardStep() {
+	if (document.getElementById('plausible-analytics-wizard') === null) {
+		return;
+	}
+
 	const hash = document.location.hash.substring(1);
 
 	/**
