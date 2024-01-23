@@ -189,6 +189,9 @@ class Upgrades {
 
 		update_option( 'plausible_analytics_version', '2.0.0' );
 
+		// No longer need this db entry.
+		delete_option( 'plausible_analytics_is_default_settings_saved' );
+
 		// We no longer need to store transient to keep notices dismissed.
 		delete_transient( 'plausible_analytics_module_install_failed_notice_dismissed' );
 		delete_transient( 'plausible_analytics_proxy_test_failed_notice_dismissed' );
