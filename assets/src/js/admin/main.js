@@ -214,52 +214,57 @@ function plausibleShowNotice(message, isError = false) {
  */
 function plausibleToggleWizardStep() {
 	const hash = document.location.hash.substring(1);
-	let activeStep = document.getElementById('active-step-' + hash);
-	let hiddenStep = document.getElementById('step-' + hash);
 
-	activeStep.classList.remove('hidden');
-	hiddenStep.classList += ' hidden';
+	/**
+	 * Reset all steps to inactive.
+	 */
+	let allSteps = document.querySelectorAll('.plausible-analytics-wizard-step');
+	let activeSteps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
+	let completedSteps = document.querySelectorAll('.plausible-analytics-wizard-completed-step');
+
+	for (var i = 0; i < allSteps.length; i++) {
+		allSteps[i].classList.remove('hidden');
+	}
+
+	for (var i = 0; i < activeSteps.length; i++) {
+		activeSteps[i].classList += ' hidden';
+	}
+
+	for (var i = 0; i < completedSteps.length; i++) {
+		completedSteps[i].classList += ' hidden';
+	}
+
+	/**
+	 * Mark current step as active.
+	 */
+	let currentStep = document.getElementById('active-step-' + hash);
+	let inactiveCurrentStep = document.getElementById('step-' + hash);
+
+	currentStep.classList.remove('hidden');
+	inactiveCurrentStep.classList += ' hidden';
 
 	/**
 	 * Mark steps as completed.
 	 *
 	 * @type {string[]}
 	 */
-	let completedSteps = activeStep.dataset.completedSteps.split(',');
-	completedSteps = completedSteps.filter(n => n);
+	let currentlyCompletedSteps = currentStep.dataset.completedSteps.split(',');
 
-	if (completedSteps.length < 1) {
+	/**
+	 * Filter empty array elements.
+	 * @type {string[]}
+	 */
+	currentlyCompletedSteps = currentlyCompletedSteps.filter(n => n);
+
+	if (currentlyCompletedSteps.length < 1) {
 		return;
 	}
 
-	completedSteps.forEach(function (step) {
+	currentlyCompletedSteps.forEach(function (step) {
 		let completedStep = document.getElementById('completed-step-' + step);
-		let activeStep = document.getElementById('active-step-' + step);
 		let inactiveStep = document.getElementById('step-' + step);
 
 		completedStep.classList.remove('hidden');
-		activeStep.classList += ' hidden';
 		inactiveStep.classList += ' hidden';
-	});
-
-	/**
-	 * Mark upcoming steps as inactive.
-	 *
-	 * @type {string[]}
-	 */
-	let nextSteps = activeStep.dataset.nextSteps.split(',');
-
-	if (nextSteps.length === 0) {
-		return;
-	}
-
-	nextSteps.forEach(function (step) {
-		let completedStep = document.getElementById('completed-step-' + step);
-		let activeStep = document.getElementById('active-step-' + step);
-		let inactiveStep = document.getElementById('step-' + step);
-
-		completedStep.classList += ' hidden';
-		activeStep.classList += ' hidden';
-		inactiveStep.classList.remove('hidden')
 	});
 }

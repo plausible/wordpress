@@ -271,17 +271,11 @@ class API {
 								<ol class="mt-8 ml-4">
 									<?php
 									$completed_steps = [];
-									$next_steps      = [];
-									$i               = 0;
 									?>
 									<?php foreach ( $this->slides as $id => $title ): ?>
-										<?php
-										$i ++;
-										$next_steps = array_keys( array_slice( $this->slides, $i, count( $this->slides ) - 1 ) );
-										?>
 										<!-- Upcoming step -->
 										<li id="step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
-											class="plausible-analytics-wizard-step flex items-start mb-6">
+											class="plausible-analytics-wizard-step flex hidden items-start mb-6">
 											<div class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
 												<div class="h-2 w-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
 											</div>
@@ -295,9 +289,8 @@ class API {
 										</li>
 										<!-- Active Step -->
 										<li id="active-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
-											class="plausible-analytics-wizard-step flex hidden items-start mb-6"
-											data-completed-steps="<?php esc_attr_e( implode( ',', $completed_steps ), 'plausible-analytics' ); ?>"
-											data-next-steps="<?php esc_attr_e( implode( ',', $next_steps ), 'plausible-analytics' ); ?>">
+											class="plausible-analytics-wizard-active-step flex hidden items-start mb-6"
+											data-completed-steps="<?php esc_attr_e( implode( ',', $completed_steps ), 'plausible-analytics' ); ?>">
 											<!-- Hidden -->
 											<span class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
               									<span class="absolute h-4 w-4 rounded-full bg-indigo-200 dark:bg-indigo-100"></span>
@@ -313,7 +306,7 @@ class API {
 										</li>
 										<!-- Completed Step -->
 										<li id="completed-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
-											class="plausible-analytics-wizard-step flex hidden items-start mb-6">
+											class="plausible-analytics-wizard-completed-step flex hidden items-start mb-6">
 											<span class="flex-shrink-0 relative h-5 w-5 flex items-center justify-center">
 											  <svg class="h-full w-full text-indigo-600 dark:text-indigo-500" xmlns="http://www.w3.org/2000/svg"
 												   viewBox="0 0 20 20"
