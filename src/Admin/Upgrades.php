@@ -28,7 +28,7 @@ class Upgrades {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'init', [ $this, 'register_routines' ] );
+		add_action( 'admin_init', [ $this, 'register_routines' ] );
 	}
 
 	/**
@@ -60,6 +60,10 @@ class Upgrades {
 
 		if ( version_compare( $plausible_analytics_version, '1.3.2', '<' ) ) {
 			$this->upgrade_to_132();
+		}
+
+		if ( version_compare( $plausible_analytics_version, '2.0.0', '<' ) ) {
+			$this->upgrade_to_200();
 		}
 
 		// Add required upgrade routines for future versions here.
@@ -149,5 +153,45 @@ class Upgrades {
 		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
 
 		update_option( 'plausible_analytics_version', '1.3.2' );
+	}
+
+	/**
+	 * Cleans the settings of the old, unneeded sub-arrays for settings.
+	 * @return void
+	 */
+	private function upgrade_to_200() {
+		$settings = Helpers::get_settings();
+
+		foreach ( $settings as $option_name => $option_value ) {
+			if ( ! is_array( $option_value ) ) {
+				continue;
+			}
+
+			// If this is a list of toggles, let's clean the 0's needed < 2.0.0.
+			if ( count( $option_value ) > 1 ) {
+				$settings[ $option_name ] = array_filter( $option_value );
+
+				continue;
+			}
+
+			$clean_value = array_filter( $option_value );
+
+			if ( empty( $clean_value ) ) {
+				$settings[ $option_name ] = '';
+
+				continue;
+			}
+
+			$settings[ $option_name ] = 'on';
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		update_option( 'plausible_analytics_version', '2.0.0' );
+
+		// We no longer need to store transient to keep notices dismissed.
+		delete_transient( 'plausible_analytics_module_install_failed_notice_dismissed' );
+		delete_transient( 'plausible_analytics_proxy_test_failed_notice_dismissed' );
+		delete_transient( 'plausible_analytics_notice' );
 	}
 }
