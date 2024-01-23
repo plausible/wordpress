@@ -17,10 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	/**
 	 * Toggle active state for wizard menu item.
 	 */
-	window.addEventListener('hashchange', (e) => {
-		let previousHash = e.oldURL.match('#(.*)$')[1];
-
-		plausibleToggleWizardStep(previousHash);
+	window.addEventListener('hashchange', () => {
+		plausibleToggleWizardStep();
 	});
 
 	/**
@@ -214,24 +212,53 @@ function plausibleShowNotice(message, isError = false) {
 /**
  * Toggles the font-weight of the wizard's steps.
  */
-function plausibleToggleWizardStep(previousHash = null) {
+function plausibleToggleWizardStep() {
 	let hash = document.location.hash.substring(1);
 	let activeStep = document.getElementById('active-step-' + hash);
 	let hiddenStep = document.getElementById('step-' + hash);
-	let steps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
-
-	steps.forEach(function (step) {
-		step.classList += ' hidden';
-	});
 
 	activeStep.classList.remove('hidden');
 	hiddenStep.classList += ' hidden';
 
-	if (previousHash !== null) {
-		let previousActiveStep = document.getElementById('active-step-' + previousHash);
-		let previousStep = document.getElementById('step-' + previousHash);
+	/**
+	 * Mark steps as completed.
+	 *
+	 * @type {string[]}
+	 */
+	let completedSteps = activeStep.dataset.completedSteps.split(',');
 
-		previousActiveStep.classList += ' hidden';
-		previousStep.classList.remove('hidden');
+	if (completedSteps.length === 1) {
+		return;
 	}
+
+	completedSteps.forEach(function (step) {
+		let completedStep = document.getElementById('completed-step-' + step);
+		let activeStep = document.getElementById('active-step-' + step);
+		let inactiveStep = document.getElementById('step-' + step);
+
+		completedStep.classList.remove('hidden');
+		activeStep.classList += ' hidden';
+		inactiveStep.classList += ' hidden';
+	});
+
+	/**
+	 * Mark upcoming steps as inactive.
+	 *
+	 * @type {string[]}
+	 */
+	let nextSteps = activeStep.dataset.nextSteps.split(',');
+
+	if (nextSteps.length === 0) {
+		return;
+	}
+
+	nextSteps.forEach(function (step) {
+		let completedStep = document.getElementById('completed-step-' + step);
+		let activeStep = document.getElementById('active-step' + step);
+		let inactiveStep = document.getElementById('step-' + step);
+
+		completedStep.classList += ' hidden';
+		activeStep.classList += ' hidden';
+		inactiveStep.classList.remove('hidden')
+	});
 }
