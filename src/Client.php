@@ -31,6 +31,16 @@ class Client {
 	}
 
 	/**
+	 * Checks if a password is set. It doesn't validate the password!
+	 * @return bool
+	 */
+	public function check_password() {
+		$password = $this->api_instance->getConfig()->getPassword();
+
+		return ! empty( $password );
+	}
+
+	/**
 	 * Create Shared Link in Plausible Dashboard.
 	 * @return void
 	 */

@@ -28,7 +28,7 @@ class Upgrades {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'init', [ $this, 'register_routines' ] );
+		add_action( 'init', [ $this, 'run' ] );
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Upgrades {
 	 * @access public
 	 * @return void
 	 */
-	public function register_routines() {
+	public function run() {
 		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
 
 		// If version doesn't exist, then consider it `1.0.0`.

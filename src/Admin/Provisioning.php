@@ -39,6 +39,10 @@ class Provisioning {
 	 * @return void
 	 */
 	private function init() {
+		if ( ! $this->client->check_password() ) {
+			return;
+		}
+
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
