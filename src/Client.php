@@ -3,7 +3,6 @@
 namespace Plausible\Analytics\WP;
 
 use Exception;
-use Plausible\Analytics\WP\Admin\Notice;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
@@ -67,7 +66,7 @@ class Client {
 	 *
 	 * @param GoalCreateRequestBulkGetOrCreate $goals
 	 *
-	 * @return Client\Model\PaymentRequiredError|Client\Model\PlausibleWebPluginsAPIControllersGoalsCreate201Response|Client\Model\UnauthorizedError|Client\Model\UnprocessableEntityError|void
+	 * @return Client\Model\PaymentRequiredError|Client\Model\PlausibleWebPluginsAPIControllersGoalsCreate201Response|Client\Model\UnauthorizedError|Client\Model\UnprocessableEntityError|null
 	 */
 	public function create_goals( $goals ) {
 		try {
