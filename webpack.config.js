@@ -3,7 +3,6 @@ const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCSSExtractPlugin = require( 'mini-css-extract-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
-const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const wpPot = require( 'wp-pot' );
 
 const inProduction = ( 'production' === process.env.NODE_ENV );
@@ -13,7 +12,7 @@ const config = {
 	devtool: inProduction ? 'inline-source-map' : 'eval-cheap-module-source-map',
 	mode,
 	entry: {
-		'plausible-admin': [ './assets/src/css/admin/main.scss', './assets/src/js/admin/main.js' ],
+		'plausible-admin': [ './assets/src/css/admin/main.css', './assets/src/js/admin/main.js' ],
 	},
 	output: {
 		path: path.join( __dirname, './assets/dist/' ),
@@ -29,32 +28,13 @@ const config = {
 				loader: 'babel-loader',
 			},
 
-			// Create RTL styles.
+			// Tailwind CSS.
 			{
 				test: /\.css$/,
 				use: [
-					'style-loader',
-					'css-loader',
-				],
-			},
-
-			// SASS to CSS.
-			{
-				test: /\.scss$/,
-				use: [
 					MiniCSSExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: 'sass-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
+					'css-loader',
+					'postcss-loader',
 				],
 			},
 
@@ -85,7 +65,7 @@ const config = {
 		} ),
 
 		new CopyWebpackPlugin(
-			{ 
+			{
 				patterns: [
 					{ from: 'assets/src/images', to: 'images' },
 				],
@@ -96,12 +76,6 @@ const config = {
 };
 
 if ( inProduction ) {
-	// Create RTL css.
-	config.plugins.push( new WebpackRTLPlugin( {
-		suffix: '-rtl',
-		minify: true,
-	} ) );
-
 	// Minify images.
 	// Must go after CopyWebpackPlugin above: https://github.com/Klathmon/imagemin-webpack-plugin#example-usage
 	config.plugins.push( new ImageminPlugin( { test: /\.(jpe?g|png|gif|svg)$/i } ) );

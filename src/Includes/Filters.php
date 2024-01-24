@@ -8,6 +8,7 @@
 
 namespace Plausible\Analytics\WP\Includes;
 
+use WP_Term;
 use Exception;
 
 // Bailout, if accessed directly.
@@ -25,6 +26,7 @@ class Filters {
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
 		add_filter( 'rest_url', [ $this, 'wpml_compatibility' ], 10, 1 );
+		add_filter( 'plausible_analytics_script_params', [ $this, 'maybe_add_custom_params' ] );
 	}
 
 	/**
@@ -79,5 +81,44 @@ class Filters {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Adds custom parameters Author and Category if Custom Pageview Properties is enabled.
+	 *
+	 * @param $params
+	 *
+	 * @return mixed|void
+	 */
+	public function maybe_add_custom_params( $params ) {
+		$settings = Helpers::get_settings();
+
+		if ( ! in_array( 'pageview-props', $settings['enhanced_measurements'] ) ) {
+			return $params;
+		}
+
+		global $post;
+
+		$author = $post->post_author;
+
+		if ( $author ) {
+			$author_name = get_the_author_meta( 'display_name', $author );
+
+			$params .= " event-author='$author_name'";
+		}
+
+		$categories = get_the_category( $post->ID );
+
+		if ( ! is_array( $categories ) ) {
+			return $params;
+		}
+
+		foreach ( $categories as $category ) {
+			if ( $category instanceof WP_Term ) {
+				$params .= " event-category='$category->name'";
+			}
+		}
+
+		return $params;
 	}
 }

@@ -1,12 +1,11 @@
 <?php
 /**
  * Plausible Analytics | Uninstall script.
- *
  * @since      1.3.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
+
 namespace Plausible\Analytics\WP;
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -15,13 +14,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 /**
  * This class is run upon uninstall and cleans up any data in the database and leftover files added by this plugin.
- *
  * @package Plausible\Analytics\WP
  */
 class Uninstall {
 	/**
 	 * Trigger logic.
-	 *
 	 * @return void
 	 */
 	public function run() {
@@ -32,12 +29,10 @@ class Uninstall {
 
 	/**
 	 * Delete options.
-	 *
 	 * @return void
 	 */
 	private function delete_options() {
 		delete_option( 'plausible_analytics_settings' );
-		delete_option( 'plausible_analytics_is_default_settings_saved' );
 		delete_option( 'plausible_analytics_version' );
 		delete_option( 'plausible_analytics_proxy_resources' );
 		delete_option( 'plausible_analytics_created_mu_plugins_dir' );
@@ -46,7 +41,6 @@ class Uninstall {
 
 	/**
 	 * Delete transients.
-	 *
 	 * @return void
 	 */
 	private function delete_transients() {
@@ -56,7 +50,6 @@ class Uninstall {
 
 	/**
 	 * Deletes the Proxy Speed Module from the mu-plugins directory.
-	 *
 	 * @return void
 	 */
 	private function delete_proxy_speed_module() {

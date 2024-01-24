@@ -17,7 +17,8 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "phpcompatibility/phpcompatibility-wp": "*",
-        "wp-coding-standards/wpcs": "*"
+        "wp-coding-standards/wpcs": "*",
+        "coenjacobs/mozart": "^0.7.1"
     },
     "scripts": {
         "post-install-cmd": [
@@ -33,7 +34,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Plausible\\Analytics\\WP\\": "src/"
+            "Plausible\\Analytics\\WP\\": "src/",
+            "Plausible\\Analytics\\WP\\Client\\": "src/Client/lib/"
         }
     },
     "config": {

@@ -1,14 +1,11 @@
 <?php
 /**
  * Plausible Analytics | Proxy.
- *
  * @since      1.3.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
- *
- * @copyright This code was copied from CAOS Pro, created by:
- *            @author Daan van den Bergh
+ * @copyright  This code was copied from CAOS Pro, created by:
+ * @author     Daan van den Bergh
  *            https://daan.dev/wordpress/caos-pro/
  */
 
@@ -19,12 +16,9 @@ use Exception;
 class Proxy {
 	/**
 	 * Proxy IP Headers used to detect the visitors IP prior to sending the data to Plausible's Measurement Protocol.
-	 *
-	 * @var array
-	 *
-	 * For CloudFlare compatibility HTTP_CF_CONNECTING_IP has been added.
-	 *
 	 * @see https://support.cloudflare.com/hc/en-us/articles/200170986-How-does-Cloudflare-handle-HTTP-Request-headers-
+	 * @var array
+	 * For CloudFlare compatibility HTTP_CF_CONNECTING_IP has been added.
 	 */
 	const PROXY_IP_HEADERS = [
 		'HTTP_CF_CONNECTING_IP',
@@ -35,30 +29,25 @@ class Proxy {
 
 	/**
 	 * API namespace
-	 *
 	 * @var string
 	 */
 	private $namespace = '';
 
 	/**
 	 * API base
-	 *
 	 * @var string
 	 */
 	private $base = '';
 
 	/**
 	 * Endpoint
-	 *
 	 * @var string
 	 */
 	private $endpoint = '';
 
 	/**
 	 * Build properties.
-	 *
 	 * @return void
-	 *
 	 * @throws Exception
 	 */
 	public function __construct() {
@@ -71,19 +60,26 @@ class Proxy {
 
 	/**
 	 * Actions
-	 *
 	 * @return void
 	 */
 	private function init() {
-		// No need to continue if Proxy isn't enabled.
-		if ( Helpers::proxy_enabled() ) {
+		$settings = [];
+
+		if ( array_key_exists( 'option_name', $_POST ) &&
+			$_POST[ 'option_name' ] == 'proxy_enabled' &&
+			array_key_exists( 'option_value', $_POST ) &&
+			$_POST[ 'option_value' ] == 'on' ) {
+			$settings[ 'proxy_enabled' ] = 'on';
+		}
+
+		// No need to continue if Proxy isn't enabled .
+		if ( Helpers::proxy_enabled( $settings ) ) {
 			add_action( 'rest_api_init', [ $this, 'register_route' ] );
 		}
 	}
 
 	/**
 	 * Register the API route.
-	 *
 	 * @return void
 	 */
 	public function register_route() {
@@ -114,7 +110,7 @@ class Proxy {
 		$response = wp_remote_post(
 			$url,
 			[
-				'user-agent' => wp_kses( $_SERVER['HTTP_USER_AGENT'], 'strip' ),
+				'user-agent' => wp_kses( $_SERVER[ 'HTTP_USER_AGENT' ], 'strip' ),
 				'headers'    => [
 					'X-Forwarded-For' => $ip,
 					'Content-Type'    => 'application/json',
@@ -139,7 +135,7 @@ class Proxy {
 				if ( strpos( $ip, ',' ) !== false ) {
 					$ip = explode( ',', $ip );
 
-					return $ip[0];
+					return $ip[ 0 ];
 				}
 
 				return $ip;
@@ -151,6 +147,7 @@ class Proxy {
 	 * Checks if a HTTP header is set and is not empty.
 	 *
 	 * @param mixed $global
+	 *
 	 * @return bool
 	 */
 	private function header_exists( $global ) {
