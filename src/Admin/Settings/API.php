@@ -107,7 +107,7 @@ class API {
 				<!-- navigation -->
 				<main class="flex-1">
 					<div class="pt-6 mx-auto max-w-5xl">
-						<nav class="flex items-center justify-between" aria-label="Global">
+						<nav class="flex items-center justify-between py-8" aria-label="Global">
 							<div class="flex items-center gap-x-12">
 								<a href="#" class="-m-1.5 p-1.5">
 									<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
