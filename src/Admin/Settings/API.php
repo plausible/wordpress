@@ -102,33 +102,25 @@ class API {
 		<div class="h-full">
 			<!-- body -->
 			<div class="flex flex-col h-full">
-				<!-- logo -->
-				<nav class="relative z-20 py-8">
-					<div class="container">
-						<nav class="relative flex items-center justify-between sm:h-10 md:justify-center">
-							<div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-								<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
-									 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
-							</div>
-						</nav>
-					</div>
-				</nav>
 				<?php $this->render_notices_field(); ?>
 				<div class="flex flex-col gap-y-2"></div>
 				<!-- navigation -->
 				<main class="flex-1">
-					<div class="container pt-6">
-						<div class="pb-5 border-b border-gray-200 dark:border-gray-500">
-							<h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate">
-								<?php esc_html_e( 'Settings', 'plausible-analytics' ); ?>
-							</h1>
-						</div>
-						<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 lg:mt-4">
-							<div class="py-4 g:py-0 lg:col-span-3">
+					<div class="pt-6 mx-auto max-w-5xl">
+						<nav class="flex items-center justify-between" aria-label="Global">
+							<div class="flex items-center gap-x-12">
+								<a href="#" class="-m-1.5 p-1.5">
+									<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
+										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+								</a>
 								<?php $this->render_navigation(); ?>
-								<?php echo Helpers::render_quick_actions(); ?>
 							</div>
-							<div class="space-y-6 lg:col-span-9 lg:mt-4">
+							<div class="flex item-center gap-x-6">
+								<?php echo $this->render_quick_actions(); ?>
+							</div>
+						</nav>
+						<div class="mt-4">
+							<div class="space-y-6 mt-4">
 								<?php foreach ( $this->fields[ $current_tab ] as $tab => $field ): ?>
 									<div class="plausible-analytics-section shadow sm:rounded-md sm:overflow-hidden">
 										<?php
@@ -398,19 +390,61 @@ class API {
 			]
 		);
 		?>
-		<div class="hidden lg:block">
-			<?php
-			foreach ( $tabs as $tab ) {
-				printf(
-					'<a href="%1$s" class="no-underline flex items-center px-3 py-2 text-sm leading-5 font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 transition ease-in-out duration-150 %2$s">%3$s</a>',
-					esc_url( $tab[ 'url' ] ),
-					esc_attr( $tab[ 'class' ] ),
-					esc_html( $tab[ 'name' ] )
-				);
-			}
-			?>
-		</div>
 		<?php
+		foreach ( $tabs as $tab ) {
+			printf(
+				'<a href="%1$s" class="no-underline text-sm font-semibold leading-6 text-gray-900 %2$s">%3$s</a>',
+				esc_url( $tab[ 'url' ] ),
+				esc_attr( $tab[ 'class' ] ),
+				esc_html( $tab[ 'name' ] )
+			);
+		}
+		?>
+		<?php
+	}
+
+	/**
+	 * Render Quick Actions
+	 * @since  1.3.0
+	 * @return string
+	 */
+	private function render_quick_actions() {
+		ob_start();
+		$quick_actions = $this->get_quick_actions();
+		?>
+		<?php
+		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
+			foreach ( $quick_actions as $quick_action ) {
+				?>
+				<a class="no-underline text-sm leading-6 text-gray-900"
+				   target="_blank" href="<?php echo $quick_action[ 'url' ]; ?>"
+				   title="<?php echo $quick_action[ 'label' ]; ?>">
+					<?php echo $quick_action[ 'label' ]; ?>
+				</a>
+				<?php
+			}
+		}
+		?>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Get Quick Actions.
+	 * @since  1.3.0
+	 * @return array
+	 */
+	private function get_quick_actions() {
+		return [
+			'view-docs'    => [
+				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://docs.plausible.io/' ),
+			],
+			'report-issue' => [
+				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+			],
+		];
 	}
 
 	/**

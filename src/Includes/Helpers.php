@@ -298,66 +298,6 @@ class Helpers {
 	}
 
 	/**
-	 * Render Quick Actions
-	 * @since  1.3.0
-	 * @access public
-	 * @return string
-	 */
-	public static function render_quick_actions() {
-		ob_start();
-		$quick_actions = self::get_quick_actions();
-		?>
-		<div class="hidden lg:block">
-			<?php
-			if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
-				?>
-				<div
-					class="flex items-center px-3 py-2 text-sm leading-5 font-bold text-gray-600 dark:text-gray-400 rounded-md outline-none">
-					<?php esc_html_e( 'Quick Links', 'plausible-analytics' ); ?>
-				</div>
-				<?php
-				foreach ( $quick_actions as $quick_action ) {
-					?>
-					<a class="no-underline flex items-center px-3 py-2 text-sm leading-5 font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 outline-none focus:outline-none focus:text-gray-900 focus:bg-gray-50 dark:focus:text-gray-100 dark:focus:bg-gray-800 transition ease-in-out duration-150"
-					   target="_blank" href="<?php echo $quick_action[ 'url' ]; ?>"
-					   title="<?php echo $quick_action[ 'label' ]; ?>">
-						<?php echo $quick_action[ 'label' ]; ?>
-					</a>
-					<?php
-				}
-				?>
-				<?php
-			}
-			?>
-		</div>
-		<?php
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get Quick Actions.
-	 * @since  1.3.0
-	 * @access public
-	 * @return array
-	 */
-	public static function get_quick_actions() {
-		return [
-			'view-docs'        => [
-				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://docs.plausible.io/' ),
-			],
-			'report-issue'     => [
-				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
-			],
-			'translate-plugin' => [
-				'label' => esc_html__( 'Translate Plugin', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://translate.wordpress.org/projects/wp-plugins/plausible-analytics/' ),
-			],
-		];
-	}
-
-	/**
 	 * Get user role for the logged-in user.
 	 * @since  1.3.0
 	 * @access public

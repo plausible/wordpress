@@ -43,19 +43,16 @@ class Page extends API {
 					'label'  => esc_html__( 'Connect your website with Plausible Analytics', 'plausible-analytics' ),
 					'slug'   => 'connect_to_plausible_analytics',
 					'type'   => 'group',
-					'desc'   => '<ol><li>' . sprintf(
-							wp_kses(
-								__(
-									'We\'ve retrieved the domain name for which Plausible will be used. If you haven\'t already added this site to your Plausible account, please <a href="%s" target="_blank">follow these instructions</a>.',
-									'plausible-analytics'
-								),
-								'post'
+					'desc'   => sprintf(
+						wp_kses(
+							__(
+								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a href="#" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API Token\' field.',
+								'plausible-analytics'
 							),
-							'https://plausible.io/wordpress-analytics-plugin#how-to-get-started-with-plausible-analytics'
-						) . '</li><li>' . __(
-							'To automate the plugin setup, <a href="#" id="plausible-create-api-token">generate an API token</a> (link opens in a new window) and paste it into the API token field.',
-							'plausible-analytics'
-						) . '</li>',
+							'post'
+						),
+						'https://plausible.io/sites'
+					),
 					'fields' => [
 						[
 							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
