@@ -304,7 +304,7 @@ class API {
 		<div
 			class="z-50 fixed inset-0 top-5 flex items-end justify-center px-6 py-8 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
 			<div id="plausible-analytics-notice"
-				 class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto transition-opacity ease-in-out duration-200 opacity-0">
+				 class="hidden max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto transition-opacity ease-in-out duration-200 opacity-0">
 				<div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
 					<div class="p-4">
 						<div class="flex items-start">
@@ -393,7 +393,7 @@ class API {
 		<?php
 		foreach ( $tabs as $tab ) {
 			printf(
-				'<a href="%1$s" class="no-underline text-sm font-semibold leading-6 text-gray-900 %2$s">%3$s</a>',
+				'<a href="%1$s" class="no-underline text-sm leading-6 text-gray-900 %2$s">%3$s</a>',
 				esc_url( $tab[ 'url' ] ),
 				esc_attr( $tab[ 'class' ] ),
 				esc_html( $tab[ 'name' ] )
