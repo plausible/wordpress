@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
-		document.location.hash = 'welcome';
+		document.location.hash = 'welcome_slide';
 	}
 
 	plausibleToggleWizardStep();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		let hash = document.location.hash.replace('#', '');
 
-		if (hash === 'api_token' || hash === 'domain_name') {
+		if (hash === 'api_token_slide' || hash === 'domain_name_slide') {
 			let form = e.target.closest('.plausible-analytics-wizard-step-section');
 			let inputs = form.getElementsByTagName('INPUT');
 			let options = [];
@@ -198,7 +198,7 @@ function plausibleAjax(data, button = null, showNotice = true) {
 function plausibleCreateAPIToken(e) {
 	e.preventDefault();
 
-	let domain = document.querySelector('#domain_name input').value;
+	let domain = document.getElementById('domain_name').value;
 
 	window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
 }
@@ -236,7 +236,7 @@ function plausibleToggleWizardStep() {
 		return;
 	}
 
-	const hash = document.location.hash.substring(1);
+	const hash = document.location.hash.substring(1).replace('_slide', '');
 
 	/**
 	 * Reset all steps to inactive.

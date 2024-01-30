@@ -219,7 +219,7 @@ class API {
 							$i         = 0;
 							?>
 							<?php foreach ( $this->slides as $id => $title ): ?>
-								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
+								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
 										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute min-w-full">
 									<header class="relative">
 										<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
@@ -241,7 +241,7 @@ class API {
 										<?php ++ $i; ?>
 										<div class="mt-6">
 											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
-												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>"
+												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>_slide"
 												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
@@ -279,7 +279,7 @@ class API {
 											</div>
 											<?php
 											printf(
-												'<span href="#%1$s" class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">%2$s</span>',
+												'<span href="#%1$s_slide" class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">%2$s</span>',
 												esc_attr( $id ),
 												esc_html( $title )
 											);
@@ -296,7 +296,7 @@ class API {
 			            					</span>
 											<?php
 											printf(
-												'<span href="#%1$s" class="ml-3 text-sm font-medium text-indigo-600 dark:text-indigo-500">%2$s</span>',
+												'<span href="#%1$s_slide" class="ml-3 text-sm font-medium text-indigo-600 dark:text-indigo-500">%2$s</span>',
 												esc_attr( $id ),
 												esc_html( $title )
 											);
@@ -316,7 +316,7 @@ class API {
 											</span>
 											<?php
 											printf(
-												'<span href="#%1$s" class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">%2$s</span>',
+												'<span href="#%1$s_slide" class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">%2$s</span>',
 												esc_attr( $id ),
 												esc_html( $title )
 											);
