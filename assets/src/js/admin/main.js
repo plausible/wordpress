@@ -229,6 +229,10 @@ function plausibleAjax(data, button = null, showNotice = true) {
 			}
 		}
 
+		let event = new CustomEvent('plausibleAjaxDone', {detail: response});
+
+		document.dispatchEvent(event);
+
 		return response.success;
 	});
 }
