@@ -83,7 +83,7 @@ class Page extends API {
 					'type'   => 'group',
 					// translators: %1$s replaced with <code>outbound-links</code>.
 					'desc'   => esc_html__(
-						'To complete the setup process of a particular enhanced measurement, click on the "Additional action required" link and follow the instructions.',
+						'Enable enhanced measurements that you\'d like to track.',
 						'plausible-analytics'
 					),
 					'fields' => [
@@ -210,7 +210,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						'%1$s <a href="%2$s" target="_blank">%3$s</a>',
 						esc_html__(
-							'Exclude certain pages from being tracked. Wildcards are supported.',
+							'Exclude certain pages from being tracked. You can use an asterisk (*) to match patterns in your page URLs.',
 							'plausible-analytics'
 						),
 						esc_url(
@@ -228,7 +228,7 @@ class Page extends API {
 							'placeholder' => esc_html__(
 									'E.g.',
 									'plausible-analytics'
-								) . '**hello-world**, /example-page/, *another-example-page',
+								) . '/example-page/, *keyword*, /directory*',
 						],
 						[
 							'label' => __( 'Save', 'plausible-analytics' ),
@@ -242,7 +242,7 @@ class Page extends API {
 					'slug'   => 'tracked_user_roles',
 					'type'   => 'group',
 					'desc'   => esc_html__(
-						'By default, visits from logged in users aren\'t tracked. If you want to track visits for certain user roles then please specify them above.',
+						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.',
 						'plausible-analytics'
 					),
 					'toggle' => false,

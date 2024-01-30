@@ -46,6 +46,8 @@ This repository is not suitable for support. Please don't use GitHub issues for 
 - `plausible_analytics_script_params`: Allows you to modify the `script` element, loading the Plausible JS library.
   - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types when File Downloads tracking is
     enabled.
+- `plausible_analytics_pageview_properties`: Allows you to add custom pageview properties when the Pageview Properties option is enabled under
+  Enhanced Measurements. For examples, read the [documentation on Pageview Properties](https://plausible.io/docs/custom-props/for-pageviews).
 
 ### Actions
 

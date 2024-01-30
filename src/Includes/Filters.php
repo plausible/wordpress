@@ -47,15 +47,15 @@ class Filters {
 
 		$settings    = Helpers::get_settings();
 		$api_url     = Helpers::get_data_api_url();
-		$domain_name = esc_html( $settings['domain_name'] );
+		$domain_name = esc_html( $settings[ 'domain_name' ] );
 
 		// We need the correct id attribute for IE compatibility.
 		$tag    = preg_replace( "/\sid=(['\"])plausible-analytics-js(['\"])/", " id=$1plausible$2", $tag );
 		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
 
 		// Triggered when exclude pages is enabled.
-		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
-			$excluded_pages = $settings['excluded_pages'];
+		if ( ! empty( $settings[ 'excluded_pages' ] ) && $settings[ 'excluded_pages' ] ) {
+			$excluded_pages = $settings[ 'excluded_pages' ];
 			$params         .= " data-exclude='{$excluded_pages}'";
 		}
 
@@ -93,7 +93,7 @@ class Filters {
 	public function maybe_add_custom_params( $params ) {
 		$settings = Helpers::get_settings();
 
-		if ( ! in_array( 'pageview-props', $settings['enhanced_measurements'] ) ) {
+		if ( ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
 			return $params;
 		}
 
@@ -119,6 +119,6 @@ class Filters {
 			}
 		}
 
-		return $params;
+		return apply_filters( 'plausible_analytics_pageview_properties', $params );
 	}
 }
