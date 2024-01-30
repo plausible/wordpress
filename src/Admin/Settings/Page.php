@@ -70,9 +70,10 @@ class Page extends API {
 							'value' => $api_token,
 						],
 						[
-							'label' => esc_html__( 'Connect', 'plausible-analytics' ),
-							'slug'  => 'connect_plausible_analytics',
-							'type'  => 'button',
+							'label'    => esc_html__( 'Connect', 'plausible-analytics' ),
+							'slug'     => 'connect_plausible_analytics',
+							'type'     => 'button',
+							'disabled' => empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ),
 						],
 					],
 				],

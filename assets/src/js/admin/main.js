@@ -30,6 +30,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	/**
+	 * Disable Connect button if required fields aren't entered.
+	 */
+	document.addEventListener('change', (e) => {
+		if (e.target.id !== 'domain_name' && e.target.id !== 'api_token') {
+			return;
+		}
+
+		let target = e.target;
+		let button = document.getElementById('connect_plausible_analytics');
+		let buttonIsHref = false;
+
+		if (button === null) {
+			let slide_id = document.location.hash;
+			button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
+			buttonIsHref = true;
+		}
+
+		if (button === null) {
+			return;
+		}
+
+		if (target.value !== '') {
+			if (!buttonIsHref) {
+				button.disabled = false;
+			} else {
+				button.classList.remove('pointer-events-none');
+				button.classList.replace('bg-gray-200', 'bg-indigo-600')
+			}
+
+			return;
+		}
+
+		if (!buttonIsHref) {
+			button.disabled = true;
+		} else {
+			button.classList += ' pointer-events-none';
+			button.classList.replace('bg-indigo-600', 'bg-gray-200')
+		}
+	});
+
+	/**
 	 * Save Options on Next click.
 	 */
 	document.addEventListener('click', (e) => {

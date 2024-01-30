@@ -242,7 +242,7 @@ class API {
 										<div class="mt-6">
 											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
 												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>_slide"
-												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
 												<a id="plausible-analytics-wizard-quit"
