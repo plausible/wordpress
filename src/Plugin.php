@@ -47,6 +47,7 @@ final class Plugin {
 		}
 
 		new Includes\Actions();
+		new Includes\Ajax();
 		new Includes\Compatibility();
 		new Includes\Filters();
 		new Includes\Proxy();

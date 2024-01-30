@@ -48,10 +48,8 @@ class API {
 	public function settings_page() {
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
 
-		$followed_wizard = get_option( 'plausible_analytics_wizard_done' ) || ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] );
-		$domain          = Helpers::get_domain();
-
-		$this->slides = [
+		$followed_wizard          = get_option( 'plausible_analytics_wizard_done' ) || ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] );
+		$this->slides             = [
 			'welcome'                    => __( 'Welcome to Plausible Analytics', 'plausible-analytics' ),
 			'domain_name'                => __( 'Confirm domain', 'plausible-analytics' ),
 			'api_token'                  => __( 'Create API token', 'plausible-analytics' ),
@@ -60,7 +58,6 @@ class API {
 			'proxy_enabled'              => __( 'Enable proxy', 'plausible-analytics' ),
 			'success'                    => __( 'Success!', 'plausible-analytics' ),
 		];
-
 		$this->slides_description = [
 			'welcome'                    => sprintf(
 				__(
@@ -116,40 +113,7 @@ class API {
 						</nav>
 					</div>
 				</nav>
-				<!-- notices -->
-				<div
-					class="z-50 fixed inset-0 top-5 flex items-end justify-center px-6 py-8 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
-					<div id="plausible-analytics-notice"
-						 class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto transition-opacity ease-in-out duration-200 opacity-0">
-						<div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-							<div class="p-4">
-								<div class="flex items-start">
-									<div id="icon-success" class="flex-shrink-0">
-										<svg class="h-8 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-											 viewBox="0 0 24 24"
-											 stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-												  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-										</svg>
-									</div>
-									<div id="icon-error" class="flex-shrink-0 hidden">
-										<svg class="h-8 w-6 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-											 stroke-width="2"
-											 stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-										</svg>
-									</div>
-									<div class="ml-3 w-0 flex-1 pt-0.5">
-										<!-- message -->
-										<p id="plausible-analytics-notice-text" class="mt-1 text-sm leading-5 text-gray-500 dark:text-gray-200"></p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /notices -->
+				<?php $this->render_notices_field(); ?>
 				<div class="flex flex-col gap-y-2"></div>
 				<!-- navigation -->
 				<main class="flex-1">
@@ -201,6 +165,7 @@ class API {
 					<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
 						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
 				</div>
+				<?php $this->render_notices_field(); ?>
 				<!-- title -->
 				<div class="mx-auto mt-6 text-center">
 					<h1 class="text-3xl font-black">
@@ -333,6 +298,48 @@ class API {
 				</div>
 			</div>
 			<!-- /body -->
+		</div>
+		<?php
+	}
+
+	/**
+	 * Renders the notice "bubble", which is further handled by JS.
+	 * @return void
+	 */
+	private function render_notices_field() {
+		?>
+		<!-- notices -->
+		<div
+			class="z-50 fixed inset-0 top-5 flex items-end justify-center px-6 py-8 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
+			<div id="plausible-analytics-notice"
+				 class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto transition-opacity ease-in-out duration-200 opacity-0">
+				<div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+					<div class="p-4">
+						<div class="flex items-start">
+							<div id="icon-success" class="flex-shrink-0">
+								<svg class="h-8 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+									 viewBox="0 0 24 24"
+									 stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+							</div>
+							<div id="icon-error" class="flex-shrink-0 hidden">
+								<svg class="h-8 w-6 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									 stroke-width="2" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+								</svg>
+							</div>
+							<div class="ml-3 w-0 flex-1 pt-0.5">
+								<! -- message -->
+								<p id=
+								   "plausible-analytics-notice-text" class="mt-1 text-sm leading-5 text-gray-500 dark:text-gray-200"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<?php
 	}
