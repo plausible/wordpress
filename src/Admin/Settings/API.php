@@ -380,12 +380,12 @@ class API {
 				'general'     => [
 					'name'  => esc_html__( 'General', 'plausible-analytics' ),
 					'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
-					'class' => '' === $current_tab ? 'active' : '',
+					'class' => '' === $current_tab ? 'font-bold' : '',
 				],
 				'self-hosted' => [
 					'name'  => esc_html__( 'Self-Hosted', 'plausible-analytics' ),
 					'url'   => admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' ),
-					'class' => 'self-hosted' === $current_tab ? 'active' : '',
+					'class' => 'self-hosted' === $current_tab ? 'font-bold' : '',
 				],
 			]
 		);
