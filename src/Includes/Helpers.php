@@ -74,6 +74,7 @@ class Helpers {
 			'expand_dashboard_access'    => [],
 			'disable_toolbar_menu'       => '',
 			'self_hosted_domain'         => '',
+			'self_hosted_shared_link'    => '',
 		];
 
 		$settings = get_option( 'plausible_analytics_settings', [] );

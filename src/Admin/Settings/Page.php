@@ -31,11 +31,7 @@ class Page extends API {
 	public function __construct() {
 		$settings           = Helpers::get_settings();
 		$domain             = Helpers::get_domain();
-		$api_token          = ! empty( $settings[ 'api_token' ] ) ? $settings[ 'api_token' ] : '';
-		$self_hosted_domain = defined(
-			'PLAUSIBLE_SELF_HOSTED_DOMAIN'
-		) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : ( ! empty( $settings[ 'self_hosted_domain' ] ) ? $settings[ 'self_hosted_domain' ] : '' );
-		$excluded_pages     = ! empty( $settings[ 'excluded_pages' ] ) ? $settings[ 'excluded_pages' ] : '';
+		$self_hosted_domain = defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : $settings[ 'self_hosted_domain' ];
 
 		$this->fields = [
 			'general'     => [
@@ -64,7 +60,7 @@ class Page extends API {
 							'label' => esc_html__( 'API Token', 'plausible-analytics' ),
 							'slug'  => 'api_token',
 							'type'  => 'text',
-							'value' => $api_token,
+							'value' => $settings[ 'api_token' ],
 						],
 						[
 							'label'    => esc_html__( 'Connect', 'plausible-analytics' ),
@@ -221,7 +217,7 @@ class Page extends API {
 							'label'       => esc_html__( 'Excluded pages', 'plausible-analytics' ),
 							'slug'        => 'excluded_pages',
 							'type'        => 'textarea',
-							'value'       => $excluded_pages,
+							'value'       => $settings[ 'excluded_pages' ],
 							'placeholder' => esc_html__(
 									'E.g.',
 									'plausible-analytics'
@@ -296,16 +292,52 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label'       => esc_html__( 'Domain Name', 'plausible-analytics' ),
+							'label'       => esc_html__( 'Domain name', 'plausible-analytics' ),
 							'slug'        => 'self_hosted_domain',
 							'type'        => 'text',
 							'value'       => $self_hosted_domain,
 							'placeholder' => 'e.g. ' . Helpers::get_domain(),
-							'disabled'    => ! empty( Helpers::get_settings()[ 'proxy_enabled' ] ),
+							'disabled'    => Helpers::proxy_enabled(),
 						],
 						[
 							'label'    => __( 'Save', 'plausible-analytics' ),
 							'slug'     => 'save-self-hosted',
+							'type'     => 'button',
+							'disabled' => Helpers::proxy_enabled(),
+						],
+					],
+				],
+				[
+					'label'  => esc_html__( 'View stats in your WordPress dashboard', 'plausible-analytics' ),
+					'slug'   => 'self_hosted_shared_link',
+					'type'   => 'group',
+					'desc'   => sprintf(
+						'<ol><li>' .
+						__(
+							'<a href="%s" target="_blank">Create a secure and private shared link</a> in your Plausible account.',
+							'plausible-analytics'
+						) .
+						'<li>' .
+						__( 'Paste the shared link in the text box to view your stats in your WordPress dashboard.', 'plausible-analytics' ) .
+						'</li>' .
+						'</li></ol>',
+						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard' )
+					),
+					'fields' => [
+						[
+							'label'       => esc_html__( 'Shared link', 'plausible-analytics' ),
+							'slug'        => 'self_hosted_shared_link',
+							'type'        => 'text',
+							'value'       => $settings[ 'self_hosted_shared_link' ],
+							'placeholder' => sprintf(
+								wp_kses( __( 'E.g. https://plausible.io/share/%s?auth=XXXXXXXXXXXX', 'plausible-analytics' ), 'post' ),
+								$domain
+							),
+							'disabled'    => Helpers::proxy_enabled(),
+						],
+						[
+							'label'    => __( 'Save', 'plausible-analytics' ),
+							'slug'     => 'save-self-hosted-shared-link',
 							'type'     => 'button',
 							'disabled' => Helpers::proxy_enabled(),
 						],
@@ -318,6 +350,11 @@ class Page extends API {
 			$this->fields[ 'self-hosted' ][ 0 ][ 'fields' ][] = [
 				'label' => '',
 				'slug'  => 'self_hosted_domain_notice',
+				'type'  => 'hook',
+			];
+			$this->fields[ 'self-hosted' ][ 1 ][ 'fields' ][] = [
+				'label' => '',
+				'slug'  => 'self_hosted_shared_link_notice',
 				'type'  => 'hook',
 			];
 		}
@@ -368,6 +405,7 @@ class Page extends API {
 		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
 		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
 		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
+		add_action( 'plausible_analytics_settings_self_hosted_shared_link_notice', [ $this, 'self_hosted_warning' ] );
 	}
 
 	/**
