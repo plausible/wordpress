@@ -266,13 +266,19 @@ function plausibleShowNotice(message, isError = false) {
 	let notice = document.getElementById('plausible-analytics-notice');
 
 	document.getElementById('plausible-analytics-notice-text').innerHTML = message;
+
 	notice.classList.remove('hidden');
-	notice.classList.replace('opacity-0', 'opacity-100');
+
+	setTimeout(function () {
+		notice.classList.replace('opacity-0', 'opacity-100');
+	}, 200)
 
 	if (isError === false) {
 		setTimeout(function () {
-			notice.classList += ' hidden';
 			notice.classList.replace('opacity-100', 'opacity-0');
+			setTimeout(function () {
+				notice.classList += ' hidden';
+			}, 200)
 		}, 2500);
 	}
 }
