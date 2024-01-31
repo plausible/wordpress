@@ -26,6 +26,14 @@ class Provisioning {
 	];
 
 	/**
+	 * @var string[] $custom_pageview_properties
+	 */
+	private $custom_pageview_properties = [
+		'author',
+		'category',
+	];
+
+	/**
 	 * Build class.
 	 */
 	public function __construct() {
@@ -46,6 +54,7 @@ class Provisioning {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
 	}
 
 	/**
@@ -53,8 +62,6 @@ class Provisioning {
 	 *
 	 * @param $old_settings
 	 * @param $settings
-	 *
-	 * @return void
 	 */
 	public function create_shared_link( $old_settings, $settings ) {
 		if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
@@ -69,8 +76,6 @@ class Provisioning {
 	 *
 	 * @param $old_settings
 	 * @param $settings
-	 *
-	 * @return void
 	 */
 	public function create_goals( $old_settings, $settings ) {
 		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
@@ -121,8 +126,6 @@ class Provisioning {
 	 *
 	 * @param $old_settings
 	 * @param $settings
-	 *
-	 * @return void
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
 		$enhanced_measurements_old = array_filter( $old_settings[ 'enhanced_measurements' ] );
@@ -144,5 +147,30 @@ class Provisioning {
 
 			$this->client->delete_goal( $id );
 		}
+	}
+
+	/**
+	 * @param array $old_settings
+	 * @param array $settings
+	 *
+	 * @return void
+	 */
+	public function maybe_create_custom_properties( $old_settings, $settings ) {
+		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
+
+		if ( ! in_array( 'pageview-props', $enhanced_measurements ) ) {
+			return;
+		}
+
+		$create_request = new Client\Model\CustomPropEnableRequestBulkEnable();
+		$properties     = [];
+
+		foreach ( $this->custom_pageview_properties as $property ) {
+			$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
+		}
+
+		$create_request->setCustomProps( $properties );
+
+		$this->client->enable_custom_property( $create_request );
 	}
 }

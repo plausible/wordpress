@@ -6,8 +6,14 @@ use Exception;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest;
+use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequestBulkEnable;
+use Plausible\Analytics\WP\Client\Model\CustomPropListResponse;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreate;
+use Plausible\Analytics\WP\Client\Model\PaymentRequiredError;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
+use Plausible\Analytics\WP\Client\Model\UnauthorizedError;
+use Plausible\Analytics\WP\Client\Model\UnprocessableEntityError;
 use Plausible\Analytics\WP\Includes\Helpers;
 
 /**
@@ -97,8 +103,6 @@ class Client {
 	 * Delete a Custom Event Goal by ID.
 	 *
 	 * @param int $id
-	 *
-	 * @return void
 	 */
 	public function delete_goal( $id ) {
 		try {
@@ -109,6 +113,31 @@ class Client {
 					sprintf(
 						__(
 							'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
+							'plausible-analytics'
+						),
+						$e->getMessage()
+					)
+				);
+			}
+		}
+	}
+
+	/**
+	 * Enable (or get) a custom property.
+	 *
+	 * @param CustomPropEnableRequestBulkEnable $enable_request
+	 *
+	 * @throws PaymentRequiredError|UnauthorizedError|UnprocessableEntityError
+	 */
+	public function enable_custom_property( $enable_request ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersCustomPropsEnable( $enable_request );
+		} catch ( Exception $e ) {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					sprintf(
+						__(
+							'Something went wrong while trying to enable Pageview Properties. Please add it manually. The error message was: %s',
 							'plausible-analytics'
 						),
 						$e->getMessage()
