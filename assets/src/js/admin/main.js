@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		domainNameElem: document.getElementById('domain_name'),
 		apiTokenElem: document.getElementById('api_token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
-		toggleElems: document.getElementsByClassName('plausible-analytics-toggle'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
 		quitWizardElems: document.getElementsByClassName('plausible-analytics-wizard-quit'),
+		nonce: document.getElementById('_wpnonce').value,
 
 		/**
 		 * Bind events.
@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 
-			if (this.toggleElems.length > 0) {
-				for (let i = 0; i < this.toggleElems.length; i++) {
-					this.toggleElems[i].addEventListener('click', this.toggleOption);
-				}
-			}
+			/**
+			 * Due to the structure of the toggles, any events bound to them would be triggered twice, that's why we bind it to the documents' click'
+			 * event.
+			 */
+			document.addEventListener('click', this.toggleOption);
 
 			if (this.stepElems.length > 0) {
 				for (let i = 0; i < this.stepElems.length; i++) {
@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
 					this.quitWizardElems[i].addEventListener('click', this.quitWizard);
 				}
 			}
-		},
+		}
+		,
 
 		/**
 		 * Toggle Option and store in DB.
@@ -80,6 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param e
 		 */
 		toggleOption: function (e) {
+			/**
+			 * Make sure event target is a toggle.
+			 */
+			if (e.target.classList === null || !e.target.classList.contains('plausible-analytics-toggle')) {
+				return;
+			}
+
 			const button = e.target.closest('button');
 			let toggle = '';
 			let toggleStatus = '';
@@ -111,18 +119,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('option_label', button.nextElementSibling.innerHTML);
 			form.append('toggle_status', toggleStatus);
 			form.append('is_list', button.dataset.list);
-			form.append('_nonce', document.getElementById('_wpnonce').value);
+			form.append('_nonce', plausible.nonce);
 
 			let reload = false;
 			let showNotice = true;
 
+			/**
+			 * When either of these options are enabled, we need the page to reload, to display notices/warnings.
+			 */
 			if (button.name === 'proxy_enabled' || button.name === 'enable_analytics_dashboard') {
 				reload = true;
 				showNotice = false;
 			}
 
 			plausible.ajax(form, null, showNotice, reload);
-		},
+		}
+		,
 
 		/**
 		 * Save value of input or text area to DB.
@@ -142,13 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			form.append('action', 'plausible_analytics_save_options');
 			form.append('options', JSON.stringify(options));
-			form.append('_nonce', document.getElementById('_wpnonce').value);
+			form.append('_nonce', plausible.nonce);
 
 			button.children[0].classList.remove('hidden');
 			button.setAttribute('disabled', 'disabled');
 
 			plausible.ajax(form, button);
-		},
+		}
+		,
 
 		/**
 		 * Quit wizard.
@@ -162,7 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('_nonce', e.target.dataset.nonce);
 
 			plausible.ajax(form, null, false, true);
-		},
+		}
+		,
 
 		/**
 		 * Save Options on Next click for API Token and Domain Name slides.
@@ -183,12 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				let data = new FormData();
 				data.append('action', 'plausible_analytics_save_options');
-				data.append('_nonce', document.getElementById('_wpnonce').value);
 				data.append('options', JSON.stringify(options));
+				data.append('_nonce', plausible.nonce);
 
 				plausible.ajax(data, null, false);
 			}
-		},
+		}
+		,
 
 		/**
 		 * Disable Connect button if Domain Name or API Token field is empty.
@@ -227,7 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				button.classList += ' pointer-events-none';
 				button.classList.replace('bg-indigo-600', 'bg-gray-200')
 			}
-		},
+		}
+		,
 
 		/**
 		 * Open create API token dialog.
@@ -240,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			let domain = document.getElementById('domain_name').value;
 
 			window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
-		},
+		}
+		,
 
 		/**
 		 * Show wizard.
@@ -253,7 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			data.append('_nonce', e.target.dataset.nonce);
 
 			plausible.ajax(data, null, false, true);
-		},
+		}
+		,
 
 		/**
 		 * Toggles the active/inactive/current state of the steps.
@@ -317,7 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				completedStep.classList.remove('hidden');
 				inactiveStep.classList += ' hidden';
 			});
-		},
+		}
+		,
 
 		/**
 		 * Do AJAX request and (optionally) show a notice or (optionally) reload the page.
@@ -364,7 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				return response.success;
 			});
-		},
+		}
+		,
 
 		/**
 		 * Displays a notice or error message.
