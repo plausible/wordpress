@@ -193,6 +193,14 @@ class Upgrades {
 			$settings[ $option_name ] = 'on';
 		}
 
+		/**
+		 * Migrate the shared link option for self hosters who use it.
+		 */
+		if ( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'shared_link' ] ) ) {
+			$settings[ 'self_hosted_shared_link' ] = $settings[ 'shared_link' ];
+			$settings[ 'shared_link' ]             = '';
+		}
+
 		update_option( 'plausible_analytics_settings', $settings );
 
 		update_option( 'plausible_analytics_version', '2.0.0' );
