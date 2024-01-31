@@ -8,390 +8,397 @@ document.addEventListener('DOMContentLoaded', () => {
 		return;
 	}
 
-	if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
-		document.location.hash = 'welcome_slide';
-	}
+	let plausible = {
+		/**
+		 * Elements
+		 */
+		showWizardElem: document.getElementById('show_wizard'),
+		createAPITokenElem: document.getElementById('plausible-create-api-token'),
+		domainNameElem: document.getElementById('domain_name'),
+		apiTokenElem: document.getElementById('api_token'),
+		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
+		wizardQuitElem: document.getElementById('plausible-analytics-wizard-quit'),
+		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
+		toggleElems: document.getElementsByClassName('plausible-analytics-toggle'),
 
-	plausibleToggleWizardStep();
+		/**
+		 * Bind events.
+		 */
+		init: function () {
+			if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
+				document.location.hash = 'welcome_slide';
+			}
 
-	/**
-	 * Toggle active state for wizard menu item.
-	 */
-	window.addEventListener('hashchange', () => {
-		plausibleToggleWizardStep();
-	});
+			this.toggleWizardStep();
 
-	/**
-	 * Show wizard link.
-	 */
-	let showWizard = document.getElementById('show_wizard');
+			window.addEventListener('hashchange', this.toggleWizardStep);
 
-	/**
-	 * Show Wizard click event.
-	 */
-	if (showWizard !== null) {
-		showWizard.addEventListener('click', (e) => {
-			let data = new FormData();
-			data.append('action', 'plausible_analytics_show_wizard');
-			data.append('_nonce', e.target.dataset.nonce);
+			if (this.showWizardElem !== null) {
+				this.showWizardElem.addEventListener('click', this.showWizard);
+			}
 
-			plausibleAjax(data, null, false, true);
-		});
-	}
+			if (this.createAPITokenElem !== null) {
+				this.createAPITokenElem.addEventListener('click', this.createAPIToken);
+			}
 
-	/**
-	 * Create API token link.
-	 */
-	let createAPIToken = document.getElementById('plausible-create-api-token');
+			if (this.domainNameElem !== null) {
+				this.domainNameElem.addEventListener('change', this.disableConnectButton);
+			}
 
-	/**
-	 * Create API token click event.
-	 */
-	if (createAPIToken !== null) {
-		createAPIToken.addEventListener('click', (e) => {
-			plausibleCreateAPIToken(e);
-		});
-	}
+			if (this.apiTokenElem !== null) {
+				this.apiTokenElem.addEventListener('change', this.disableConnectButton);
+			}
 
-	/**
-	 * Domain and API Token fields.
-	 */
-	let domainName = document.getElementById('domain_name');
-	let apiToken = document.getElementById('api_token');
+			if (this.stepElems.length > 0) {
+				for (let i = 0; i < this.stepElems.length; i++) {
+					this.stepElems[i].addEventListener('click', this.saveOptionsOnNext);
+				}
+			}
 
-	/**
-	 * Domain Name change event.
-	 */
-	if (domainName !== null) {
-		domainName.addEventListener('change', disableConnectButton);
-	}
+			if (this.wizardQuitElem !== null) {
+				this.wizardQuitElem.addEventListener('click', this.quitWizard);
+			}
 
-	/**
-	 * Api Token change event.
-	 */
-	if (apiToken !== null) {
-		apiToken.addEventListener('change', disableConnectButton);
-	}
+			if (this.buttonElems.length > 0) {
+				for (let i = 0; i < this.buttonElems.length; i++) {
+					this.buttonElems[i].addEventListener('click', this.saveOption);
+				}
+			}
 
-	/**
-	 * Disable Connect button if required fields aren't entered.
-	 */
-	function disableConnectButton(e) {
-		let target = e.target;
-		let button = document.getElementById('connect_plausible_analytics');
-		let buttonIsHref = false;
+			if (this.toggleElems.length > 0) {
+				for (let i = 0; i < this.toggleElems.length; i++) {
+					this.toggleElems[i].addEventListener('click', this.toggleOption);
+				}
+			}
+		},
 
-		if (button === null) {
-			let slide_id = document.location.hash;
-			button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
-			buttonIsHref = true;
-		}
+		/**
+		 * Toggle Option and store in DB.
+		 *
+		 * @param e
+		 */
+		toggleOption: function (e) {
+			const button = e.target.closest('button');
+			let toggle = '';
+			let toggleStatus = '';
 
-		if (button === null) {
-			return;
-		}
-
-		if (target.value !== '') {
-			if (!buttonIsHref) {
-				button.disabled = false;
+			// The button element is clicked.
+			if (e.target.type === 'submit') {
+				toggle = button.querySelector('span');
 			} else {
-				button.classList.remove('pointer-events-none');
-				button.classList.replace('bg-gray-200', 'bg-indigo-600')
+				// The span element is clicked.
+				toggle = e.target.closest('span');
 			}
 
-			return;
-		}
+			if (button.classList.contains('bg-indigo-600')) {
+				// Toggle: off
+				button.classList.replace('bg-indigo-600', 'bg-gray-200');
+				toggle.classList.replace('translate-x-5', 'translate-x-0');
+				toggleStatus = '';
+			} else {
+				// Toggle: on
+				button.classList.replace('bg-gray-200', 'bg-indigo-600');
+				toggle.classList.replace('translate-x-0', 'translate-x-5');
+				toggleStatus = 'on';
+			}
 
-		if (!buttonIsHref) {
-			button.disabled = true;
-		} else {
-			button.classList += ' pointer-events-none';
-			button.classList.replace('bg-indigo-600', 'bg-gray-200')
-		}
-	}
+			const form = new FormData();
+			form.append('action', 'plausible_analytics_toggle_option');
+			form.append('option_name', button.name);
+			form.append('option_value', button.value);
+			form.append('option_label', button.nextElementSibling.innerHTML);
+			form.append('toggle_status', toggleStatus);
+			form.append('is_list', button.dataset.list);
+			form.append('_nonce', document.getElementById('_wpnonce').value);
 
-	/**
-	 * Save Options on Next click.
-	 */
-	document.addEventListener('click', (e) => {
-		if (e.target.classList === undefined || !e.target.classList.contains('plausible-analytics-wizard-next-step')) {
-			return;
-		}
+			let reload = false;
+			let showNotice = true;
 
-		let hash = document.location.hash.replace('#', '');
+			if (button.name === 'proxy_enabled' || button.name === 'enable_analytics_dashboard') {
+				reload = true;
+				showNotice = false;
+			}
 
-		if (hash === 'api_token_slide' || hash === 'domain_name_slide') {
-			let form = e.target.closest('.plausible-analytics-wizard-step-section');
-			let inputs = form.getElementsByTagName('INPUT');
-			let options = [];
+			plausible.ajax(form, null, showNotice, reload);
+		},
 
-			for (let input of inputs) {
+		/**
+		 * Save value of input or text area to DB.
+		 *
+		 * @param e
+		 */
+		saveOption: function (e) {
+			const button = e.target;
+			const section = button.closest('.plausible-analytics-section');
+			const inputs = section.querySelectorAll('input, textarea');
+			const form = new FormData();
+			const options = [];
+
+			inputs.forEach(function (input) {
 				options.push({name: input.name, value: input.value});
-			}
+			});
 
-			let data = new FormData();
-			data.append('action', 'plausible_analytics_save_options');
-			data.append('_nonce', document.getElementById('_wpnonce').value);
-			data.append('options', JSON.stringify(options));
+			form.append('action', 'plausible_analytics_save_options');
+			form.append('options', JSON.stringify(options));
+			form.append('_nonce', document.getElementById('_wpnonce').value);
 
-			plausibleAjax(data, null, false);
-		}
-	});
+			button.children[0].classList.remove('hidden');
+			button.setAttribute('disabled', 'disabled');
 
-	/**
-	 * Quit Wizard button.
-	 */
-	let wizardQuit = document.getElementById('plausible-analytics-wizard-quit');
+			plausible.ajax(form, button);
+		},
 
-	/**
-	 * Quit Wizard
-	 */
-	if (wizardQuit !== null) {
-		wizardQuit.addEventListener('click', (e) => {
+		/**
+		 * Quit wizard.
+		 *
+		 * @param e
+		 */
+		quitWizard: function (e) {
 			const form = new FormData();
 
 			form.append('action', 'plausible_analytics_quit_wizard');
 			form.append('_nonce', e.target.dataset.nonce);
 
-			plausibleAjax(form, null, false, true);
-		});
-	}
+			plausible.ajax(form, null, false, true);
+		},
 
-	/**
-	 * Save Options.
-	 */
-	document.addEventListener('click', (e) => {
-		if (!e.target.classList.contains('plausible-analytics-button')) {
-			return;
-		}
+		/**
+		 * Save Options on Next click for API Token and Domain Name slides.
+		 *
+		 * @param e
+		 */
+		saveOptionsOnNext: function (e) {
+			let hash = document.location.hash.replace('#', '');
 
-		const button = e.target;
-		const section = button.closest('.plausible-analytics-section');
-		const inputs = section.querySelectorAll('input, textarea');
-		const form = new FormData();
-		const options = [];
+			if (hash === 'api_token_slide' || hash === 'domain_name_slide') {
+				let form = e.target.closest('.plausible-analytics-wizard-step-section');
+				let inputs = form.getElementsByTagName('INPUT');
+				let options = [];
 
-		inputs.forEach(function (input) {
-			options.push({name: input.name, value: input.value});
-		});
+				for (let input of inputs) {
+					options.push({name: input.name, value: input.value});
+				}
 
-		form.append('action', 'plausible_analytics_save_options');
-		form.append('options', JSON.stringify(options));
-		form.append('_nonce', document.getElementById('_wpnonce').value);
+				let data = new FormData();
+				data.append('action', 'plausible_analytics_save_options');
+				data.append('_nonce', document.getElementById('_wpnonce').value);
+				data.append('options', JSON.stringify(options));
 
-		button.children[0].classList.remove('hidden');
-		button.setAttribute('disabled', 'disabled');
+				plausible.ajax(data, null, false);
+			}
+		},
 
-		plausibleAjax(form, button);
-	});
+		/**
+		 * Disable Connect button if Domain Name or API Token field is empty.
+		 *
+		 * @param e
+		 */
+		disableConnectButton: function (e) {
+			let target = e.target;
+			let button = document.getElementById('connect_plausible_analytics');
+			let buttonIsHref = false;
 
-	/**
-	 * Toggle Options.
-	 */
-	document.addEventListener('click', (e) => {
-		if (!e.target.classList.contains('plausible-analytics-toggle')) {
-			return;
-		}
+			if (button === null) {
+				let slide_id = document.location.hash;
+				button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
+				buttonIsHref = true;
+			}
 
-		const button = e.target.closest('button');
-		let toggle = '';
-		let toggleStatus = '';
+			if (button === null) {
+				return;
+			}
 
-		// The button element is clicked.
-		if (e.target.type === 'submit') {
-			toggle = button.querySelector('span');
-		} else {
-			// The span element is clicked.
-			toggle = e.target.closest('span');
-		}
+			if (target.value !== '') {
+				if (!buttonIsHref) {
+					button.disabled = false;
+				} else {
+					button.classList.remove('pointer-events-none');
+					button.classList.replace('bg-gray-200', 'bg-indigo-600')
+				}
 
-		if (button.classList.contains('bg-indigo-600')) {
-			// Toggle: off
-			button.classList.replace('bg-indigo-600', 'bg-gray-200');
-			toggle.classList.replace('translate-x-5', 'translate-x-0');
-			toggleStatus = '';
-		} else {
-			// Toggle: on
-			button.classList.replace('bg-gray-200', 'bg-indigo-600');
-			toggle.classList.replace('translate-x-0', 'translate-x-5');
-			toggleStatus = 'on';
-		}
+				return;
+			}
 
-		const form = new FormData();
-		form.append('action', 'plausible_analytics_toggle_option');
-		form.append('option_name', button.name);
-		form.append('option_value', button.value);
-		form.append('option_label', button.nextElementSibling.innerHTML);
-		form.append('toggle_status', toggleStatus);
-		form.append('is_list', button.dataset.list);
-		form.append('_nonce', document.getElementById('_wpnonce').value);
-
-		let reload = false;
-		let showNotice = true;
-
-		if (button.name === 'proxy_enabled' || button.name === 'enable_analytics_dashboard') {
-			reload = true;
-			showNotice = false;
-		}
-
-		plausibleAjax(form, null, showNotice, reload);
-	});
-})
-;
-
-/**
- * Do AJAX request and (optionally) show a notice.
- *
- * @param data
- * @param button
- * @param showNotice
- * @param reload
- */
-function plausibleAjax(data, button = null, showNotice = true, reload = false) {
-	fetch(
-		ajaxurl,
-		{
-			method: 'POST',
-			body: data,
-		}
-	).then(response => {
-		if (button) {
-			button.children[0].classList += ' hidden';
-			button.removeAttribute('disabled');
-		}
-
-		if (response.status === 200) {
-			return response.json();
-		}
-
-		return false;
-	}).then(response => {
-		if (showNotice === true) {
-			if (response.success === true) {
-				plausibleShowNotice(response.data);
+			if (!buttonIsHref) {
+				button.disabled = true;
 			} else {
-				plausibleShowNotice(response.data, true);
+				button.classList += ' pointer-events-none';
+				button.classList.replace('bg-indigo-600', 'bg-gray-200')
+			}
+		},
+
+		/**
+		 * Open create API token dialog.
+		 *
+		 * @param e
+		 */
+		createAPIToken: function (e) {
+			e.preventDefault();
+
+			let domain = document.getElementById('domain_name').value;
+
+			window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
+		},
+
+		/**
+		 * Show wizard.
+		 *
+		 * @param e
+		 */
+		showWizard: function (e) {
+			let data = new FormData();
+			data.append('action', 'plausible_analytics_show_wizard');
+			data.append('_nonce', e.target.dataset.nonce);
+
+			plausible.ajax(data, null, false, true);
+		},
+
+		/**
+		 * Toggles the active/inactive/current state of the steps.
+		 */
+		toggleWizardStep: function () {
+			if (document.getElementById('plausible-analytics-wizard') === null) {
+				return;
+			}
+
+			const hash = document.location.hash.substring(1).replace('_slide', '');
+
+			/**
+			 * Reset all steps to inactive.
+			 */
+			let allSteps = document.querySelectorAll('.plausible-analytics-wizard-step');
+			let activeSteps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
+			let completedSteps = document.querySelectorAll('.plausible-analytics-wizard-completed-step');
+
+			for (let i = 0; i < allSteps.length; i++) {
+				allSteps[i].classList.remove('hidden');
+			}
+
+			for (let i = 0; i < activeSteps.length; i++) {
+				activeSteps[i].classList += ' hidden';
+			}
+
+			for (let i = 0; i < completedSteps.length; i++) {
+				completedSteps[i].classList += ' hidden';
+			}
+
+			/**
+			 * Mark current step as active.
+			 */
+			let currentStep = document.getElementById('active-step-' + hash);
+			let inactiveCurrentStep = document.getElementById('step-' + hash);
+
+			currentStep.classList.remove('hidden');
+			inactiveCurrentStep.classList += ' hidden';
+
+			/**
+			 * Mark steps as completed.
+			 *
+			 * @type {string[]}
+			 */
+			let currentlyCompletedSteps = currentStep.dataset.completedSteps.split(',');
+
+			/**
+			 * Filter empty array elements.
+			 * @type {string[]}
+			 */
+			currentlyCompletedSteps = currentlyCompletedSteps.filter(n => n);
+
+			if (currentlyCompletedSteps.length < 1) {
+				return;
+			}
+
+			currentlyCompletedSteps.forEach(function (step) {
+				let completedStep = document.getElementById('completed-step-' + step);
+				let inactiveStep = document.getElementById('step-' + step);
+
+				completedStep.classList.remove('hidden');
+				inactiveStep.classList += ' hidden';
+			});
+		},
+
+		/**
+		 * Do AJAX request and (optionally) show a notice or (optionally) reload the page.
+		 *
+		 * @param data
+		 * @param button
+		 * @param showNotice
+		 * @param reload
+		 */
+		ajax: function (data, button = null, showNotice = true, reload = false) {
+			fetch(
+				ajaxurl,
+				{
+					method: 'POST',
+					body: data,
+				}
+			).then(response => {
+				if (button) {
+					button.children[0].classList += ' hidden';
+					button.removeAttribute('disabled');
+				}
+
+				if (response.status === 200) {
+					return response.json();
+				}
+
+				return false;
+			}).then(response => {
+				if (showNotice === true) {
+					if (response.success === true) {
+						plausible.notice(response.data);
+					} else {
+						plausible.notice(response.data, true);
+					}
+				}
+
+				let event = new CustomEvent('plausibleAjaxDone', {detail: response});
+
+				document.dispatchEvent(event);
+
+				if (reload === true) {
+					window.location.reload();
+				}
+
+				return response.success;
+			});
+		},
+
+		/**
+		 * Displays a notice or error message.
+		 *
+		 * @param message
+		 * @param isError
+		 */
+		notice: function (message, isError = false) {
+			if (isError === true) {
+				document.getElementById('icon-error').classList.remove('hidden');
+				document.getElementById('icon-success').classList += ' hidden';
+			} else {
+				document.getElementById('icon-success').classList.remove('hidden');
+				document.getElementById('icon-error').classList += ' hidden';
+			}
+
+			let notice = document.getElementById('plausible-analytics-notice');
+
+			document.getElementById('plausible-analytics-notice-text').innerHTML = message;
+
+			notice.classList.remove('hidden');
+
+			setTimeout(function () {
+				notice.classList.replace('opacity-0', 'opacity-100');
+			}, 200)
+
+			if (isError === false) {
+				setTimeout(function () {
+					notice.classList.replace('opacity-100', 'opacity-0');
+					setTimeout(function () {
+						notice.classList += ' hidden';
+					}, 200)
+				}, 2000);
 			}
 		}
-
-		let event = new CustomEvent('plausibleAjaxDone', {detail: response});
-
-		document.dispatchEvent(event);
-
-		if (reload === true) {
-			window.location.reload();
-		}
-
-		return response.success;
-	});
-}
-
-/**
- * Open Create API Token dialog.
- */
-function plausibleCreateAPIToken(e) {
-	e.preventDefault();
-
-	let domain = document.getElementById('domain_name').value;
-
-	window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
-}
-
-/**
- * Show notice.
- *
- * @param message
- * @param isError
- */
-function plausibleShowNotice(message, isError = false) {
-	if (isError === true) {
-		document.getElementById('icon-error').classList.remove('hidden');
-		document.getElementById('icon-success').classList += ' hidden';
-	} else {
-		document.getElementById('icon-success').classList.remove('hidden');
-		document.getElementById('icon-error').classList += ' hidden';
 	}
 
-	let notice = document.getElementById('plausible-analytics-notice');
-
-	document.getElementById('plausible-analytics-notice-text').innerHTML = message;
-
-	notice.classList.remove('hidden');
-
-	setTimeout(function () {
-		notice.classList.replace('opacity-0', 'opacity-100');
-	}, 200)
-
-	if (isError === false) {
-		setTimeout(function () {
-			notice.classList.replace('opacity-100', 'opacity-0');
-			setTimeout(function () {
-				notice.classList += ' hidden';
-			}, 200)
-		}, 2000);
-	}
-}
-
-/**
- * Toggles the font-weight of the wizard's steps.
- */
-function plausibleToggleWizardStep() {
-	if (document.getElementById('plausible-analytics-wizard') === null) {
-		return;
-	}
-
-	const hash = document.location.hash.substring(1).replace('_slide', '');
-
-	/**
-	 * Reset all steps to inactive.
-	 */
-	let allSteps = document.querySelectorAll('.plausible-analytics-wizard-step');
-	let activeSteps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
-	let completedSteps = document.querySelectorAll('.plausible-analytics-wizard-completed-step');
-
-	for (let i = 0; i < allSteps.length; i++) {
-		allSteps[i].classList.remove('hidden');
-	}
-
-	for (let i = 0; i < activeSteps.length; i++) {
-		activeSteps[i].classList += ' hidden';
-	}
-
-	for (let i = 0; i < completedSteps.length; i++) {
-		completedSteps[i].classList += ' hidden';
-	}
-
-	/**
-	 * Mark current step as active.
-	 */
-	let currentStep = document.getElementById('active-step-' + hash);
-	let inactiveCurrentStep = document.getElementById('step-' + hash);
-
-	currentStep.classList.remove('hidden');
-	inactiveCurrentStep.classList += ' hidden';
-
-	/**
-	 * Mark steps as completed.
-	 *
-	 * @type {string[]}
-	 */
-	let currentlyCompletedSteps = currentStep.dataset.completedSteps.split(',');
-
-	/**
-	 * Filter empty array elements.
-	 * @type {string[]}
-	 */
-	currentlyCompletedSteps = currentlyCompletedSteps.filter(n => n);
-
-	if (currentlyCompletedSteps.length < 1) {
-		return;
-	}
-
-	currentlyCompletedSteps.forEach(function (step) {
-		let completedStep = document.getElementById('completed-step-' + step);
-		let inactiveStep = document.getElementById('step-' + step);
-
-		completedStep.classList.remove('hidden');
-		inactiveStep.classList += ' hidden';
-	});
-}
+	plausible.init();
+});
