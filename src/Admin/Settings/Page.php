@@ -116,7 +116,7 @@ class Page extends API {
 							'value' => 'revenue',
 						],
 						'pageview-props' => [
-							'label' => esc_html__( 'Pageview properties', 'plausible-analytics' ),
+							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
