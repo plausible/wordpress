@@ -10,23 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let plausible = {
 		/**
-		 * Elements
+		 * Properties
 		 */
 		showWizardElem: document.getElementById('show_wizard'),
 		createAPITokenElem: document.getElementById('plausible-create-api-token'),
 		domainNameElem: document.getElementById('domain_name'),
 		apiTokenElem: document.getElementById('api_token'),
-		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
-		wizardQuitElem: document.getElementById('plausible-analytics-wizard-quit'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		toggleElems: document.getElementsByClassName('plausible-analytics-toggle'),
+		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
+		quitWizardElems: document.getElementsByClassName('plausible-analytics-wizard-quit'),
 
 		/**
 		 * Bind events.
 		 */
 		init: function () {
 			if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
-				document.location.hash = 'welcome_slide';
+				document.location.hash = '#welcome_slide';
 			}
 
 			this.toggleWizardStep();
@@ -49,16 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				this.apiTokenElem.addEventListener('change', this.disableConnectButton);
 			}
 
-			if (this.stepElems.length > 0) {
-				for (let i = 0; i < this.stepElems.length; i++) {
-					this.stepElems[i].addEventListener('click', this.saveOptionsOnNext);
-				}
-			}
-
-			if (this.wizardQuitElem !== null) {
-				this.wizardQuitElem.addEventListener('click', this.quitWizard);
-			}
-
 			if (this.buttonElems.length > 0) {
 				for (let i = 0; i < this.buttonElems.length; i++) {
 					this.buttonElems[i].addEventListener('click', this.saveOption);
@@ -68,6 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (this.toggleElems.length > 0) {
 				for (let i = 0; i < this.toggleElems.length; i++) {
 					this.toggleElems[i].addEventListener('click', this.toggleOption);
+				}
+			}
+
+			if (this.stepElems.length > 0) {
+				for (let i = 0; i < this.stepElems.length; i++) {
+					this.stepElems[i].addEventListener('click', this.saveOptionOnNext);
+				}
+			}
+
+			if (this.quitWizardElems.length > 0) {
+				for (let i = 0; i < this.quitWizardElems.length; i++) {
+					this.quitWizardElems[i].addEventListener('click', this.quitWizard);
 				}
 			}
 		},
@@ -167,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 *
 		 * @param e
 		 */
-		saveOptionsOnNext: function (e) {
+		saveOptionOnNext: function (e) {
 			let hash = document.location.hash.replace('#', '');
 
 			if (hash === 'api_token_slide' || hash === 'domain_name_slide') {

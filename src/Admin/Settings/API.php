@@ -202,15 +202,13 @@ class API {
 												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
-												<a id="plausible-analytics-wizard-quit"
-												   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-												   class="inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
+												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+												   class="plausible-analytics-wizard-quit inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
 													<?php esc_html_e( 'Setup later', 'plausible-analytics' ); ?>
 												</a>
 											<?php else: ?>
-												<a id="plausible-analytics-wizard-quit"
-												   data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-												   class="no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
+												   class="plausible-analytics-wizard-quit no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 													<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
 												</a>
 											<?php endif; ?>
