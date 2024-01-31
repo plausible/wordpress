@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		/**
 		 * Properties
 		 */
+		nonceElem: document.getElementById('_wpnonce'),
+		nonce: '',
 		showWizardElem: document.getElementById('show_wizard'),
 		createAPITokenElem: document.getElementById('plausible-create-api-token'),
 		domainNameElem: document.getElementById('domain_name'),
@@ -19,8 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
 		quitWizardElems: document.getElementsByClassName('plausible-analytics-wizard-quit'),
-		nonceElem: document.getElementById('_wpnonce'),
-		nonce: '',
 
 		/**
 		 * Bind events.
