@@ -83,9 +83,12 @@ class API {
 			),
 			'success'                    => sprintf(
 				__(
-					'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out your intuitive, fast-loading and privacy-friendly dashboard.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them here.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+					'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them <a class="plausible-analytics-wizard-quit" data-nonce="%s" href="%s">here</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
 					'plausible-analytics'
 				),
+				'https://plausible.io',
+				wp_create_nonce( 'plausible_analytics_quit_wizard' ),
+				admin_url( 'options-general.php?page=plausible_analytics#tracked_user_roles' ),
 				'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
 				'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
 			),
@@ -475,7 +478,8 @@ class API {
 		<div class="<?php echo $hide_header ? '' : 'plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?> bg-white dark:bg-gray-800">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
-					<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" for=""><?php echo $group[ 'label' ]; ?></label>
+					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100"
+						id="<?php echo $group[ 'slug' ]; ?>"><?php echo $group[ 'label' ]; ?></h3>
 					<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 						<?php echo wp_kses_post( $group[ 'desc' ] ); ?>
 					</div>
