@@ -47,11 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			if (this.domainNameElem !== null) {
-				this.domainNameElem.addEventListener('change', this.disableConnectButton);
+				this.domainNameElem.addEventListener('keyup', this.disableConnectButton);
 			}
 
 			if (this.apiTokenElem !== null) {
-				this.apiTokenElem.addEventListener('change', this.disableConnectButton);
+				this.apiTokenElem.addEventListener('keyup', this.disableConnectButton);
 			}
 
 			if (this.buttonElems.length > 0) {
