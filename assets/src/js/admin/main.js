@@ -21,22 +21,62 @@ document.addEventListener('DOMContentLoaded', () => {
 		plausibleToggleWizardStep();
 	});
 
-	document.addEventListener('click', (e) => {
-		if (e.target.id !== 'plausible-create-api-token') {
-			return;
-		}
+	/**
+	 * Show wizard link.
+	 */
+	let showWizard = document.getElementById('show_wizard');
 
-		plausibleCreateAPIToken(e);
-	});
+	/**
+	 * Show Wizard click event.
+	 */
+	if (showWizard !== null) {
+		showWizard.addEventListener('click', (e) => {
+			let data = new FormData();
+			data.append('action', 'plausible_analytics_show_wizard');
+			data.append('_nonce', e.target.dataset.nonce);
+
+			plausibleAjax(data, null, false, true);
+		});
+	}
+
+	/**
+	 * Create API token link.
+	 */
+	let createAPIToken = document.getElementById('plausible-create-api-token');
+
+	/**
+	 * Create API token click event.
+	 */
+	if (createAPIToken !== null) {
+		createAPIToken.addEventListener('click', (e) => {
+			plausibleCreateAPIToken(e);
+		});
+	}
+
+	/**
+	 * Domain and API Token fields.
+	 */
+	let domainName = document.getElementById('domain_name');
+	let apiToken = document.getElementById('api_token');
+
+	/**
+	 * Domain Name change event.
+	 */
+	if (domainName !== null) {
+		domainName.addEventListener('change', disableConnectButton);
+	}
+
+	/**
+	 * Api Token change event.
+	 */
+	if (apiToken !== null) {
+		apiToken.addEventListener('change', disableConnectButton);
+	}
 
 	/**
 	 * Disable Connect button if required fields aren't entered.
 	 */
-	document.addEventListener('change', (e) => {
-		if (e.target.id !== 'domain_name' && e.target.id !== 'api_token') {
-			return;
-		}
-
+	function disableConnectButton(e) {
 		let target = e.target;
 		let button = document.getElementById('connect_plausible_analytics');
 		let buttonIsHref = false;
@@ -68,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			button.classList += ' pointer-events-none';
 			button.classList.replace('bg-indigo-600', 'bg-gray-200')
 		}
-	});
+	}
 
 	/**
 	 * Save Options on Next click.
@@ -99,28 +139,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	/**
+	 * Quit Wizard button.
+	 */
+	let wizardQuit = document.getElementById('plausible-analytics-wizard-quit');
+
+	/**
 	 * Quit Wizard
 	 */
-	document.addEventListener('click', (e) => {
-		if (e.target.id !== 'plausible-analytics-wizard-quit') {
-			return;
-		}
+	if (wizardQuit !== null) {
+		wizardQuit.addEventListener('click', (e) => {
+			const form = new FormData();
 
-		const form = new FormData();
+			form.append('action', 'plausible_analytics_quit_wizard');
+			form.append('_nonce', e.target.dataset.nonce);
 
-		form.append('action', 'plausible_analytics_quit_wizard');
-		form.append('_nonce', e.target.dataset.nonce);
-
-		fetch(
-			ajaxurl,
-			{
-				method: 'POST',
-				body: form,
-			}
-		).then(response => {
-			window.location.reload();
+			plausibleAjax(form, null, false, true);
 		});
-	});
+	}
 
 	/**
 	 * Save Options.
@@ -201,7 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		plausibleAjax(form, null, showNotice, reload);
 	});
-});
+})
+;
 
 /**
  * Do AJAX request and (optionally) show a notice.

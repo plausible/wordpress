@@ -33,6 +33,7 @@ class Ajax {
 	 */
 	private function init() {
 		add_action( 'wp_ajax_plausible_analytics_quit_wizard', [ $this, 'quit_wizard' ] );
+		add_action( 'wp_ajax_plausible_analytics_show_wizard', [ $this, 'show_wizard' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
 	}
@@ -44,9 +45,7 @@ class Ajax {
 	public function quit_wizard() {
 		$post_data = $this->clean( $_POST );
 
-		if ( $post_data[ 'action' ] !== 'plausible_analytics_quit_wizard' ||
-			! current_user_can( 'manage_options' ) ||
-			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_quit_wizard' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_quit_wizard' ) < 1 ) {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
@@ -87,6 +86,20 @@ class Ajax {
 	}
 
 	/**
+	 * Removes the plausible_analytics_wizard_done row from the wp_options table, effectively displaying the wizard on next page load.
+	 * @return void
+	 */
+	public function show_wizard() {
+		$post_data = $this->clean( $_POST );
+
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_show_wizard' ) < 1 ) {
+			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
+		}
+
+		delete_option( 'plausible_analytics_wizard_done' );
+	}
+
+	/**
 	 * Save Admin Settings
 	 * @since 1.0.0
 	 * @return void
@@ -96,9 +109,7 @@ class Ajax {
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
-		if ( $post_data[ 'action' ] !== 'plausible_analytics_toggle_option' ||
-			! current_user_can( 'manage_options' ) ||
-			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
@@ -147,9 +158,7 @@ class Ajax {
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
-		if ( $post_data[ 'action' ] !== 'plausible_analytics_save_options' ||
-			! current_user_can( 'manage_options' ) ||
-			wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
 			return;
 		}
 

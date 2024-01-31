@@ -378,7 +378,7 @@ class API {
 			'plausible_analytics_settings_navigation_tabs',
 			[
 				'general'     => [
-					'name'  => esc_html__( 'General', 'plausible-analytics' ),
+					'name'  => esc_html__( 'Settings', 'plausible-analytics' ),
 					'url'   => admin_url( 'options-general.php?page=plausible_analytics' ),
 					'class' => '' === $current_tab ? 'font-bold' : '',
 				],
@@ -412,19 +412,15 @@ class API {
 		ob_start();
 		$quick_actions = $this->get_quick_actions();
 		?>
-		<?php
-		if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) {
-			foreach ( $quick_actions as $quick_action ) {
-				?>
-				<a class="no-underline text-sm leading-6 text-gray-900"
-				   target="_blank" href="<?php echo $quick_action[ 'url' ]; ?>"
-				   title="<?php echo $quick_action[ 'label' ]; ?>">
+		<?php if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) : ?>
+			<?php foreach ( $quick_actions as $quick_action ) : ?>
+				<a id="<?php echo $quick_action[ 'id' ]; ?>" class="no-underline text-sm leading-6 text-gray-900"
+				   target="<?php echo $quick_action[ 'target' ]; ?>" href="<?php echo $quick_action[ 'url' ]; ?>"
+				   title="<?php echo $quick_action[ 'label' ]; ?>" data-nonce="<?php echo $quick_action[ 'nonce' ]; ?>">
 					<?php echo $quick_action[ 'label' ]; ?>
 				</a>
-				<?php
-			}
-		}
-		?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 		<?php
 		return ob_get_clean();
 	}
@@ -436,13 +432,26 @@ class API {
 	 */
 	private function get_quick_actions() {
 		return [
-			'view-docs'    => [
-				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://plausible.io/docs' ),
+			'getting-started' => [
+				'label'  => esc_html__( 'Getting Started Guide', 'plausible-analytics' ),
+				'url'    => '#',
+				'id'     => 'show_wizard',
+				'target' => '_self',
+				'nonce'  => wp_create_nonce( 'plausible_analytics_show_wizard' ),
 			],
-			'report-issue' => [
-				'label' => esc_html__( 'Contact Support', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://plausible.io/contact' ),
+			'view-docs'       => [
+				'label'  => esc_html__( 'Documentation', 'plausible-analytics' ),
+				'url'    => esc_url( 'https://plausible.io/docs' ),
+				'id'     => '',
+				'target' => '_blank',
+				'nonce'  => '',
+			],
+			'report-issue'    => [
+				'label'  => esc_html__( 'Contact Support', 'plausible-analytics' ),
+				'url'    => esc_url( 'https://plausible.io/contact' ),
+				'id'     => '',
+				'target' => '_blank',
+				'nonce'  => '',
 			],
 		];
 	}
