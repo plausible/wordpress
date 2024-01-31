@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalCreateRequestPageviewGoal
+ * GoalDeleteBulkRequest
  *
  * PHP version 7.4
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
- * GoalCreateRequestPageviewGoal Class Doc Comment
+ * GoalDeleteBulkRequest Class Doc Comment
  *
  * @category Class
+ * @description Goal deletion params
  * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \JsonSerializable
+class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal_CreateRequest_Pageview_goal';
+    protected static $openAPIModelName = 'Goal.DeleteBulkRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,7 +58,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'path' => 'string'
+        'goal_ids' => 'int[]'
     ];
 
     /**
@@ -68,7 +69,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'path' => null
+        'goal_ids' => null
     ];
 
     /**
@@ -77,7 +78,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'path' => false
+        'goal_ids' => false
     ];
 
     /**
@@ -166,7 +167,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $attributeMap = [
-        'path' => 'path'
+        'goal_ids' => 'goal_ids'
     ];
 
     /**
@@ -175,7 +176,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $setters = [
-        'path' => 'setPath'
+        'goal_ids' => 'setGoalIds'
     ];
 
     /**
@@ -184,7 +185,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $getters = [
-        'path' => 'getPath'
+        'goal_ids' => 'getGoalIds'
     ];
 
     /**
@@ -244,7 +245,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('path', $data ?? [], null);
+        $this->setIfExists('goal_ids', $data ?? [], null);
     }
 
     /**
@@ -274,9 +275,17 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['path'] === null) {
-            $invalidProperties[] = "'path' can't be null";
+        if ($this->container['goal_ids'] === null) {
+            $invalidProperties[] = "'goal_ids' can't be null";
         }
+        if ((count($this->container['goal_ids']) > 8)) {
+            $invalidProperties[] = "invalid value for 'goal_ids', number of items must be less than or equal to 8.";
+        }
+
+        if ((count($this->container['goal_ids']) < 1)) {
+            $invalidProperties[] = "invalid value for 'goal_ids', number of items must be greater than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -293,28 +302,35 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 
 
     /**
-     * Gets path
+     * Gets goal_ids
      *
-     * @return string
+     * @return int[]
      */
-    public function getPath()
+    public function getGoalIds()
     {
-        return $this->container['path'];
+        return $this->container['goal_ids'];
     }
 
     /**
-     * Sets path
+     * Sets goal_ids
      *
-     * @param string $path path
+     * @param int[] $goal_ids goal_ids
      *
      * @return self
      */
-    public function setPath($path)
+    public function setGoalIds($goal_ids)
     {
-        if (is_null($path)) {
-            throw new \InvalidArgumentException('non-nullable path cannot be null');
+        if (is_null($goal_ids)) {
+            throw new \InvalidArgumentException('non-nullable goal_ids cannot be null');
         }
-        $this->container['path'] = $path;
+
+        if ((count($goal_ids) > 8)) {
+            throw new \InvalidArgumentException('invalid value for $goal_ids when calling GoalDeleteBulkRequest., number of items must be less than or equal to 8.');
+        }
+        if ((count($goal_ids) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $goal_ids when calling GoalDeleteBulkRequest., number of items must be greater than or equal to 1.');
+        }
+        $this->container['goal_ids'] = $goal_ids;
 
         return $this;
     }

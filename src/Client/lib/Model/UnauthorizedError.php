@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * UnauthorizedError Class Doc Comment
  *
  * @category Class
  * @description The response that is returned when the user makes an unauthorized request.
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,7 +58,7 @@ class UnauthorizedError implements ModelInterface, ArrayAccess, \JsonSerializabl
       * @var string[]
       */
     protected static $openAPITypes = [
-        'errors' => '\Plausible\Analytics\WP\Client\Model\Error[]'
+        'errors' => '\PlausibleAnalyticsWPClient\Model\Error[]'
     ];
 
     /**
@@ -296,7 +296,7 @@ class UnauthorizedError implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets errors
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Error[]
+     * @return \PlausibleAnalyticsWPClient\Model\Error[]
      */
     public function getErrors()
     {
@@ -306,7 +306,7 @@ class UnauthorizedError implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets errors
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Error[] $errors errors
+     * @param \PlausibleAnalyticsWPClient\Model\Error[] $errors errors
      *
      * @return self
      */

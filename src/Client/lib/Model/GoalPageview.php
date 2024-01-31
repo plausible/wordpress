@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * GoalPageview Class Doc Comment
  *
  * @category Class
  * @description Pageview Goal object
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -59,7 +59,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'goal_type' => 'string',
-        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal'
+        'goal' => '\PlausibleAnalyticsWPClient\Model\GoalPageviewAllOfGoal'
     ];
 
     /**
@@ -333,7 +333,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets goal
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal
+     * @return \PlausibleAnalyticsWPClient\Model\GoalPageviewAllOfGoal
      */
     public function getGoal()
     {
@@ -343,7 +343,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets goal
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal $goal goal
+     * @param \PlausibleAnalyticsWPClient\Model\GoalPageviewAllOfGoal $goal goal
      *
      * @return self
      */

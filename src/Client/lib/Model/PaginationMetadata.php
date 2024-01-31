@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * PaginationMetadata Class Doc Comment
  *
  * @category Class
  * @description Pagination meta data
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -60,7 +60,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPITypes = [
         'has_next_page' => 'bool',
         'has_prev_page' => 'bool',
-        'links' => '\Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks'
+        'links' => '\PlausibleAnalyticsWPClient\Model\PaginationMetadataLinks'
     ];
 
     /**
@@ -367,7 +367,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets links
      *
-     * @return \Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks|null
+     * @return \PlausibleAnalyticsWPClient\Model\PaginationMetadataLinks|null
      */
     public function getLinks()
     {
@@ -377,7 +377,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets links
      *
-     * @param \Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks|null $links links
+     * @param \PlausibleAnalyticsWPClient\Model\PaginationMetadataLinks|null $links links
      *
      * @return self
      */

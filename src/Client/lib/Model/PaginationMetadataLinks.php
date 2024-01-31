@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,16 +26,16 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * PaginationMetadataLinks Class Doc Comment
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -57,8 +57,8 @@ class PaginationMetadataLinks implements ModelInterface, ArrayAccess, \JsonSeria
       * @var string[]
       */
     protected static $openAPITypes = [
-        'next' => '\Plausible\Analytics\WP\Client\Model\Link',
-        'prev' => '\Plausible\Analytics\WP\Client\Model\Link'
+        'next' => '\PlausibleAnalyticsWPClient\Model\Link',
+        'prev' => '\PlausibleAnalyticsWPClient\Model\Link'
     ];
 
     /**
@@ -299,7 +299,7 @@ class PaginationMetadataLinks implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets next
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Link|null
+     * @return \PlausibleAnalyticsWPClient\Model\Link|null
      */
     public function getNext()
     {
@@ -309,7 +309,7 @@ class PaginationMetadataLinks implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets next
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Link|null $next next
+     * @param \PlausibleAnalyticsWPClient\Model\Link|null $next next
      *
      * @return self
      */
@@ -326,7 +326,7 @@ class PaginationMetadataLinks implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Gets prev
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Link|null
+     * @return \PlausibleAnalyticsWPClient\Model\Link|null
      */
     public function getPrev()
     {
@@ -336,7 +336,7 @@ class PaginationMetadataLinks implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets prev
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Link|null $prev prev
+     * @param \PlausibleAnalyticsWPClient\Model\Link|null $prev prev
      *
      * @return self
      */

@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * GoalCreateRequest Class Doc Comment
  *
  * @category Class
  * @description Goal creation params
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,8 +58,8 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goals' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
-        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal',
+        'goals' => '\PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
+        'goal' => '\PlausibleAnalyticsWPClient\Model\GoalCreateRequestPageviewGoal',
         'goal_type' => 'string'
     ];
 
@@ -346,7 +346,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets goals
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
+     * @return \PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
      */
     public function getGoals()
     {
@@ -356,7 +356,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets goals
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[] $goals goals
+     * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[] $goals goals
      *
      * @return self
      */
@@ -380,7 +380,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Gets goal
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal
+     * @return \PlausibleAnalyticsWPClient\Model\GoalCreateRequestPageviewGoal
      */
     public function getGoal()
     {
@@ -390,7 +390,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     /**
      * Sets goal
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal $goal goal
+     * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequestPageviewGoal $goal goal
      *
      * @return self
      */

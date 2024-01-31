@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalCreateRequestPageviewGoal
+ * CustomProp
  *
  * PHP version 7.4
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
- * GoalCreateRequestPageviewGoal Class Doc Comment
+ * CustomProp Class Doc Comment
  *
  * @category Class
+ * @description Custom Property object
  * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \JsonSerializable
+class CustomProp implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal_CreateRequest_Pageview_goal';
+    protected static $openAPIModelName = 'CustomProp';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,7 +58,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'path' => 'string'
+        'custom_prop' => '\PlausibleAnalyticsWPClient\Model\CustomPropCustomProp'
     ];
 
     /**
@@ -68,7 +69,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'path' => null
+        'custom_prop' => null
     ];
 
     /**
@@ -77,7 +78,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'path' => false
+        'custom_prop' => false
     ];
 
     /**
@@ -166,7 +167,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $attributeMap = [
-        'path' => 'path'
+        'custom_prop' => 'custom_prop'
     ];
 
     /**
@@ -175,7 +176,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $setters = [
-        'path' => 'setPath'
+        'custom_prop' => 'setCustomProp'
     ];
 
     /**
@@ -184,7 +185,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $getters = [
-        'path' => 'getPath'
+        'custom_prop' => 'getCustomProp'
     ];
 
     /**
@@ -244,7 +245,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('path', $data ?? [], null);
+        $this->setIfExists('custom_prop', $data ?? [], null);
     }
 
     /**
@@ -274,8 +275,8 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['path'] === null) {
-            $invalidProperties[] = "'path' can't be null";
+        if ($this->container['custom_prop'] === null) {
+            $invalidProperties[] = "'custom_prop' can't be null";
         }
         return $invalidProperties;
     }
@@ -293,28 +294,28 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 
 
     /**
-     * Gets path
+     * Gets custom_prop
      *
-     * @return string
+     * @return \PlausibleAnalyticsWPClient\Model\CustomPropCustomProp
      */
-    public function getPath()
+    public function getCustomProp()
     {
-        return $this->container['path'];
+        return $this->container['custom_prop'];
     }
 
     /**
-     * Sets path
+     * Sets custom_prop
      *
-     * @param string $path path
+     * @param \PlausibleAnalyticsWPClient\Model\CustomPropCustomProp $custom_prop custom_prop
      *
      * @return self
      */
-    public function setPath($path)
+    public function setCustomProp($custom_prop)
     {
-        if (is_null($path)) {
-            throw new \InvalidArgumentException('non-nullable path cannot be null');
+        if (is_null($custom_prop)) {
+            throw new \InvalidArgumentException('non-nullable custom_prop cannot be null');
         }
-        $this->container['path'] = $path;
+        $this->container['custom_prop'] = $custom_prop;
 
         return $this;
     }

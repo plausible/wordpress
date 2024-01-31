@@ -50,24 +50,23 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure HTTP basic authorization: basic_auth
-$config = Plausible\Analytics\WP\Client\Configuration::getDefaultConfiguration()
+$config = PlausibleAnalyticsWPClient\Configuration::getDefaultConfiguration()
               ->setUsername('YOUR_USERNAME')
               ->setPassword('YOUR_PASSWORD');
 
 
-$apiInstance = new Plausible\Analytics\WP\Client\Api\DefaultApi(
+$apiInstance = new PlausibleAnalyticsWPClient\Api\DefaultApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$goal_create_request = new \Plausible\Analytics\WP\Client\Model\GoalCreateRequest(); // \Plausible\Analytics\WP\Client\Model\GoalCreateRequest | Goal params
+$custom_prop_disable_request = new \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest(); // \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest | CustomProp disable params
 
 try {
-    $result = $apiInstance->plausibleWebPluginsAPIControllersGoalsCreate($goal_create_request);
-    print_r($result);
+    $apiInstance->plausibleWebPluginsAPIControllersCustomPropsDisable($custom_prop_disable_request);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->plausibleWebPluginsAPIControllersGoalsCreate: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->plausibleWebPluginsAPIControllersCustomPropsDisable: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -78,8 +77,11 @@ All URIs are relative to *https://plausible.io/api/plugins*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsDisable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsdisable) | **DELETE** /v1/custom_props | Disable CustomProp(s)
+*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsEnable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsenable) | **PUT** /v1/custom_props | Get or enable CustomProp(s)
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalscreate) | **PUT** /v1/goals | Get or create Goal
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDelete**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdelete) | **DELETE** /v1/goals/{id} | Delete Goal by ID
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDeleteBulk**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdeletebulk) | **DELETE** /v1/goals | Delete Goals in bulk
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsget) | **GET** /v1/goals/{id} | Retrieve Goal by ID
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsindex) | **GET** /v1/goals | Retrieve Goals
 *DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinkscreate) | **PUT** /v1/shared_links | Get or create Shared Link
@@ -88,6 +90,13 @@ Class | Method | HTTP request | Description
 
 ## Models
 
+- [CustomProp](docs/Model/CustomProp.md)
+- [CustomPropCustomProp](docs/Model/CustomPropCustomProp.md)
+- [CustomPropDisableRequest](docs/Model/CustomPropDisableRequest.md)
+- [CustomPropDisableRequestBulkDisable](docs/Model/CustomPropDisableRequestBulkDisable.md)
+- [CustomPropEnableRequest](docs/Model/CustomPropEnableRequest.md)
+- [CustomPropEnableRequestBulkEnable](docs/Model/CustomPropEnableRequestBulkEnable.md)
+- [CustomPropListResponse](docs/Model/CustomPropListResponse.md)
 - [Error](docs/Model/Error.md)
 - [Goal](docs/Model/Goal.md)
 - [GoalCreateRequest](docs/Model/GoalCreateRequest.md)
@@ -101,6 +110,7 @@ Class | Method | HTTP request | Description
 - [GoalCreateRequestRevenueGoal](docs/Model/GoalCreateRequestRevenueGoal.md)
 - [GoalCustomEvent](docs/Model/GoalCustomEvent.md)
 - [GoalCustomEventAllOfGoal](docs/Model/GoalCustomEventAllOfGoal.md)
+- [GoalDeleteBulkRequest](docs/Model/GoalDeleteBulkRequest.md)
 - [GoalListResponse](docs/Model/GoalListResponse.md)
 - [GoalListResponseMeta](docs/Model/GoalListResponseMeta.md)
 - [GoalPageview](docs/Model/GoalPageview.md)
@@ -113,7 +123,6 @@ Class | Method | HTTP request | Description
 - [PaginationMetadata](docs/Model/PaginationMetadata.md)
 - [PaginationMetadataLinks](docs/Model/PaginationMetadataLinks.md)
 - [PaymentRequiredError](docs/Model/PaymentRequiredError.md)
-- [PlausibleWebPluginsAPIControllersGoalsCreate201Response](docs/Model/PlausibleWebPluginsAPIControllersGoalsCreate201Response.md)
 - [SharedLink](docs/Model/SharedLink.md)
 - [SharedLinkCreateRequest](docs/Model/SharedLinkCreateRequest.md)
 - [SharedLinkCreateRequestSharedLink](docs/Model/SharedLinkCreateRequestSharedLink.md)

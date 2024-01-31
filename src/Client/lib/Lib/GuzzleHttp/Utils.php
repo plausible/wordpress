@@ -129,7 +129,7 @@ final class Utils
      *
      * @throws \RuntimeException if no bundle can be found.
      *
-     * @deprecated Utils::defaultCaBundle will be removed in guzzlehttp/guzzle:8.0. This method is not needed in PHP 5.6+.
+     * @deprecated Utils::defaultCaBundle will be removed in Plausible\Analytics\WP\Client\Lib\GuzzleHttp/guzzle:8.0. This method is not needed in PHP 5.6+.
      */
     public static function defaultCaBundle(): string
     {

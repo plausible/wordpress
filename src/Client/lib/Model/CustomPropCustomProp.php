@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalCreateRequestPageviewGoal
+ * CustomPropCustomProp
  *
  * PHP version 7.4
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
- * GoalCreateRequestPageviewGoal Class Doc Comment
+ * CustomPropCustomProp Class Doc Comment
  *
  * @category Class
  * @package  PlausibleAnalyticsWPClient
@@ -40,7 +40,7 @@ use \PlausibleAnalyticsWPClient\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \JsonSerializable
+class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal_CreateRequest_Pageview_goal';
+    protected static $openAPIModelName = 'CustomProp_custom_prop';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,7 +57,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'path' => 'string'
+        'key' => 'string'
     ];
 
     /**
@@ -68,7 +68,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'path' => null
+        'key' => null
     ];
 
     /**
@@ -77,7 +77,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'path' => false
+        'key' => false
     ];
 
     /**
@@ -166,7 +166,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $attributeMap = [
-        'path' => 'path'
+        'key' => 'key'
     ];
 
     /**
@@ -175,7 +175,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $setters = [
-        'path' => 'setPath'
+        'key' => 'setKey'
     ];
 
     /**
@@ -184,7 +184,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $getters = [
-        'path' => 'getPath'
+        'key' => 'getKey'
     ];
 
     /**
@@ -244,7 +244,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('path', $data ?? [], null);
+        $this->setIfExists('key', $data ?? [], null);
     }
 
     /**
@@ -274,8 +274,8 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['path'] === null) {
-            $invalidProperties[] = "'path' can't be null";
+        if ($this->container['key'] === null) {
+            $invalidProperties[] = "'key' can't be null";
         }
         return $invalidProperties;
     }
@@ -293,28 +293,28 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 
 
     /**
-     * Gets path
+     * Gets key
      *
      * @return string
      */
-    public function getPath()
+    public function getKey()
     {
-        return $this->container['path'];
+        return $this->container['key'];
     }
 
     /**
-     * Sets path
+     * Sets key
      *
-     * @param string $path path
+     * @param string $key Custom Property Key
      *
      * @return self
      */
-    public function setPath($path)
+    public function setKey($key)
     {
-        if (is_null($path)) {
-            throw new \InvalidArgumentException('non-nullable path cannot be null');
+        if (is_null($key)) {
+            throw new \InvalidArgumentException('non-nullable key cannot be null');
         }
-        $this->container['path'] = $path;
+        $this->container['key'] = $key;
 
         return $this;
     }

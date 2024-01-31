@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client\Model
+ * @package  PlausibleAnalyticsWPClient\Model
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,12 +26,12 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 /**
  * Interface abstracting model access.
  *
- * @package Plausible\Analytics\WP\Client\Model
+ * @package PlausibleAnalyticsWPClient\Model
  * @author  OpenAPI Generator team
  */
 interface ModelInterface

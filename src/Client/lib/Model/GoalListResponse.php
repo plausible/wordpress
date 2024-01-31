@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * GoalListResponse Class Doc Comment
  *
  * @category Class
  * @description Goals list response
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,8 +58,8 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goals' => '\Plausible\Analytics\WP\Client\Model\Goal[]',
-        'meta' => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta'
+        'goals' => '\PlausibleAnalyticsWPClient\Model\Goal[]',
+        'meta' => '\PlausibleAnalyticsWPClient\Model\GoalListResponseMeta'
     ];
 
     /**
@@ -306,7 +306,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets goals
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Goal[]
+     * @return \PlausibleAnalyticsWPClient\Model\Goal[]
      */
     public function getGoals()
     {
@@ -316,7 +316,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets goals
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Goal[] $goals goals
+     * @param \PlausibleAnalyticsWPClient\Model\Goal[] $goals goals
      *
      * @return self
      */
@@ -333,7 +333,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets meta
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
+     * @return \PlausibleAnalyticsWPClient\Model\GoalListResponseMeta
      */
     public function getMeta()
     {
@@ -343,7 +343,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets meta
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
+     * @param \PlausibleAnalyticsWPClient\Model\GoalListResponseMeta $meta meta
      *
      * @return self
      */

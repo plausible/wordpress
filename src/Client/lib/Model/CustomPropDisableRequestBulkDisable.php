@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalCreateRequestPageviewGoal
+ * CustomPropDisableRequestBulkDisable
  *
  * PHP version 7.4
  *
@@ -32,15 +32,16 @@ use \ArrayAccess;
 use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
- * GoalCreateRequestPageviewGoal Class Doc Comment
+ * CustomPropDisableRequestBulkDisable Class Doc Comment
  *
  * @category Class
+ * @description Bulk Custom Property disable request
  * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \JsonSerializable
+class CustomPropDisableRequestBulkDisable implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +50,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal_CreateRequest_Pageview_goal';
+    protected static $openAPIModelName = 'CustomProp_DisableRequest_BulkDisable';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,7 +58,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'path' => 'string'
+        'custom_props' => '\PlausibleAnalyticsWPClient\Model\CustomProp[]'
     ];
 
     /**
@@ -68,7 +69,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'path' => null
+        'custom_props' => null
     ];
 
     /**
@@ -77,7 +78,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'path' => false
+        'custom_props' => false
     ];
 
     /**
@@ -166,7 +167,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $attributeMap = [
-        'path' => 'path'
+        'custom_props' => 'custom_props'
     ];
 
     /**
@@ -175,7 +176,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $setters = [
-        'path' => 'setPath'
+        'custom_props' => 'setCustomProps'
     ];
 
     /**
@@ -184,7 +185,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $getters = [
-        'path' => 'getPath'
+        'custom_props' => 'getCustomProps'
     ];
 
     /**
@@ -244,7 +245,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('path', $data ?? [], null);
+        $this->setIfExists('custom_props', $data ?? [], null);
     }
 
     /**
@@ -274,9 +275,13 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['path'] === null) {
-            $invalidProperties[] = "'path' can't be null";
+        if ($this->container['custom_props'] === null) {
+            $invalidProperties[] = "'custom_props' can't be null";
         }
+        if ((count($this->container['custom_props']) < 1)) {
+            $invalidProperties[] = "invalid value for 'custom_props', number of items must be greater than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -293,28 +298,33 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 
 
     /**
-     * Gets path
+     * Gets custom_props
      *
-     * @return string
+     * @return \PlausibleAnalyticsWPClient\Model\CustomProp[]
      */
-    public function getPath()
+    public function getCustomProps()
     {
-        return $this->container['path'];
+        return $this->container['custom_props'];
     }
 
     /**
-     * Sets path
+     * Sets custom_props
      *
-     * @param string $path path
+     * @param \PlausibleAnalyticsWPClient\Model\CustomProp[] $custom_props custom_props
      *
      * @return self
      */
-    public function setPath($path)
+    public function setCustomProps($custom_props)
     {
-        if (is_null($path)) {
-            throw new \InvalidArgumentException('non-nullable path cannot be null');
+        if (is_null($custom_props)) {
+            throw new \InvalidArgumentException('non-nullable custom_props cannot be null');
         }
-        $this->container['path'] = $path;
+
+
+        if ((count($custom_props) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $custom_props when calling CustomPropDisableRequestBulkDisable., number of items must be greater than or equal to 1.');
+        }
+        $this->container['custom_props'] = $custom_props;
 
         return $this;
     }

@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * GoalCreateRequestBulkGetOrCreate Class Doc Comment
  *
  * @category Class
  * @description Bulk goal creation request
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,7 +58,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goals' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]'
+        'goals' => '\PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]'
     ];
 
     /**
@@ -304,7 +304,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
     /**
      * Gets goals
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
+     * @return \PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
      */
     public function getGoals()
     {
@@ -314,7 +314,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
     /**
      * Sets goals
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[] $goals goals
+     * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[] $goals goals
      *
      * @return self
      */

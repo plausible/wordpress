@@ -5,7 +5,7 @@
  * PHP version 7.4
  *
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,17 +26,17 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client\Model;
+namespace PlausibleAnalyticsWPClient\Model;
 
 use \ArrayAccess;
-use \Plausible\Analytics\WP\Client\ObjectSerializer;
+use \PlausibleAnalyticsWPClient\ObjectSerializer;
 
 /**
  * SharedLinkListResponse Class Doc Comment
  *
  * @category Class
  * @description Shared Links list response
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
@@ -58,8 +58,8 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
       * @var string[]
       */
     protected static $openAPITypes = [
-        'meta' => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta',
-        'shared_links' => '\Plausible\Analytics\WP\Client\Model\SharedLink[]'
+        'meta' => '\PlausibleAnalyticsWPClient\Model\GoalListResponseMeta',
+        'shared_links' => '\PlausibleAnalyticsWPClient\Model\SharedLink[]'
     ];
 
     /**
@@ -306,7 +306,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets meta
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
+     * @return \PlausibleAnalyticsWPClient\Model\GoalListResponseMeta
      */
     public function getMeta()
     {
@@ -316,7 +316,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets meta
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
+     * @param \PlausibleAnalyticsWPClient\Model\GoalListResponseMeta $meta meta
      *
      * @return self
      */
@@ -333,7 +333,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets shared_links
      *
-     * @return \Plausible\Analytics\WP\Client\Model\SharedLink[]
+     * @return \PlausibleAnalyticsWPClient\Model\SharedLink[]
      */
     public function getSharedLinks()
     {
@@ -343,7 +343,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets shared_links
      *
-     * @param \Plausible\Analytics\WP\Client\Model\SharedLink[] $shared_links shared_links
+     * @param \PlausibleAnalyticsWPClient\Model\SharedLink[] $shared_links shared_links
      *
      * @return self
      */

@@ -3,7 +3,7 @@
  * ObjectSerializer
  * PHP version 7.4
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -22,15 +22,15 @@
  * Do not edit the class manually.
  */
 
-namespace Plausible\Analytics\WP\Client;
+namespace PlausibleAnalyticsWPClient;
 
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Utils;
-use Plausible\Analytics\WP\Client\Model\ModelInterface;
+use PlausibleAnalyticsWPClient\Model\ModelInterface;
 
 /**
  * ObjectSerializer Class Doc Comment
  * @category Class
- * @package  Plausible\Analytics\WP\Client
+ * @package  PlausibleAnalyticsWPClient
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -406,7 +406,7 @@ class ObjectSerializer {
 			$deserialized = [];
 			if ( strrpos( $inner, "," ) !== false ) {
 				$subClass_array = explode( ',', $inner, 2 );
-				$subClass       = $subClass_array[1];
+				$subClass       = $subClass_array[ 1 ];
 				foreach ( $data as $key => $value ) {
 					$deserialized[ $key ] = self::deserialize( $value, $subClass, null );
 				}
@@ -454,8 +454,9 @@ class ObjectSerializer {
 			// determine file name
 			if ( is_array( $httpHeaders ) &&
 				array_key_exists( 'Content-Disposition', $httpHeaders ) &&
-				preg_match( '/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders['Content-Disposition'], $match ) ) {
-				$filename = Configuration::getDefaultConfiguration()->getTempFolderPath() . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[1] );
+				preg_match( '/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders[ 'Content-Disposition' ], $match ) ) {
+				$filename =
+					Configuration::getDefaultConfiguration()->getTempFolderPath() . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[ 1 ] );
 			} else {
 				$filename = tempnam( Configuration::getDefaultConfiguration()->getTempFolderPath(), '' );
 			}
@@ -512,7 +513,7 @@ class ObjectSerializer {
 			// If a discriminator is defined and points to a valid subclass, use it.
 			$discriminator = $class::DISCRIMINATOR;
 			if ( ! empty( $discriminator ) && isset( $data->{$discriminator} ) && is_string( $data->{$discriminator} ) ) {
-				$subclass = '\Plausible\Analytics\WP\Client\Model\\' . $data->{$discriminator};
+				$subclass = '\PlausibleAnalyticsWPClient\Model\\' . $data->{$discriminator};
 				if ( is_subclass_of( $subclass, $class ) ) {
 					$class = $subclass;
 				}
@@ -570,7 +571,7 @@ class ObjectSerializer {
 	 */
 	public static function sanitizeFilename( $filename ) {
 		if ( preg_match( "/.*[\/\\\\](.*)$/", $filename, $match ) ) {
-			return $match[1];
+			return $match[ 1 ];
 		} else {
 			return $filename;
 		}
