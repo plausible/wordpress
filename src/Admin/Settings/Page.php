@@ -546,10 +546,29 @@ class Page extends API {
 				$shared_link .= "&page={$page_url}";
 			}
 			?>
-			<iframe plausible-embed=""
-					src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>"
-					scrolling="no" loading="lazy" style="border: 0; width: 100%; height: 1750px; "></iframe>
-			<script async src="https://plausible.io/js/embed.host.js"></script>
+			<div id="plausible-analytics-stats">
+				<iframe plausible-embed=""
+						src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>"
+						scrolling="no" loading="lazy" style="border: 0; width: 100%; height: 1750px; "></iframe>
+				<script async src="https://plausible.io/js/embed.host.js"></script>
+				<script>
+					document.addEventListener('DOMContentLoaded', () => {
+						let iframe = document.getElementById('iFrameResizer0');
+
+						/**
+						 * Adblocker active.
+						 */
+						if (iframe === null) {
+							let div = document.getElementById('plausible-analytics-stats');
+
+							div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+								"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
+								'plausible-analytics'
+							); ?></strong></p>';
+						}
+					});
+				</script>
+			</div>
 			<?php
 		} else {
 			?>
