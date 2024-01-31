@@ -194,8 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		let reload = false;
 		let showNotice = true;
 
-		console.log(button.name);
-
 		if (button.name === 'proxy_enabled' || button.name === 'enable_analytics_dashboard') {
 			reload = true;
 			showNotice = false;
