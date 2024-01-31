@@ -119,3 +119,4 @@ this is a WordPress plugin, some manual modifications need to be done to make su
   again, mind the space at the beginning)
 - In the same directory, replace all occurences of ` \GuzzleHttp` (mind the space and backslash)
   with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.
+- In some cases, you might also have to replace `PlausibleAnalyticsWPClient` with `Plausible\Analytics\WP\Client`.

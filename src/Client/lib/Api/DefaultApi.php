@@ -3,7 +3,7 @@
  * DefaultApi
  * PHP version 7.4
  * @category Class
- * @package  PlausibleAnalyticsWPClient
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -22,7 +22,7 @@
  * Do not edit the class manually.
  */
 
-namespace PlausibleAnalyticsWPClient\Api;
+namespace Plausible\Analytics\WP\Client\Api;
 
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\ClientInterface;
@@ -31,15 +31,15 @@ use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Exception\RequestException;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\MultipartStream;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\RequestOptions;
-use PlausibleAnalyticsWPClient\ApiException;
-use PlausibleAnalyticsWPClient\Configuration;
-use PlausibleAnalyticsWPClient\HeaderSelector;
-use PlausibleAnalyticsWPClient\ObjectSerializer;
+use Plausible\Analytics\WP\Client\ApiException;
+use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\HeaderSelector;
+use Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * DefaultApi Class Doc Comment
  * @category Class
- * @package  PlausibleAnalyticsWPClient
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -144,14 +144,15 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsDisable
 	 * Disable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                     $contentType                 The value for the Content-Type header. Check
-	 *                                                                                                self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
-	 *                                                                                                to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
+	 * @param string                                                        $contentType                 The value for the Content-Type header. Check
+	 *                                                                                                   self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
+	 *                                                                                                   to see the possible values for this
+	 *                                                                                                   operation
 	 *
 	 * @return void
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersCustomPropsDisable(
 		$custom_prop_disable_request = null,
@@ -164,14 +165,15 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsDisableWithHttpInfo
 	 * Disable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                     $contentType                 The value for the Content-Type header. Check
-	 *                                                                                                self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
-	 *                                                                                                to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
+	 * @param string                                                        $contentType                 The value for the Content-Type header. Check
+	 *                                                                                                   self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
+	 *                                                                                                   to see the possible values for this
+	 *                                                                                                   operation
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersCustomPropsDisableWithHttpInfo(
 		$custom_prop_disable_request = null,
@@ -215,7 +217,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -223,7 +225,7 @@ class DefaultApi {
 				case 402:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\PaymentRequiredError',
+						'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -231,7 +233,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -244,10 +246,11 @@ class DefaultApi {
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersCustomPropsDisable'
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                     $contentType                 The value for the Content-Type header. Check
-	 *                                                                                                self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
-	 *                                                                                                to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
+	 * @param string                                                        $contentType                 The value for the Content-Type header. Check
+	 *                                                                                                   self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
+	 *                                                                                                   to see the possible values for this
+	 *                                                                                                   operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
@@ -274,10 +277,9 @@ class DefaultApi {
 		if ( isset( $custom_prop_disable_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-						ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+					ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
+				);
 			} else {
 				$httpBody = $custom_prop_disable_request;
 			}
@@ -350,10 +352,11 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsDisableAsync
 	 * Disable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                     $contentType                 The value for the Content-Type header. Check
-	 *                                                                                                self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
-	 *                                                                                                to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
+	 * @param string                                                        $contentType                 The value for the Content-Type header. Check
+	 *                                                                                                   self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
+	 *                                                                                                   to see the possible values for this
+	 *                                                                                                   operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -373,10 +376,11 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsDisableAsyncWithHttpInfo
 	 * Disable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                     $contentType                 The value for the Content-Type header. Check
-	 *                                                                                                self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
-	 *                                                                                                to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
+	 * @param string                                                        $contentType                 The value for the Content-Type header. Check
+	 *                                                                                                   self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsDisable']
+	 *                                                                                                   to see the possible values for this
+	 *                                                                                                   operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -410,14 +414,14 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsEnable
 	 * Get or enable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
+	 *                                                                                                 to see the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\CustomPropListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\PaymentRequiredError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError
+	 * @return \Plausible\Analytics\WP\Client\Model\CustomPropListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersCustomPropsEnable(
 		$custom_prop_enable_request = null,
@@ -432,16 +436,16 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsEnableWithHttpInfo
 	 * Get or enable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return array of
-	 *               \PlausibleAnalyticsWPClient\Model\CustomPropListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\PaymentRequiredError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError,
+	 *               \Plausible\Analytics\WP\Client\Model\CustomPropListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError,
 	 *               HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersCustomPropsEnableWithHttpInfo(
 		$custom_prop_enable_request = null,
@@ -480,68 +484,68 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 201:
-					if ( '\PlausibleAnalyticsWPClient\Model\CustomPropListResponse' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\CustomPropListResponse' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\CustomPropListResponse', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 402:
-					if ( '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 422:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\CustomPropListResponse';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -562,7 +566,7 @@ class DefaultApi {
 				case 201:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\CustomPropListResponse',
+						'\Plausible\Analytics\WP\Client\Model\CustomPropListResponse',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -570,7 +574,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -578,7 +582,7 @@ class DefaultApi {
 				case 402:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\PaymentRequiredError',
+						'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -586,7 +590,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -599,10 +603,10 @@ class DefaultApi {
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersCustomPropsEnable'
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
@@ -629,10 +633,9 @@ class DefaultApi {
 		if ( isset( $custom_prop_enable_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-						ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+					ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
+				);
 			} else {
 				$httpBody = $custom_prop_enable_request;
 			}
@@ -688,10 +691,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsEnableAsync
 	 * Get or enable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -711,10 +714,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsEnableAsyncWithHttpInfo
 	 * Get or enable CustomProp(s)
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersCustomPropsEnable']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -723,7 +726,7 @@ class DefaultApi {
 		$custom_prop_enable_request = null,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCustomPropsEnable' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\CustomPropListResponse';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse';
 		$request    = $this->plausibleWebPluginsAPIControllersCustomPropsEnableRequest( $custom_prop_enable_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -761,14 +764,14 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsCreate
 	 * Get or create Goal
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                              $contentType         The value for the Content-Type header. Check
-	 *                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
-	 *                                                                                 to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
+	 * @param string                                                 $contentType         The value for the Content-Type header. Check
+	 *                                                                                    self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
+	 *                                                                                    to see the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\GoalListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\PaymentRequiredError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError
+	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsCreate(
 		$goal_create_request = null,
@@ -783,16 +786,16 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsCreateWithHttpInfo
 	 * Get or create Goal
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                              $contentType         The value for the Content-Type header. Check
-	 *                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
-	 *                                                                                 to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
+	 * @param string                                                 $contentType         The value for the Content-Type header. Check
+	 *                                                                                    self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
+	 *                                                                                    to see the possible values for this operation
 	 *
 	 * @return array of
-	 *               \PlausibleAnalyticsWPClient\Model\GoalListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\PaymentRequiredError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError,
+	 *               \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError,
 	 *               HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsCreateWithHttpInfo(
 		$goal_create_request = null,
@@ -831,68 +834,68 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 201:
-					if ( '\PlausibleAnalyticsWPClient\Model\GoalListResponse' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\GoalListResponse' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\GoalListResponse' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\GoalListResponse' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\GoalListResponse', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\GoalListResponse', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 402:
-					if ( '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\PaymentRequiredError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 422:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\GoalListResponse';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -913,7 +916,7 @@ class DefaultApi {
 				case 201:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\GoalListResponse',
+						'\Plausible\Analytics\WP\Client\Model\GoalListResponse',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -921,7 +924,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -929,7 +932,7 @@ class DefaultApi {
 				case 402:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\PaymentRequiredError',
+						'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -937,7 +940,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -950,10 +953,10 @@ class DefaultApi {
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersGoalsCreate'
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                              $contentType         The value for the Content-Type header. Check
-	 *                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
-	 *                                                                                 to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
+	 * @param string                                                 $contentType         The value for the Content-Type header. Check
+	 *                                                                                    self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
+	 *                                                                                    to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
@@ -980,10 +983,9 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-						ObjectSerializer::sanitizeForSerialization( $goal_create_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+					ObjectSerializer::sanitizeForSerialization( $goal_create_request )
+				);
 			} else {
 				$httpBody = $goal_create_request;
 			}
@@ -1039,10 +1041,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsCreateAsync
 	 * Get or create Goal
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                              $contentType         The value for the Content-Type header. Check
-	 *                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
-	 *                                                                                 to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
+	 * @param string                                                 $contentType         The value for the Content-Type header. Check
+	 *                                                                                    self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
+	 *                                                                                    to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -1062,10 +1064,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsCreateAsyncWithHttpInfo
 	 * Get or create Goal
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                              $contentType         The value for the Content-Type header. Check
-	 *                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
-	 *                                                                                 to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
+	 * @param string                                                 $contentType         The value for the Content-Type header. Check
+	 *                                                                                    self::contentTypes['plausibleWebPluginsAPIControllersGoalsCreate']
+	 *                                                                                    to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -1074,7 +1076,7 @@ class DefaultApi {
 		$goal_create_request = null,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsCreate' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\GoalListResponse';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsCreateRequest( $goal_create_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -1118,7 +1120,7 @@ class DefaultApi {
 	 *
 	 * @return void
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDelete(
 		$id,
@@ -1137,7 +1139,7 @@ class DefaultApi {
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteWithHttpInfo(
 		$id,
@@ -1181,7 +1183,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1346,14 +1348,14 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteBulk
 	 * Delete Goals in bulk
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                  $contentType              The value for the Content-Type header. Check
-	 *                                                                                          self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
-	 *                                                                                          to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
+	 * @param string                                                     $contentType              The value for the Content-Type header. Check
+	 *                                                                                             self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
+	 *                                                                                             to see the possible values for this operation
 	 *
 	 * @return void
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteBulk(
 		$goal_delete_bulk_request = null,
@@ -1366,14 +1368,14 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteBulkWithHttpInfo
 	 * Delete Goals in bulk
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                  $contentType              The value for the Content-Type header. Check
-	 *                                                                                          self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
-	 *                                                                                          to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
+	 * @param string                                                     $contentType              The value for the Content-Type header. Check
+	 *                                                                                             self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
+	 *                                                                                             to see the possible values for this operation
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsDeleteBulkWithHttpInfo(
 		$goal_delete_bulk_request = null,
@@ -1417,7 +1419,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1430,10 +1432,10 @@ class DefaultApi {
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersGoalsDeleteBulk'
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                  $contentType              The value for the Content-Type header. Check
-	 *                                                                                          self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
-	 *                                                                                          to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
+	 * @param string                                                     $contentType              The value for the Content-Type header. Check
+	 *                                                                                             self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
+	 *                                                                                             to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
@@ -1460,10 +1462,9 @@ class DefaultApi {
 		if ( isset( $goal_delete_bulk_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-						ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+					ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
+				);
 			} else {
 				$httpBody = $goal_delete_bulk_request;
 			}
@@ -1519,10 +1520,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteBulkAsync
 	 * Delete Goals in bulk
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                  $contentType              The value for the Content-Type header. Check
-	 *                                                                                          self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
-	 *                                                                                          to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
+	 * @param string                                                     $contentType              The value for the Content-Type header. Check
+	 *                                                                                             self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
+	 *                                                                                             to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -1542,10 +1543,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteBulkAsyncWithHttpInfo
 	 * Delete Goals in bulk
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                  $contentType              The value for the Content-Type header. Check
-	 *                                                                                          self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
-	 *                                                                                          to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
+	 * @param string                                                     $contentType              The value for the Content-Type header. Check
+	 *                                                                                             self::contentTypes['plausibleWebPluginsAPIControllersGoalsDeleteBulk']
+	 *                                                                                             to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -1583,9 +1584,9 @@ class DefaultApi {
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see
 	 *                            the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\Goal|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\NotFoundError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError
+	 * @return \Plausible\Analytics\WP\Client\Model\Goal|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsGet(
 		$id,
@@ -1605,10 +1606,10 @@ class DefaultApi {
 	 *                            the possible values for this operation
 	 *
 	 * @return array of
-	 *               \PlausibleAnalyticsWPClient\Model\Goal|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\NotFoundError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError,
+	 *               \Plausible\Analytics\WP\Client\Model\Goal|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError,
 	 *               HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo(
 		$id,
@@ -1647,68 +1648,68 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 200:
-					if ( '\PlausibleAnalyticsWPClient\Model\Goal' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\Goal' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\Goal' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\Goal' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\Goal', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Goal', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 404:
-					if ( '\PlausibleAnalyticsWPClient\Model\NotFoundError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\NotFoundError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\NotFoundError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\NotFoundError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 422:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\Goal';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\Goal';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -1729,7 +1730,7 @@ class DefaultApi {
 				case 200:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\Goal',
+						'\Plausible\Analytics\WP\Client\Model\Goal',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1737,7 +1738,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1745,7 +1746,7 @@ class DefaultApi {
 				case 404:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\NotFoundError',
+						'\Plausible\Analytics\WP\Client\Model\NotFoundError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1753,7 +1754,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -1893,7 +1894,7 @@ class DefaultApi {
 		$id,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsGet' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\Goal';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\Goal';
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsGetRequest( $id, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -1937,9 +1938,9 @@ class DefaultApi {
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to
 	 *                            see the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\GoalListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError
+	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsIndex(
 		$limit = null,
@@ -1962,10 +1963,10 @@ class DefaultApi {
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to
 	 *                            see the possible values for this operation
 	 *
-	 * @return array of \PlausibleAnalyticsWPClient\Model\GoalListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError, HTTP status code,
-	 *               HTTP response headers (array of strings)
+	 * @return array of \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status
+	 *               code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo(
 		$limit = null,
@@ -2006,38 +2007,38 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 200:
-					if ( '\PlausibleAnalyticsWPClient\Model\GoalListResponse' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\GoalListResponse' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\GoalListResponse' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\GoalListResponse' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\GoalListResponse', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\GoalListResponse', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\GoalListResponse';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -2058,7 +2059,7 @@ class DefaultApi {
 				case 200:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\GoalListResponse',
+						'\Plausible\Analytics\WP\Client\Model\GoalListResponse',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2066,7 +2067,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2239,7 +2240,7 @@ class DefaultApi {
 		$before = null,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsIndex' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\GoalListResponse';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit, $after, $before, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -2277,14 +2278,14 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreate
 	 * Get or create Shared Link
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
+	 *                                                                                                 to see the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\SharedLink|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError
+	 * @return \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksCreate(
 		$shared_link_create_request = null,
@@ -2299,16 +2300,16 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo
 	 * Get or create Shared Link
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return array of
-	 *               \PlausibleAnalyticsWPClient\Model\SharedLink|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError,
+	 *               \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError,
 	 *               HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo(
 		$shared_link_create_request = null,
@@ -2347,53 +2348,53 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 201:
-					if ( '\PlausibleAnalyticsWPClient\Model\SharedLink' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\SharedLink' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\SharedLink' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\SharedLink' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\SharedLink', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLink', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 422:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLink';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -2414,7 +2415,7 @@ class DefaultApi {
 				case 201:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\SharedLink',
+						'\Plausible\Analytics\WP\Client\Model\SharedLink',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2422,7 +2423,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2430,7 +2431,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2443,10 +2444,10 @@ class DefaultApi {
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersSharedLinksCreate'
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
@@ -2473,10 +2474,9 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-						ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
+				);
 			} else {
 				$httpBody = $shared_link_create_request;
 			}
@@ -2532,10 +2532,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreateAsync
 	 * Get or create Shared Link
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -2555,10 +2555,10 @@ class DefaultApi {
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo
 	 * Get or create Shared Link
 	 *
-	 * @param \PlausibleAnalyticsWPClient\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
-	 * @param string                                                    $contentType                The value for the Content-Type header. Check
-	 *                                                                                              self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                              to see the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string                                                       $contentType                The value for the Content-Type header. Check
+	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
+	 *                                                                                                 to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
@@ -2567,7 +2567,7 @@ class DefaultApi {
 		$shared_link_create_request = null,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksCreate' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLink';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest( $shared_link_create_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -2609,9 +2609,9 @@ class DefaultApi {
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet']
 	 *                            to see the possible values for this operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\SharedLink|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\NotFoundError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError
+	 * @return \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksGet(
 		$id,
@@ -2631,10 +2631,10 @@ class DefaultApi {
 	 *                            to see the possible values for this operation
 	 *
 	 * @return array of
-	 *               \PlausibleAnalyticsWPClient\Model\SharedLink|\PlausibleAnalyticsWPClient\Model\UnauthorizedError|\PlausibleAnalyticsWPClient\Model\NotFoundError|\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError,
+	 *               \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError,
 	 *               HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo(
 		$id,
@@ -2673,68 +2673,68 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 201:
-					if ( '\PlausibleAnalyticsWPClient\Model\SharedLink' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\SharedLink' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\SharedLink' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\SharedLink' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\SharedLink', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLink', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 404:
-					if ( '\PlausibleAnalyticsWPClient\Model\NotFoundError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\NotFoundError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\NotFoundError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\NotFoundError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 422:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLink';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -2755,7 +2755,7 @@ class DefaultApi {
 				case 201:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\SharedLink',
+						'\Plausible\Analytics\WP\Client\Model\SharedLink',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2763,7 +2763,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2771,7 +2771,7 @@ class DefaultApi {
 				case 404:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\NotFoundError',
+						'\Plausible\Analytics\WP\Client\Model\NotFoundError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2779,7 +2779,7 @@ class DefaultApi {
 				case 422:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnprocessableEntityError',
+						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -2919,7 +2919,7 @@ class DefaultApi {
 		$id,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksGet' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLink';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksGetRequest( $id, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
@@ -2964,9 +2964,9 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this
 	 *                            operation
 	 *
-	 * @return \PlausibleAnalyticsWPClient\Model\SharedLinkListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError
+	 * @return \Plausible\Analytics\WP\Client\Model\SharedLinkListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksIndex(
 		$limit = null,
@@ -2990,10 +2990,10 @@ class DefaultApi {
 	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this
 	 *                            operation
 	 *
-	 * @return array of \PlausibleAnalyticsWPClient\Model\SharedLinkListResponse|\PlausibleAnalyticsWPClient\Model\UnauthorizedError, HTTP status
-	 *               code, HTTP response headers (array of strings)
+	 * @return array of \Plausible\Analytics\WP\Client\Model\SharedLinkListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP
+	 *               status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
-	 * @throws \PlausibleAnalyticsWPClient\ApiException on non-2xx response
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
 	public function plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo(
 		$limit = null,
@@ -3034,38 +3034,38 @@ class DefaultApi {
 
 			switch ( $statusCode ) {
 				case 200:
-					if ( '\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 				case 401:
-					if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' === '\SplFileObject' ) {
+					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
 					} else {
 						$content = (string) $response->getBody();
-						if ( '\PlausibleAnalyticsWPClient\Model\UnauthorizedError' !== 'string' ) {
+						if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' !== 'string' ) {
 							$content = json_decode( $content );
 						}
 					}
 
 					return [
-						ObjectSerializer::deserialize( $content, '\PlausibleAnalyticsWPClient\Model\UnauthorizedError', [] ),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
 						$response->getHeaders(),
 					];
 			}
 
-			$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse';
+			$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse';
 			if ( $returnType === '\SplFileObject' ) {
 				$content = $response->getBody(); //stream goes to serializer
 			} else {
@@ -3086,7 +3086,7 @@ class DefaultApi {
 				case 200:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse',
+						'\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -3094,7 +3094,7 @@ class DefaultApi {
 				case 401:
 					$data = ObjectSerializer::deserialize(
 						$e->getResponseBody(),
-						'\PlausibleAnalyticsWPClient\Model\UnauthorizedError',
+						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
 					$e->setResponseObject( $data );
@@ -3270,7 +3270,7 @@ class DefaultApi {
 		$before = null,
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksIndex' ][ 0 ]
 	) {
-		$returnType = '\PlausibleAnalyticsWPClient\Model\SharedLinkListResponse';
+		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse';
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(

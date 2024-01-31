@@ -3,7 +3,7 @@
  * ObjectSerializer
  * PHP version 7.4
  * @category Class
- * @package  PlausibleAnalyticsWPClient
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -22,15 +22,15 @@
  * Do not edit the class manually.
  */
 
-namespace PlausibleAnalyticsWPClient;
+namespace Plausible\Analytics\WP\Client;
 
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Utils;
-use PlausibleAnalyticsWPClient\Model\ModelInterface;
+use Plausible\Analytics\WP\Client\Model\ModelInterface;
 
 /**
  * ObjectSerializer Class Doc Comment
  * @category Class
- * @package  PlausibleAnalyticsWPClient
+ * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -513,7 +513,7 @@ class ObjectSerializer {
 			// If a discriminator is defined and points to a valid subclass, use it.
 			$discriminator = $class::DISCRIMINATOR;
 			if ( ! empty( $discriminator ) && isset( $data->{$discriminator} ) && is_string( $data->{$discriminator} ) ) {
-				$subclass = '\PlausibleAnalyticsWPClient\Model\\' . $data->{$discriminator};
+				$subclass = '\Plausible\Analytics\WP\Client\Model\\' . $data->{$discriminator};
 				if ( is_subclass_of( $subclass, $class ) ) {
 					$class = $subclass;
 				}
