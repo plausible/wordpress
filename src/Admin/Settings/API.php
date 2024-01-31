@@ -438,11 +438,11 @@ class API {
 		return [
 			'view-docs'    => [
 				'label' => esc_html__( 'Documentation', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://docs.plausible.io/' ),
+				'url'   => esc_url( 'https://plausible.io/docs' ),
 			],
 			'report-issue' => [
-				'label' => esc_html__( 'Report an issue', 'plausible-analytics' ),
-				'url'   => esc_url( 'https://github.com/plausible/wordpress/issues/new' ),
+				'label' => esc_html__( 'Contact Support', 'plausible-analytics' ),
+				'url'   => esc_url( 'https://plausible.io/contact' ),
 			],
 		];
 	}
