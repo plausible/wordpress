@@ -191,7 +191,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		form.append('is_list', button.dataset.list);
 		form.append('_nonce', document.getElementById('_wpnonce').value);
 
-		plausibleAjax(form);
+		let reload = false;
+		let showNotice = true;
+
+		console.log(button.name);
+
+		if (button.name === 'proxy_enabled' || button.name === 'enable_analytics_dashboard') {
+			reload = true;
+			showNotice = false;
+		}
+
+		plausibleAjax(form, null, showNotice, reload);
 	});
 });
 
@@ -201,8 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param data
  * @param button
  * @param showNotice
+ * @param reload
  */
-function plausibleAjax(data, button = null, showNotice = true) {
+function plausibleAjax(data, button = null, showNotice = true, reload = false) {
 	fetch(
 		ajaxurl,
 		{
@@ -232,6 +243,10 @@ function plausibleAjax(data, button = null, showNotice = true) {
 		let event = new CustomEvent('plausibleAjaxDone', {detail: response});
 
 		document.dispatchEvent(event);
+
+		if (reload === true) {
+			window.location.reload();
+		}
 
 		return response.success;
 	});

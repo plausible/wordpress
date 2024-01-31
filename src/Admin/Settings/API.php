@@ -562,15 +562,16 @@ class API {
 		$checked  =
 			! empty( $field[ 'checked' ] ) ? 'checked="checked"' :
 				( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
+		$disabled = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
 		?>
 		<div class="flex items-center mt-4 space-x-3">
 			<button
-				class="plausible-analytics-toggle <?php echo $checked ? 'bg-indigo-600' :
+				class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' :
 					'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
 				id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
 				echo $id; ?>" type="checkbox" data-list="<?php echo $is_list ? '1' : ''; ?>"
 				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
-				value="<?php echo esc_html( $value ); ?>">
+				value="<?php echo esc_html( $value ); ?>" <?php echo $disabled; ?>>
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
@@ -629,20 +630,37 @@ class API {
 	 * @return string|false
 	 */
 	public function render_hook_field( array $field ) {
+		$hook_type  = $field[ 'hook_type' ] ?? 'warning';
+		$box_class  = 'bg-yellow-50 dark:bg-yellow-100';
+		$text_class = 'text-yellow-700 dark:text-yellow-800';
+
+		if ( $hook_type === 'success' ) {
+			$box_class  = 'bg-green-50 dark:bg-green-100';
+			$text_class = 'text-green-700 dark:text-green-800';
+		}
+
 		ob_start();
 		?>
 		<div class="">
-			<div class="rounded-md p-4 mt-4 relative bg-yellow-50 dark:bg-yellow-100 rounded-t-md rounded-b-none">
+			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?> rounded-t-md rounded-b-none">
 				<div class="flex">
 					<div class="flex-shrink-0">
-						<svg class="h-12 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path fill-rule="evenodd"
-								  d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-								  clip-rule="evenodd"></path>
-						</svg>
+						<?php if ( $hook_type === 'success' ) : ?>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-12 text-green-400">
+								<path fill-rule="evenodd"
+									  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+									  clip-rule="evenodd"/>
+							</svg>
+						<?php else: ?>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-12 text-yellow-400">
+								<path fill-rule="evenodd"
+									  d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+									  clip-rule="evenodd"/>
+							</svg>
+						<?php endif; ?>
 					</div>
 					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field[ 'slug' ] ) ); ?>">
-						<div class="text-sm text-yellow-700 dark:text-yellow-800">
+						<div class="text-sm <?php echo $text_class; ?>>">
 							<p><?php do_action( 'plausible_analytics_settings_' . $field[ 'slug' ], $field[ 'slug' ] ); ?></p>
 						</div>
 					</div>

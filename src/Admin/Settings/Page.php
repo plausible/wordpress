@@ -171,11 +171,6 @@ class Page extends API {
 							'value'    => 'on',
 							'disabled' => ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] ),
 						],
-						[
-							'label' => '',
-							'slug'  => 'proxy_warning',
-							'type'  => 'hook',
-						],
 					],
 				],
 				[
@@ -346,6 +341,23 @@ class Page extends API {
 			],
 		];
 
+		if ( Helpers::proxy_enabled() || ! empty( $settings[ 'self_hosted_domain' ] ) ) {
+			$this->fields[ 'general' ][ 2 ][ 'fields' ][] = [
+				'label' => '',
+				'slug'  => 'proxy_warning',
+				'type'  => 'hook',
+			];
+		}
+
+		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
+			$this->fields[ 'general' ][ 3 ][ 'fields' ][] = [
+				'label'     => '',
+				'slug'      => 'enable_analytics_dashboard_notice',
+				'type'      => 'hook',
+				'hook_type' => 'success',
+			];
+		}
+
 		if ( Helpers::proxy_enabled() ) {
 			$this->fields[ 'self-hosted' ][ 0 ][ 'fields' ][] = [
 				'label' => '',
@@ -404,6 +416,7 @@ class Page extends API {
 		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
 		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
 		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
+		add_action( 'plausible_analytics_settings_enable_analytics_dashboard_notice', [ $this, 'enable_analytics_dashboard_notice' ] );
 		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
 		add_action( 'plausible_analytics_settings_self_hosted_shared_link_notice', [ $this, 'self_hosted_warning' ] );
 	}
@@ -598,6 +611,26 @@ class Page extends API {
 					'post'
 				),
 				'https://plausible.io/contact'
+			);
+		}
+	}
+
+	/**
+	 * Renders the analytics dashboard link if the option is enabled.
+	 * @since 2.0.0
+	 * @return void
+	 */
+	public function enable_analytics_dashboard_notice() {
+		if ( ! empty( Helpers::get_settings()[ 'enable_analytics_dashboard' ] ) ) {
+			echo sprintf(
+				wp_kses(
+					__(
+						'Your analytics dashboard is available <a href="%s">here</a>.',
+						'plausible-analytics'
+					),
+					'post'
+				),
+				admin_url( 'index.php?page=plausible_analytics_statistics' )
 			);
 		}
 	}
