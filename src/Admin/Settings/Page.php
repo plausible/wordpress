@@ -235,7 +235,7 @@ class Page extends API {
 					'slug'   => 'tracked_user_roles',
 					'type'   => 'group',
 					'desc'   => esc_html__(
-						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.',
+						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them below.',
 						'plausible-analytics'
 					),
 					'toggle' => false,
@@ -246,7 +246,7 @@ class Page extends API {
 					'slug'   => 'expand_dashboard_access',
 					'type'   => 'group',
 					'desc'   => esc_html__(
-						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them above.',
+						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them below.',
 						'plausible-analytics'
 					),
 					'toggle' => false,
