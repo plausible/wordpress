@@ -134,13 +134,24 @@ class Client {
 			$this->api_instance->plausibleWebPluginsAPIControllersCustomPropsEnable( $enable_request );
 		} catch ( Exception $e ) {
 			if ( wp_doing_ajax() ) {
+				$message       = $e->getMessage();
+				$response_body = $e->getResponseBody();
+
+				if ( $response_body !== null ) {
+					$response_json = json_decode( $response_body );
+
+					if ( ! empty( $response_json->errors[ 0 ]->detail ) ) {
+						$message = $response_json->errors[ 0 ]->detail;
+					}
+				}
+
 				wp_send_json_error(
 					sprintf(
 						__(
-							'Something went wrong while trying to enable Pageview Properties. Please add it manually. The error message was: %s',
+							'Something went wrong while trying to enable Pageview Properties. The error message was: %s',
 							'plausible-analytics'
 						),
-						$e->getMessage()
+						$message
 					)
 				);
 			}

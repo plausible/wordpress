@@ -328,7 +328,7 @@ function plausibleShowNotice(message, isError = false) {
 			setTimeout(function () {
 				notice.classList += ' hidden';
 			}, 200)
-		}, 2500);
+		}, 2000);
 	}
 }
 
@@ -349,15 +349,15 @@ function plausibleToggleWizardStep() {
 	let activeSteps = document.querySelectorAll('.plausible-analytics-wizard-active-step');
 	let completedSteps = document.querySelectorAll('.plausible-analytics-wizard-completed-step');
 
-	for (var i = 0; i < allSteps.length; i++) {
+	for (let i = 0; i < allSteps.length; i++) {
 		allSteps[i].classList.remove('hidden');
 	}
 
-	for (var i = 0; i < activeSteps.length; i++) {
+	for (let i = 0; i < activeSteps.length; i++) {
 		activeSteps[i].classList += ' hidden';
 	}
 
-	for (var i = 0; i < completedSteps.length; i++) {
+	for (let i = 0; i < completedSteps.length; i++) {
 		completedSteps[i].classList += ' hidden';
 	}
 
