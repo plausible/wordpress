@@ -26,7 +26,7 @@ class Module {
 	 */
 	private function init() {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_install_module' ], 9, 2 );
-		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 1 );
+		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_proxy' ], 10, 2 );
 	}
 
 	/**
@@ -171,11 +171,19 @@ class Module {
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function maybe_enable_proxy( $settings ) {
+	public function maybe_enable_proxy( $settings, $old_settings ) {
+		/**
+		 * No need to run this on each update run.
+		 */
+		if ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] === 'on' ) {
+			return $settings;
+		}
+
 		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled( $settings ) );
 
 		if ( ! $test_succeeded && Helpers::proxy_enabled( $settings ) && wp_doing_ajax() ) {
-			wp_send_json_error(
+			set_transient(
+				'plausible_analytics_error',
 				sprintf(
 					wp_kses(
 						__(
@@ -186,8 +194,12 @@ class Module {
 					),
 					Helpers::get_rest_endpoint( false ),
 					'https://plausible.io/contact'
-				)
+				),
+				5
 			);
+
+			// Disable the proxy.
+			return $old_settings;
 		}
 
 		return $settings;

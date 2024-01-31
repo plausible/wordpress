@@ -72,15 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
 					this.quitWizardElems[i].addEventListener('click', this.quitWizard);
 				}
 			}
-		}
-		,
+		},
 
 		/**
 		 * Toggle Option and store in DB.
 		 *
 		 * @param e
 		 */
-		toggleOption: function (e) {
+		toggleOption: function (e, showNotice = true) {
 			/**
 			 * Make sure event target is a toggle.
 			 */
@@ -122,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('_nonce', plausible.nonce);
 
 			let reload = false;
-			let showNotice = true;
 
 			/**
 			 * When either of these options are enabled, we need the page to reload, to display notices/warnings.
@@ -132,9 +130,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				showNotice = false;
 			}
 
-			plausible.ajax(form, null, showNotice, reload);
-		}
-		,
+			let result = plausible.ajax(form, null, showNotice, reload);
+
+			result.then(function (success) {
+				if (success === false) {
+					plausible.toggleOption(e, false);
+				}
+			});
+		},
 
 		/**
 		 * Save value of input or text area to DB.
@@ -160,8 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			button.setAttribute('disabled', 'disabled');
 
 			plausible.ajax(form, button);
-		}
-		,
+		},
 
 		/**
 		 * Quit wizard.
@@ -202,8 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				plausible.ajax(data, null, false);
 			}
-		}
-		,
+		},
 
 		/**
 		 * Disable Connect button if Domain Name or API Token field is empty.
@@ -242,8 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				button.classList += ' pointer-events-none';
 				button.classList.replace('bg-indigo-600', 'bg-gray-200')
 			}
-		}
-		,
+		},
 
 		/**
 		 * Open create API token dialog.
@@ -256,8 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			let domain = document.getElementById('domain_name').value;
 
 			window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
-		}
-		,
+		},
 
 		/**
 		 * Show wizard.
@@ -270,8 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			data.append('_nonce', e.target.dataset.nonce);
 
 			plausible.ajax(data, null, false, true);
-		}
-		,
+		},
 
 		/**
 		 * Toggles the active/inactive/current state of the steps.
@@ -335,8 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				completedStep.classList.remove('hidden');
 				inactiveStep.classList += ' hidden';
 			});
-		}
-		,
+		},
 
 		/**
 		 * Do AJAX request and (optionally) show a notice or (optionally) reload the page.
@@ -345,9 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param button
 		 * @param showNotice
 		 * @param reload
+		 *
+		 * @return object
 		 */
 		ajax: function (data, button = null, showNotice = true, reload = false) {
-			fetch(
+			return fetch(
 				ajaxurl,
 				{
 					method: 'POST',
@@ -383,8 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				return response.success;
 			});
-		}
-		,
+		},
 
 		/**
 		 * Displays a notice or error message.
