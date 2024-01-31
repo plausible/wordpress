@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
 		quitWizardElems: document.getElementsByClassName('plausible-analytics-wizard-quit'),
-		nonce: document.getElementById('_wpnonce').value,
+		nonceElem: document.getElementById('_wpnonce'),
+		nonce: '',
 
 		/**
 		 * Bind events.
@@ -27,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		init: function () {
 			if (document.location.hash === '' && document.getElementById('plausible-analytics-wizard') !== null) {
 				document.location.hash = '#welcome_slide';
+			}
+
+			if (this.nonceElem !== null) {
+				this.nonce = this.nonceElem.value;
 			}
 
 			this.toggleWizardStep();
