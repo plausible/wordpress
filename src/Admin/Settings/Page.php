@@ -663,7 +663,7 @@ class Page extends API {
 		if ( Helpers::proxy_enabled() ) {
 			echo wp_kses(
 				__(
-					'This option is disabled, because the <strong>Proxy</strong> setting is enabled under <em>General</em> settings.',
+					'This option is disabled, because the <strong>Proxy</strong> setting is enabled under <em>Settings</em>.',
 					'plausible-analytics'
 				),
 				'post'
