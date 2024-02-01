@@ -2,10 +2,6 @@
 
 namespace Plausible\Analytics\WP;
 
-use Plausible\Analytics\WP\Admin;
-use Plausible\Analytics\WP\Includes;
-use Plausible\Analytics\WP\Includes\Helpers;
-
 // Bailout, if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
