@@ -201,8 +201,9 @@ class API {
 										<?php ++ $i; ?>
 										<div class="mt-6">
 											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
-												<?php $disabled = false; ?>
-												<?php if ( $id === 'api_token' ) {
+												<?php $disabled = false;
+
+												if ( $id === 'api_token' ) {
 													$settings = Helpers::get_settings();
 
 													if ( empty( $settings[ $id ] ) ) {
