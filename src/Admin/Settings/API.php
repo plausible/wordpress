@@ -201,8 +201,19 @@ class API {
 										<?php ++ $i; ?>
 										<div class="mt-6">
 											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
+												<?php $disabled = false; ?>
+												<?php if ( $id === 'domain_name' || $id === 'api_token' ) {
+													$settings = Helpers::get_settings();
+
+													if ( empty( $settings[ $id ] ) ) {
+														$disabled = true;
+													}
+												} ?>
 												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>_slide"
-												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
+												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0
+												   rounded-md <?php echo $disabled ? 'bg-gray-200 pointer-events-none' : 'bg-indigo-600'; ?> px-3.5 py-2.5 text-sm
+												   font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline
+												   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
 												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"

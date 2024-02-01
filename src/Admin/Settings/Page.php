@@ -42,7 +42,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						wp_kses(
 							__(
-								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a href="#" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API Token\' field.',
+								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a href="#" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API token\' field.',
 								'plausible-analytics'
 							),
 							'post'
@@ -51,13 +51,13 @@ class Page extends API {
 					),
 					'fields' => [
 						[
-							'label' => esc_html__( 'Domain Name', 'plausible-analytics' ),
+							'label' => esc_html__( 'Domain name', 'plausible-analytics' ),
 							'slug'  => 'domain_name',
 							'type'  => 'text',
 							'value' => $domain,
 						],
 						[
-							'label' => esc_html__( 'API Token', 'plausible-analytics' ),
+							'label' => esc_html__( 'API token', 'plausible-analytics' ),
 							'slug'  => 'api_token',
 							'type'  => 'text',
 							'value' => $settings[ 'api_token' ],
@@ -504,7 +504,7 @@ class Page extends API {
 		if ( $settings[ 'self_hosted_domain' ] && $settings[ 'self_hosted_shared_link' ] ) {
 			$shared_link = $settings[ 'self_hosted_shared_link' ];
 		}
-		
+
 		$has_access             = false;
 		$user_roles_have_access = ! empty( $settings[ 'expand_dashboard_access' ] ) ? array_merge(
 			[ 'administrator' ],
