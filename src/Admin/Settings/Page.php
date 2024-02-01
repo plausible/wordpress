@@ -497,9 +497,14 @@ class Page extends API {
 	public function statistics_page() {
 		global $current_user;
 
-		$settings               = Helpers::get_settings();
-		$domain                 = Helpers::get_domain();
-		$shared_link            = ! empty( $settings[ 'shared_link' ] ) ? $settings[ 'shared_link' ] : '';
+		$settings    = Helpers::get_settings();
+		$domain      = Helpers::get_domain();
+		$shared_link = $settings[ 'shared_link' ] ?: '';
+
+		if ( $settings[ 'self_hosted_domain' ] && $settings[ 'self_hosted_shared_link' ] ) {
+			$shared_link = $settings[ 'self_hosted_shared_link' ];
+		}
+		
 		$has_access             = false;
 		$user_roles_have_access = ! empty( $settings[ 'expand_dashboard_access' ] ) ? array_merge(
 			[ 'administrator' ],
