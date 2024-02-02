@@ -66,10 +66,12 @@ class Page extends API {
 							'disabled' => ! empty( $settings[ 'self_hosted_domain' ] ),
 						],
 						[
-							'label'    => esc_html__( 'Connect', 'plausible-analytics' ),
+							'label'    => empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ) ?
+								esc_html__( 'Connect', 'plausible-analytics' ) : esc_html__( 'Connected', 'plausible-analytics' ),
 							'slug'     => 'connect_plausible_analytics',
 							'type'     => 'button',
-							'disabled' => empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ),
+							'disabled' => ( empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ) ) ||
+								( ! empty( $settings[ 'domain_name' ] ) && ! empty( $settings[ 'api_token' ] ) ),
 						],
 					],
 				],
@@ -377,18 +379,6 @@ class Page extends API {
 		}
 
 		/**
-		 * If View Stats is enabled, display notice.
-		 */
-		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
-			$this->fields[ 'general' ][ 3 ][ 'fields' ][] = [
-				'label'     => '',
-				'slug'      => 'enable_analytics_dashboard_notice',
-				'type'      => 'hook',
-				'hook_type' => 'success',
-			];
-		}
-
-		/**
 		 * If proxy is enabled, disable Self-hosted fields and display a warning.
 		 */
 		if ( Helpers::proxy_enabled() ) {
@@ -401,6 +391,32 @@ class Page extends API {
 				'label' => '',
 				'slug'  => 'option_disabled_by_proxy',
 				'type'  => 'hook',
+			];
+		}
+
+		if ( empty( $settings[ 'api_token' ] ) ) {
+			$this->fields[ 'general' ][ 0 ][ 'fields' ][] = [
+				'label' => '',
+				'slug'  => 'api_token_missing',
+				'type'  => 'hook',
+			];
+
+			$this->fields[ 'general' ][ 3 ][ 'fields' ][] = [
+				'label' => '',
+				'slug'  => 'option_disabled_by_missing_api_token',
+				'type'  => 'hook',
+			];
+		}
+
+		/**
+		 * If View Stats is enabled, display notice.
+		 */
+		if ( ! empty( $settings[ 'api_token' ] ) && ! empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
+			$this->fields[ 'general' ][ 3 ][ 'fields' ][] = [
+				'label'     => '',
+				'slug'      => 'enable_analytics_dashboard_notice',
+				'type'      => 'hook',
+				'hook_type' => 'success',
 			];
 		}
 	}
@@ -420,9 +436,11 @@ class Page extends API {
 		 * Plugin hooks
 		 */
 		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
+		add_action( 'plausible_analytics_settings_api_token_missing', [ $this, 'api_token_missing' ] );
 		add_action( 'plausible_analytics_settings_option_disabled_by_self_hosted_domain', [ $this, 'option_disabled_by_self_hosted_domain' ] );
 		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
 		add_action( 'plausible_analytics_settings_enable_analytics_dashboard_notice', [ $this, 'enable_analytics_dashboard_notice' ] );
+		add_action( 'plausible_analytics_settings_option_disabled_by_missing_api_token', [ $this, 'option_disabled_by_missing_api_token' ] );
 		add_action( 'plausible_analytics_settings_option_disabled_by_proxy', [ $this, 'option_disabled_by_proxy' ] );
 	}
 
@@ -652,11 +670,18 @@ class Page extends API {
 	 * @return void
 	 */
 	public function connect_button() {
-		$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
-		?>
-		<a href="<?php esc_attr_e( $url, 'plausible-analytics' ); ?>" target="_blank" class="plausible-analytics-btn">
-			<?php esc_html_e( 'Connect to Plausible', 'plausible-analytics' ); ?>
-		</a>
+		$settings = Helpers::get_settings();
+
+		if ( ! empty( $settings[ 'domain_name' ] ) && ! empty( $settings[ 'api_token' ] ) ): ?>
+
+		<?php else: ?>
+			<?php
+			$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
+			?>
+			<a href="<?php esc_attr_e( $url, 'plausible-analytics' ); ?>" target="_blank" class="plausible-analytics-btn">
+				<?php esc_html_e( 'Connect to Plausible', 'plausible-analytics' ); ?>
+			</a>
+		<?php endif; ?>
 		<?php
 	}
 
@@ -731,5 +756,25 @@ class Page extends API {
 				'post'
 			);
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function api_token_missing() {
+		echo wp_kses(
+			__( 'Please generate and insert the API token into the API token field above.', 'plausible-analytics' ),
+			'post'
+		);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function option_disabled_by_missing_api_token() {
+		echo wp_kses(
+			__( 'Please generate and insert the API token into the API token field above to enable this option.', 'plausible-analytics' ),
+			'post'
+		);
 	}
 }

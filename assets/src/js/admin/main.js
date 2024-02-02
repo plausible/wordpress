@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			button.children[0].classList.remove('hidden');
 			button.setAttribute('disabled', 'disabled');
 
-			plausible.ajax(form, button);
+			plausible.ajax(form, button, null, true);
 		},
 
 		/**
@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (!buttonIsHref) {
 				button.disabled = true;
+				button.innerHTML = button.innerHTML.replace('Connected', 'Connect');
 			} else {
 				button.classList += ' pointer-events-none';
 				button.classList.replace('bg-indigo-600', 'bg-gray-200')
