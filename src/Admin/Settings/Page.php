@@ -620,6 +620,7 @@ class Page extends API {
 					document.addEventListener('DOMContentLoaded', () => {
 						let iframe = '';
 
+						// Give iframe a chance to load.
 						setTimeout(function () {
 								iframe = document.getElementById('iFrameResizer0');
 							},
@@ -632,7 +633,6 @@ class Page extends API {
 						if (iframe === null) {
 							let div = document.getElementById('plausible-analytics-stats');
 
-							// Give iframe a chance to load.
 							div.innerHTML = '<p style="color: red;"><strong><?php echo __(
 								"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
 								'plausible-analytics'
