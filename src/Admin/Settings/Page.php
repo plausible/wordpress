@@ -237,7 +237,7 @@ class Page extends API {
 					'slug'   => 'tracked_user_roles',
 					'type'   => 'group',
 					'desc'   => esc_html__(
-						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them below.',
+						'By default, visits from logged in users aren\'t tracked. If you want to track visits for certain user roles then please specify them below.',
 						'plausible-analytics'
 					),
 					'toggle' => false,
