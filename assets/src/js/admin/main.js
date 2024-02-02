@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				data.append('options', JSON.stringify(options));
 				data.append('_nonce', plausible.nonce);
 
-				plausible.ajax(data, null, false);
+				plausible.ajax(data, null, false, true);
 			}
 		},
 

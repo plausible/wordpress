@@ -48,58 +48,93 @@ class API {
 	public function settings_page() {
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
 
-		$followed_wizard          = get_option( 'plausible_analytics_wizard_done' ) || ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] );
-		$this->slides             = [
-			'welcome'                    => __( 'Welcome to Plausible Analytics', 'plausible-analytics' ),
-			'domain_name'                => __( 'Confirm domain', 'plausible-analytics' ),
-			'api_token'                  => __( 'Create API token', 'plausible-analytics' ),
-			'enable_analytics_dashboard' => __( 'View the stats in your WP dashboard', 'plausible-analytics' ),
-			'enhanced_measurements'      => __( 'Enhanced measurements', 'plausible-analytics' ),
-			'proxy_enabled'              => __( 'Enable proxy', 'plausible-analytics' ),
-			'success'                    => __( 'Success!', 'plausible-analytics' ),
-		];
-		$this->slides_description = [
-			'welcome'                    => sprintf(
-				__(
-					'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight (< 1 KB) and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
-					'plausible-analytics'
-				),
-				'https://plausible.io/?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
-				'https://plausible.io/register?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
-			),
-			'domain_name'                => __( 'Confirm your domain name as you\'ve added it to your Plausible account.', 'plausible-analytics' ),
-			'api_token'                  => __(
-				'<a href="#" id="plausible-create-api-token">Create the API token</a> (link opens in a new window) that we\'ll use to automate the remaining setup process. Paste the API token in the field below and click "Next".',
-				'plausible-analytics'
-			),
-			'enable_analytics_dashboard' => __(
-				'Would you like to view your site\'s stats right here in your WordPress dashboard?',
-				'plausible-analytics'
-			),
-			'enhanced_measurements'      => __( 'Enable enhanced measurements', 'plausible-analytics' ),
-			'proxy_enabled'              => __(
-				'Run our scripts as a 1st party connection from your domain name to count visitors who use adblockers',
-				'plausible-analytics'
-			),
-			'success'                    => sprintf(
-				__(
-					'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them <a class="plausible-analytics-wizard-quit" data-nonce="%s" href="%s">here</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
-					'plausible-analytics'
-				),
-				'https://plausible.io',
-				wp_create_nonce( 'plausible_analytics_quit_wizard' ),
-				admin_url( 'options-general.php?page=plausible_analytics#tracked_user_roles' ),
-				'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
-				'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
-			),
-		];
+		$settings        = Helpers::get_settings();
+		$followed_wizard = get_option( 'plausible_analytics_wizard_done' ) || ! empty( $settings[ 'self_hosted_domain' ] );
 
+		/**
+		 * On-boarding wizard.
+		 */
 		if ( ! $followed_wizard ) {
+			$this->slides             = [
+				'welcome'                    => __( 'Welcome to Plausible Analytics', 'plausible-analytics' ),
+				'domain_name'                => __( 'Confirm domain', 'plausible-analytics' ),
+				'api_token'                  => __( 'Create API token', 'plausible-analytics' ),
+				'enable_analytics_dashboard' => __( 'View the stats in your WP dashboard', 'plausible-analytics' ),
+				'enhanced_measurements'      => __( 'Enhanced measurements', 'plausible-analytics' ),
+				'proxy_enabled'              => __( 'Enable proxy', 'plausible-analytics' ),
+				'success'                    => __( 'Success!', 'plausible-analytics' ),
+			];
+			$this->slides_description = [
+				'welcome'                    => sprintf(
+					__(
+						'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight (< 1 KB) and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Already have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
+						'plausible-analytics'
+					),
+					'https://plausible.io/?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
+					'https://plausible.io/register?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
+				),
+				'domain_name'                => __(
+					'Confirm your domain name as you\'ve added it to your Plausible account.',
+					'plausible-analytics'
+				),
+				'api_token'                  => __(
+					'<a class="hover:cursor-pointer underline" id="plausible-create-api-token">Create the API token</a> (link opens in a new window) that we\'ll use to automate your setup process. Paste the API token in the field below and click "Next".',
+					'plausible-analytics'
+				),
+				'enable_analytics_dashboard' => __(
+					'Would you like to view your site\'s stats in your WordPress dashboard?',
+					'plausible-analytics'
+				),
+				'enhanced_measurements'      => __( 'Enable enhanced measurements', 'plausible-analytics' ),
+				'proxy_enabled'              => __(
+					'Run our script as a first party connection from your domain name to count visitors who use ad blockers',
+					'plausible-analytics'
+				),
+				'success'                    => sprintf(
+					__(
+						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a class="plausible-analytics-wizard-quit" data-nonce="%s" href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+						'plausible-analytics'
+					),
+					'https://plausible.io',
+					wp_create_nonce( 'plausible_analytics_quit_wizard' ),
+					admin_url( 'options-general.php?page=plausible_analytics#tracked_user_roles' ),
+					'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
+					'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
+				),
+			];
+
+			if ( ! empty( $settings ) ) {
+				$this->slides_description[ 'welcome' ] = sprintf(
+					'<h4>%s</h4><p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p>',
+					__( 'Thanks for using the Plausible Analytics WordPress plugin!', 'plausible-analytics' ),
+					__(
+						'We’ve put a lot of effort into this new release. The experience will now be much more familiar to the experience you’re used to on our website.',
+						'plausible-analytics'
+					),
+					__(
+						'Plus, our brand new API eliminates many tasks that previously had to be done manually!',
+						'plausible-analytics'
+					),
+					__(
+						'For instance, after inserting the API token, enable the new Authors and categories tracking and it will be displayed in your stats immediately without you needing to add those properties manually in your site settings.',
+						'plausible-analytics'
+					),
+					__(
+						'This welcome screen will guide you through the process of creating the API token and introduce you to other new features we\'ve added, e.g. Revenue tracking. Click on the “Next” button below to start.',
+						'plausible-analytics'
+					),
+					__( 'We hope you’ll find this useful. Thanks again for using Plausible!', 'plausible-analytics' ),
+				);
+			}
+
 			$this->show_wizard();
 
 			return;
 		}
 
+		/**
+		 * Settings screen
+		 */
 		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
 		?>
 		<div class="h-full">
@@ -118,7 +153,7 @@ class API {
 								</a>
 								<?php $this->render_navigation(); ?>
 							</div>
-							<div class="flex item-center gap-x-6">
+							<div class="flex item-center gap-x-6 md:flex hidden">
 								<?php echo $this->render_quick_actions(); ?>
 							</div>
 						</nav>
@@ -180,7 +215,7 @@ class API {
 							?>
 							<?php foreach ( $this->slides as $id => $title ): ?>
 								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
-										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute min-w-full">
+										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute md:min-w-full sm:max-w-full">
 									<header class="relative">
 										<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
 											   for=""><?php echo $title; ?></label>
@@ -217,13 +252,13 @@ class API {
 												   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
-												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-												   class="plausible-analytics-wizard-quit inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
+												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>"
+												   class="plausible-analytics-wizard-quit hover:cursor-pointer inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
 													<?php esc_html_e( 'Setup later', 'plausible-analytics' ); ?>
 												</a>
 											<?php else: ?>
-												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>" href="#"
-												   class="plausible-analytics-wizard-quit no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>"
+												   class="plausible-analytics-wizard-quit hover:cursor-pointer no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 													<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
 												</a>
 											<?php endif; ?>

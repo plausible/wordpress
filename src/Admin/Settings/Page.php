@@ -29,6 +29,8 @@ class Page extends API {
 	 * @return void
 	 */
 	public function __construct() {
+		$this->init();
+
 		$settings           = Helpers::get_settings();
 		$domain             = Helpers::get_domain();
 		$self_hosted_domain = defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ? PLAUSIBLE_SELF_HOSTED_DOMAIN : $settings[ 'self_hosted_domain' ];
@@ -42,7 +44,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						wp_kses(
 							__(
-								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a href="#" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API token\' field.',
+								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a class="hover:cursor-pointer underline" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API token\' field.',
 								'plausible-analytics'
 							),
 							'post'
@@ -57,10 +59,11 @@ class Page extends API {
 							'value' => $domain,
 						],
 						[
-							'label' => esc_html__( 'API token', 'plausible-analytics' ),
-							'slug'  => 'api_token',
-							'type'  => 'text',
-							'value' => $settings[ 'api_token' ],
+							'label'    => esc_html__( 'API token', 'plausible-analytics' ),
+							'slug'     => 'api_token',
+							'type'     => 'text',
+							'value'    => $settings[ 'api_token' ],
+							'disabled' => ! empty( $settings[ 'self_hosted_domain' ] ),
 						],
 						[
 							'label'    => esc_html__( 'Connect', 'plausible-analytics' ),
@@ -109,11 +112,12 @@ class Page extends API {
 							'value' => 'tagged-events',
 						],
 						'revenue'        => [
-							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'revenue',
+							'label'    => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
+							'docs'     => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
+							'slug'     => 'enhanced_measurements',
+							'type'     => 'checkbox',
+							'value'    => 'revenue',
+							'disabled' => ! empty( $settings[ 'self_hosted_domain' ] ),
 						],
 						'pageview-props' => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
@@ -184,10 +188,11 @@ class Page extends API {
 					'toggle' => '',
 					'fields' => [
 						[
-							'label' => esc_html__( 'View stats in WordPress', 'plausible-analytics' ),
-							'slug'  => 'enable_analytics_dashboard',
-							'type'  => 'checkbox',
-							'value' => 'on',
+							'label'    => esc_html__( 'View stats in WordPress', 'plausible-analytics' ),
+							'slug'     => 'enable_analytics_dashboard',
+							'type'     => 'checkbox',
+							'value'    => 'on',
+							'disabled' => empty( Helpers::get_settings()[ 'api_token' ] ) && empty( Helpers::get_settings()[ 'self_hosted_domain' ] ),
 						],
 					],
 				],
@@ -316,7 +321,7 @@ class Page extends API {
 						__( 'Paste the shared link in the text box to view your stats in your WordPress dashboard.', 'plausible-analytics' ) .
 						'</li>' .
 						'</li></ol>',
-						esc_url( 'https://plausible.io/wordpress-analytics-plugin#how-to-view-your-stats-directly-in-your-wordpress-dashboard' )
+						esc_url( 'https://plausible.io/docs/embed-dashboard' )
 					),
 					'fields' => [
 						[
@@ -341,6 +346,28 @@ class Page extends API {
 			],
 		];
 
+		if ( ! empty( $settings[ 'self_hosted_domain' ] ) ) {
+			$option_disabled_hook = [
+				[
+					'label' => '',
+					'slug'  => 'option_disabled_by_self_hosted_domain',
+					'type'  => 'hook',
+				],
+			];
+
+			$fields = $this->fields[ 'general' ][ 0 ][ 'fields' ];
+
+			array_splice( $fields, 2, 0, $option_disabled_hook );
+
+			$this->fields[ 'general' ][ 0 ][ 'fields' ] = $fields;
+
+			$fields = $this->fields[ 'general' ][ 1 ][ 'fields' ];
+
+			array_splice( $fields, 5, 0, $option_disabled_hook );
+
+			$this->fields[ 'general' ][ 1 ][ 'fields' ] = $fields;
+		}
+
 		if ( Helpers::proxy_enabled() || ! empty( $settings[ 'self_hosted_domain' ] ) ) {
 			$this->fields[ 'general' ][ 2 ][ 'fields' ][] = [
 				'label' => '',
@@ -349,6 +376,9 @@ class Page extends API {
 			];
 		}
 
+		/**
+		 * If View Stats is enabled, display notice.
+		 */
 		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
 			$this->fields[ 'general' ][ 3 ][ 'fields' ][] = [
 				'label'     => '',
@@ -358,20 +388,42 @@ class Page extends API {
 			];
 		}
 
+		/**
+		 * If proxy is enabled, disable Self-hosted fields and display a warning.
+		 */
 		if ( Helpers::proxy_enabled() ) {
 			$this->fields[ 'self-hosted' ][ 0 ][ 'fields' ][] = [
 				'label' => '',
-				'slug'  => 'self_hosted_domain_notice',
+				'slug'  => 'option_disabled_by_proxy',
 				'type'  => 'hook',
 			];
 			$this->fields[ 'self-hosted' ][ 1 ][ 'fields' ][] = [
 				'label' => '',
-				'slug'  => 'self_hosted_shared_link_notice',
+				'slug'  => 'option_disabled_by_proxy',
 				'type'  => 'hook',
 			];
 		}
+	}
 
-		$this->init();
+	/**
+	 * Action hooks.
+	 * @return void
+	 */
+	private function init() {
+		/**
+		 * Core hooks
+		 */
+		add_action( 'admin_menu', [ $this, 'register_menu' ] );
+		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
+
+		/**
+		 * Plugin hooks
+		 */
+		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
+		add_action( 'plausible_analytics_settings_option_disabled_by_self_hosted_domain', [ $this, 'option_disabled_by_self_hosted_domain' ] );
+		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
+		add_action( 'plausible_analytics_settings_enable_analytics_dashboard_notice', [ $this, 'enable_analytics_dashboard_notice' ] );
+		add_action( 'plausible_analytics_settings_option_disabled_by_proxy', [ $this, 'option_disabled_by_proxy' ] );
 	}
 
 	/**
@@ -405,20 +457,6 @@ class Page extends API {
 		ksort( $roles_array, SORT_STRING );
 
 		return $roles_array;
-	}
-
-	/**
-	 * Action hooks.
-	 * @return void
-	 */
-	private function init() {
-		add_action( 'admin_menu', [ $this, 'register_menu' ] );
-		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
-		add_action( 'plausible_analytics_settings_api_connect_button', [ $this, 'connect_button' ] );
-		add_action( 'plausible_analytics_settings_proxy_warning', [ $this, 'proxy_warning' ] );
-		add_action( 'plausible_analytics_settings_enable_analytics_dashboard_notice', [ $this, 'enable_analytics_dashboard_notice' ] );
-		add_action( 'plausible_analytics_settings_self_hosted_domain_notice', [ $this, 'self_hosted_warning' ] );
-		add_action( 'plausible_analytics_settings_self_hosted_shared_link_notice', [ $this, 'self_hosted_warning' ] );
 	}
 
 	/**
@@ -465,7 +503,7 @@ class Page extends API {
 			'plausible_analytics_statistics',
 			[
 				$this,
-				'statistics_page',
+				'render_analytics_dashboard',
 			]
 		);
 
@@ -482,9 +520,13 @@ class Page extends API {
 		);
 	}
 
+	/**
+	 * A little hack to add some classes to the core #wpcontent div.
+	 * @return void
+	 */
 	public function add_background_color() {
 		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] == 'plausible_analytics' ) {
-			echo "<script>document.getElementById('wpcontent').classList += 'bg-gray-50 dark:bg-gray-85'; </script>";
+			echo "<script>document.getElementById('wpcontent').classList += 'px-2.5 bg-gray-50 dark:bg-gray-85'; </script>";
 		}
 	}
 
@@ -494,14 +536,14 @@ class Page extends API {
 	 * @access public
 	 * @return void
 	 */
-	public function statistics_page() {
+	public function render_analytics_dashboard() {
 		global $current_user;
 
-		$settings    = Helpers::get_settings();
-		$domain      = Helpers::get_domain();
-		$shared_link = $settings[ 'shared_link' ] ?: '';
+		$settings          = Helpers::get_settings();
+		$analytics_enabled = $settings[ 'enable_analytics_dashboard' ];
+		$shared_link       = $settings[ 'shared_link' ] ?: '';
 
-		if ( $settings[ 'self_hosted_domain' ] && $settings[ 'self_hosted_shared_link' ] ) {
+		if ( $settings[ 'self_hosted_domain' ] ) {
 			$shared_link = $settings[ 'self_hosted_shared_link' ];
 		}
 
@@ -543,7 +585,7 @@ class Page extends API {
 		 * those who haven't properly set it up.
 		 * @since v1.2.5
 		 */
-		if ( ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
+		if ( ! empty( $analytics_enabled ) && ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
 			$page_url = isset( $_GET[ 'page-url' ] ) ? esc_url( $_GET[ 'page-url' ] ) : '';
 
 			// Append individual page URL if it exists.
@@ -566,10 +608,14 @@ class Page extends API {
 						if (iframe === null) {
 							let div = document.getElementById('plausible-analytics-stats');
 
-							div.innerHTML = '<p style="color: red;"><strong><?php echo __(
-								"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
-								'plausible-analytics'
-							); ?></strong></p>';
+							// Give iframe a chance to load.
+							setTimeout(
+								div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+									"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
+									'plausible-analytics'
+								); ?></strong></p>',
+								1000
+							);
 						}
 					});
 				</script>
@@ -578,30 +624,33 @@ class Page extends API {
 		} else {
 			?>
 			<div class="plausible-analytics-statistics-not-loaded">
-				<?php
-				echo sprintf(
-					'%1$s <a href="%2$s">%3$s</a> %4$s %5$s <a href="%6$s">%7$s</a> %8$s',
-					esc_html( 'Please', 'plausible-analytics' ),
-					esc_url_raw( "https://plausible.io/{$domain}/settings/visibility" ),
-					esc_html( 'click here', 'plausible-analytics' ),
-					esc_html(
-						'to generate your shared link from your Plausible Analytics dashboard. Make sure the link is not password protected.',
-						'plausible-analytics'
-					),
-					esc_html( 'Now, copy the generated shared link and', 'plausible-analytics' ),
-					admin_url( 'options-general.php?page=plausible_analytics' ),
-					esc_html( 'paste here', 'plausible-analytics' ),
-					esc_html(
-						'under Shared Link to view Plausible Analytics dashboard within your WordPress site.',
-						'plausible-analytics'
-					)
-				);
-				?>
+				<p>
+					<?php if ( $settings[ 'self_hosted_domain' ] ) : ?>
+						<?php echo sprintf(
+							__(
+								'Please enter your <em>Shared Link</em> under <a href="%s">Self-Hosted Settings</a>.',
+								'plausible-analytics'
+							),
+							admin_url( 'options-general.php?page=plausible_analytics#is_shared_link' ),
+							admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' )
+						); ?>
+					<?php else: ?>
+						<?php echo sprintf(
+							__( 'Please <a href="%s">click here</a> to enable <strong>View Stats in WordPress</strong>.', 'plausible-analytics' ),
+							admin_url( 'options-general.php?page=plausible_analytics#is_shared_link' )
+						);
+						?>
+					<?php endif; ?>
+				</p>
 			</div>
 			<?php
 		}
 	}
 
+	/**
+	 * Display connect button.
+	 * @return void
+	 */
 	public function connect_button() {
 		$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
 		?>
@@ -618,13 +667,7 @@ class Page extends API {
 	 */
 	public function proxy_warning() {
 		if ( ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] ) ) {
-			echo wp_kses(
-				__(
-					'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.',
-					'plausible-analytics'
-				),
-				'post'
-			);
+			$this->option_disabled_by_self_hosted_domain();
 		} else {
 			echo sprintf(
 				wp_kses(
@@ -637,6 +680,20 @@ class Page extends API {
 				'https://plausible.io/contact'
 			);
 		}
+	}
+
+	/**
+	 * Show notice when API token notice is disabled.
+	 * @return void
+	 */
+	public function option_disabled_by_self_hosted_domain() {
+		echo wp_kses(
+			__(
+				'This option is disabled, because the <strong>Domain Name</strong> setting is enabled under <em>Self-Hosted</em> settings.',
+				'plausible-analytics'
+			),
+			'post'
+		);
 	}
 
 	/**
@@ -664,7 +721,7 @@ class Page extends API {
 	 * @since 1.3.3
 	 * @return void
 	 */
-	public function self_hosted_warning() {
+	public function option_disabled_by_proxy() {
 		if ( Helpers::proxy_enabled() ) {
 			echo wp_kses(
 				__(

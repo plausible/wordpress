@@ -40,6 +40,7 @@ final class Plugin {
 			new Admin\Actions();
 			new Admin\Module();
 			new Admin\Provisioning();
+			new Admin\SelfHosted();
 		}
 
 		new Includes\Actions();
