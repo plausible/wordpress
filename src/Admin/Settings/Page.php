@@ -627,12 +627,12 @@ class Page extends API {
 							let div = document.getElementById('plausible-analytics-stats');
 
 							// Give iframe a chance to load.
-							setTimeout(
-								div.innerHTML = '<p style="color: red;"><strong><?php echo __(
-									"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
-									'plausible-analytics'
-								); ?></strong></p>',
-								1000
+							setTimeout(function () {
+									div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+										"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
+										'plausible-analytics'
+									); ?></strong></p>';
+								}, 1000
 							);
 						}
 					});
