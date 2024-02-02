@@ -618,7 +618,13 @@ class Page extends API {
 				<script async src="https://plausible.io/js/embed.host.js"></script>
 				<script>
 					document.addEventListener('DOMContentLoaded', () => {
-						let iframe = document.getElementById('iFrameResizer0');
+						let iframe = '';
+
+						setTimeout(function () {
+								iframe = document.getElementById('iFrameResizer0');
+							},
+							1500
+						);
 
 						/**
 						 * Adblocker active.
@@ -627,13 +633,10 @@ class Page extends API {
 							let div = document.getElementById('plausible-analytics-stats');
 
 							// Give iframe a chance to load.
-							setTimeout(function () {
-									div.innerHTML = '<p style="color: red;"><strong><?php echo __(
-										"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
-										'plausible-analytics'
-									); ?></strong></p>';
-								}, 1000
-							);
+							div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+								"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
+								'plausible-analytics'
+							); ?></strong></p>';
 						}
 					});
 				</script>
