@@ -186,7 +186,8 @@ class Ajax {
 		}
 
 		foreach ( $options as $option ) {
-			$settings[ $option->name ] = $option->value;
+			// Clean spaces
+			$settings[ $option->name ] = trim( $option->value );
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
