@@ -8,8 +8,6 @@
 
 namespace Plausible\Analytics\WP\Includes;
 
-use Plausible\Analytics\WP\Includes\Helpers;
-
 class Ajax {
 	/**
 	 * @var array Allows defining custom success messages for options.
