@@ -43,13 +43,28 @@ class Ajax {
 	 * @return void
 	 */
 	public function quit_wizard() {
-		$post_data = $this->clean( $_POST );
+		$request_data = $this->clean( $_REQUEST );
 
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_quit_wizard' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data[ '_nonce' ], 'plausible_analytics_quit_wizard' ) < 1 ) {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
 		update_option( 'plausible_analytics_wizard_done', true );
+
+		if ( ! empty( $request_data[ 'redirect' ] ) ) {
+			$url = admin_url( 'options-general.php?page=plausible_analytics' );
+
+			// Redirect param points to a specific option.
+			if ( $request_data[ 'redirect' ] !== '1' ) {
+				$url .= '#' . $request_data[ 'redirect' ];
+			}
+
+			wp_redirect( $url );
+
+			exit;
+		}
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -97,6 +112,8 @@ class Ajax {
 		}
 
 		delete_option( 'plausible_analytics_wizard_done' );
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -159,13 +176,13 @@ class Ajax {
 		$settings  = Helpers::get_settings();
 
 		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
-			return;
+			wp_send_json_error( __( 'Forbidden', 'plausible-analytics' ), 403 );
 		}
 
 		$options = json_decode( $post_data[ 'options' ] );
 
 		if ( empty( $options ) ) {
-			return;
+			wp_send_json_error( __( 'No options found to save.', 'plausible-analytics' ), 400 );
 		}
 
 		foreach ( $options as $option ) {

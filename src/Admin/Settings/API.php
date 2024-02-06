@@ -92,12 +92,13 @@ class API {
 				),
 				'success'                    => sprintf(
 					__(
-						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a class="plausible-analytics-wizard-quit" data-nonce="%s" href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
 						'plausible-analytics'
 					),
 					'https://plausible.io',
-					wp_create_nonce( 'plausible_analytics_quit_wizard' ),
-					admin_url( 'options-general.php?page=plausible_analytics#tracked_user_roles' ),
+					admin_url( 'admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=' ) .
+					wp_create_nonce( 'plausible_analytics_quit_wizard' ) .
+					'&redirect=tracked_user_roles',
 					'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
 					'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
 				),
@@ -235,6 +236,7 @@ class API {
 										?>
 										<?php ++ $i; ?>
 										<div class="mt-6">
+											<?php $nonce = wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>
 											<?php if ( array_key_exists( $i, $slide_ids ) ) : ?>
 												<?php $disabled = false;
 
@@ -252,13 +254,17 @@ class API {
 												   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-color">
 													<?php esc_html_e( 'Next', 'plausible-analytics' ); ?>
 												</a>
-												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>"
-												   class="plausible-analytics-wizard-quit hover:cursor-pointer inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
+												<a href="<?php echo admin_url(
+													"admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=$nonce&redirect=1"
+												); ?>"
+												   class="hover:cursor-pointer inline-block mt-4 px-4 py-2 border no-underline text-sm leading-5 font-medium rounded-md text-red-700 bg-white dark:text-white hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:border-blue-300 focus:ring active:text-red-800 active:bg-gray-50 transition ease-in-out duration-150">
 													<?php esc_html_e( 'Setup later', 'plausible-analytics' ); ?>
 												</a>
 											<?php else: ?>
-												<a data-nonce="<?php echo wp_create_nonce( 'plausible_analytics_quit_wizard' ); ?>"
-												   class="plausible-analytics-wizard-quit hover:cursor-pointer no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+												<a href="<?php echo admin_url(
+													"admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=$nonce&redirect=1"
+												); ?>"
+												   class="hover:cursor-pointer no-underline gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 													<?php esc_html_e( 'Visit plugin settings', 'plausible-analytics' ); ?>
 												</a>
 											<?php endif; ?>

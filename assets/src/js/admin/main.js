@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		apiTokenElem: document.getElementById('api_token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
-		quitWizardElems: document.getElementsByClassName('plausible-analytics-wizard-quit'),
 
 		/**
 		 * Bind events.
@@ -69,12 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (this.stepElems.length > 0) {
 				for (let i = 0; i < this.stepElems.length; i++) {
 					this.stepElems[i].addEventListener('click', this.saveOptionOnNext);
-				}
-			}
-
-			if (this.quitWizardElems.length > 0) {
-				for (let i = 0; i < this.quitWizardElems.length; i++) {
-					this.quitWizardElems[i].addEventListener('click', this.quitWizard);
 				}
 			}
 		},
@@ -169,21 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			plausible.ajax(form, button, null, true);
 		},
-
-		/**
-		 * Quit wizard.
-		 *
-		 * @param e
-		 */
-		quitWizard: function (e) {
-			const form = new FormData();
-
-			form.append('action', 'plausible_analytics_quit_wizard');
-			form.append('_nonce', e.target.dataset.nonce);
-
-			plausible.ajax(form, null, false, true);
-		}
-		,
 
 		/**
 		 * Save Options on Next click for API Token and Domain Name slides.
