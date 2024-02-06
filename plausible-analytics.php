@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin version here for convenience.
-define( 'PLAUSIBLE_ANALYTICS_VERSION', '2.0.0' );
+define( 'PLAUSIBLE_ANALYTICS_VERSION', '2.0.2' );
 define( 'PLAUSIBLE_ANALYTICS_PLUGIN_FILE', __FILE__ );
 define( 'PLAUSIBLE_ANALYTICS_PLUGIN_BASENAME', plugin_basename( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) );
 define( 'PLAUSIBLE_ANALYTICS_PLUGIN_DIR', plugin_dir_path( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) );
