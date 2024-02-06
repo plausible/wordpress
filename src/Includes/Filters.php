@@ -99,6 +99,10 @@ class Filters {
 
 		global $post;
 
+		if ( ! $post instanceof \WP_Post ) {
+			return $params;
+		}
+
 		$author = $post->post_author;
 
 		if ( $author ) {
