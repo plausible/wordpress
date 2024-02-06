@@ -70,8 +70,9 @@ class Actions {
 		}
 
 		$wizard_done = get_option( 'plausible_analytics_wizard_done', false );
+		$self_hosted = Helpers::get_settings()[ 'self_hosted_domain' ];
 
-		if ( ! $wizard_done ) {
+		if ( ! $wizard_done && ! $self_hosted ) {
 			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome_slide' );
 
 			wp_redirect( $url );
