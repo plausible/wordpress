@@ -96,7 +96,7 @@ class Helpers {
 		}
 
 		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'revenue', 'pageview-props', 'compat', 'hash' ] as $extension ) {
-			if ( in_array( $extension, $settings[ 'enhanced_measurements' ], true ) ) {
+			if ( is_array($extension) && in_array( $extension, $settings[ 'enhanced_measurements' ], true ) ) {
 				$file_name .= '.' . $extension;
 			}
 		}
