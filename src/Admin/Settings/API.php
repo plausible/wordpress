@@ -95,7 +95,7 @@ class API {
 						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
 						'plausible-analytics'
 					),
-					'https://plausible.io',
+					admin_url( 'index.php?page=plausible_analytics_statistics' ),
 					admin_url( 'admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=' ) .
 					wp_create_nonce( 'plausible_analytics_quit_wizard' ) .
 					'&redirect=tracked_user_roles',
@@ -103,6 +103,20 @@ class API {
 					'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
 				),
 			];
+
+			if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
+				$this->slides_description[ 'success' ] = sprintf(
+					__(
+						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+						'plausible-analytics'
+					),
+					admin_url( 'admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=' ) .
+					wp_create_nonce( 'plausible_analytics_quit_wizard' ) .
+					'&redirect=tracked_user_roles',
+					'https://plausible.io/docs?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
+					'https://plausible.io/contact?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin'
+				);
+			}
 
 			if ( ! empty( $settings ) ) {
 				$this->slides_description[ 'welcome' ] = sprintf(
