@@ -63,17 +63,18 @@ Plausible is open source analytics. Our source code is available and accessible 
 
 * Our product is updated several times per week and with our WordPress plugin you always have access to all the latest features
 * Automatically includes tracking code in the header of your site
-* Simple plugin settings page with easy options
+* Simple plugin settings page with easy options and an onboarding guide 
 * Get more accurate stats by running the Plausible script as a first-party connection from your domain name
 * View your Plausible stats directly in your WordPress dashboard (you can grant access to other user roles too)
 * Tracking of admin users is disabled by default (you can also disable tracking of other user roles)
-* Enable file downloads, external link clicks and 404 error pages tracking 
+* Enable ecommerce revenue, file downloads, external link clicks and 404 error pages tracking 
+* Enable automated tracking of post authors and post categories for better content analysis
 * Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
 * Import your historical Google Universal Analytics stats
 * Keep an eye on your traffic with weekly and/or monthly email and Slack reports
 * Get traffic spike notifications via email or Slack so you don't miss being on the Hacker News
-* Tag your paid ads, emails and social media posts with UTM tags and analyze your ecommerce and marketing campaigns from click to conversion
+* Tag your paid ads, emails and social media posts with UTM tags and analyze your ecommerce and marketing campaigns from click to conversion using marketing funnels 
 * Filter the dashboard by any metric that you click on to get further insights. Mix and match filters too
 
 For more information: [How to setup Plausible Analytics WordPress plugin](https://plausible.io/wordpress-analytics-plugin).
