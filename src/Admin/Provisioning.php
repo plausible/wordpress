@@ -103,6 +103,10 @@ class Provisioning {
 			);
 		}
 
+		if ( empty( $goals ) ) {
+			return;
+		}
+
 		$create_request->setGoals( $goals );
 		$response = $this->client->create_goals( $create_request );
 
