@@ -5,7 +5,7 @@
  * Description: Simple and privacy-friendly alternative to Google Analytics.
  * Author: Plausible.io
  * Author URI: https://plausible.io
- * Version: 2.0.1
+ * Version: 2.0.2
  * Text Domain: plausible-analytics
  * Domain Path: /languages
  */
