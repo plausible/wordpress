@@ -47,6 +47,12 @@ class Provisioning {
 	 * @return void
 	 */
 	private function init() {
+		if ( ! extension_loaded( 'curl' ) ) {
+			add_action( 'init', [ $this, 'add_curl_error' ] );
+
+			return;
+		}
+
 		if ( ! $this->client->check_password() ) {
 			return;
 		}
@@ -55,6 +61,20 @@ class Provisioning {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
+	}
+
+	/**
+	 * Show an error on the settings screen if cURL isn't enabled on this machine.
+	 * @return void
+	 */
+	public function add_curl_error() {
+		set_transient(
+			'plausible_analytics_error',
+			__(
+				'cURL is not enabled on this server, which means API provisioning will not work. Please contact your hosting provider to enable the cURL module.',
+				'plausible-analytics'
+			)
+		);
 	}
 
 	/**
