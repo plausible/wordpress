@@ -514,17 +514,22 @@ class Page extends API {
 			}
 		}
 
-		// Setup `Analytics` page under Dashboard.
-		add_dashboard_page(
-			esc_html__( 'Analytics', 'plausible-analytics' ),
-			esc_html__( 'Analytics', 'plausible-analytics' ),
-			$capabilities,
-			'plausible_analytics_statistics',
-			[
-				$this,
-				'render_analytics_dashboard',
-			]
-		);
+		/**
+		 * Don't show the Analytics dashboard, if View Stats is disabled.
+		 */
+		if ( ! empty( Helpers::get_settings()[ 'enable_analytics_dashboard' ] ) ) {
+			// Setup `Analytics` page under Dashboard.
+			add_dashboard_page(
+				esc_html__( 'Analytics', 'plausible-analytics' ),
+				esc_html__( 'Analytics', 'plausible-analytics' ),
+				$capabilities,
+				'plausible_analytics_statistics',
+				[
+					$this,
+					'render_analytics_dashboard',
+				]
+			);
+		}
 
 		// Setup `Plausible Analytics` page under Settings.
 		add_options_page(
