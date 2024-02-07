@@ -230,5 +230,7 @@ class Upgrades {
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
+
+		update_option( 'plausible_analytics_version', '2.0.3' );
 	}
 }
