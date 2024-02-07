@@ -30,6 +30,8 @@ class SelfHosted {
 	}
 
 	/**
+	 * Removing the API token will effectively disable all auto provisioning, which Self Hosters can't use either way.
+	 *
 	 * @param $settings
 	 *
 	 * @return void
