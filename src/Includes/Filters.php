@@ -93,7 +93,7 @@ class Filters {
 	public function maybe_add_custom_params( $params ) {
 		$settings = Helpers::get_settings();
 
-		if ( ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
+		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
 			return $params;
 		}
 
