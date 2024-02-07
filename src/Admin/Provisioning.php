@@ -37,6 +37,12 @@ class Provisioning {
 	 * Build class.
 	 */
 	public function __construct() {
+		if ( ! extension_loaded( 'curl' ) && ! ini_get( 'allow_url_fopen' ) ) {
+			add_action( 'init', [ $this, 'add_curl_error' ] );
+
+			return;
+		}
+
 		$this->client = new Client();
 
 		$this->init();
@@ -47,12 +53,6 @@ class Provisioning {
 	 * @return void
 	 */
 	private function init() {
-		if ( ! extension_loaded( 'curl' ) ) {
-			add_action( 'init', [ $this, 'add_curl_error' ] );
-
-			return;
-		}
-
 		if ( ! $this->client->check_password() ) {
 			return;
 		}
@@ -71,9 +71,10 @@ class Provisioning {
 		set_transient(
 			'plausible_analytics_error',
 			__(
-				'cURL is not enabled on this server, which means API provisioning will not work. Please contact your hosting provider to enable the cURL module.',
+				'cURL is not enabled on this server, which means API provisioning will not work. Please contact your hosting provider to enable the cURL module or <code>allow_url_fopen</code>.',
 				'plausible-analytics'
-			)
+			),
+			5
 		);
 	}
 
