@@ -70,7 +70,8 @@ class Page extends API {
 								esc_html__( 'Connect', 'plausible-analytics' ) : esc_html__( 'Connected', 'plausible-analytics' ),
 							'slug'     => 'connect_plausible_analytics',
 							'type'     => 'button',
-							'disabled' => ( empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ) ) ||
+							'disabled' => ( empty( $settings[ 'self_hosted_domain' ] ) ) &&
+								( empty( $settings[ 'domain_name' ] ) || empty( $settings[ 'api_token' ] ) ) ||
 								( ! empty( $settings[ 'domain_name' ] ) && ! empty( $settings[ 'api_token' ] ) ),
 						],
 					],
@@ -394,7 +395,7 @@ class Page extends API {
 			];
 		}
 
-		if ( empty( $settings[ 'api_token' ] ) ) {
+		if ( empty( $settings[ 'api_token' ] ) && empty( $settings[ 'self_hosted_domain' ] ) ) {
 			$this->fields[ 'general' ][ 0 ][ 'fields' ][] = [
 				'label' => '',
 				'slug'  => 'api_token_missing',
@@ -629,7 +630,7 @@ class Page extends API {
 						// Give iframe a chance to load.
 						setTimeout(function () {
 								iframe = document.getElementById('iFrameResizer0');
-								
+
 								/**
 								 * Adblocker active.
 								 */
