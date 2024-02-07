@@ -47,8 +47,8 @@ class Filters {
 
 		$settings    = Helpers::get_settings();
 		$api_url     = Helpers::get_data_api_url();
-		$domain_name = esc_url( $settings[ 'domain_name' ] );
-		
+		$domain_name = esc_html( $settings[ 'domain_name' ] );
+
 		// We need the correct id attribute for IE compatibility.
 		$tag    = preg_replace( "/\sid=(['\"])plausible-analytics-js(['\"])/", " id=$1plausible$2", $tag );
 		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}'";
