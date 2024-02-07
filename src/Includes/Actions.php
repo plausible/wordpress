@@ -57,10 +57,7 @@ class Actions {
 		);
 
 		// Track 404 pages (if enabled)
-		if ( ! empty( $settings[ 'enhanced_measurements' ] ) &&
-			is_array( $settings[ 'enhanced_measurements' ] ) &&
-			in_array( '404', $settings[ 'enhanced_measurements' ] ) &&
-			is_404() ) {
+		if ( is_array( $settings[ 'enhanced_measurements' ] ) && in_array( '404', $settings[ 'enhanced_measurements' ] ) && is_404() ) {
 			wp_add_inline_script(
 				'plausible-analytics',
 				"document.addEventListener('DOMContentLoaded', function () { plausible('404', { props: { path: document.location.pathname } }); });"
