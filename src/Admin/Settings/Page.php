@@ -560,8 +560,9 @@ class Page extends API {
 		$settings          = Helpers::get_settings();
 		$analytics_enabled = $settings[ 'enable_analytics_dashboard' ];
 		$shared_link       = $settings[ 'shared_link' ] ?: '';
+		$self_hosted       = ! empty( $settings [ 'self_hosted_domain' ] );
 
-		if ( $settings[ 'self_hosted_domain' ] ) {
+		if ( $self_hosted ) {
 			$shared_link = $settings[ 'self_hosted_shared_link' ];
 		}
 
@@ -602,8 +603,13 @@ class Page extends API {
 		 * Now, we explicitly check for the existence of this example "auth" key, and display a human readable error message to
 		 * those who haven't properly set it up.
 		 * @since v1.2.5
+		 * For self-hosters the View Stats option doesn't need to be enabled, if a Shared Link is entered, we can assume they want to View Stats.
+		 * For regular users, the shared link is provisioned by the API, so it shouldn't be empty.
+		 * @since v2.0.3
 		 */
-		if ( ! empty( $analytics_enabled ) && ! empty( $shared_link ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
+		if ( ( ! $self_hosted && ! empty( $analytics_enabled ) && ! empty( $shared_link ) ) ||
+			( $self_hosted && ! empty( $shared_link ) ) ||
+			strpos( $shared_link, 'XXXXXX' ) !== false ) {
 			$page_url = isset( $_GET[ 'page-url' ] ) ? esc_url( $_GET[ 'page-url' ] ) : '';
 
 			// Append individual page URL if it exists.
@@ -623,21 +629,22 @@ class Page extends API {
 						// Give iframe a chance to load.
 						setTimeout(function () {
 								iframe = document.getElementById('iFrameResizer0');
+								
+								/**
+								 * Adblocker active.
+								 */
+								if (iframe === null) {
+									let div = document.getElementById('plausible-analytics-stats');
+
+									div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+										"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
+										'plausible-analytics'
+									); ?></strong></p>';
+								}
 							},
 							1500
 						);
 
-						/**
-						 * Adblocker active.
-						 */
-						if (iframe === null) {
-							let div = document.getElementById('plausible-analytics-stats');
-
-							div.innerHTML = '<p style="color: red;"><strong><?php echo __(
-								"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
-								'plausible-analytics'
-							); ?></strong></p>';
-						}
 					});
 				</script>
 			</div>
@@ -652,7 +659,6 @@ class Page extends API {
 								'Please enter your <em>Shared Link</em> under <a href="%s">Self-Hosted Settings</a>.',
 								'plausible-analytics'
 							),
-							admin_url( 'options-general.php?page=plausible_analytics#is_shared_link' ),
 							admin_url( 'options-general.php?page=plausible_analytics&tab=self-hosted' )
 						); ?>
 					<?php else: ?>
