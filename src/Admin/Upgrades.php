@@ -66,6 +66,10 @@ class Upgrades {
 			$this->upgrade_to_200();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.0.3', '<' ) ) {
+			$this->upgrade_to_203();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -212,5 +216,19 @@ class Upgrades {
 		delete_transient( 'plausible_analytics_module_install_failed_notice_dismissed' );
 		delete_transient( 'plausible_analytics_proxy_test_failed_notice_dismissed' );
 		delete_transient( 'plausible_analytics_notice' );
+	}
+
+	/**
+	 * Makes sure the View Stats option is enabled for users that previously set a shared link.
+	 * @return void
+	 */
+	private function upgrade_to_203() {
+		$settings = Helpers::get_settings();
+
+		if ( ! empty( $settings[ 'shared_link' ] ) ) {
+			$settings[ 'enable_analytics_dashboard' ] = 'on';
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
 	}
 }
