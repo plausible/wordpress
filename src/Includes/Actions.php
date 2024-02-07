@@ -85,36 +85,38 @@ class Actions {
 		}
 
 		// Add main admin bar node.
-		$args = [
+		$args[] = [
 			'id'    => 'plausible-admin-bar',
 			'title' => 'Plausible Analytics',
 		];
-		$admin_bar->add_node( $args );
 
-		// Add link to view all stats.
-		$args   = [];
-		$args[] = [
-			'id'     => 'view-analytics',
-			'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
-			'href'   => admin_url( 'index.php?page=plausible_analytics_statistics' ),
-			'parent' => 'plausible-admin-bar',
-		];
+		$settings = Helpers::get_settings();
 
-		// Add link to individual page stats.
-		if ( is_singular() ) {
-			global $post;
-			$uri = wp_make_link_relative( get_permalink( $post->ID ) );
-
+		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ||
+			( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'self_hosted_shared_link' ] ) ) ) {
 			$args[] = [
-				'id'     => 'view-page-analytics',
-				'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
-				'href'   => add_query_arg(
-					'page-url',
-					is_home() ? '' : $uri,
-					admin_url( 'index.php?page=plausible_analytics_statistics' )
-				),
+				'id'     => 'view-analytics',
+				'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
+				'href'   => admin_url( 'index.php?page=plausible_analytics_statistics' ),
 				'parent' => 'plausible-admin-bar',
 			];
+
+			// Add link to individual page stats.
+			if ( is_singular() ) {
+				global $post;
+				$uri = wp_make_link_relative( get_permalink( $post->ID ) );
+
+				$args[] = [
+					'id'     => 'view-page-analytics',
+					'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
+					'href'   => add_query_arg(
+						'page-url',
+						is_home() ? '' : $uri,
+						admin_url( 'index.php?page=plausible_analytics_statistics' )
+					),
+					'parent' => 'plausible-admin-bar',
+				];
+			}
 		}
 
 		// Add link to Plausible Settings page.
@@ -124,6 +126,7 @@ class Actions {
 			'href'   => admin_url( 'options-general.php?page=plausible_analytics' ),
 			'parent' => 'plausible-admin-bar',
 		];
+
 		foreach ( $args as $arg ) {
 			$admin_bar->add_node( $arg );
 		}

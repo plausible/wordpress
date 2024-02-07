@@ -514,10 +514,13 @@ class Page extends API {
 			}
 		}
 
+		$settings = Helpers::get_settings();
+
 		/**
 		 * Don't show the Analytics dashboard, if View Stats is disabled.
 		 */
-		if ( ! empty( Helpers::get_settings()[ 'enable_analytics_dashboard' ] ) ) {
+		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ||
+			( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'self_hosted_shared_link' ] ) ) ) {
 			// Setup `Analytics` page under Dashboard.
 			add_dashboard_page(
 				esc_html__( 'Analytics', 'plausible-analytics' ),
