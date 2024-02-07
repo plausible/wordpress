@@ -59,8 +59,8 @@ class Actions {
 	 * @return void
 	 */
 	public function maybe_redirect_to_wizard() {
-		// Make sure it only runs when requested by a browser.
-		if ( wp_doing_ajax() || wp_doing_cron() ) {
+		// Make sure it only runs when requested by (an admin in) a browser.
+		if ( wp_doing_ajax() || wp_doing_cron() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
