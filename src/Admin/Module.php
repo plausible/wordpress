@@ -67,13 +67,13 @@ class Module {
 		}
 
 		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
-			$this->throw_notice();
+			$this->show_module_not_installed_error();
 		}
 
 		$results = copy_dir( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'mu-plugin', WPMU_PLUGIN_DIR );
 
 		if ( is_wp_error( $results ) ) {
-			$this->throw_notice();
+			$this->show_module_not_installed_error();
 		}
 
 		add_option( 'plausible_analytics_proxy_speed_module_installed', true );
@@ -83,21 +83,19 @@ class Module {
 	 * @since 1.3.0
 	 * @return void
 	 */
-	private function throw_notice() {
-		if ( wp_doing_ajax() ) {
-			wp_send_json_error(
-				sprintf(
-					wp_kses(
-						__(
-							'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
-							'plausible-analytics'
-						),
-						'post'
-					),
-					'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
-				)
-			);
-		}
+	private function show_module_not_installed_error() {
+		$message = sprintf(
+			wp_kses(
+				__(
+					'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
+					'plausible-analytics'
+				),
+				'post'
+			),
+			'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
+		);
+
+		set_transient( 'plausible_analytics_error', $message, 5 );
 	}
 
 	/**
