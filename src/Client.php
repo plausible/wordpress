@@ -58,14 +58,7 @@ class Client {
 				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
 			);
 		} catch ( Exception $e ) {
-			if ( wp_doing_ajax() ) {
-				wp_send_json_error(
-					sprintf(
-						__( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ),
-						$e->getMessage()
-					)
-				);
-			}
+			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
 		}
 
 		if ( $result instanceof SharedLink ) {
@@ -75,6 +68,36 @@ class Client {
 		if ( ! empty( $shared_link->getHref() ) ) {
 			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
 		}
+	}
+
+	/**
+	 * @param Exception $e
+	 * @param string    $error_message The human-readable part of the error message, requires an %s at the end!
+	 *
+	 * @return void
+	 */
+	private function send_json_error( $e, $error_message ) {
+		if ( ! wp_doing_ajax() ) {
+			return;
+		}
+
+		$message       = $e->getMessage();
+		$response_body = $e->getResponseBody();
+
+		if ( $response_body !== null ) {
+			$response_json = json_decode( $response_body );
+
+			if ( ! empty( $response_json->errors[ 0 ]->detail->error ) ) {
+				$message = $response_json->errors[ 0 ]->detail->error;
+			}
+		}
+
+		wp_send_json_error(
+			sprintf(
+				$error_message,
+				$message
+			)
+		);
 	}
 
 	/**
@@ -88,14 +111,7 @@ class Client {
 		try {
 			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $goals );
 		} catch ( Exception $e ) {
-			if ( wp_doing_ajax() ) {
-				wp_send_json_error(
-					sprintf(
-						__( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ),
-						$e->getMessage()
-					)
-				);
-			}
+			$this->send_json_error( $e, __( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ) );
 		}
 	}
 
@@ -108,17 +124,13 @@ class Client {
 		try {
 			$this->api_instance->plausibleWebPluginsAPIControllersGoalsDelete( $id );
 		} catch ( Exception $e ) {
-			if ( wp_doing_ajax() ) {
-				wp_send_json_error(
-					sprintf(
-						__(
-							'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
-							'plausible-analytics'
-						),
-						$e->getMessage()
-					)
-				);
-			}
+			$this->send_json_error(
+				$e,
+				__(
+					'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
+					'plausible-analytics'
+				)
+			);
 		}
 	}
 
@@ -133,28 +145,13 @@ class Client {
 		try {
 			$this->api_instance->plausibleWebPluginsAPIControllersCustomPropsEnable( $enable_request );
 		} catch ( Exception $e ) {
-			if ( wp_doing_ajax() ) {
-				$message       = $e->getMessage();
-				$response_body = $e->getResponseBody();
-
-				if ( $response_body !== null ) {
-					$response_json = json_decode( $response_body );
-
-					if ( ! empty( $response_json->errors[ 0 ]->detail ) ) {
-						$message = $response_json->errors[ 0 ]->detail;
-					}
-				}
-
-				wp_send_json_error(
-					sprintf(
-						__(
-							'Something went wrong while trying to enable Pageview Properties. The error message was: %s',
-							'plausible-analytics'
-						),
-						$message
-					)
-				);
-			}
+			$this->send_json_error(
+				$e,
+				__(
+					'Something went wrong while trying to enable Pageview Properties. The error message was: %s',
+					'plausible-analytics'
+				)
+			);
 		}
 	}
 }
