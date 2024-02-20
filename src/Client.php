@@ -62,7 +62,7 @@ class Client {
 
 	/**
 	 * @param Exception $e
-	 * @param string    $error_message The human-readable part of the error message, requires an %s at the end!
+	 * @param string    $error_message The human-readable part of the error message, requires a %s at the end!
 	 *
 	 * @return void
 	 */
@@ -71,23 +71,37 @@ class Client {
 			return;
 		}
 
+		$code = $e->getCode();
+
+		// Any error codes outside the 4xx range should show a generic error.
+		if ( ( $code >= 100 && $code <= 199 ) || ( $code >= 300 && $code <= 399 ) || ( $code >= 500 && $code <= 599 ) ) {
+			$message = __( 'Something went wrong, try again later.', 'plausible-analytics' );
+
+			wp_send_json_error( $message );
+		}
+
 		$message       = $e->getMessage();
 		$response_body = $e->getResponseBody();
 
 		if ( $response_body !== null ) {
 			$response_json = json_decode( $response_body );
 
-			if ( ! empty( $response_json->errors[ 0 ]->detail->error ) ) {
-				$message = $response_json->errors[ 0 ]->detail->error;
+			if ( ! empty( $response_json->errors ) ) {
+				$message = '';
+
+				foreach ( $response_json->errors as $error_no => $error ) {
+					$message .= $error->detail;
+
+					if ( $error_no + 1 === count( $response_json->errors ) ) {
+						$message .= '.';
+					} elseif ( count( $response_json->errors ) > 1 ) {
+						$message .= ', ';
+					}
+				}
 			}
 		}
 
-		wp_send_json_error(
-			sprintf(
-				$error_message,
-				$message
-			)
-		);
+		wp_send_json_error( sprintf( $error_message, $message ) );
 	}
 
 	/**
@@ -141,7 +155,7 @@ class Client {
 			$this->send_json_error(
 				$e,
 				__(
-					'Something went wrong while trying to delete a Custom Event Goal. Please delete it manually. The error message was: %s',
+					'Something went wrong while deleting a Custom Event Goal: %s',
 					'plausible-analytics'
 				)
 			);
@@ -162,7 +176,7 @@ class Client {
 			$this->send_json_error(
 				$e,
 				__(
-					'Something went wrong while trying to enable Pageview Properties. The error message was: %s',
+					'Something went wrong while enabling Pageview Properties: %s',
 					'plausible-analytics'
 				)
 			);
