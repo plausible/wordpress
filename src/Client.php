@@ -3,6 +3,7 @@
 namespace Plausible\Analytics\WP;
 
 use Exception;
+use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
@@ -41,6 +42,7 @@ class Client {
 	/**
 	 * Validates the API token (password) set in the current instance.
 	 * @return bool
+	 * @throws ApiException
 	 */
 	public function validate_api_token() {
 		$password = $this->api_instance->getConfig()->getPassword();
@@ -49,16 +51,39 @@ class Client {
 	}
 
 	/**
-	 * @return Client\Model\GoalListResponse|UnauthorizedError|void
+	 * We intentionally ignore the Exception, because this method is (currently) only used for API token validation.
+	 * @return Client\Model\GoalListResponse|UnauthorizedError|false
+	 * @throws ApiException
 	 */
 	public function get_goals() {
 		try {
 			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex( 10 );
-		} catch ( Exception $e ) {
-			$this->send_json_error(
-				$e,
-				__( 'Couldn\'t retrieve goals: %s', 'plausible-analytics' )
+		} catch ( \Exception $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Create Shared Link in Plausible Dashboard.
+	 * @return void
+	 */
+	public function create_shared_link() {
+		$shared_link = (object) [];
+
+		try {
+			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
+				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
 			);
+		} catch ( Exception $e ) {
+			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
+		}
+
+		if ( $result instanceof SharedLink ) {
+			$shared_link = $result->getSharedLink();
+		}
+
+		if ( ! empty( $shared_link->getHref() ) ) {
+			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
 		}
 	}
 
@@ -104,30 +129,6 @@ class Client {
 		}
 
 		wp_send_json_error( sprintf( $error_message, $message ) );
-	}
-
-	/**
-	 * Create Shared Link in Plausible Dashboard.
-	 * @return void
-	 */
-	public function create_shared_link() {
-		$shared_link = (object) [];
-
-		try {
-			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
-				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
-			);
-		} catch ( Exception $e ) {
-			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
-		}
-
-		if ( $result instanceof SharedLink ) {
-			$shared_link = $result->getSharedLink();
-		}
-
-		if ( ! empty( $shared_link->getHref() ) ) {
-			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
-		}
 	}
 
 	/**
