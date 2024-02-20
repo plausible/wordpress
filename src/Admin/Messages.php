@@ -25,4 +25,16 @@ class Messages {
 	public static function set_error( $message, $expiration = 5 ) {
 		set_transient( 'plausible_analytics_error', $message, $expiration );
 	}
+
+	/**
+	 * Sets a notice.
+	 *
+	 * @param $message
+	 * @param $expiration
+	 *
+	 * @return void
+	 */
+	public static function set_notice( $message, $expiration = 5 ) {
+		set_transient( 'plausible_analytics_notice', $message, $expiration );
+	}
 }

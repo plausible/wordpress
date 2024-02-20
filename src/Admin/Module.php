@@ -173,13 +173,27 @@ class Module {
 		/**
 		 * No need to run this on each update run.
 		 */
-		if ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] === 'on' ) {
+		if ( empty( $settings[ 'proxy_enabled' ] ) || ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] === 'on' ) ) {
 			return $settings;
 		}
 
-		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled( $settings ) );
+		$is_ssl = $this->is_ssl();
 
-		if ( ! $test_succeeded && Helpers::proxy_enabled( $settings ) && wp_doing_ajax() ) {
+		if ( ! $is_ssl ) {
+			Messages::set_notice(
+				sprintf(
+					__(
+						'Please check that your proxy is functioning correctly. If you encounter any issues with tracking, <a href="%s" target="_blank">click here</a> for a list of potential solutions',
+						'plausible-analytics'
+					),
+					'https://plausible.io/wordpress-analytics-plugin#stats-not-being-recorded-after-enabling-the-proxy'
+				)
+			);
+		}
+
+		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled( $settings ) && wp_doing_ajax() );
+
+		if ( ! $test_succeeded ) {
 			Messages::set_error(
 				sprintf(
 					wp_kses(
@@ -199,6 +213,15 @@ class Module {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * is_ssl() only checks the current scheme that is used, which fails on an Nginx Reverse Proxy (where the scheme is HTTP behind the proxy), this
+	 * function is a custom wrapper which also checks the WordPress configuration for the presence of https in the configured Home URL.
+	 * @return bool
+	 */
+	private function is_ssl() {
+		return strpos( get_home_url(), 'https' ) !== false || is_ssl();
 	}
 
 	/**
