@@ -79,7 +79,7 @@ class Helpers {
 
 		$settings = get_option( 'plausible_analytics_settings', [] );
 
-		return wp_parse_args( $settings, $defaults );
+		return apply_filters( 'plausible_analytics_settings', wp_parse_args( $settings, $defaults ) );
 	}
 
 	/**
