@@ -171,7 +171,7 @@ class Module {
 	 */
 	public function maybe_enable_proxy( $settings, $old_settings ) {
 		/**
-		 * No need to run this on each update run.
+		 * No need to run this on each update run, or when the proxy is disabled.
 		 */
 		if ( empty( $settings[ 'proxy_enabled' ] ) || ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] === 'on' ) ) {
 			return $settings;
