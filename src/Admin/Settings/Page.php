@@ -11,10 +11,7 @@ namespace Plausible\Analytics\WP\Admin\Settings;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	wp_die( 'Cheat\'in huh?' );
-}
+defined( 'ABSPATH' ) || exit;
 
 class Page extends API {
 	/**
@@ -590,7 +587,7 @@ class Page extends API {
 		// Show error, if not having access.
 		if ( ! $has_access ) :
 			?>
-            <div class="plausible-analytics-statistics-not-loaded">
+			<div class="plausible-analytics-statistics-not-loaded">
 				<?php
 				echo sprintf(
 					'%1$s',
@@ -602,7 +599,7 @@ class Page extends API {
 
 				return;
 				?>
-            </div>
+			</div>
 		<?php
 		endif;
 
@@ -626,42 +623,42 @@ class Page extends API {
 				$shared_link .= "&page={$page_url}";
 			}
 			?>
-            <div id="plausible-analytics-stats">
-                <iframe plausible-embed=""
-                        src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>"
-                        scrolling="no" loading="lazy" style="border: 0; width: 100%; height: 1750px; "></iframe>
-                <script async src="https://plausible.io/js/embed.host.js"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        let iframe = '';
+			<div id="plausible-analytics-stats">
+				<iframe plausible-embed=""
+						src="<?php echo "{$shared_link}&embed=true&theme=light&background=transparent"; ?>"
+						scrolling="no" loading="lazy" style="border: 0; width: 100%; height: 1750px; "></iframe>
+				<script async src="https://plausible.io/js/embed.host.js"></script>
+				<script>
+					document.addEventListener('DOMContentLoaded', () => {
+						let iframe = '';
 
-                        // Give iframe a chance to load.
-                        setTimeout(function () {
-                                iframe = document.getElementById('iFrameResizer0');
+						// Give iframe a chance to load.
+						setTimeout(function () {
+								iframe = document.getElementById('iFrameResizer0');
 
-                                /**
-                                 * Adblocker active.
-                                 */
-                                if (iframe === null) {
-                                    let div = document.getElementById('plausible-analytics-stats');
+								/**
+								 * Adblocker active.
+								 */
+								if (iframe === null) {
+									let div = document.getElementById('plausible-analytics-stats');
 
-                                    div.innerHTML = '<p style="color: red;"><strong><?php echo __(
+									div.innerHTML = '<p style="color: red;"><strong><?php echo __(
 										"Plausible Analytics\' statistics couldn\'t be loaded. Please disable your ad blocker.",
 										'plausible-analytics'
 									); ?></strong></p>';
-                                }
-                            },
-                            1500
-                        );
+								}
+							},
+							1500
+						);
 
-                    });
-                </script>
-            </div>
+					});
+				</script>
+			</div>
 			<?php
 		} else {
 			?>
-            <div class="plausible-analytics-statistics-not-loaded">
-                <p>
+			<div class="plausible-analytics-statistics-not-loaded">
+				<p>
 					<?php if ( $settings[ 'self_hosted_domain' ] ) : ?>
 						<?php echo sprintf(
 							__(
@@ -677,8 +674,8 @@ class Page extends API {
 						);
 						?>
 					<?php endif; ?>
-                </p>
-            </div>
+				</p>
+			</div>
 			<?php
 		}
 	}
@@ -696,9 +693,9 @@ class Page extends API {
 			<?php
 			$url = sprintf( 'https://plausible.io/%s/settings/integrations?new_token=Wordpress', Helpers::get_domain() );
 			?>
-            <a href="<?php esc_attr_e( $url, 'plausible-analytics' ); ?>" target="_blank" class="plausible-analytics-btn">
+			<a href="<?php esc_attr_e( $url, 'plausible-analytics' ); ?>" target="_blank" class="plausible-analytics-btn">
 				<?php esc_html_e( 'Connect to Plausible', 'plausible-analytics' ); ?>
-            </a>
+			</a>
 		<?php endif; ?>
 		<?php
 	}

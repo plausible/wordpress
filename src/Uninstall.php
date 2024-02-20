@@ -8,9 +8,7 @@
 
 namespace Plausible\Analytics\WP;
 
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
-}
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 /**
  * This class is run upon uninstall and cleans up any data in the database and leftover files added by this plugin.

@@ -1,26 +1,19 @@
 <?php
 /**
  * Plausible Analytics | Filters.
- *
  * @since      1.2.5
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
 
 namespace Plausible\Analytics\WP\Includes;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Compatibility {
 	/**
 	 * A list of filters and actions to prevent our script from being manipulated by other plugins, known to cause issues.
-	 *
 	 * Our script is already <1KB, so there's no need to minify, combine or optimize it in any other way.
-	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -61,7 +54,9 @@ class Compatibility {
 
 	/**
 	 * Adds window.plausible
+	 *
 	 * @param mixed $exclude_js
+	 *
 	 * @return string
 	 */
 	public function exclude_plausible_js_as_string( $exclude_js ) {
@@ -72,17 +67,16 @@ class Compatibility {
 
 	/**
 	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine our inline JS, please.
-	 *
 	 * @filter rocket_excluded_inline_js_content
+	 * @since  1.2.5
 	 *
 	 * @param array $inline_js
-	 * @since 1.2.5
 	 *
 	 * @return array
 	 */
 	public function exclude_plausible_inline_js( $inline_js ) {
-		if ( ! isset( $inline_js['plausible'] ) ) {
-			$inline_js['plausible'] = 'window.plausible';
+		if ( ! isset( $inline_js[ 'plausible' ] ) ) {
+			$inline_js[ 'plausible' ] = 'window.plausible';
 		}
 
 		return $inline_js;
@@ -90,12 +84,11 @@ class Compatibility {
 
 	/**
 	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine/delay our external JS, please.
-	 *
 	 * @filter rocket_exclude_js
 	 * @filter rocket_minify_excluded_external_js
+	 * @since  1.2.5
 	 *
 	 * @param array $excluded_js
-	 * @since 1.2.5
 	 *
 	 * @return array
 	 */
@@ -107,12 +100,11 @@ class Compatibility {
 
 	/**
 	 * Dear WP Rocket/SG Optimizer/Etc., don't minify/combine/delay our external JS, please.
-	 *
 	 * @filter rocket_exclude_js
 	 * @filter rocket_minify_excluded_external_js
+	 * @since  1.2.5
 	 *
 	 * @param array $excluded_js
-	 * @since 1.2.5
 	 *
 	 * @return array
 	 */

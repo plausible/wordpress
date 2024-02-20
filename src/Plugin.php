@@ -2,10 +2,7 @@
 
 namespace Plausible\Analytics\WP;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Loads and registers plugin functionality through WordPress hooks.

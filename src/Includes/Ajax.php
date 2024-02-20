@@ -11,6 +11,8 @@ namespace Plausible\Analytics\WP\Includes;
 use Plausible\Analytics\WP\Admin\Messages;
 use Plausible\Analytics\WP\Client;
 
+defined( 'ABSPATH' ) || exit;
+
 class Ajax {
 	/**
 	 * Build class.

@@ -11,6 +11,8 @@ namespace Plausible\Analytics\WP\Admin;
 use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Includes\Helpers;
 
+defined( 'ABSPATH' ) || exit;
+
 class Provisioning {
 	/**
 	 * @var Client $client

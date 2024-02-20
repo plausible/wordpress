@@ -11,10 +11,7 @@ namespace Plausible\Analytics\WP\Includes;
 use WP_Term;
 use Exception;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Filters {
 	/**

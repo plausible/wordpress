@@ -1,27 +1,19 @@
 <?php
 /**
  * Plausible Analytics | Admin Filters.
- *
- * @since 1.0.0
- *
+ * @since      1.0.0
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
 
 namespace Plausible\Analytics\WP\Admin;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Filters {
-
 	/**
 	 * Constructor.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -41,9 +33,13 @@ class Filters {
 
 		if ( true === stristr( $current_screen->base, 'plausible-analytics' ) ) {
 			return sprintf(
-				/* translators: %s: Link to 5 star rating */
-				__( 'If you like <strong>Plausible Analytics</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!', 'plausible-analytics' ),
-				'<a href="https://wordpress.org/support/view/plugin-reviews/plausible-analytics?filter=5#postform" target="_blank" class="plausible-analytics-rating-link" style="text-decoration:none;" data-rated="' . esc_attr__( 'Thanks :)', 'plausible-analytics' ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+			/* translators: %s: Link to 5 star rating */ __(
+					'If you like <strong>Plausible Analytics</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!',
+					'plausible-analytics'
+				),
+				'<a href="https://wordpress.org/support/view/plugin-reviews/plausible-analytics?filter=5#postform" target="_blank" class="plausible-analytics-rating-link" style="text-decoration:none;" data-rated="' .
+				esc_attr__( 'Thanks :)', 'plausible-analytics' ) .
+				'">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 			);
 		}
 
@@ -52,10 +48,9 @@ class Filters {
 
 	/**
 	 * Plugin page action links.
+	 * @since 1.0.0
 	 *
 	 * @param array $actions An array of plugin action links.
-	 *
-	 * @since 1.0.0
 	 *
 	 * @return array
 	 */

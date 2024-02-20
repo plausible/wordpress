@@ -8,10 +8,7 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class SelfHosted {
 	/**

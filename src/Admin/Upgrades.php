@@ -11,10 +11,7 @@ namespace Plausible\Analytics\WP\Admin;
 use Exception;
 use Plausible\Analytics\WP\Includes\Helpers;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Upgrades

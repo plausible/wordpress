@@ -10,10 +10,7 @@ namespace Plausible\Analytics\WP\Includes;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Actions {
 	/**

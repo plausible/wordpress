@@ -1,26 +1,24 @@
 <?php
 /**
  * Plausible Analytics | Setup.
- *
  * @since      1.3.0
- *
  * @package    WordPress
  * @subpackage Plausible Analytics
  */
 
 namespace Plausible\Analytics\WP\Includes;
 
+defined( 'ABSPATH' ) || exit;
+
 class Setup {
 	/**
 	 * Cron job handle
-	 *
 	 * @var string
 	 */
 	private $cron = 'plausible_analytics_update_js';
 
 	/**
 	 * Filters and Hooks.
-	 *
 	 * @return void
 	 */
 	public function __construct() {

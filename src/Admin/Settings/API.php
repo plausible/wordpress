@@ -11,10 +11,7 @@ namespace Plausible\Analytics\WP\Admin\Settings;
 
 use Plausible\Analytics\WP\Includes\Helpers;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	wp_die( 'Cheat\'in huh?' );
-}
+defined( 'ABSPATH' ) || exit;
 
 class API {
 	/**

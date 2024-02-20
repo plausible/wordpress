@@ -11,10 +11,7 @@ namespace Plausible\Analytics\WP\Includes;
 use Exception;
 use WpOrg\Requests\Exception\InvalidArgument;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Helpers {
 	/**
