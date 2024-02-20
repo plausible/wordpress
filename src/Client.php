@@ -74,7 +74,7 @@ class Client {
 		$code = $e->getCode();
 
 		// Any error codes outside the 4xx range should show a generic error.
-		if ( ( $code >= 100 && $code <= 199 ) || ( $code >= 300 && $code <= 399 ) || ( $code >= 500 && $code <= 599 ) ) {
+		if ( $code <= 399 || $code >= 500 ) {
 			$message = __( 'Something went wrong, try again later.', 'plausible-analytics' );
 
 			wp_send_json_error( $message );
