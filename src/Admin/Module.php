@@ -217,7 +217,7 @@ class Module {
 
 	/**
 	 * is_ssl() only checks the current scheme that is used, which fails on an Nginx Reverse Proxy (where the scheme is HTTP behind the proxy), this
-	 * function is a custom wrapper which also checks the WordPress configuration for the presence of https in the configured Home URL.
+	 * function is a custom wrapper which also checks the WordPress configuration for the presence of "https" in the configured Home URL.
 	 * @return bool
 	 */
 	private function is_ssl() {
