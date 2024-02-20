@@ -6,9 +6,7 @@ use Exception;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
-use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest;
 use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequestBulkEnable;
-use Plausible\Analytics\WP\Client\Model\CustomPropListResponse;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreate;
 use Plausible\Analytics\WP\Client\Model\PaymentRequiredError;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
@@ -28,45 +26,37 @@ class Client {
 
 	/**
 	 * Setup basic authorization, basic_auth.
+	 *
+	 * @param string $token Allows to specify the token, e.g. when it's not stored in the DB yet.
 	 */
-	public function __construct() {
+	public function __construct( $token = '' ) {
 		$config             = Configuration::getDefaultConfiguration()->setUsername( 'WordPress' )->setPassword(
-			Helpers::get_settings()[ 'api_token' ]
+			$token ?? Helpers::get_settings()[ 'api_token' ]
 		);
 		$this->api_instance = new DefaultApi( new GuzzleClient(), $config );
 	}
 
 	/**
-	 * Checks if a password is set. It doesn't validate the password!
+	 * Validates the API token (password) set in the current instance.
 	 * @return bool
 	 */
-	public function check_password() {
+	public function validate_api_token() {
 		$password = $this->api_instance->getConfig()->getPassword();
 
-		return ! empty( $password );
+		return strpos( $password, 'plausible-plugin' ) !== false && ! empty( $this->get_goals() );
 	}
 
 	/**
-	 * Create Shared Link in Plausible Dashboard.
-	 * @return void
+	 * @return Client\Model\GoalListResponse|UnauthorizedError|void
 	 */
-	public function create_shared_link() {
-		$shared_link = (object) [];
-
+	public function get_goals() {
 		try {
-			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
-				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
-			);
+			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex( 10 );
 		} catch ( Exception $e ) {
-			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
-		}
-
-		if ( $result instanceof SharedLink ) {
-			$shared_link = $result->getSharedLink();
-		}
-
-		if ( ! empty( $shared_link->getHref() ) ) {
-			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+			$this->send_json_error(
+				$e,
+				__( 'Couldn\'t retrieve goals: %s', 'plausible-analytics' )
+			);
 		}
 	}
 
@@ -98,6 +88,30 @@ class Client {
 				$message
 			)
 		);
+	}
+
+	/**
+	 * Create Shared Link in Plausible Dashboard.
+	 * @return void
+	 */
+	public function create_shared_link() {
+		$shared_link = (object) [];
+
+		try {
+			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
+				[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
+			);
+		} catch ( Exception $e ) {
+			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
+		}
+
+		if ( $result instanceof SharedLink ) {
+			$shared_link = $result->getSharedLink();
+		}
+
+		if ( ! empty( $shared_link->getHref() ) ) {
+			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+		}
 	}
 
 	/**

@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		nonceElem: document.getElementById('_wpnonce'),
 		nonce: '',
 		showWizardElem: document.getElementById('show_wizard'),
-		createAPITokenElem: document.getElementById('plausible-create-api-token'),
 		domainNameElem: document.getElementById('domain_name'),
 		apiTokenElem: document.getElementById('api_token'),
+		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
 
@@ -41,16 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
 				this.showWizardElem.addEventListener('click', this.showWizard);
 			}
 
-			if (this.createAPITokenElem !== null) {
-				this.createAPITokenElem.addEventListener('click', this.createAPIToken);
-			}
-
 			if (this.domainNameElem !== null) {
 				this.domainNameElem.addEventListener('keyup', this.disableConnectButton);
 			}
 
 			if (this.apiTokenElem !== null) {
 				this.apiTokenElem.addEventListener('keyup', this.disableConnectButton);
+			}
+
+			if (this.createAPITokenElems.length > 0) {
+				for (let i = 0; i < this.createAPITokenElems.length; i++) {
+					this.createAPITokenElems[i].addEventListener('click', this.createAPIToken);
+				}
 			}
 
 			if (this.buttonElems.length > 0) {
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * Toggle Option and store in DB.
 		 *
 		 * @param e
+		 * @param showNotice
 		 */
 		toggleOption: function (e, showNotice = true) {
 			/**

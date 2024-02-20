@@ -8,20 +8,14 @@
 
 namespace Plausible\Analytics\WP\Includes;
 
-class Ajax {
-	/**
-	 * @var array Allows defining custom success messages for options.
-	 */
-	private $option_success_messages = [];
+use Plausible\Analytics\WP\Admin\Messages;
+use Plausible\Analytics\WP\Client;
 
+class Ajax {
 	/**
 	 * Build class.
 	 */
 	public function __construct() {
-		$this->option_success_messages = [
-			'Enable proxy' => __( 'Proxy', 'plausible-analytics' ),
-		];
-
 		$this->init();
 	}
 
@@ -153,12 +147,7 @@ class Ajax {
 
 		do_action( 'plausible_analytics_settings_saved' );
 
-		$option_label = $post_data[ 'option_label' ];
-
-		if ( in_array( $option_label, array_keys( $this->option_success_messages ) ) ) {
-			$option_label = $this->option_success_messages[ $post_data[ 'option_label' ] ];
-		}
-
+		$option_label  = $post_data[ 'option_label' ];
 		$toggle_status = $post_data[ 'toggle_status' ] === 'on' ? __( 'enabled', 'plausible-analytics' ) : __( 'disabled', 'plausible-analytics' );
 
 		wp_send_json_success( sprintf( '%s %s.', $option_label, $toggle_status ), 200 );
@@ -186,10 +175,40 @@ class Ajax {
 		foreach ( $options as $option ) {
 			// Clean spaces
 			$settings[ $option->name ] = trim( $option->value );
+
+			// Validate API token, if this is the API token field.
+			if ( $option->name === 'api_token' ) {
+				$this->validate_api_token( $option->value );
+			}
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
 
 		wp_send_json_success( __( 'Settings saved.', 'plausible-analytics' ), 200 );
+	}
+
+	/**
+	 * Validate the entered API token, before storing it to the DB. wp_send_json_error() ensures that code execution stops.
+	 *
+	 * @param string $token
+	 *
+	 * @return void
+	 */
+	private function validate_api_token( $token = '' ) {
+		$client = new Client( $token );
+
+		if ( ! $client->validate_api_token() ) {
+			Messages::set_error(
+				sprintf(
+					__(
+						'Oops! The API token you used is invalid. Please <a class="plausible-create-api-token hover:cursor-pointer underline">click here</a> to generate a new token.',
+						'plausible-analytics'
+					),
+					''
+				)
+			);
+
+			wp_send_json_error( __( 'Invalid API token.', 'plausible-analytics' ) );
+		}
 	}
 }

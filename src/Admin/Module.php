@@ -95,7 +95,7 @@ class Module {
 			'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
 		);
 
-		set_transient( 'plausible_analytics_error', $message, 5 );
+		Messages::set_error( $message );
 	}
 
 	/**
@@ -180,8 +180,7 @@ class Module {
 		$test_succeeded = $this->test_proxy( Helpers::proxy_enabled( $settings ) );
 
 		if ( ! $test_succeeded && Helpers::proxy_enabled( $settings ) && wp_doing_ajax() ) {
-			set_transient(
-				'plausible_analytics_error',
+			Messages::set_error(
 				sprintf(
 					wp_kses(
 						__(
@@ -192,8 +191,7 @@ class Module {
 					),
 					Helpers::get_rest_endpoint( false ),
 					'https://plausible.io/contact'
-				),
-				5
+				)
 			);
 
 			// Disable the proxy.

@@ -44,7 +44,7 @@ class Page extends API {
 					'desc'   => sprintf(
 						wp_kses(
 							__(
-								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a class="hover:cursor-pointer underline" id="plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API token\' field.',
+								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a class="hover:cursor-pointer underline plausible-create-api-token">generate the API token</a> (link opens in a new window) and paste it into the \'API token\' field.',
 								'plausible-analytics'
 							),
 							'post'

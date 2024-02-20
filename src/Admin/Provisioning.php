@@ -56,7 +56,7 @@ class Provisioning {
 	 * @return void
 	 */
 	private function init() {
-		if ( ! $this->client->check_password() ) {
+		if ( ! $this->client->validate_api_token() ) {
 			return;
 		}
 
@@ -71,13 +71,11 @@ class Provisioning {
 	 * @return void
 	 */
 	public function add_curl_error() {
-		set_transient(
-			'plausible_analytics_error',
+		Messages::set_error(
 			__(
 				'cURL is not enabled on this server, which means API provisioning will not work. Please contact your hosting provider to enable the cURL module or <code>allow_url_fopen</code>.',
 				'plausible-analytics'
-			),
-			5
+			)
 		);
 	}
 

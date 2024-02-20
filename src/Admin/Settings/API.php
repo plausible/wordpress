@@ -78,7 +78,7 @@ class API {
 					'plausible-analytics'
 				),
 				'api_token'                  => __(
-					'<a class="hover:cursor-pointer underline" id="plausible-create-api-token">Create the API token</a> (link opens in a new window) that we\'ll use to automate your setup process. Paste the API token in the field below and click "Next".',
+					'<a class="hover:cursor-pointer underline plausible-create-api-token">Create the API token</a> (link opens in a new window) that we\'ll use to automate your setup process. Paste the API token in the field below and click "Next".',
 					'plausible-analytics'
 				),
 				'enable_analytics_dashboard' => __(
