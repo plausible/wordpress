@@ -108,15 +108,23 @@ class Filters {
 			$params .= " event-author='$author_name'";
 		}
 
-		$categories = get_the_category( $post->ID );
+		// Add support for post category and tags along with custom taxonomies.
+		$taxonomies = get_object_taxonomies( $post->post_type );
 
-		if ( ! is_array( $categories ) ) {
-			return $params;
-		}
+		// Loop through existing taxonomies.
+		foreach ( $taxonomies as $taxonomy ) {
+			$terms = get_the_terms( $post->ID, $taxonomy );
 
-		foreach ( $categories as $category ) {
-			if ( $category instanceof WP_Term ) {
-				$params .= " event-category='$category->name'";
+			// Skip the iteration, if `$terms` is not array.
+			if ( ! is_array( $terms ) ) {
+				continue;
+			}
+
+			// Loop through the terms.
+			foreach ( $terms as $term ) {
+				if ( $term instanceof WP_Term ) {
+					$params .= " event-{$taxonomy}='{$term->name}'";
+				}
 			}
 		}
 
