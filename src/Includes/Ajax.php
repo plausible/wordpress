@@ -10,6 +10,7 @@ namespace Plausible\Analytics\WP\Includes;
 
 use Plausible\Analytics\WP\Admin\Messages;
 use Plausible\Analytics\WP\Client;
+use Plausible\Analytics\WP\Client\ApiException;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -195,6 +196,7 @@ class Ajax {
 	 * @param string $token
 	 *
 	 * @return void
+	 * @throws ApiException
 	 */
 	private function validate_api_token( $token = '' ) {
 		$client = new Client( $token );
