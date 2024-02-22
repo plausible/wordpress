@@ -44,22 +44,51 @@ class Client {
 	 * @throws ApiException
 	 */
 	public function validate_api_token() {
-		$password = $this->api_instance->getConfig()->getPassword();
+		$password    = $this->api_instance->getConfig()->getPassword();
+		$features    = $this->get_features();
+		$data_domain = $this->get_data_domain();
 
-		return strpos( $password, 'plausible-plugin' ) !== false && ! empty( $this->get_goals() );
+		return strpos( $password, 'plausible-plugin' ) !== false && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
 	}
 
 	/**
-	 * We intentionally ignore the Exception, because this method is (currently) only used for API token validation.
-	 * @return Client\Model\GoalListResponse|UnauthorizedError|false
-	 * @throws ApiException
+	 * Retrieve Features from Capabilities object.
+	 * @return false|Client\Model\CapabilitiesFeatures
 	 */
-	public function get_goals() {
+	private function get_features() {
 		try {
-			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndex( 10 );
+			$capabilities = $this->get_capabilities();
 		} catch ( \Exception $e ) {
 			return false;
 		}
+
+		return $capabilities->getFeatures();
+	}
+
+	/**
+	 * Retrieve all capabilities assigned to configured API token.
+	 * @return bool|Client\Model\Capabilities
+	 */
+	private function get_capabilities() {
+		try {
+			return $this->api_instance->plausibleWebPluginsAPIControllersCapabilitiesIndex();
+		} catch ( \Exception $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieve Data Domain property from Capabilities object.
+	 * @return false|string
+	 */
+	private function get_data_domain() {
+		try {
+			$capabilities = $this->get_capabilities();
+		} catch ( \Exception $e ) {
+			return false;
+		}
+
+		return $capabilities->getDataDomain();
 	}
 
 	/**
