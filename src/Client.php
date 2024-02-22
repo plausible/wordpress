@@ -13,7 +13,6 @@ use Plausible\Analytics\WP\Client\Model\PaymentRequiredError;
 use Plausible\Analytics\WP\Client\Model\SharedLink;
 use Plausible\Analytics\WP\Client\Model\UnauthorizedError;
 use Plausible\Analytics\WP\Client\Model\UnprocessableEntityError;
-use Plausible\Analytics\WP\Helpers;
 
 defined( 'ABSPATH' ) || exit;
 

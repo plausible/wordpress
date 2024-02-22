@@ -9,7 +9,6 @@
 namespace Plausible\Analytics\WP;
 
 use Plausible\Analytics\WP\Admin\Messages;
-use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Client\ApiException;
 
 defined( 'ABSPATH' ) || exit;

@@ -8,8 +8,6 @@
 
 namespace Plausible\Analytics\WP;
 
-use Plausible\Analytics\WP\Helpers;
-
 defined( 'ABSPATH' ) || exit;
 
 class Actions {
