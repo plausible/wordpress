@@ -6,7 +6,7 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 use WP_Term;
 use Exception;
@@ -74,7 +74,7 @@ class Filters {
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
 		if ( strpos( $url, $rest_endpoint ) !== false ) {
-			return get_option( 'home' ) . $rest_endpoint;
+			return Filters . phpget_option( 'home' ) . $rest_endpoint;
 		}
 
 		return $url;

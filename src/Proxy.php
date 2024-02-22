@@ -9,7 +9,7 @@
  *            https://daan.dev/wordpress/caos-pro/
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 use Exception;
 

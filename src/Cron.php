@@ -6,7 +6,7 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 use WpOrg\Requests\Exception\InvalidArgument;
 use Exception;

@@ -6,7 +6,7 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -66,6 +66,6 @@ class Setup {
 	 * Triggers the cron script.
 	 */
 	public function load_cron_script() {
-		new \Plausible\Analytics\WP\Includes\Cron();
+		new \Plausible\Analytics\WP\Cron();
 	}
 }

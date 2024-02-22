@@ -6,7 +6,7 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 use Exception;
 use WpOrg\Requests\Exception\InvalidArgument;
@@ -32,7 +32,7 @@ class Helpers {
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
 		if ( $local && self::proxy_enabled() ) {
-			return esc_url( self::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
+			return esc_url( Helpers . phpself::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
 		}
 
 		// Allows for hard-coding the self-hosted domain.
@@ -168,8 +168,8 @@ class Helpers {
 				'namespace'  => bin2hex( random_bytes( 3 ) ),
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
-				'cache_dir'  => trailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => trailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
+				'cache_dir'  => Helpers . phptrailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => Helpers . phptrailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
@@ -198,7 +198,7 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_js_path() {
-		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename( true ) . '.js';
+		return Helpers . phpself::get_proxy_resource( 'cache_dir' ) . self::get_filename( true ) . '.js';
 	}
 
 	/**
@@ -264,7 +264,7 @@ class Helpers {
 			// This'll make sure the API endpoint is properly registered when we're testing.
 			$append = isset( $_GET[ 'plausible_proxy' ] ) ? '?plausible_proxy=1' : '';
 
-			return self::get_rest_endpoint() . $append;
+			return Helpers . phpself::get_rest_endpoint() . $append;
 		}
 
 		// Triggered when self-hosted analytics is enabled.

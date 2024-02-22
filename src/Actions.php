@@ -6,9 +6,9 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
-use Plausible\Analytics\WP\Includes\Helpers;
+use Plausible\Analytics\WP\Helpers;
 
 defined( 'ABSPATH' ) || exit;
 

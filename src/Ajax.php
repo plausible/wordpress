@@ -6,7 +6,7 @@
  * @subpackage Plausible Analytics
  */
 
-namespace Plausible\Analytics\WP\Includes;
+namespace Plausible\Analytics\WP;
 
 use Plausible\Analytics\WP\Admin\Messages;
 use Plausible\Analytics\WP\Client;

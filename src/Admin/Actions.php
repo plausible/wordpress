@@ -8,7 +8,7 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
-use Plausible\Analytics\WP\Includes\Helpers;
+use Plausible\Analytics\WP\Helpers;
 
 defined( 'ABSPATH' ) || exit;
 
