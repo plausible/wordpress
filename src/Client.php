@@ -39,16 +39,25 @@ class Client {
 	}
 
 	/**
-	 * Validates the API token (password) set in the current instance.
+	 * Validates the API token (password) set in the current instance and caches the state to a transient valid for 1 day.
 	 * @return bool
 	 * @throws ApiException
 	 */
 	public function validate_api_token() {
-		$password    = $this->api_instance->getConfig()->getPassword();
+		$token    = $this->api_instance->getConfig()->getPassword();
+		$is_valid = ! empty( get_transient( 'plausible_analytics_valid_token' )[ $token ] );
+
+		if ( $is_valid ) {
+			return true;
+		}
+
 		$features    = $this->get_features();
 		$data_domain = $this->get_data_domain();
+		$is_valid    = strpos( $token, 'plausible-plugin' ) !== false && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
 
-		return strpos( $password, 'plausible-plugin' ) !== false && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
+		set_transient( 'plausible_analytics_valid_token', [ $token => $is_valid ], 86400 );
+
+		return $is_valid;
 	}
 
 	/**

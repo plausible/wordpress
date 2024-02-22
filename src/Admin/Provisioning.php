@@ -9,7 +9,7 @@
 namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Client;
-use Plausible\Analytics\WP\Helpers;
+use Plausible\Analytics\WP\Client\ApiException;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -57,9 +57,10 @@ class Provisioning {
 	/**
 	 * Action & filter hooks.
 	 * @return void
+	 * @throws ApiException
 	 */
 	private function init() {
-		if ( ! $this->validate_api_token() ) {
+		if ( ! $this->client->validate_api_token() ) {
 			return;
 		}
 
@@ -67,26 +68,6 @@ class Provisioning {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
-	}
-
-	/**
-	 * Fetches the API token's validity from the API, and if it doesn't exist yet, stores it in a transient, which is valid for 1 day.
-	 * @return bool
-	 */
-	private function validate_api_token() {
-		$token       = Helpers::get_settings()[ 'api_token' ];
-		$valid_token = get_transient( 'plausible_analytics_valid_token' );
-		$is_valid    = isset( $valid_token[ $token ] );
-
-		if ( empty( $is_valid ) ) {
-			$is_valid = $this->client->validate_api_token();
-		}
-
-		if ( empty( $valid_token[ $token ] ) && $is_valid ) {
-			set_transient( 'plausible_analytics_valid_token', [ $token => $is_valid ], 86400 );
-		}
-
-		return $is_valid;
 	}
 
 	/**
