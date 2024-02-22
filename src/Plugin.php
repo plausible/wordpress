@@ -40,12 +40,12 @@ final class Plugin {
 			new Admin\SelfHosted();
 		}
 
-		new Includes\Actions();
-		new Includes\Ajax();
-		new Includes\Compatibility();
-		new Includes\Filters();
-		new Includes\Proxy();
-		new Includes\Setup();
+		new Actions();
+		new Ajax();
+		new Compatibility();
+		new Filters();
+		new Proxy();
+		new Setup();
 	}
 
 	/**

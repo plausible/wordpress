@@ -74,7 +74,7 @@ class Filters {
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
 		if ( strpos( $url, $rest_endpoint ) !== false ) {
-			return Filters . phpget_option( 'home' ) . $rest_endpoint;
+			return get_option( 'home' ) . $rest_endpoint;
 		}
 
 		return $url;
