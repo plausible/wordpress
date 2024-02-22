@@ -46,6 +46,9 @@ use Plausible\Analytics\WP\Client\ObjectSerializer;
 class DefaultApi {
 	/** @var string[] $contentTypes * */
 	public const contentTypes = [
+		'plausibleWebPluginsAPIControllersCapabilitiesIndex'  => [
+			'application/json',
+		],
 		'plausibleWebPluginsAPIControllersCustomPropsDisable' => [
 			'application/json',
 		],
@@ -138,6 +141,283 @@ class DefaultApi {
 	 */
 	public function getConfig() {
 		return $this->config;
+	}
+
+	/**
+	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndex
+	 * Retrieve Capabilities
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check
+	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this
+	 *                            operation
+	 *
+	 * @return \Plausible\Analytics\WP\Client\Model\Capabilities
+	 * @throws \InvalidArgumentException
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
+	 */
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndex(
+		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCapabilitiesIndex' ][ 0 ]
+	) {
+		[ $response ] = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo( $contentType );
+
+		return $response;
+	}
+
+	/**
+	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo
+	 * Retrieve Capabilities
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check
+	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this
+	 *                            operation
+	 *
+	 * @return array of \Plausible\Analytics\WP\Client\Model\Capabilities, HTTP status code, HTTP response headers (array of strings)
+	 * @throws \InvalidArgumentException
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
+	 */
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo(
+		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCapabilitiesIndex' ][ 0 ]
+	) {
+		$request = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexRequest( $contentType );
+
+		try {
+			$options = $this->createHttpClientOption();
+			try {
+				$response = $this->client->send( $request, $options );
+			} catch ( RequestException $e ) {
+				throw new ApiException(
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					$e->getResponse() ? $e->getResponse()->getHeaders() : null,
+					$e->getResponse() ? (string) $e->getResponse()->getBody() : null
+				);
+			} catch ( ConnectException $e ) {
+				throw new ApiException(
+					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+				);
+			}
+
+			$statusCode = $response->getStatusCode();
+
+			if ( $statusCode < 200 || $statusCode > 299 ) {
+				throw new ApiException(
+					sprintf(
+						'[%d] Error connecting to the API (%s)',
+						$statusCode,
+						(string) $request->getUri()
+					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+				);
+			}
+
+			switch ( $statusCode ) {
+				case 200:
+					if ( '\Plausible\Analytics\WP\Client\Model\Capabilities' === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( '\Plausible\Analytics\WP\Client\Model\Capabilities' !== 'string' ) {
+							$content = json_decode( $content );
+						}
+					}
+
+					return [
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Capabilities', [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+			}
+
+			$returnType = '\Plausible\Analytics\WP\Client\Model\Capabilities';
+			if ( $returnType === '\SplFileObject' ) {
+				$content = $response->getBody(); //stream goes to serializer
+			} else {
+				$content = (string) $response->getBody();
+				if ( $returnType !== 'string' ) {
+					$content = json_decode( $content );
+				}
+			}
+
+			return [
+				ObjectSerializer::deserialize( $content, $returnType, [] ),
+				$response->getStatusCode(),
+				$response->getHeaders(),
+			];
+
+		} catch ( ApiException $e ) {
+			switch ( $e->getCode() ) {
+				case 200:
+					$data = ObjectSerializer::deserialize(
+						$e->getResponseBody(),
+						'\Plausible\Analytics\WP\Client\Model\Capabilities',
+						$e->getResponseHeaders()
+					);
+					$e->setResponseObject( $data );
+					break;
+			}
+			throw $e;
+		}
+	}
+
+	/**
+	 * Create request for operation 'plausibleWebPluginsAPIControllersCapabilitiesIndex'
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check
+	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this
+	 *                            operation
+	 *
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
+	 * @throws \InvalidArgumentException
+	 */
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexRequest(
+		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCapabilitiesIndex' ][ 0 ]
+	) {
+
+		$resourcePath = '/api/plugins/v1/capabilities';
+		$formParams   = [];
+		$queryParams  = [];
+		$headerParams = [];
+		$httpBody     = '';
+		$multipart    = false;
+
+		$headers = $this->headerSelector->selectHeaders(
+			[ 'application/json', ],
+			$contentType,
+			$multipart
+		);
+
+		// for model (json/xml)
+		if ( count( $formParams ) > 0 ) {
+			if ( $multipart ) {
+				$multipartContents = [];
+				foreach ( $formParams as $formParamName => $formParamValue ) {
+					$formParamValueItems = is_array( $formParamValue ) ? $formParamValue : [ $formParamValue ];
+					foreach ( $formParamValueItems as $formParamValueItem ) {
+						$multipartContents[] = [
+							'name'     => $formParamName,
+							'contents' => $formParamValueItem,
+						];
+					}
+				}
+				// for HTTP post (form)
+				$httpBody = new MultipartStream( $multipartContents );
+
+			} elseif ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
+				# if Content-Type contains "application/json", json_encode the form parameters
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+			} else {
+				// for HTTP post (form)
+				$httpBody = ObjectSerializer::buildQuery( $formParams );
+			}
+		}
+
+		// this endpoint requires HTTP basic authentication
+		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
+			$headers[ 'Authorization' ] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+		}
+
+		$defaultHeaders = [];
+		if ( $this->config->getUserAgent() ) {
+			$defaultHeaders[ 'User-Agent' ] = $this->config->getUserAgent();
+		}
+
+		$headers = array_merge(
+			$defaultHeaders,
+			$headerParams,
+			$headers
+		);
+
+		$operationHost = $this->config->getHost();
+		$query         = ObjectSerializer::buildQuery( $queryParams );
+
+		return new Request(
+			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+		);
+	}
+
+	/**
+	 * Create http client option
+	 * @return array of http client options
+	 * @throws \RuntimeException on file opening failure
+	 */
+	protected function createHttpClientOption() {
+		$options = [];
+		if ( $this->config->getDebug() ) {
+			$options[ RequestOptions::DEBUG ] = fopen( $this->config->getDebugFile(), 'a' );
+			if ( ! $options[ RequestOptions::DEBUG ] ) {
+				throw new \RuntimeException( 'Failed to open the debug file: ' . $this->config->getDebugFile() );
+			}
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexAsync
+	 * Retrieve Capabilities
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check
+	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this
+	 *                            operation
+	 *
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
+	 */
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsync(
+		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCapabilitiesIndex' ][ 0 ]
+	) {
+		return $this->plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo( $contentType )->then(
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
+	}
+
+	/**
+	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo
+	 * Retrieve Capabilities
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check
+	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this
+	 *                            operation
+	 *
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
+	 */
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo(
+		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCapabilitiesIndex' ][ 0 ]
+	) {
+		$returnType = '\Plausible\Analytics\WP\Client\Model\Capabilities';
+		$request    = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexRequest( $contentType );
+
+		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
+					}
+
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -260,7 +540,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCustomPropsDisable' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/custom_props';
+		$resourcePath = '/api/plugins/v1/custom_props';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -277,9 +557,10 @@ class DefaultApi {
 		if ( isset( $custom_prop_disable_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
+					);
 			} else {
 				$httpBody = $custom_prop_disable_request;
 			}
@@ -332,23 +613,6 @@ class DefaultApi {
 	}
 
 	/**
-	 * Create http client option
-	 * @return array of http client options
-	 * @throws \RuntimeException on file opening failure
-	 */
-	protected function createHttpClientOption() {
-		$options = [];
-		if ( $this->config->getDebug() ) {
-			$options[ RequestOptions::DEBUG ] = fopen( $this->config->getDebugFile(), 'a' );
-			if ( ! $options[ RequestOptions::DEBUG ] ) {
-				throw new \RuntimeException( 'Failed to open the debug file: ' . $this->config->getDebugFile() );
-			}
-		}
-
-		return $options;
-	}
-
-	/**
 	 * Operation plausibleWebPluginsAPIControllersCustomPropsDisableAsync
 	 * Disable CustomProp(s)
 	 *
@@ -366,10 +630,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCustomPropsDisable' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersCustomPropsDisableAsyncWithHttpInfo( $custom_prop_disable_request, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -393,21 +657,21 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersCustomPropsDisableRequest( $custom_prop_disable_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				return [ null, $response->getStatusCode(), $response->getHeaders() ];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+				function ( $response ) use ( $returnType ) {
+					return [ null, $response->getStatusCode(), $response->getHeaders() ];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -616,7 +880,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCustomPropsEnable' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/custom_props';
+		$resourcePath = '/api/plugins/v1/custom_props';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -633,9 +897,10 @@ class DefaultApi {
 		if ( isset( $custom_prop_enable_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
+					);
 			} else {
 				$httpBody = $custom_prop_enable_request;
 			}
@@ -704,10 +969,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersCustomPropsEnable' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersCustomPropsEnableAsyncWithHttpInfo( $custom_prop_enable_request, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -730,34 +995,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersCustomPropsEnableRequest( $custom_prop_enable_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -966,7 +1231,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsCreate' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/goals';
+		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -983,9 +1248,10 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $goal_create_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $goal_create_request )
+					);
 			} else {
 				$httpBody = $goal_create_request;
 			}
@@ -1054,10 +1320,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsCreate' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersGoalsCreateAsyncWithHttpInfo( $goal_create_request, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -1080,34 +1346,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsCreateRequest( $goal_create_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -1215,7 +1481,7 @@ class DefaultApi {
 			);
 		}
 
-		$resourcePath = '/v1/goals/{id}';
+		$resourcePath = '/api/plugins/v1/goals/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -1302,10 +1568,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsDelete' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -1327,21 +1593,21 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsDeleteRequest( $id, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				return [ null, $response->getStatusCode(), $response->getHeaders() ];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+				function ( $response ) use ( $returnType ) {
+					return [ null, $response->getStatusCode(), $response->getHeaders() ];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -1445,7 +1711,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsDeleteBulk' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/goals';
+		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -1462,9 +1728,10 @@ class DefaultApi {
 		if ( isset( $goal_delete_bulk_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
+					);
 			} else {
 				$httpBody = $goal_delete_bulk_request;
 			}
@@ -1533,10 +1800,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsDeleteBulk' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersGoalsDeleteBulkAsyncWithHttpInfo( $goal_delete_bulk_request, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -1559,21 +1826,21 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsDeleteBulkRequest( $goal_delete_bulk_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				return [ null, $response->getStatusCode(), $response->getHeaders() ];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+				function ( $response ) use ( $returnType ) {
+					return [ null, $response->getStatusCode(), $response->getHeaders() ];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -1786,7 +2053,7 @@ class DefaultApi {
 			);
 		}
 
-		$resourcePath = '/v1/goals/{id}';
+		$resourcePath = '/api/plugins/v1/goals/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -1873,10 +2140,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsGet' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -1898,34 +2165,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsGetRequest( $id, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -2096,7 +2363,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsIndex' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/goals';
+		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -2215,10 +2482,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersGoalsIndex' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo( $limit, $after, $before, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -2244,34 +2511,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit, $after, $before, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -2457,7 +2724,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksCreate' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/shared_links';
+		$resourcePath = '/api/plugins/v1/shared_links';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -2474,9 +2741,10 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers[ 'Content-Type' ], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
-				);
+				$httpBody =
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
+						ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
+					);
 			} else {
 				$httpBody = $shared_link_create_request;
 			}
@@ -2545,10 +2813,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksCreate' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo( $shared_link_create_request, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -2571,34 +2839,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest( $shared_link_create_request, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -2811,7 +3079,7 @@ class DefaultApi {
 			);
 		}
 
-		$resourcePath = '/v1/shared_links/{id}';
+		$resourcePath = '/api/plugins/v1/shared_links/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -2898,10 +3166,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksGet' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -2923,34 +3191,34 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksGetRequest( $id, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -3124,7 +3392,7 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksIndex' ][ 0 ]
 	) {
 
-		$resourcePath = '/v1/shared_links';
+		$resourcePath = '/api/plugins/v1/shared_links';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
@@ -3244,10 +3512,10 @@ class DefaultApi {
 		string $contentType = self::contentTypes[ 'plausibleWebPluginsAPIControllersSharedLinksIndex' ][ 0 ]
 	) {
 		return $this->plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo( $limit, $after, $before, $contentType )->then(
-			function ( $response ) {
-				return $response[ 0 ];
-			}
-		);
+				function ( $response ) {
+					return $response[ 0 ];
+				}
+			);
 	}
 
 	/**
@@ -3274,33 +3542,33 @@ class DefaultApi {
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
 
 		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
-						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders(),
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					);
+				}
+			);
 	}
 }

@@ -61,35 +61,38 @@ $apiInstance = new PlausibleAnalyticsWPClient\Api\DefaultApi(
     new GuzzleHttp\Client(),
     $config
 );
-$custom_prop_disable_request = new \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest(); // \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest | CustomProp disable params
 
 try {
-    $apiInstance->plausibleWebPluginsAPIControllersCustomPropsDisable($custom_prop_disable_request);
+    $result = $apiInstance->plausibleWebPluginsAPIControllersCapabilitiesIndex();
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->plausibleWebPluginsAPIControllersCustomPropsDisable: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->plausibleWebPluginsAPIControllersCapabilitiesIndex: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
 
 ## API Endpoints
 
-All URIs are relative to *https://plausible.io/api/plugins*
+All URIs are relative to *https://plausible.io*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsDisable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsdisable) | **DELETE** /v1/custom_props | Disable CustomProp(s)
-*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsEnable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsenable) | **PUT** /v1/custom_props | Get or enable CustomProp(s)
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalscreate) | **PUT** /v1/goals | Get or create Goal
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDelete**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdelete) | **DELETE** /v1/goals/{id} | Delete Goal by ID
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDeleteBulk**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdeletebulk) | **DELETE** /v1/goals | Delete Goals in bulk
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsget) | **GET** /v1/goals/{id} | Retrieve Goal by ID
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsindex) | **GET** /v1/goals | Retrieve Goals
-*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinkscreate) | **PUT** /v1/shared_links | Get or create Shared Link
-*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksget) | **GET** /v1/shared_links/{id} | Retrieve Shared Link by ID
-*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksindex) | **GET** /v1/shared_links | Retrieve Shared Links
+*DefaultApi* | [**plausibleWebPluginsAPIControllersCapabilitiesIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscapabilitiesindex) | **GET** /api/plugins/v1/capabilities | Retrieve Capabilities
+*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsDisable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsdisable) | **DELETE** /api/plugins/v1/custom_props | Disable CustomProp(s)
+*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsEnable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsenable) | **PUT** /api/plugins/v1/custom_props | Get or enable CustomProp(s)
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalscreate) | **PUT** /api/plugins/v1/goals | Get or create Goal
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDelete**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdelete) | **DELETE** /api/plugins/v1/goals/{id} | Delete Goal by ID
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDeleteBulk**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdeletebulk) | **DELETE** /api/plugins/v1/goals | Delete Goals in bulk
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsget) | **GET** /api/plugins/v1/goals/{id} | Retrieve Goal by ID
+*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsindex) | **GET** /api/plugins/v1/goals | Retrieve Goals
+*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinkscreate) | **PUT** /api/plugins/v1/shared_links | Get or create Shared Link
+*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksget) | **GET** /api/plugins/v1/shared_links/{id} | Retrieve Shared Link by ID
+*DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksindex) | **GET** /api/plugins/v1/shared_links | Retrieve Shared Links
 
 ## Models
 
+- [Capabilities](docs/Model/Capabilities.md)
+- [CapabilitiesFeatures](docs/Model/CapabilitiesFeatures.md)
 - [CustomProp](docs/Model/CustomProp.md)
 - [CustomPropCustomProp](docs/Model/CustomPropCustomProp.md)
 - [CustomPropDisableRequest](docs/Model/CustomPropDisableRequest.md)

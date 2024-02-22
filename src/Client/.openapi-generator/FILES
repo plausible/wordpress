@@ -7,6 +7,8 @@ lib/Api/DefaultApi.php
 lib/ApiException.php
 lib/Configuration.php
 lib/HeaderSelector.php
+lib/Model/Capabilities.php
+lib/Model/CapabilitiesFeatures.php
 lib/Model/CustomProp.php
 lib/Model/CustomPropCustomProp.php
 lib/Model/CustomPropDisableRequest.php

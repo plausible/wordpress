@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalPageview
+ * CapabilitiesFeatures
  *
  * PHP version 7.4
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
- * GoalPageview Class Doc Comment
+ * CapabilitiesFeatures Class Doc Comment
  *
  * @category Class
- * @description Pageview Goal object
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
+class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal.Pageview';
+    protected static $openAPIModelName = 'Capabilities_features';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +57,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal_type' => 'string',
-        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal'
+        'funnels' => 'bool',
+        'goals' => 'bool',
+        'props' => 'bool',
+        'revenue_goals' => 'bool',
+        'stats_api' => 'bool'
     ];
 
     /**
@@ -70,8 +72,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'goal_type' => null,
-        'goal' => null
+        'funnels' => null,
+        'goals' => null,
+        'props' => null,
+        'revenue_goals' => null,
+        'stats_api' => null
     ];
 
     /**
@@ -80,8 +85,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'goal_type' => false,
-		'goal' => false
+        'funnels' => false,
+		'goals' => false,
+		'props' => false,
+		'revenue_goals' => false,
+		'stats_api' => false
     ];
 
     /**
@@ -170,8 +178,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'goal_type' => 'goal_type',
-        'goal' => 'goal'
+        'funnels' => 'Funnels',
+        'goals' => 'Goals',
+        'props' => 'Props',
+        'revenue_goals' => 'RevenueGoals',
+        'stats_api' => 'StatsAPI'
     ];
 
     /**
@@ -180,8 +191,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'goal_type' => 'setGoalType',
-        'goal' => 'setGoal'
+        'funnels' => 'setFunnels',
+        'goals' => 'setGoals',
+        'props' => 'setProps',
+        'revenue_goals' => 'setRevenueGoals',
+        'stats_api' => 'setStatsApi'
     ];
 
     /**
@@ -190,8 +204,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'goal_type' => 'getGoalType',
-        'goal' => 'getGoal'
+        'funnels' => 'getFunnels',
+        'goals' => 'getGoals',
+        'props' => 'getProps',
+        'revenue_goals' => 'getRevenueGoals',
+        'stats_api' => 'getStatsApi'
     ];
 
     /**
@@ -251,8 +268,11 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('goal_type', $data ?? [], null);
-        $this->setIfExists('goal', $data ?? [], null);
+        $this->setIfExists('funnels', $data ?? [], null);
+        $this->setIfExists('goals', $data ?? [], null);
+        $this->setIfExists('props', $data ?? [], null);
+        $this->setIfExists('revenue_goals', $data ?? [], null);
+        $this->setIfExists('stats_api', $data ?? [], null);
     }
 
     /**
@@ -282,11 +302,20 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['goal_type'] === null) {
-            $invalidProperties[] = "'goal_type' can't be null";
+        if ($this->container['funnels'] === null) {
+            $invalidProperties[] = "'funnels' can't be null";
         }
-        if ($this->container['goal'] === null) {
-            $invalidProperties[] = "'goal' can't be null";
+        if ($this->container['goals'] === null) {
+            $invalidProperties[] = "'goals' can't be null";
+        }
+        if ($this->container['props'] === null) {
+            $invalidProperties[] = "'props' can't be null";
+        }
+        if ($this->container['revenue_goals'] === null) {
+            $invalidProperties[] = "'revenue_goals' can't be null";
+        }
+        if ($this->container['stats_api'] === null) {
+            $invalidProperties[] = "'stats_api' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,55 +333,136 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets goal_type
+     * Gets funnels
      *
-     * @return string
+     * @return bool
      */
-    public function getGoalType()
+    public function getFunnels()
     {
-        return $this->container['goal_type'];
+        return $this->container['funnels'];
     }
 
     /**
-     * Sets goal_type
+     * Sets funnels
      *
-     * @param string $goal_type goal_type
+     * @param bool $funnels funnels
      *
      * @return self
      */
-    public function setGoalType($goal_type)
+    public function setFunnels($funnels)
     {
-        if (is_null($goal_type)) {
-            throw new \InvalidArgumentException('non-nullable goal_type cannot be null');
+        if (is_null($funnels)) {
+            throw new \InvalidArgumentException('non-nullable funnels cannot be null');
         }
-        $this->container['goal_type'] = $goal_type;
+        $this->container['funnels'] = $funnels;
 
         return $this;
     }
 
     /**
-     * Gets goal
+     * Gets goals
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal
+     * @return bool
      */
-    public function getGoal()
+    public function getGoals()
     {
-        return $this->container['goal'];
+        return $this->container['goals'];
     }
 
     /**
-     * Sets goal
+     * Sets goals
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal $goal goal
+     * @param bool $goals goals
      *
      * @return self
      */
-    public function setGoal($goal)
+    public function setGoals($goals)
     {
-        if (is_null($goal)) {
-            throw new \InvalidArgumentException('non-nullable goal cannot be null');
+        if (is_null($goals)) {
+            throw new \InvalidArgumentException('non-nullable goals cannot be null');
         }
-        $this->container['goal'] = $goal;
+        $this->container['goals'] = $goals;
+
+        return $this;
+    }
+
+    /**
+     * Gets props
+     *
+     * @return bool
+     */
+    public function getProps()
+    {
+        return $this->container['props'];
+    }
+
+    /**
+     * Sets props
+     *
+     * @param bool $props props
+     *
+     * @return self
+     */
+    public function setProps($props)
+    {
+        if (is_null($props)) {
+            throw new \InvalidArgumentException('non-nullable props cannot be null');
+        }
+        $this->container['props'] = $props;
+
+        return $this;
+    }
+
+    /**
+     * Gets revenue_goals
+     *
+     * @return bool
+     */
+    public function getRevenueGoals()
+    {
+        return $this->container['revenue_goals'];
+    }
+
+    /**
+     * Sets revenue_goals
+     *
+     * @param bool $revenue_goals revenue_goals
+     *
+     * @return self
+     */
+    public function setRevenueGoals($revenue_goals)
+    {
+        if (is_null($revenue_goals)) {
+            throw new \InvalidArgumentException('non-nullable revenue_goals cannot be null');
+        }
+        $this->container['revenue_goals'] = $revenue_goals;
+
+        return $this;
+    }
+
+    /**
+     * Gets stats_api
+     *
+     * @return bool
+     */
+    public function getStatsApi()
+    {
+        return $this->container['stats_api'];
+    }
+
+    /**
+     * Sets stats_api
+     *
+     * @param bool $stats_api stats_api
+     *
+     * @return self
+     */
+    public function setStatsApi($stats_api)
+    {
+        if (is_null($stats_api)) {
+            throw new \InvalidArgumentException('non-nullable stats_api cannot be null');
+        }
+        $this->container['stats_api'] = $stats_api;
 
         return $this;
     }

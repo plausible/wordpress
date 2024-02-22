@@ -1,6 +1,6 @@
 <?php
 /**
- * GoalPageview
+ * Capabilities
  *
  * PHP version 7.4
  *
@@ -32,16 +32,16 @@ use \ArrayAccess;
 use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
- * GoalPageview Class Doc Comment
+ * Capabilities Class Doc Comment
  *
  * @category Class
- * @description Pageview Goal object
+ * @description Capabilities object
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
+class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Goal.Pageview';
+    protected static $openAPIModelName = 'Capabilities';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +58,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'goal_type' => 'string',
-        'goal' => '\Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal'
+        'authorized' => 'bool',
+        'data_domain' => 'string',
+        'features' => '\Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures'
     ];
 
     /**
@@ -70,8 +71,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'goal_type' => null,
-        'goal' => null
+        'authorized' => null,
+        'data_domain' => null,
+        'features' => null
     ];
 
     /**
@@ -80,8 +82,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'goal_type' => false,
-		'goal' => false
+        'authorized' => false,
+		'data_domain' => false,
+		'features' => false
     ];
 
     /**
@@ -170,8 +173,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'goal_type' => 'goal_type',
-        'goal' => 'goal'
+        'authorized' => 'authorized',
+        'data_domain' => 'data_domain',
+        'features' => 'features'
     ];
 
     /**
@@ -180,8 +184,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'goal_type' => 'setGoalType',
-        'goal' => 'setGoal'
+        'authorized' => 'setAuthorized',
+        'data_domain' => 'setDataDomain',
+        'features' => 'setFeatures'
     ];
 
     /**
@@ -190,8 +195,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'goal_type' => 'getGoalType',
-        'goal' => 'getGoal'
+        'authorized' => 'getAuthorized',
+        'data_domain' => 'getDataDomain',
+        'features' => 'getFeatures'
     ];
 
     /**
@@ -251,8 +257,9 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('goal_type', $data ?? [], null);
-        $this->setIfExists('goal', $data ?? [], null);
+        $this->setIfExists('authorized', $data ?? [], null);
+        $this->setIfExists('data_domain', $data ?? [], null);
+        $this->setIfExists('features', $data ?? [], null);
     }
 
     /**
@@ -282,11 +289,14 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['goal_type'] === null) {
-            $invalidProperties[] = "'goal_type' can't be null";
+        if ($this->container['authorized'] === null) {
+            $invalidProperties[] = "'authorized' can't be null";
         }
-        if ($this->container['goal'] === null) {
-            $invalidProperties[] = "'goal' can't be null";
+        if ($this->container['data_domain'] === null) {
+            $invalidProperties[] = "'data_domain' can't be null";
+        }
+        if ($this->container['features'] === null) {
+            $invalidProperties[] = "'features' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,55 +314,82 @@ class GoalPageview implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets goal_type
+     * Gets authorized
      *
-     * @return string
+     * @return bool
      */
-    public function getGoalType()
+    public function getAuthorized()
     {
-        return $this->container['goal_type'];
+        return $this->container['authorized'];
     }
 
     /**
-     * Sets goal_type
+     * Sets authorized
      *
-     * @param string $goal_type goal_type
+     * @param bool $authorized authorized
      *
      * @return self
      */
-    public function setGoalType($goal_type)
+    public function setAuthorized($authorized)
     {
-        if (is_null($goal_type)) {
-            throw new \InvalidArgumentException('non-nullable goal_type cannot be null');
+        if (is_null($authorized)) {
+            throw new \InvalidArgumentException('non-nullable authorized cannot be null');
         }
-        $this->container['goal_type'] = $goal_type;
+        $this->container['authorized'] = $authorized;
 
         return $this;
     }
 
     /**
-     * Gets goal
+     * Gets data_domain
      *
-     * @return \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal
+     * @return string
      */
-    public function getGoal()
+    public function getDataDomain()
     {
-        return $this->container['goal'];
+        return $this->container['data_domain'];
     }
 
     /**
-     * Sets goal
+     * Sets data_domain
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal $goal goal
+     * @param string $data_domain data_domain
      *
      * @return self
      */
-    public function setGoal($goal)
+    public function setDataDomain($data_domain)
     {
-        if (is_null($goal)) {
-            throw new \InvalidArgumentException('non-nullable goal cannot be null');
+        if (is_null($data_domain)) {
+            throw new \InvalidArgumentException('non-nullable data_domain cannot be null');
         }
-        $this->container['goal'] = $goal;
+        $this->container['data_domain'] = $data_domain;
+
+        return $this;
+    }
+
+    /**
+     * Gets features
+     *
+     * @return \Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures
+     */
+    public function getFeatures()
+    {
+        return $this->container['features'];
+    }
+
+    /**
+     * Sets features
+     *
+     * @param \Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures $features features
+     *
+     * @return self
+     */
+    public function setFeatures($features)
+    {
+        if (is_null($features)) {
+            throw new \InvalidArgumentException('non-nullable features cannot be null');
+        }
+        $this->container['features'] = $features;
 
         return $this;
     }
