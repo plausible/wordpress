@@ -160,8 +160,8 @@ class API {
 						<nav class="flex items-center justify-between py-8" aria-label="Global">
 							<div class="flex items-center gap-x-12">
 								<a href="#" class="-m-1.5 p-1.5">
-									<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
-										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+									<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
+										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/src/images/icon.svg'; ?>">
 								</a>
 								<?php $this->render_navigation(); ?>
 							</div>
@@ -204,8 +204,8 @@ class API {
 			<div class="flex flex-col h-full">
 				<!-- logo -->
 				<div class="w-full my-8 text-center">
-					<img class="h-8 w-auto sm:h-10 -mt-2 dark:inline" alt="Plausible Logo"
-						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . '/assets/dist/images/icon.png'; ?>"/>
+					<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
+						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/src/images/icon.svg'; ?>">
 				</div>
 				<?php $this->render_notices_field(); ?>
 				<!-- title -->
