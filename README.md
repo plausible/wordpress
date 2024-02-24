@@ -17,11 +17,11 @@ the plugin on your WordPress site.
 
 * WordPress 4.8 or greater
 * PHP version 7.0 or greater
-* MySQL version 5.5 or greaterd
+* MySQL version 5.5 or greater
 
 ### Automatic installation
 
-Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an
+Automatic installation is the easiest option as WordPress handles the file transfers itself, and you don't need to leave your web browser. To do an
 automatic installation of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New".
 
 In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view details about it such as the
@@ -63,7 +63,7 @@ make sure its code is loaded before this plugin.
 - `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible, this constant allows you to
   specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the plugin's setting. So, if this
   constant is defined, changing the setting won't have any effect.
-- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This'll allow you to test your proxy
+- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This will allow you to test your proxy
   in the frontend, before enabling the option.
 
 ## Local Development
@@ -83,7 +83,8 @@ That's it. You're now ready to start development.
 
 Plausible Analytics relies on several npm commands to get you started:
 
-* `npm run watch` - Live reloads JS and SASS files. Typically you'll run this command before you start development. It's necessary to build the JS/CSS
+* `npm run watch` - Live reloads JS and SASS files. Typically, you'll run this command before you start development. It's necessary to build the
+  JS/CSS
   however if you're working strictly within PHP it may not be necessary to run.
 * `npm run dev` - Runs a one time build for development. No production files are created.
 * `npm run production` - Builds the minified production files for release.
@@ -116,9 +117,9 @@ this is a WordPress plugin, some manual modifications need to be done to make su
   dependencies: `composer install --no-dev`
 - (When regenerating the PHP client this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make sure Mozart is installed
   globally)
-- In the `src/Client/lib` directory, replace all occurences of ` GuzzleHttp` (mind the space) with ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (
+- In the `src/Client/lib` directory, replace all occurrences of ` GuzzleHttp` (mind the space) with ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (
   again, mind the space at the beginning)
-- In the same directory, replace all occurences of ` \GuzzleHttp` (mind the space and backslash)
+- In the same directory, replace all occurrences of ` \GuzzleHttp` (mind the space and backslash)
   with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.
 - If escaping characters doesn't work in your bash instance, you might also have to replace `PlausibleAnalyticsWPClient`
   with `Plausible\Analytics\WP\Client`.
