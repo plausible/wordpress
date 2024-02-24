@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy, privacy friend
 Requires at least: 4.8
 Tested up to: 6.4
 Requires PHP: 7.0
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
