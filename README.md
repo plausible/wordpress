@@ -17,7 +17,7 @@ the plugin on your WordPress site.
 
 * WordPress 4.8 or greater
 * PHP version 7.0 or greater
-* MySQL version 5.5 or greater
+* MySQL version 5.5 or greaterd
 
 ### Automatic installation
 
@@ -29,8 +29,8 @@ point release, rating and description. Most importantly of course, you can insta
 
 ### Manual installation
 
-The manual installation method involves downloading our donation plugin and uploading it to your server via your favorite FTP application. The
-WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+The manual installation method involves downloading our plugin and uploading it to your server via your favorite FTP application. The
+WordPress codex contains [instructions on how to do this](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
 ### Support
 
