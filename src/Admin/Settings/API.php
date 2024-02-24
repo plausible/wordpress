@@ -135,7 +135,7 @@ class API {
 						'This welcome screen will guide you through the process of creating the API token and introduce you to other new features we\'ve added, e.g. Revenue tracking. Click on the “Next” button below to start.',
 						'plausible-analytics'
 					),
-					__( 'We hope you’ll find this useful. Thanks again for using Plausible!', 'plausible-analytics' ),
+					__( 'We hope you’ll find this useful. Thanks again for using Plausible!', 'plausible-analytics' )
 				);
 			}
 
