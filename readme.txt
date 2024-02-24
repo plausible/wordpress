@@ -9,11 +9,11 @@ Stable tag: 2.0.6
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
-Plausible Analytics is an easy to use, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is an easy-to-use, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
 
 == Description ==
 
-Plausible Analytics is an easy to use, open source, lightweight (<1 KB) and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is an easy-to-use, open source, lightweight (<1 KB) and privacy-friendly web analytics alternative to Google Analytics.
 
 Plausible Analytics doesn’t use cookies and is fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU, powered by European-owned cloud infrastructure 🇪🇺.
 

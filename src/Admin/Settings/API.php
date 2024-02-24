@@ -161,7 +161,7 @@ class API {
 							<div class="flex items-center gap-x-12">
 								<a href="#" class="-m-1.5 p-1.5">
 									<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
-										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/src/images/icon.svg'; ?>">
+										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.svg'; ?>">
 								</a>
 								<?php $this->render_navigation(); ?>
 							</div>
@@ -205,7 +205,7 @@ class API {
 				<!-- logo -->
 				<div class="w-full my-8 text-center">
 					<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
-						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/src/images/icon.svg'; ?>">
+						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.svg'; ?>">
 				</div>
 				<?php $this->render_notices_field(); ?>
 				<!-- title -->
