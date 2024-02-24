@@ -16,7 +16,7 @@ the plugin on your WordPress site.
 ### Minimum Requirements
 
 * WordPress 4.8 or greater
-* PHP version 5.6 or greater
+* PHP version 7.0 or greater
 * MySQL version 5.5 or greater
 
 ### Automatic installation
