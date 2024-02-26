@@ -241,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.preventDefault();
 
 			let domain = document.getElementById('domain_name').value;
+			domain = domain.replace('/', '%2F');
 
 			window.open(`https://plausible.io/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
 		},
