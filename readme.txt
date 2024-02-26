@@ -1,7 +1,7 @@
 === Plausible Analytics ===
 Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
-Tags: analytics, google analytics, web analytics, stats, privacy, privacy-friendly
+Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.3
 Tested up to: 6.4
 Requires PHP: 7.0
