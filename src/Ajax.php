@@ -158,6 +158,7 @@ class Ajax {
 	/**
 	 * Save Options
 	 * @return void
+	 * @throws ApiException
 	 */
 	public function save_options() {
 		// Sanitize all the post data before using.
@@ -179,7 +180,7 @@ class Ajax {
 			$settings[ $option->name ] = trim( $option->value );
 
 			// Validate API token, if this is the API token field.
-			if ( $option->name === 'api_token' ) {
+			if ( $option->name === 'api_token' && empty( $settings[ 'self_hosted_domain' ] ) ) {
 				$this->validate_api_token( $option->value );
 			}
 		}
