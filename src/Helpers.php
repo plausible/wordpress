@@ -168,8 +168,8 @@ class Helpers {
 				'namespace'  => bin2hex( random_bytes( 3 ) ),
 				'base'       => bin2hex( random_bytes( 2 ) ),
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
-				'cache_dir'  => phptrailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
-				'cache_url'  => phptrailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
+				'cache_dir'  => trailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
+				'cache_url'  => trailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
 				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
