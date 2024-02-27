@@ -7,6 +7,7 @@ use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
+use Plausible\Analytics\WP\Client\Model\Capabilities;
 use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequestBulkEnable;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreate;
 use Plausible\Analytics\WP\Client\Model\PaymentRequiredError;
@@ -65,13 +66,13 @@ class Client {
 	 * @return false|Client\Model\CapabilitiesFeatures
 	 */
 	private function get_features() {
-		try {
-			$capabilities = $this->get_capabilities();
-		} catch ( \Exception $e ) {
-			return false;
+		$capabilities = $this->get_capabilities();
+
+		if ( $capabilities instanceof Capabilities ) {
+			return $capabilities->getFeatures();
 		}
 
-		return $capabilities->getFeatures();
+		return false;
 	}
 
 	/**
