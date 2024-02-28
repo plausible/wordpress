@@ -1,5 +1,12 @@
 {
-    "*.json": ["prettier --write", "git add"],
-    "*.php": ["npm run lint:textdomain", "git add"],
-    "*.{js,jsx}": ["git add"]
+  "*.json": [
+    "git add"
+  ],
+  "*.php": [
+    "npm run lint:textdomain",
+    "git add"
+  ],
+  "*.{js,jsx}": [
+    "git add"
+  ]
 }
