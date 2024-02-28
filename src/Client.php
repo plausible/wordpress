@@ -92,13 +92,13 @@ class Client {
 	 * @return false|string
 	 */
 	private function get_data_domain() {
-		try {
-			$capabilities = $this->get_capabilities();
-		} catch ( \Exception $e ) {
-			return false;
+		$capabilities = $this->get_capabilities();
+
+		if ( $capabilities instanceof Capabilities ) {
+			return $capabilities->getDataDomain();
 		}
 
-		return $capabilities->getDataDomain();
+		return false;
 	}
 
 	/**
