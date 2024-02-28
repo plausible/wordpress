@@ -46,6 +46,12 @@ class Client {
 	 * @throws ApiException
 	 */
 	public function validate_api_token() {
+		$is_self_hosted = Helpers::get_settings()[ 'self_hosted_domain' ];
+
+		if ( ! empty( $is_self_hosted ) ) {
+			return false;
+		}
+
 		$token    = $this->api_instance->getConfig()->getPassword();
 		$is_valid = ! empty( get_transient( 'plausible_analytics_valid_token' )[ $token ] );
 
