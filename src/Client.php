@@ -8,6 +8,7 @@ use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
 use Plausible\Analytics\WP\Client\Api\DefaultApi;
 use Plausible\Analytics\WP\Client\Configuration;
 use Plausible\Analytics\WP\Client\Model\Capabilities;
+use Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures;
 use Plausible\Analytics\WP\Client\Model\CustomPropEnableRequestBulkEnable;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreate;
 use Plausible\Analytics\WP\Client\Model\PaymentRequiredError;
@@ -52,7 +53,12 @@ class Client {
 			return true;
 		}
 
-		$features    = $this->get_features();
+		$features = $this->get_features();
+
+		if ( ! $features instanceof CapabilitiesFeatures ) {
+			return false;
+		}
+
 		$data_domain = $this->get_data_domain();
 		$is_valid    = strpos( $token, 'plausible-plugin' ) !== false && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
 
