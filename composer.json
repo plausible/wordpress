@@ -1,47 +1,71 @@
 {
-    "name": "plausible/analytics-wp",
-    "description": "Simple and privacy-friendly alternative to Google Analytics.",
-    "authors": [
-        {
-            "name": "Plausible.io",
-            "email": "hello@plausible.io"
-        },
-        {
-            "name": "Daan van den Bergh",
-            "email": "help@daan.dev"
-        }
-    ],
-    "require": {
-        "composer/installers": "*"
+  "name": "plausible/analytics-wp",
+  "description": "Simple and privacy-friendly alternative to Google Analytics.",
+  "authors": [
+    {
+      "name": "Plausible.io",
+      "email": "hello@plausible.io"
     },
-    "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "*",
-        "phpcompatibility/phpcompatibility-wp": "*",
-        "wp-coding-standards/wpcs": "*",
-        "coenjacobs/mozart": "^0.7.1"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true",
-            "@install-codestandards"
-        ],
-        "post-update-cmd": [
-            "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true"
-        ],
-        "install-codestandards": [
-            "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
-        ]
-    },
-    "autoload": {
-        "psr-4": {
-            "Plausible\\Analytics\\WP\\": "src/",
-            "Plausible\\Analytics\\WP\\Client\\": "src/Client/lib/"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
+    {
+      "name": "Daan van den Bergh",
+      "email": "help@daan.dev"
     }
+  ],
+  "require": {
+    "composer/installers": "*"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "wp-coding-standards/wpcs": "*",
+    "coenjacobs/mozart": "^0.7.1",
+    "yoast/wp-test-utils": "*",
+    "php-parallel-lint/php-parallel-lint": "*",
+    "php-parallel-lint/php-console-highlighter": "*"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true",
+      "@install-codestandards"
+    ],
+    "post-update-cmd": [
+      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs || true"
+    ],
+    "install-codestandards": [
+      "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+    ],
+    "lint": [
+      "@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --show-deprecated --exclude vendor --exclude .git"
+    ],
+    "unit": [
+      "@php ./vendor/bin/phpunit --no-coverage"
+    ],
+    "integration": [
+      "@php ./vendor/bin/phpunit --configuration phpunit-with-integration.xml --no-coverage"
+    ],
+    "coverage": [
+      "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover ./build/clover.xml"
+    ]
+  },
+  "scripts-descriptions": {
+    "lint": "Check the PHP files for parse errors.",
+    "unit": "Run the unit tests without code coverage.",
+    "integration": "Run unit and integration tests without code coverage.",
+    "coverage": "Shorthand for running unit and integration tests with code coverage (best used on local machines only)."
+  },
+  "autoload": {
+    "psr-4": {
+      "Plausible\\Analytics\\WP\\": "src/",
+      "Plausible\\Analytics\\WP\\Client\\": "src/Client/lib/",
+      "Plausible\\Analytics\\Tests\\Integration\\": "tests/integration/",
+      "Plausible\\Analytics\\Tests\\Unit\\": "tests/unit/",
+      "Plausible\\Analytics\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
 }
