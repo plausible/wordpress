@@ -101,7 +101,7 @@ class Proxy {
 	}
 
 	/**
-	 * @return void
+	 * @return array|\WP_Error
 	 */
 	public function send( $request ) {
 		$params = $request->get_body();
@@ -143,6 +143,8 @@ class Proxy {
 				return $ip;
 			}
 		}
+
+		return $ip;
 	}
 
 	/**
@@ -153,6 +155,6 @@ class Proxy {
 	 * @return bool
 	 */
 	private function header_exists( $global ) {
-		return isset( $_SERVER[ $global ] ) && ! empty( $_SERVER[ $global ] );
+		return ! empty( $_SERVER[ $global ] );
 	}
 }
