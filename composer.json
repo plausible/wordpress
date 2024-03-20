@@ -21,7 +21,8 @@
     "coenjacobs/mozart": "^0.7.1",
     "yoast/wp-test-utils": "*",
     "php-parallel-lint/php-parallel-lint": "*",
-    "php-parallel-lint/php-console-highlighter": "*"
+    "php-parallel-lint/php-console-highlighter": "*",
+    "friendsofphp/php-cs-fixer": "*"
   },
   "scripts": {
     "post-install-cmd": [
