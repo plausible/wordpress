@@ -10,7 +10,7 @@ use Plausible\Analytics\WP\Plugin;
 
 class PluginTest extends TestCase {
 	/**
-	 *
+	 * @see Plugin::register()
 	 */
 	public function testRegister() {
 		$class = new Plugin();
