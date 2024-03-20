@@ -80,8 +80,7 @@ class ObjectSerializer {
 				foreach ( $data::openAPITypes() as $property => $openAPIType ) {
 					$getter = $data::getters()[ $property ];
 					$value  = $data->$getter();
-					if ( $value !== null &&
-						! in_array(
+					if ( $value !== null && ! in_array(
 							$openAPIType,
 							[
 								'\DateTime',
