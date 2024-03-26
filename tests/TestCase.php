@@ -22,4 +22,30 @@ class TestCase extends YoastTestCase {
 
 		parent::__construct();
 	}
+
+	/**
+	 * Enable the proxy.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableProxy( $settings ) {
+		$settings[ 'proxy_enabled' ] = 'on';
+
+		return $settings;
+	}
+
+	/**
+	 * Set domain_name option.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function setDomain( $settings ) {
+		$settings[ 'domain_name' ] = 'test.dev';
+
+		return $settings;
+	}
 }

@@ -35,19 +35,6 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * Enable the proxy.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableProxy( $settings ) {
-		$settings[ 'proxy_enabled' ] = 'on';
-
-		return $settings;
-	}
-
-	/**
 	 * Enable Self Hosted domain.
 	 *
 	 * @param $settings
@@ -203,19 +190,6 @@ class HelpersTest extends TestCase {
 		remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
 
 		$this->assertEquals( 'test.dev', $domain );
-	}
-
-	/**
-	 * Set domain_name option.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function setDomain( $settings ) {
-		$settings[ 'domain_name' ] = 'test.dev';
-
-		return $settings;
 	}
 
 	/**
