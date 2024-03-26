@@ -17,7 +17,7 @@ class ActionsTest extends TestCase {
 	 */
 	public function testRegisterAssets() {
 		$class = new Actions();
-		
+
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 		add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
 
@@ -28,5 +28,8 @@ class ActionsTest extends TestCase {
 		$this->expectOutputContains( Helpers::get_rest_endpoint() );
 
 		wp_print_head_scripts();
+
+		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
 	}
 }
