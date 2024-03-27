@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Filters.
+ *
  * @since      1.0.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -16,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 class Filters {
 	/**
 	 * Constructor.
+	 *
 	 * @since  1.0.0
 	 * @access public
 	 * @return void
@@ -28,6 +30,7 @@ class Filters {
 
 	/**
 	 * Add Plausible Analytics attributes.
+	 *
 	 * @since  1.0.0
 	 * @access public
 	 *
@@ -71,6 +74,10 @@ class Filters {
 	 * @throws Exception
 	 */
 	public function wpml_compatibility( $url ) {
+		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			return $url; // @codeCoverageIgnore
+		}
+
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
 		if ( strpos( $url, $rest_endpoint ) !== false ) {
@@ -91,13 +98,13 @@ class Filters {
 		$settings = Helpers::get_settings();
 
 		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
-			return $params;
+			return $params; // @codeCoverageIgnore
 		}
 
 		global $post;
 
 		if ( ! $post instanceof \WP_Post ) {
-			return $params;
+			return $params; // @codeCoverageIgnore
 		}
 
 		$author = $post->post_author;
