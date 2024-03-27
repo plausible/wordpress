@@ -135,7 +135,7 @@ class Helpers {
 		/**
 		 * Create the cache directory if it doesn't exist.
 		 */
-		if ( $resource_name === 'cache_dir' && ! is_dir( $resources[ $resource_name ] ) ) {
+		if ( ( $resource_name === 'cache_dir' || $resource_name === 'cache_url' ) && ! is_dir( $resources[ 'cache_dir' ] ) ) {
 			wp_mkdir_p( $resources[ $resource_name ] );
 		}
 
@@ -193,7 +193,7 @@ class Helpers {
 	}
 
 	/**
-	 * A convenient way to retrieve the absolute path to the local JS file.
+	 * A convenient way to retrieve the absolute path to the local JS file. Proxy should be enabled when this method is called!
 	 * @return string
 	 * @throws Exception
 	 */
@@ -202,7 +202,7 @@ class Helpers {
 	}
 
 	/**
-	 * Downloads the plausible.js file to this server.
+	 * Downloads a remote file to this server.
 	 * @since 1.3.0
 	 *
 	 * @param string $local_file  Absolute path to where to store the $remote_file.

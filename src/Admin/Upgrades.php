@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Upgrades
+ *
  * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -15,11 +16,13 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Upgrades
+ *
  * @since 1.3.0
  */
 class Upgrades {
 	/**
 	 * Constructor for Upgrades.
+	 *
 	 * @since  1.3.0
 	 * @access public
 	 * @return void
@@ -31,9 +34,12 @@ class Upgrades {
 	/**
 	 * Register routines for upgrades.
 	 * This is intended for automatic upgrade routines having less resource intensive tasks.
+	 *
 	 * @since  1.3.0
 	 * @access public
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function run() {
 		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
@@ -73,9 +79,11 @@ class Upgrades {
 	/**
 	 * Upgrade routine for 1.2.5
 	 * Cleans Custom Domain related options from database, as it was removed in this version.
+	 *
 	 * @since  1.2.5
 	 * @access public
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade_to_125() {
 		$old_settings = Helpers::get_settings();
@@ -107,8 +115,10 @@ class Upgrades {
 
 	/**
 	 * Get rid of the previous "example.com" default for self_hosted_domain.
+	 *
 	 * @since 1.2.6
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade_to_126() {
 		$old_settings = Helpers::get_settings();
@@ -126,7 +136,9 @@ class Upgrades {
 	/**
 	 * Upgrade to 1.3.1
 	 * - Enables 404 pages tracking by default.
+	 *
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade_to_131() {
 		$settings = Helpers::get_settings();
@@ -143,8 +155,10 @@ class Upgrades {
 	/**
 	 * Upgrade to 1.3.2
 	 * - Updates the Proxy Resource, Cache URL to be protocol relative.
+	 *
 	 * @return void
 	 * @throws Exception
+	 * @codeCoverageIgnore
 	 */
 	private function upgrade_to_132() {
 		$proxy_resources = Helpers::get_proxy_resources();
@@ -158,7 +172,9 @@ class Upgrades {
 
 	/**
 	 * Cleans the settings of the old, unneeded sub-arrays for settings.
+	 *
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	private function upgrade_to_200() {
 		$settings     = Helpers::get_settings();
@@ -217,7 +233,9 @@ class Upgrades {
 
 	/**
 	 * Makes sure the View Stats option is enabled for users that previously set a shared link.
+	 *
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	private function upgrade_to_203() {
 		$settings = Helpers::get_settings();

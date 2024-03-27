@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Module.
+ *
  * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -16,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 class Module {
 	/**
 	 * Build properties.
+	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -24,6 +26,7 @@ class Module {
 
 	/**
 	 * Filters & Actions.
+	 *
 	 * @return void
 	 */
 	private function init() {
@@ -33,6 +36,7 @@ class Module {
 
 	/**
 	 * Decide whether we should install the module, or not.
+	 *
 	 * @since 1.3.0
 	 *
 	 * @param array $settings Current settings, already written to the DB.
@@ -49,6 +53,7 @@ class Module {
 
 	/**
 	 * Takes care of installing the M(ust)U(se) plugin when the Proxy is enabled.
+	 *
 	 * @since 1.3.0
 	 * @return void.
 	 */
@@ -102,6 +107,7 @@ class Module {
 
 	/**
 	 * Uninstall the Speed Module, generates JS files and all related settings when the proxy is disabled.
+	 *
 	 * @since 1.3.0
 	 * @return void.
 	 */
@@ -149,6 +155,7 @@ class Module {
 	 * Check if a directory is empty.
 	 * This works because a new FilesystemIterator will initially point to the first file in the folder -
 	 * if there are no files in the folder, valid() will return false.
+	 *
 	 * @see   https://www.php.net/manual/en/directoryiterator.valid.php
 	 * @since 1.3.0
 	 *
@@ -164,6 +171,7 @@ class Module {
 
 	/**
 	 * Test the proxy before enabling the option.
+	 *
 	 * @since 1.3.0
 	 *
 	 * @param mixed $settings
@@ -221,6 +229,7 @@ class Module {
 	 * is_ssl() only checks the current scheme that is used, which fails in a Nginx Reverse Proxy configuration (where the scheme is HTTP behind the
 	 * proxy), this function is a custom wrapper which also checks the WordPress configuration for the presence of "https" in the configured Home
 	 * URL.
+	 *
 	 * @return bool
 	 */
 	private function is_ssl() {
@@ -229,13 +238,14 @@ class Module {
 
 	/**
 	 * Runs a quick internal call to the WordPress API to make sure it's accessable.
+	 *
 	 * @since 1.3.0
 	 * @return bool
 	 * @throws Exception
 	 */
 	private function test_proxy( $run = true ) {
 		// Should we run the test?
-		if ( ! $run ) {
+		if ( ! apply_filters( 'plausible_analytics_module_run_test_proxy', $run ) ) {
 			return false;
 		}
 

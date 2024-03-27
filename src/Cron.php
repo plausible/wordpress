@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Cron.
+ *
  * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -13,9 +14,13 @@ use Exception;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Cron {
 	/**
 	 * Build class
+	 *
 	 * @return void
 	 * @throws InvalidArgument
 	 * @throws Exception
@@ -26,6 +31,7 @@ class Cron {
 
 	/**
 	 * Run
+	 *
 	 * @return void
 	 * @throws InvalidArgument
 	 * @throws Exception
@@ -36,6 +42,7 @@ class Cron {
 
 	/**
 	 * Download the plausible.js file if the Proxy is enabled and downloads it to the uploads directory with an alias.
+	 *
 	 * @return bool
 	 * @throws InvalidArgument
 	 * @throws Exception
