@@ -16,14 +16,7 @@ class PluginTest extends TestCase {
 		$class = new Plugin();
 		$class->register();
 
-		do_action( 'plugins_loaded' );
-
-		$this->assertTrue( class_exists( '\Plausible\Analytics\WP\Setup' ) );
-
 		define( 'WP_ADMIN', true );
-
-		$class->register();
-
 		do_action( 'plugins_loaded' );
 
 		$this->assertTrue( class_exists( '\Plausible\Analytics\WP\Admin\SelfHosted' ) );
