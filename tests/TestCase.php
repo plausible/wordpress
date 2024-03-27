@@ -50,6 +50,19 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Enable Enhanced Measurements > Categories & Authors.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enablePageviewProps( $settings ) {
+		$settings[ 'enhanced_measurements' ] = [ 'pageview-props' ];
+
+		return $settings;
+	}
+
+	/**
 	 * Add user capability for testing.
 	 *
 	 * @return void
