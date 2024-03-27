@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Proxy.
+ *
  * @since      1.3.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -18,6 +19,7 @@ defined( 'ABSPATH' ) || exit;
 class Proxy {
 	/**
 	 * Proxy IP Headers used to detect the visitors IP prior to sending the data to Plausible's Measurement Protocol.
+	 *
 	 * @see https://support.cloudflare.com/hc/en-us/articles/200170986-How-does-Cloudflare-handle-HTTP-Request-headers-
 	 * @var array
 	 * For CloudFlare compatibility HTTP_CF_CONNECTING_IP has been added.
@@ -31,24 +33,28 @@ class Proxy {
 
 	/**
 	 * API namespace
+	 *
 	 * @var string
 	 */
 	private $namespace = '';
 
 	/**
 	 * API base
+	 *
 	 * @var string
 	 */
 	private $base = '';
 
 	/**
 	 * Endpoint
+	 *
 	 * @var string
 	 */
 	private $endpoint = '';
 
 	/**
 	 * Build properties.
+	 *
 	 * @return void
 	 * @throws Exception
 	 */
@@ -62,6 +68,7 @@ class Proxy {
 
 	/**
 	 * Actions
+	 *
 	 * @return void
 	 */
 	private function init() {
@@ -82,6 +89,7 @@ class Proxy {
 
 	/**
 	 * Register the API route.
+	 *
 	 * @return void
 	 */
 	public function register_route() {
@@ -108,11 +116,12 @@ class Proxy {
 
 		$ip  = $this->get_user_ip_address();
 		$url = 'https://plausible.io/api/event';
+		$ua  = ! empty ( $_SERVER[ 'HTTP_USER_AGENT' ] ) ? wp_kses( $_SERVER[ 'HTTP_USER_AGENT' ], 'strip' ) : '';
 
-		$response = wp_remote_post(
+		return wp_remote_post(
 			$url,
 			[
-				'user-agent' => wp_kses( $_SERVER[ 'HTTP_USER_AGENT' ], 'strip' ),
+				'user-agent' => $ua,
 				'headers'    => [
 					'X-Forwarded-For' => $ip,
 					'Content-Type'    => 'application/json',
@@ -120,8 +129,6 @@ class Proxy {
 				'body'       => wp_kses_no_null( $params ),
 			]
 		);
-
-		return $response;
 	}
 
 	/**
