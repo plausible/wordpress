@@ -48,4 +48,18 @@ class TestCase extends YoastTestCase {
 
 		return $settings;
 	}
+
+	/**
+	 * Add user capability for testing.
+	 *
+	 * @return void
+	 */
+	public function addUserCap( $cap ) {
+		add_filter(
+			'user_has_cap',
+			function ( $caps ) use ( $cap ) {
+				return array_merge( $caps, [ $cap => true ] );
+			}
+		);
+	}
 }
