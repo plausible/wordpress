@@ -7,12 +7,15 @@ namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Actions;
+use Plausible\Analytics\WP\Filters;
 use Plausible\Analytics\WP\Helpers;
 use WP_Admin_Bar;
 
 class ActionsTest extends TestCase {
 	/**
 	 * @see Actions::maybe_register_assets()
+	 * @see Filters::add_plausible_attributes()
+	 * @see Filters::maybe_add_custom_params()
 	 * @return void
 	 * @throws \Exception
 	 */
