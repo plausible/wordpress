@@ -1,6 +1,7 @@
 <?php
 /**
  * Plausible Analytics | Actions.
+ *
  * @since      1.0.0
  * @package    WordPress
  * @subpackage Plausible Analytics
@@ -13,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
 class Actions {
 	/**
 	 * Constructor.
+	 *
 	 * @since  1.0.0
 	 * @access public
 	 * @return void
@@ -24,6 +26,7 @@ class Actions {
 
 	/**
 	 * Register Assets.
+	 *
 	 * @since  1.0.0
 	 * @access public
 	 * @return void
@@ -38,7 +41,7 @@ class Actions {
 		 */
 		if ( ( ! empty( $user_role ) && ! isset( $settings[ 'tracked_user_roles' ] ) ) ||
 			( ! empty( $user_role ) && ! in_array( $user_role, $settings[ 'tracked_user_roles' ], true ) ) ) {
-			return;
+			return; // @codeCoverageIgnore
 		}
 
 		$version =
@@ -65,6 +68,7 @@ class Actions {
 
 	/**
 	 * Create admin bar nodes.
+	 *
 	 * @since  1.3.0
 	 * @access public
 	 *
@@ -76,12 +80,12 @@ class Actions {
 		$disable = ! empty( Helpers::get_settings()[ 'disable_toolbar_menu' ] );
 
 		if ( $disable ) {
-			return;
+			return; // @codeCoverageIgnore
 		}
 
 		// Add main admin bar node.
 		$args[] = [
-			'id'    => 'plausible-admin-bar',
+			'id'    => 'plausible-analytics',
 			'title' => 'Plausible Analytics',
 		];
 
@@ -93,7 +97,7 @@ class Actions {
 				'id'     => 'view-analytics',
 				'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
 				'href'   => admin_url( 'index.php?page=plausible_analytics_statistics' ),
-				'parent' => 'plausible-admin-bar',
+				'parent' => 'plausible-analytics',
 			];
 
 			// Add link to individual page stats.
@@ -109,7 +113,7 @@ class Actions {
 						is_home() ? '' : $uri,
 						admin_url( 'index.php?page=plausible_analytics_statistics' )
 					),
-					'parent' => 'plausible-admin-bar',
+					'parent' => 'plausible-analytics',
 				];
 			}
 		}
@@ -119,7 +123,7 @@ class Actions {
 			'id'     => 'settings',
 			'title'  => esc_html__( 'Settings', 'plausible-analytics' ),
 			'href'   => admin_url( 'options-general.php?page=plausible_analytics' ),
-			'parent' => 'plausible-admin-bar',
+			'parent' => 'plausible-analytics',
 		];
 
 		foreach ( $args as $arg ) {

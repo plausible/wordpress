@@ -42,6 +42,7 @@ class Client {
 
 	/**
 	 * Validates the API token (password) set in the current instance and caches the state to a transient valid for 1 day.
+	 *
 	 * @return bool
 	 * @throws ApiException
 	 */
@@ -75,6 +76,7 @@ class Client {
 
 	/**
 	 * Retrieve Features from Capabilities object.
+	 *
 	 * @return false|Client\Model\CapabilitiesFeatures
 	 */
 	private function get_features() {
@@ -89,6 +91,7 @@ class Client {
 
 	/**
 	 * Retrieve all capabilities assigned to configured API token.
+	 *
 	 * @return bool|Client\Model\Capabilities
 	 */
 	private function get_capabilities() {
@@ -101,6 +104,7 @@ class Client {
 
 	/**
 	 * Retrieve Data Domain property from Capabilities object.
+	 *
 	 * @return false|string
 	 */
 	private function get_data_domain() {
@@ -115,10 +119,12 @@ class Client {
 
 	/**
 	 * Create Shared Link in Plausible Dashboard.
+	 *
 	 * @return void
 	 */
 	public function create_shared_link() {
 		$shared_link = (object) [];
+		$result      = (object) [];
 
 		try {
 			$result = $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
