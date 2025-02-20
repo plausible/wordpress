@@ -21,6 +21,9 @@ final class Plugin {
 
 		// Load text domain.
 		add_action( 'init', [ $this, 'load_plugin_textdomain' ] );
+
+		// Register CLI commands
+		add_action( 'cli_init', [ $this, 'register_cli_commands' ] );
 	}
 
 	/**
@@ -64,5 +67,9 @@ final class Plugin {
 			false,
 			dirname( plugin_basename( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) ) . '/languages/'
 		);
+	}
+
+	public function register_cli_commands() {
+		\WP_CLI::add_command( 'plausible', '\Plausible\Analytics\WP\CLI' );
 	}
 }
