@@ -144,17 +144,20 @@ class Proxy {
 		$url = 'https://plausible.io/api/event';
 		$ua  = ! empty ( $_SERVER[ 'HTTP_USER_AGENT' ] ) ? wp_kses( $_SERVER[ 'HTTP_USER_AGENT' ], 'strip' ) : '';
 
-		return wp_remote_post(
-			$url,
-			[
-				'user-agent' => $ua,
-				'headers'    => [
-					'X-Forwarded-For' => $ip,
-					'Content-Type'    => 'application/json',
-				],
-				'body'       => wp_kses_no_null( $params ),
-			]
-		);
+		Debug::log( __( 'Sending Request...', 'plausible-analytics' ) );
+
+		$args = [
+			'user-agent' => $ua,
+			'headers'    => [
+				'X-Forwarded-For' => $ip,
+				'Content-Type'    => 'application/json',
+			],
+			'body'       => wp_kses_no_null( $params ),
+		];
+
+		Debug::log( __( 'Request Args: ', 'plausible-analytics' ), $args );
+
+		return wp_remote_post( $url, $args );
 	}
 
 	/**
@@ -169,7 +172,7 @@ class Proxy {
 			if ( $this->header_exists( $header ) ) {
 				$ip = wp_kses( $_SERVER[ $header ], 'strip' );
 
-				if ( strpos( $ip, ',' ) !== false ) {
+				if ( str_contains( $ip, ',' ) ) {
 					$ip = explode( ',', $ip );
 
 					return $ip[ 0 ];
@@ -228,7 +231,7 @@ class Proxy {
 	 * @codeCoverageIgnore
 	 */
 	public function force_http_response_code( $response, $server, $request ) {
-		if ( strpos( $request->get_route(), $this->namespace ) === false ) {
+		if ( ! str_contains( $request->get_route(), $this->namespace ) ) {
 			return $response; // @codeCoverageIgnore
 		}
 
