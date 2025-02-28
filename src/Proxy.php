@@ -121,13 +121,13 @@ class Proxy {
 			$body[ 'p' ] = $props; // @codeCoverageIgnore
 		}
 
-		Debug::log( __( 'Request Body: ', 'plausible-analytics' ) . print_r( $body, true ) );
+		Debug::log( __( 'Request Body: ', 'plausible-analytics' ), $body );
 
 		$request->set_body( wp_json_encode( $body ) );
 
 		$response = $this->send_event( $request );
 
-		Debug::log( __( 'Response: ', 'plausible-analytics' ) . print_r( $response, true ) );
+		Debug::log( __( 'Response: ', 'plausible-analytics' ), $response );
 
 		return $response;
 	}

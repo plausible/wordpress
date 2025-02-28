@@ -192,7 +192,7 @@ class EDD {
 			]
 		);
 
-		Debug::log( __( 'Purchase event properties: ', 'plausible-analytics' ) . print_r( $props, true ) );
+		Debug::log( __( 'Purchase event properties: ', 'plausible-analytics' ), $props );
 
 		$proxy = new Proxy( false );
 
