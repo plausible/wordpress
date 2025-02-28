@@ -9,6 +9,7 @@
 
 namespace Plausible\Analytics\WP\Integrations;
 
+use Plausible\Analytics\WP\Debug;
 use Plausible\Analytics\WP\Proxy;
 
 /**
@@ -190,6 +191,8 @@ class EDD {
 				],
 			]
 		);
+
+		Debug::log( __( 'Purchase event properties: ', 'plausible-analytics' ) . print_r( $props, true ) );
 
 		$proxy = new Proxy( false );
 

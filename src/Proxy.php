@@ -105,6 +105,8 @@ class Proxy {
 	 * @return array|WP_Error
 	 */
 	public function do_request( $name = 'pageview', $domain = '', $url = '', $props = [] ) {
+		Debug::log( __( 'Building Request...', 'plausible-analytics' ) );
+
 		$request = new \WP_REST_Request( 'POST', "/$this->namespace/v1/$this->base/$this->endpoint" );
 		$body    = [
 			'n' => $name,
@@ -119,9 +121,15 @@ class Proxy {
 			$body[ 'p' ] = $props; // @codeCoverageIgnore
 		}
 
+		Debug::log( __( 'Request Body: ', 'plausible-analytics' ) . print_r( $body, true ) );
+
 		$request->set_body( wp_json_encode( $body ) );
 
-		return $this->send_event( $request );
+		$response = $this->send_event( $request );
+
+		Debug::log( __( 'Response: ', 'plausible-analytics' ) . print_r( $response, true ) );
+
+		return $response;
 	}
 
 	/**
