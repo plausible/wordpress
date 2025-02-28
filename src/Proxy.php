@@ -170,6 +170,8 @@ class Proxy {
 
 		foreach ( self::PROXY_IP_HEADERS as $header ) {
 			if ( $this->header_exists( $header ) ) {
+				Debug::log( __( 'IP Header found: ', 'plausible-analytics' ), $header );
+				
 				$ip = wp_kses( $_SERVER[ $header ], 'strip' );
 
 				if ( str_contains( $ip, ',' ) ) {
