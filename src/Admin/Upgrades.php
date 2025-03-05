@@ -11,6 +11,7 @@ namespace Plausible\Analytics\WP\Admin;
 
 use Exception;
 use Plausible\Analytics\WP\Admin\Provisioning\Integrations;
+use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Helpers;
 
 /**
@@ -291,6 +292,11 @@ class Upgrades {
 		if ( Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
 			$edd_provisioning = new Provisioning\Integrations\EDD( new Integrations() );
 			$provisioning     = new Provisioning();
+
+			// No token entered.
+			if ( ! $provisioning->client instanceof Client ) {
+				return;
+			}
 
 			$provisioning->maybe_create_custom_properties( [], $settings );
 			$edd_provisioning->maybe_create_edd_funnel( [], $settings );
