@@ -60,7 +60,10 @@ class Actions {
 			Helpers::get_js_url( true ),
 			'',
 			$version,
-			apply_filters( 'plausible_load_js_in_footer', false )
+			[
+				'in_footer' => apply_filters( 'plausible_load_js_in_footer', false ),
+				'strategy' => 'defer',
+			]
 		);
 
 		// Goal tracking inline script (Don't disable this as it is required by 404).
