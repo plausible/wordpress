@@ -46,14 +46,11 @@ class Actions {
 		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or,
 		 * if current role should not be tracked.
 		 */
-		if ( ( ! empty( $user_role ) && ! isset( $settings[ 'tracked_user_roles' ] ) ) ||
-			( ! empty( $user_role ) && ! in_array( $user_role, $settings[ 'tracked_user_roles' ], true ) ) ) {
+		if ( ( ! empty( $user_role ) && ! isset( $settings[ 'tracked_user_roles' ] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings[ 'tracked_user_roles' ], true ) ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		$version =
-			Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) :
-				PLAUSIBLE_ANALYTICS_VERSION;
+		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
 
 		wp_enqueue_script(
 			'plausible-analytics',
@@ -62,7 +59,7 @@ class Actions {
 			$version,
 			[
 				'in_footer' => apply_filters( 'plausible_load_js_in_footer', false ),
-				'strategy' => 'defer',
+				'strategy'  => 'defer',
 			]
 		);
 
@@ -134,13 +131,13 @@ class Actions {
 			return; // @codeCoverageIgnore
 		}
 
-		$settings = Helpers::get_settings();
+		$settings     = Helpers::get_settings();
 		$current_user = wp_get_current_user();
 
 		$has_access             = false;
 		$user_roles_have_access = array_merge(
 			[ 'administrator' ],
-			$settings['expand_dashboard_access'] ?? []
+			$settings[ 'expand_dashboard_access' ] ?? []
 		);
 
 		foreach ( $current_user->roles as $role ) {
@@ -160,9 +157,7 @@ class Actions {
 			'title' => 'Plausible Analytics',
 		];
 
-
-		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) ||
-			( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'self_hosted_shared_link' ] ) ) ) {
+		if ( ! empty( $settings[ 'enable_analytics_dashboard' ] ) || ( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'self_hosted_shared_link' ] ) ) ) {
 			$args[] = [
 				'id'     => 'view-analytics',
 				'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
