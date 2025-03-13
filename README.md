@@ -4,37 +4,45 @@
 
 [![Github CI](https://github.com/plausible/wordpress/actions/workflows/push.yml/badge.svg)](https://github.com/plausible/wordpress/actions/workflows/push.yml) ![WordPress version](https://img.shields.io/wordpress/plugin/v/plausible-analytics.svg) ![WordPress Rating](https://img.shields.io/wordpress/plugin/r/plausible-analytics.svg) ![WordPress Downloads](https://img.shields.io/wordpress/plugin/dt/plausible-analytics.svg)
 
-Welcome to the Plausible Analytics WordPress Plugin GitHub repository. This is the code source and the center of active development. Here you can
+Welcome to the Plausible Analytics WordPress Plugin GitHub repository. This is the code source and the center of active
+development. Here you can
 browse the source, look at open issues, and contribute to the project.
 
 ## Getting Started
 
 If you're looking to contribute or actively develop on Plausible Analytics then skip ahead to
-the [Local Development](https://github.com/plausible/wordpress/#local-development) section below. The following is if you're looking to actively use
+the [Local Development](https://github.com/plausible/wordpress/#local-development) section below. The following is if
+you're looking to actively use
 the plugin on your WordPress site.
 
 ### Minimum Requirements
 
-* WordPress 5.3 or greater
+* WordPress 5.9 or greater
 * PHP version 7.4 or greater
 * MySQL version 5.5 or greater
 
 ### Automatic installation
 
-Automatic installation is the easiest option as WordPress handles the file transfers itself, and you don't need to leave your web browser. To do an
-automatic installation of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New".
+Automatic installation is the easiest option as WordPress handles the file transfers itself, and you don't need to leave
+your web browser. To do an
+automatic installation of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and
+click "Add New".
 
-In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view details about it such as the
+In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view
+details about it such as the
 point release, rating and description. Most importantly of course, you can install it by simply clicking "Install Now".
 
 ### Manual installation
 
-The manual installation method involves downloading our plugin and uploading it to your server via your favorite FTP application. The
-WordPress codex contains [instructions on how to do this](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+The manual installation method involves downloading our plugin and uploading it to your server via your favorite FTP
+application. The
+WordPress codex
+contains [instructions on how to do this](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
 ### Support
 
-This repository is not suitable for support. Please don't use GitHub issues for support requests. To get support please use the following channels:
+This repository is not suitable for support. Please don't use GitHub issues for support requests. To get support please
+use the following channels:
 
 * [WP.org Support Forums](https://wordpress.org/support/plugin/plausible-analytics) - for all users
 
@@ -45,25 +53,33 @@ This repository is not suitable for support. Please don't use GitHub issues for 
 - `plausible_analytics_settings`: Allows you to modify and/or force values for each of the plugin's settings.
 - `plausible_load_js_in_footer`: Allows you to load the JS code snippet in the footer.
 - `plausible_analytics_script_params`: Allows you to modify the `script` element, loading the Plausible JS library.
-  - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types when File Downloads tracking is
+  - Example: using this filter and the `file-types` attribute will allow you to track downloads of certain file types
+    when File Downloads tracking is
     enabled.
-- `plausible_analytics_pageview_properties`: Allows you to add custom pageview properties when the Pageview Properties option is enabled under
-  Enhanced Measurements. For examples, read the [documentation on Pageview Properties](https://plausible.io/docs/custom-props/for-pageviews).
+- `plausible_analytics_pageview_properties`: Allows you to add custom pageview properties when the Pageview Properties
+  option is enabled under
+  Enhanced Measurements. For examples, read
+  the [documentation on Pageview Properties](https://plausible.io/docs/custom-props/for-pageviews).
 
 ### Actions
 
 - `plausible_analytics_settings_saved`: Trigger additional tasks directly after settings are saved.
-- `plausible_analytics_after_register_assets`: This action allows you to trigger additional tasks or add custom JS (e.g. events) to the tracking code.
+- `plausible_analytics_after_register_assets`: This action allows you to trigger additional tasks or add custom JS (e.g.
+  events) to the tracking code.
 
 ### Toggles
 
-Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If you're using a custom plugin,
+Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If
+you're using a custom plugin,
 make sure its code is loaded before this plugin.
 
-- `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible, this constant allows you to
-  specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the plugin's setting. So, if this
+- `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible,
+  this constant allows you to
+  specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the
+  plugin's setting. So, if this
   constant is defined, changing the setting won't have any effect.
-- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This will allow you to test your proxy
+- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This
+  will allow you to test your proxy
   in the frontend, before enabling the option.
 
 ## Local Development
@@ -83,7 +99,8 @@ That's it. You're now ready to start development.
 
 Plausible Analytics relies on several npm commands to get you started:
 
-* `npm run watch` - Live reloads JS and SASS files. Typically, you'll run this command before you start development. It's necessary to build the
+* `npm run watch` - Live reloads JS and SASS files. Typically, you'll run this command before you start development.
+  It's necessary to build the
   JS/CSS
   however if you're working strictly within PHP it may not be necessary to run.
 * `npm run dev` - Runs a one time build for development. No production files are created.
@@ -91,7 +108,8 @@ Plausible Analytics relies on several npm commands to get you started:
 
 ### Development Notes
 
-* Ensure that you have `SCRIPT_DEBUG` enabled within your wp-config.php file. Here's a good example of wp-config.php for debugging:
+* Ensure that you have `SCRIPT_DEBUG` enabled within your wp-config.php file. Here's a good example of wp-config.php for
+  debugging:
     ```
      // Enable WP_DEBUG mode
     define( 'WP_DEBUG', true );
@@ -103,21 +121,27 @@ Plausible Analytics relies on several npm commands to get you started:
     define( 'SCRIPT_DEBUG', true );
     ```
 * Commit the `package.lock` file. Read more about why [here](https://docs.npmjs.com/files/package-lock.json).
-* Your editor should recognize the `.eslintrc` and `.editorconfig` files within the Repo's root directory. Please only submit PRs following those
+* Your editor should recognize the `.eslintrc` and `.editorconfig` files within the Repo's root directory. Please only
+  submit PRs following those
   coding style rulesets.
 
 ### Regenerating the OpenAPI PHP Client
 
-This plugin uses a OpenAPI PHP Client which is autogenerated by the OpenAPI generator to reduce contract violations, etc. to a minimum. But, since
-this is a WordPress plugin, some manual modifications need to be done to make sure it doesn't conflict with other plugins:
+This plugin uses a OpenAPI PHP Client which is autogenerated by the OpenAPI generator to reduce contract violations,
+etc. to a minimum. But, since
+this is a WordPress plugin, some manual modifications need to be done to make sure it doesn't conflict with other
+plugins:
 
-- (Re)generate the PHP client using the following command (trigger it from the Plugin's root dir as output will be saved to `src/Client`):
+- (Re)generate the PHP client using the following command (trigger it from the Plugin's root dir as output will be saved
+  to `src/Client`):
   `openapi-generator-cli generate -i https://plausible.io/api/plugins/spec/openapi -g php -o src/Client --additional-properties=identifierNamingConvention=snake_case,invokerPackage="Plausible\\Analytics\\WP\\Client" --global-property=apis,models,supportingFiles,modelDocs=false,modelTests=false,apiDocs=false,apiTests=false`
 - (When regenerating the PHP client this step can be skipped) Navigate to the `src/Client` director and install Composer
   dependencies: `composer install --no-dev`
-- (When regenerating the PHP client this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make sure Mozart is installed
+- (When regenerating the PHP client this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make
+  sure Mozart is installed
   globally)
-- In the `src/Client/lib` directory, replace all occurrences of ` GuzzleHttp` (mind the space) with ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (
+- In the `src/Client/lib` directory, replace all occurrences of ` GuzzleHttp` (mind the space) with
+  ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (
   again, mind the space at the beginning)
 - In the same directory, replace all occurrences of ` \GuzzleHttp` (mind the space and backslash)
   with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.

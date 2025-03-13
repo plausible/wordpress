@@ -11,13 +11,6 @@ namespace Plausible\Analytics\WP;
 
 class Setup {
 	/**
-	 * Cron job handle
-	 *
-	 * @var string
-	 */
-	private $cron = 'plausible_analytics_update_js';
-
-	/**
 	 * Filters and Hooks.
 	 *
 	 * @return void
@@ -28,7 +21,7 @@ class Setup {
 		register_deactivation_hook( PLAUSIBLE_ANALYTICS_PLUGIN_FILE, [ $this, 'deactivate_cron' ] );
 
 		// Attach the cron script to the cron action.
-		add_action( $this->cron, [ $this, 'load_cron_script' ] );
+		add_action( Cron::TASK_NAME, [ $this, 'load_cron_script' ] );
 
 		// This assures that the local file is downloaded/updated when settings are saved.
 		add_action( 'plausible_analytics_settings_saved', [ $this, 'load_cron_script' ] );
@@ -51,8 +44,8 @@ class Setup {
 	 * @codeCoverageIgnore
 	 */
 	public function activate_cron() {
-		if ( ! wp_next_scheduled( $this->cron ) ) {
-			wp_schedule_event( time(), 'daily', $this->cron );
+		if ( ! wp_next_scheduled( Cron::TASK_NAME ) ) {
+			wp_schedule_event( time(), 'daily', Cron::TASK_NAME );
 		}
 	}
 
@@ -62,8 +55,8 @@ class Setup {
 	 * @codeCoverageIgnore
 	 */
 	public function deactivate_cron() {
-		if ( wp_next_scheduled( $this->cron ) ) {
-			wp_clear_scheduled_hook( $this->cron );
+		if ( wp_next_scheduled( Cron::TASK_NAME ) ) {
+			wp_clear_scheduled_hook( Cron::TASK_NAME );
 		}
 	}
 

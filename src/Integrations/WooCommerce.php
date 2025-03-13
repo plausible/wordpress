@@ -69,8 +69,10 @@ class WooCommerce {
 		 */
 		add_action( 'woocommerce_before_add_to_cart_quantity', [ $this, 'add_cart_form_hidden_input' ] );
 		add_action( 'woocommerce_after_add_to_cart_form', [ $this, 'track_add_to_cart_on_product_page' ] );
-		add_filter( 'woocommerce_store_api_validate_add_to_cart', [ $this, 'track_add_to_cart' ], 10, 2 );
-		add_filter( 'woocommerce_ajax_added_to_cart', [ $this, 'track_ajax_add_to_cart' ] );
+		add_action( 'woocommerce_store_api_validate_add_to_cart', [ $this, 'track_add_to_cart' ], 10, 2 );
+		add_action( 'woocommerce_ajax_added_to_cart', [ $this, 'track_ajax_add_to_cart' ] );
+		/** @see \WC_Form_Handler::add_to_cart_action() runs on priority 20. */
+		add_action( 'wp_loaded', [ $this, 'track_direct_add_to_cart' ], 21 );
 		add_action( 'woocommerce_remove_cart_item', [ $this, 'track_remove_cart_item' ], 10, 2 );
 		add_action( 'wp_head', [ $this, 'track_entered_checkout' ] );
 		add_action( 'woocommerce_thankyou', [ $this, 'track_purchase' ] );
@@ -173,22 +175,22 @@ class WooCommerce {
 	}
 
 	/**
-	 * Track (non-Interactivity API, i.e. AJAX) add to cart events.
-	 *
-	 * @param string|int $product_id ID of the product added to the cart.
+	 * Track add to cart actions by direct link, e.g. ?product_type=download&add-to-cart=1&quantity=1
 	 *
 	 * @return void
 	 *
-	 * @codeCoverageIgnore Because we can't test XHR requests here.
+	 * @codeCoverageIgnore Because we can't test XHR here.
 	 */
-	public function track_ajax_add_to_cart( $product_id ) {
-		$product          = wc_get_product( $product_id );
-		$add_to_cart_data = [
-			'id'       => $product_id,
-			'quantity' => $_POST[ 'quantity' ] ?? 1,
-		];
+	public function track_direct_add_to_cart() {
+		if ( ! isset( $_REQUEST[ 'add-to-cart' ] ) || ! is_numeric( wp_unslash( $_REQUEST[ 'add-to-cart' ] ) ) ) {
+			return;
+		}
 
-		$this->track_add_to_cart( $product, $add_to_cart_data );
+		$product_id = absint( wp_unslash( $_REQUEST[ 'add-to-cart' ] ) );
+		$product    = wc_get_product( $product_id );
+		$quantity   = isset( $_REQUEST[ 'quantity' ] ) ? absint( wp_unslash( $_REQUEST[ 'quantity' ] ) ) : 1;
+
+		$this->track_add_to_cart( $product, [ 'id' => $product_id, 'quantity' => $quantity ] );
 	}
 
 	/**
@@ -239,6 +241,25 @@ class WooCommerce {
 		}
 
 		return $product;
+	}
+
+	/**
+	 * Track (non-Interactivity API, i.e. AJAX) add to cart events.
+	 *
+	 * @param string|int $product_id ID of the product added to the cart.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore Because we can't test XHR requests here.
+	 */
+	public function track_ajax_add_to_cart( $product_id ) {
+		$product          = wc_get_product( $product_id );
+		$add_to_cart_data = [
+			'id'       => $product_id,
+			'quantity' => $_POST[ 'quantity' ] ?? 1,
+		];
+
+		$this->track_add_to_cart( $product, $add_to_cart_data );
 	}
 
 	/**

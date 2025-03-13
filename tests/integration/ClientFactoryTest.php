@@ -3,7 +3,7 @@
  * @package Plausible Analytics Unit Tests - ClientFactory
  */
 
-namespace Plausible\Analytics\Tests\Unit;
+namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Client;

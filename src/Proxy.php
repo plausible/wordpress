@@ -112,6 +112,11 @@ class Proxy {
 			'u' => $url ?: wp_get_referer(),
 		];
 
+		// URL is required, so if no $url was set and no referer was found, attempt to create it from the REQUEST_URI server variable.
+		if ( empty( $body[ 'u' ] ) ) {
+			$body[ 'u' ] = $this->generate_event_url(); // @codeCoverageIgnore
+		}
+
 		// Revenue events use a different approach.
 		if ( isset( $props[ 'revenue' ] ) ) {
 			$body[ 'revenue' ] = reset( $props ); // @codeCoverageIgnore
@@ -122,6 +127,23 @@ class Proxy {
 		$request->set_body( wp_json_encode( $body ) );
 
 		return $this->send_event( $request );
+	}
+
+	/**
+	 * Attempts to generate the Event URL from available resources.
+	 *
+	 * @return string
+	 */
+	public function generate_event_url() {
+		$url            = '';
+		$parts          = parse_url( $_SERVER[ 'REQUEST_URI' ] );
+		$home_url_parts = parse_url( get_home_url() );
+
+		if ( isset( $home_url_parts[ 'scheme' ] ) && isset( $home_url_parts[ 'host' ] ) && isset( $parts[ 'path' ] ) ) {
+			$url = $home_url_parts[ 'scheme' ] . '://' . $home_url_parts [ 'host' ] . $parts[ 'path' ];
+		}
+
+		return $url;
 	}
 
 	/**

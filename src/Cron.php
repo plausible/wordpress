@@ -14,6 +14,13 @@ use Exception;
 
 class Cron {
 	/**
+	 * Cron job handle
+	 *
+	 * @var string
+	 */
+	const TASK_NAME = 'plausible_analytics_update_js';
+
+	/**
 	 * Build class
 	 *
 	 * @return void
