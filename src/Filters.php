@@ -11,11 +11,6 @@ namespace Plausible\Analytics\WP;
 
 use WP_Term;
 
-// Bailout, if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 class Filters {
 	/**
 	 * Constructor.
