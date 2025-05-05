@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 7.2
-Stable tag: 2.3.2
+Stable tag: 2.3.3
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -154,6 +154,11 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.3.3 | May 5th, 2025 =
+* Added: W3 Total Cache compatibility.
+* Improved: WP Rocket compatibility (exclude our script from Delay JS setting)
+* Added: User logged in/out status tracking.
 
 = 2.3.2 | April 22nd, 2025 =
 * Tested with WP 6.8.
