@@ -151,6 +151,14 @@ class Page extends API {
 							'value' => '404',
 							'caps'  => [ self::CAP_GOALS ],
 						],
+						'file-downloads'   => [
+							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'file-downloads',
+							'caps'  => [ self::CAP_GOALS ],
+						],
 						'outbound-links'   => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
@@ -159,13 +167,37 @@ class Page extends API {
 							'value' => 'outbound-links',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'file-downloads'   => [
-							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
+						'pageview-props'   => [
+							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'file-downloads',
+							'value' => 'pageview-props',
+							'caps'  => [ self::CAP_PROPS ],
+						],
+						'revenue'          => [
+							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'revenue',
+							'caps'  => [ self::CAP_GOALS, self::CAP_FUNNELS, self::CAP_PROPS, self::CAP_REVENUE ],
+						],
+						'form-completions' => [
+							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-form-completions',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'form-completions',
 							'caps'  => [ self::CAP_GOALS ],
+						],
+						'user-logged-in'   => [
+							'label' => esc_html__( 'Logged-in user status', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-logged-in-user-status',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'user-logged-in',
+							'caps'  => [ self::CAP_PROPS ],
 						],
 						'search'           => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
@@ -181,30 +213,6 @@ class Page extends API {
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => 'tagged-events',
-							'caps'  => [ self::CAP_GOALS ],
-						],
-						'revenue'          => [
-							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'revenue',
-							'caps'  => [ self::CAP_GOALS, self::CAP_FUNNELS, self::CAP_PROPS, self::CAP_REVENUE ],
-						],
-						'pageview-props'   => [
-							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'pageview-props',
-							'caps'  => [ self::CAP_PROPS ],
-						],
-						'form-completions' => [
-							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-form-completions',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'form-completions',
 							'caps'  => [ self::CAP_GOALS ],
 						],
 						'hash'             => [
@@ -434,7 +442,7 @@ class Page extends API {
 		if ( ! empty( $settings[ 'self_hosted_domain' ] ) ) {
 			$fields = $this->fields[ 'general' ][ 1 ][ 'fields' ];
 
-			array_splice( $fields, 6, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
+			array_splice( $fields, 5, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
 
 			$this->fields[ 'general' ][ 1 ][ 'fields' ] = $fields;
 		}

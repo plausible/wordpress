@@ -29,4 +29,32 @@ class FiltersTest extends TestCase {
 
 		$this->assertStringNotContainsString( 'plausible-analytics-js', $tag );
 	}
+
+	/**
+	 * @see Filters::maybe_track_logged_in_users()
+	 *
+	 * @return void
+	 */
+	public function testTrackLoggedInUsers() {
+		$class = new Filters();
+
+		add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+
+		$params = $class->maybe_track_logged_in_users( '' );
+
+		$this->assertStringContainsString( 'no', $params );
+
+		global $current_user;
+
+		$user         = new \WP_User();
+		$user->ID     = 1;
+		$user->roles  = [ 'test' ];
+		$current_user = $user;
+
+		$params = $class->maybe_track_logged_in_users( '' );
+
+		remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+
+		$this->assertStringContainsString( 'test', $params );
+	}
 }

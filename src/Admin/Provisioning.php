@@ -57,6 +57,7 @@ class Provisioning {
 	private $custom_pageview_properties = [
 		'author',
 		'category',
+		'user_logged_in',
 	];
 
 	/**
