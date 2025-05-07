@@ -79,19 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			this.showMessages();
 		},
 
-		toggleSection: function (target) {
-			let section = document.getElementById(target + '_content');
-			let chevron = document.getElementById(target + '_chevron');
-
-			if (section.className.indexOf('hidden') !== -1) {
-				section.className = 'block';
-				chevron.classList.add('rotate-180');
-			} else {
-				section.className = 'hidden';
-				chevron.classList.remove('rotate-180');
-			}
-		},
-
 		/**
 		 * Toggle Option and store in DB.
 		 *
@@ -132,6 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				toggleStatus = 'on';
 			}
 
+			if (button.dataset.addtlOpts === '1') {
+				plausible.toggleSection(button.value.replace('-', '_'));
+			}
+
 			const form = new FormData();
 			form.append('action', 'plausible_analytics_toggle_option');
 			form.append('option_name', button.name);
@@ -148,6 +139,32 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			plausible.maybeDisableOptions(data.capabilities);
+		},
+		
+		/**
+		 * Toggles a collapsable section and rotates a chevron if it exists.
+		 *
+		 * @param target
+		 */
+		toggleSection: function (target) {
+			let section = document.getElementById(target + '_content');
+			let chevron = document.getElementById(target + '_chevron');
+
+			if (section.className.indexOf('hidden') !== -1) {
+				section.classList.add('block');
+				section.classList.remove('hidden');
+
+				if (chevron !== null) {
+					chevron.classList.add('rotate-180');
+				}
+			} else {
+				section.classList.add('hidden');
+				section.classList.remove('block');
+
+				if (chevron !== null) {
+					chevron.classList.remove('rotate-180');
+				}
+			}
 		},
 
 		/**

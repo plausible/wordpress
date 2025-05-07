@@ -622,7 +622,7 @@ class API {
 		$values = $group[ 'value' ] ?: [ 0 => '' ];
 		$slug   = $group[ 'slug' ] ?? '';
 		?>
-		<div class="<?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> mt-4 mx-14">
+		<div id="<?php echo $slug; ?>_content" class="<?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> mt-4 mx-14">
 			<div class="flex justify-between items-center">
 				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo esc_attr( $group[ 'description' ] ); ?></div>
 				<button type="button" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-medium rounded-md px-3.5 py-2.5 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-400 dark:disabled:text-white dark:disabled:text-gray-400 dark:disabled:bg-gray-700 bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600 " id="add-goal-button">
@@ -716,13 +716,15 @@ class API {
 	 */
 	public function render_checkbox_field( array $field, $is_list = false ) {
 		ob_start();
-		$value    = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : 'on';
-		$settings = Helpers::get_settings();
-		$slug     = ! empty( $settings[ $field[ 'slug' ] ] ) ? $settings[ $field[ 'slug' ] ] : '';
-		$id       = $field[ 'slug' ] . '_' . str_replace( '-', '_', sanitize_title( $field[ 'label' ] ) );
-		$checked  = ! empty( $field[ 'checked' ] ) ? 'checked="checked"' : ( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
-		$caps     = ! empty( $field[ 'caps' ] ) ? $field[ 'caps' ] : [];
+		$value      = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : 'on';
+		$settings   = Helpers::get_settings();
+		$slug       = ! empty( $settings[ $field[ 'slug' ] ] ) ? $settings[ $field[ 'slug' ] ] : '';
+		$id         = $field[ 'slug' ] . '_' . str_replace( '-', '_', sanitize_title( $field[ 'label' ] ) );
+		$checked    = ! empty( $field[ 'checked' ] ) ? 'checked="checked"' :
+			( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
+		$disabled   = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
+		$caps       = ! empty( $field[ 'caps' ] ) ? $field[ 'caps' ] : [];
+		$addtl_opts = ! empty( $field[ 'addtl_opts' ] );
 		?>
 		<div class="toggle-container flex items-center mt-4 space-x-3">
 			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' :
@@ -732,7 +734,9 @@ class API {
 				''; ?>" <?php if ( ! empty( $caps ) ): ?>data-caps="<?php echo implode(
 				',',
 				$caps
-			); ?>"<?php endif; ?> name="<?php echo esc_attr( $field[ 'slug' ] ); ?>" value="<?php echo esc_html( $value ); ?>" <?php echo $disabled; ?>>
+			); ?>"<?php endif; ?> data-addtl-opts="<?php echo $addtl_opts; ?>" name="<?php echo esc_attr( $field[ 'slug' ] ); ?>" value="<?php echo esc_html(
+				$value
+			); ?>" <?php echo $disabled; ?>>
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
