@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param target
 		 */
 		removeField: function (target) {
-			let rowClass = target.replace(/\[[0-9]+\]/, '').replace('_', '-');
+			let rowClass = target.replace(/\[[0-9]+]/, '').replace('_', '-');
 			let rows = document.getElementsByClassName(rowClass + '-field');
 			let input = document.getElementById(target);
 			let listItem = input.closest('.' + rowClass + '-field');
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			const section = button.closest('.plausible-analytics-section');
 			const inputs = section.querySelectorAll('input, textarea');
 			const form = new FormData();
-			const options = [];
+			let options = [];
 
 			inputs.forEach(function (input) {
 				input = plausible.validateInput(input);
@@ -293,8 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (input.name === 'domain_name' && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
 				input.value = input.value.replace(/^(https?:\/\/)?(www.)?/, '');
 			}
-
-			debugger;
 
 			return input;
 		},

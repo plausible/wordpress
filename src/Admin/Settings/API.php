@@ -622,7 +622,7 @@ class API {
 		$values = $group[ 'value' ] ?: [ 0 => '' ];
 		$slug   = $group[ 'slug' ] ?? '';
 		?>
-		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> mt-4 mx-14">
+		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> !mt-1 mx-14">
 			<div class="flex justify-between items-center">
 				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo esc_attr( $group[ 'description' ] ); ?></div>
 				<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-medium rounded-md px-3.5 py-2.5 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-400 bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600">
