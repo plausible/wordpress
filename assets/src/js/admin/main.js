@@ -79,6 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			this.showMessages();
 		},
 
+		toggleSection: function (target) {
+			let section = document.getElementById(target + '_content');
+			let chevron = document.getElementById(target + '_chevron');
+
+			if (section.className.indexOf('hidden') !== -1) {
+				section.className = 'block';
+				chevron.classList.add('rotate-180');
+			} else {
+				section.className = 'hidden';
+				chevron.classList.remove('rotate-180');
+			}
+		},
+
 		/**
 		 * Toggle Option and store in DB.
 		 *
@@ -562,6 +575,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 	}
+
+	plausibleToggleSection = plausible.toggleSection;
 
 	plausible.init();
 });

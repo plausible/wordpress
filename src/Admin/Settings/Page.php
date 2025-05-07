@@ -207,29 +207,36 @@ class Page extends API {
 							'value' => 'search',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'tagged-events'    => [
-							'label' => esc_html__( 'Custom events', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'tagged-events',
-							'caps'  => [ self::CAP_GOALS ],
-						],
-						'hash'             => [
-							'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'hash',
-							'caps'  => [],
-						],
-						'compat'           => [
-							'label' => esc_html__( 'IE compatibility', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => 'compat',
-							'caps'  => [],
+						'advanced-options' => [
+							'label'  => esc_html__( 'Advanced options', 'plausible-analytics' ),
+							'slug'   => 'advanced_options',
+							'type'   => 'toggle_group',
+							'fields' => [
+								'tagged-events' => [
+									'label' => esc_html__( 'Custom events', 'plausible-analytics' ),
+									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
+									'slug'  => 'enhanced_measurements',
+									'type'  => 'checkbox',
+									'value' => 'tagged-events',
+									'caps'  => [ self::CAP_GOALS ],
+								],
+								'hash'          => [
+									'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
+									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
+									'slug'  => 'enhanced_measurements',
+									'type'  => 'checkbox',
+									'value' => 'hash',
+									'caps'  => [],
+								],
+								'compat'        => [
+									'label' => esc_html__( 'IE compatibility', 'plausible-analytics' ),
+									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
+									'slug'  => 'enhanced_measurements',
+									'type'  => 'checkbox',
+									'value' => 'compat',
+									'caps'  => [],
+								],
+							],
 						],
 					],
 				],
@@ -257,7 +264,6 @@ class Page extends API {
 							),
 						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),
-					'toggle' => '',
 					'fields' => [
 						[
 							'label'    => esc_html__( 'Enable proxy', 'plausible-analytics' ),
@@ -276,7 +282,6 @@ class Page extends API {
 						'View your site statistics within your WordPress Dashboard.',
 						'plausible-analytics'
 					),
-					'toggle' => '',
 					'fields' => [
 						[
 							'label'    => esc_html__( 'View stats in WordPress', 'plausible-analytics' ),
@@ -302,7 +307,6 @@ class Page extends API {
 						),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
-					'toggle' => '',
 					'fields' => [
 						[
 							'label'       => esc_html__( 'Excluded pages', 'plausible-analytics' ),
@@ -329,7 +333,6 @@ class Page extends API {
 						'By default, visits from logged in users aren\'t tracked. If you want to track visits for certain user roles then please specify them below.',
 						'plausible-analytics'
 					),
-					'toggle' => false,
 					'fields' => $this->build_user_roles_array( 'tracked_user_roles' ),
 				],
 				[
@@ -340,7 +343,6 @@ class Page extends API {
 						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them below.',
 						'plausible-analytics'
 					),
-					'toggle' => false,
 					'fields' => $this->build_user_roles_array( 'expand_dashboard_access', [ 'administrator' => true ] ),
 				],
 				[
@@ -351,7 +353,6 @@ class Page extends API {
 						'Check this option if you don\'t want the Plausible Analytics menu item to be added to the toolbar at the top of the screen.',
 						'plausible-analytics'
 					),
-					'toggle'        => false,
 					'add_sub_array' => false,
 					'fields'        => [
 						'disable_toolbar_menu' => [
@@ -380,7 +381,6 @@ class Page extends API {
 						esc_url( 'https://plausible.io/self-hosted-web-analytics/' ),
 						esc_html__( 'Learn more about Plausible Community Edition.', 'plausible-analytics' )
 					),
-					'toggle' => '',
 					'fields' => [
 						[
 							'label'       => esc_html__( 'Domain name', 'plausible-analytics' ),

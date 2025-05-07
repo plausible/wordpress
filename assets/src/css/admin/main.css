@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+div[id$="_content"] .toggle-container {
+	@apply mt-6;
+}

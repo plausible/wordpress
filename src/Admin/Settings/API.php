@@ -139,12 +139,12 @@ class API {
 						<nav class="flex items-center justify-between py-8" aria-label="Global">
 							<div class="flex items-center gap-x-12">
 								<a href="#" class="-m-1.5 p-1.5">
-									<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
+									<img alt="Plausible logo" class="w-44 -mt-2"
 										 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.svg'; ?>">
 								</a>
 								<?php $this->render_navigation(); ?>
 							</div>
-							<div class="flex item-center gap-x-6 md:flex hidden">
+							<div class="hidden item-center gap-x-6 md:flex">
 								<?php echo $this->render_quick_actions(); ?>
 							</div>
 						</nav>
@@ -153,6 +153,7 @@ class API {
 								<?php foreach ( $this->fields[ $current_tab ] as $tab => $field ): ?>
 									<div class="plausible-analytics-section shadow sm:rounded-md sm:overflow-hidden">
 										<?php
+										/** @var string $type checkbox|group|toggle_group|button|text */
 										$type = $field[ 'type' ] ?? '';
 
 										if ( $type ) {
@@ -184,7 +185,7 @@ class API {
 			<div class="flex flex-col h-full">
 				<!-- logo -->
 				<div class="w-full my-8 text-center">
-					<img alt="Plausible logo" class="w-44 -mt-2 dark:hidden"
+					<img alt="Plausible logo" class="w-44 -mt-2"
 						 src="<?php echo PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/images/icon.svg'; ?>">
 				</div>
 				<?php $this->render_notices_field(); ?>
@@ -543,6 +544,31 @@ class API {
 	}
 
 	/**
+	 * Render Toggle Group Field.
+	 *
+	 * @since 2.4.0
+	 * @return string
+	 */
+	public function render_toggle_group_field( array $group, $hide_header = false ) {
+		ob_start();
+		?>
+		<div id="<?php echo $group[ 'slug' ]; ?>_toggle" onclick="plausibleToggleSection('<?php echo $group[ 'slug' ]; ?>')" class="flex items-center mt-4 space-x-3 hover:cursor-pointer">
+			<span class="dark:text-gray-100 text-lg">
+				<?php echo $group[ 'label' ]; ?>
+			</span>
+			<!-- Chevron -->
+			<svg xmlns="http://www.w3.org/2000/svg" id="<?php echo $group[ 'slug' ]; ?>_chevron" class="h-6 w-6 ml-2 text-gray-400 dark:text-gray-500 transition-transform duration-250" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/>
+			</svg>
+		</div>
+		<div class="hidden" id="<?php echo $group[ 'slug' ]; ?>_content">
+			<?php echo $this->render_group_field( $group, true ); ?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * Render Group Field.
 	 *
 	 * @since  1.3.0
@@ -550,24 +576,16 @@ class API {
 	 * @return string
 	 */
 	public function render_group_field( array $group, $hide_header = false ) {
-		$toggle = $group[ 'toggle' ] ?? [];
 		$fields = $group[ 'fields' ];
 		ob_start();
 		?>
-		<div
-			class="<?php echo $hide_header ? '' : 'plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?> bg-white dark:bg-gray-800">
+		<div class="bg-white dark:bg-gray-800<?php echo $hide_header ? '' : ' plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?>">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
-					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100"
-						id="<?php echo $group[ 'slug' ]; ?>"><?php echo $group[ 'label' ]; ?></h3>
+					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo $group[ 'slug' ]; ?>"><?php echo $group[ 'label' ]; ?></h3>
 					<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 						<?php echo wp_kses_post( $group[ 'desc' ] ); ?>
 					</div>
-					<?php if ( ! empty( $toggle ) && is_array( $toggle ) ) : ?>
-						<a target="_blank" class="plausible-analytics-link" href="<?php echo $toggle[ 'anchor' ]; ?>">
-							<?php echo $toggle[ 'label' ]; ?>
-						</a>
-					<?php endif; ?>
 				</header>
 			<?php endif; ?>
 			<?php if ( ! empty( $fields ) ): ?>
