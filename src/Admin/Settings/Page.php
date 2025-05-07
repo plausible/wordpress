@@ -143,7 +143,7 @@ class Page extends API {
 						'plausible-analytics'
 					),
 					'fields' => [
-						'404'              => [
+						'404'                      => [
 							'label' => esc_html__( '404 error pages', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
 							'slug'  => 'enhanced_measurements',
@@ -151,7 +151,7 @@ class Page extends API {
 							'value' => '404',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'file-downloads'   => [
+						'file-downloads'           => [
 							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
 							'slug'  => 'enhanced_measurements',
@@ -159,7 +159,7 @@ class Page extends API {
 							'value' => 'file-downloads',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'outbound-links'   => [
+						'outbound-links'           => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
 							'slug'  => 'enhanced_measurements',
@@ -167,7 +167,7 @@ class Page extends API {
 							'value' => 'outbound-links',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'pageview-props'   => [
+						'pageview-props'           => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
 							'slug'  => 'enhanced_measurements',
@@ -175,7 +175,22 @@ class Page extends API {
 							'value' => 'pageview-props',
 							'caps'  => [ self::CAP_PROPS ],
 						],
-						'revenue'          => [
+						'affiliate-links'          => [
+							'label' => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/docs/custom-automatic-link-tracking',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'affiliate-links',
+							'caps'  => [ self::CAP_GOALS ],
+						],
+						'affiliate-links-patterns' => [
+							'slug'        => 'affiliate_links',
+							'description' => __( 'Enter the URLs (or patterns; regular expressions are allowed) you want to track.', 'plausible-analytics' ),
+							'type'        => 'text_group',
+							'value'       => Helpers::get_settings()[ 'affiliate_links' ] ?? [],
+							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ),
+						],
+						'revenue'                  => [
 							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
 							'slug'  => 'enhanced_measurements',
@@ -183,7 +198,7 @@ class Page extends API {
 							'value' => 'revenue',
 							'caps'  => [ self::CAP_GOALS, self::CAP_FUNNELS, self::CAP_PROPS, self::CAP_REVENUE ],
 						],
-						'form-completions' => [
+						'form-completions'         => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-form-completions',
 							'slug'  => 'enhanced_measurements',
@@ -191,7 +206,7 @@ class Page extends API {
 							'value' => 'form-completions',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'user-logged-in'   => [
+						'user-logged-in'           => [
 							'label' => esc_html__( 'Logged-in user status', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-logged-in-user-status',
 							'slug'  => 'enhanced_measurements',
@@ -199,7 +214,7 @@ class Page extends API {
 							'value' => 'user-logged-in',
 							'caps'  => [ self::CAP_PROPS ],
 						],
-						'search'           => [
+						'search'                   => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-site-search-tracking',
 							'slug'  => 'enhanced_measurements',
@@ -207,7 +222,7 @@ class Page extends API {
 							'value' => 'search',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'advanced-options' => [
+						'advanced-options'         => [
 							'label'  => esc_html__( 'Advanced options', 'plausible-analytics' ),
 							'slug'   => 'advanced_options',
 							'type'   => 'toggle_group',
