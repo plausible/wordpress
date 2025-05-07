@@ -161,6 +161,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
+		 * Removes an input node.
+		 *
+		 * @param target
+		 */
+		removeField: function (target) {
+			let rowClass = target.replace(/\[[0-9]+\]/, '').replace('_', '-');
+			let rows = document.getElementsByClassName(rowClass + '-field');
+			let input = document.getElementById(target);
+			let listItem = input.closest('.' + rowClass + '-field');
+
+			listItem.remove();
+
+			plausible.resetListItems(rows, rowClass);
+		},
+
+		/**
 		 * Make sure all items in a list have properly incremented id, name and onclick attributes.
 		 *
 		 * @param listItems
@@ -180,22 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				input.setAttribute('name', list + '[' + i + ']');
 				trash.setAttribute('onclick', 'plausibleRemoveField("' + list + '[' + i + ']")');
 			}
-		},
-
-		/**
-		 * Removes an input node.
-		 *
-		 * @param target
-		 */
-		removeField: function (target) {
-			let rowClass = target.replace(/\[[0-9]+\]/, '').replace('_', '-');
-			let rows = document.getElementsByClassName(rowClass + '-field');
-			let input = document.getElementById(target);
-			let listItem = input.closest('.' + rowClass + '-field');
-
-			listItem.remove();
-
-			plausible.resetListItems(rows, rowClass);
 		},
 
 		/**
