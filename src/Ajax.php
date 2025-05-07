@@ -289,7 +289,7 @@ class Ajax {
 			// Clean spaces
 			$settings[ $option->name ] = trim( $option->value );
 
-			// Validate Plugin Token, if this is the Plugin Token field.
+			// Validate Plugin Token if this is the Plugin Token field.
 			if ( $option->name === 'api_token' ) {
 				$this->validate_api_token( $option->value );
 

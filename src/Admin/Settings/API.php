@@ -617,23 +617,23 @@ class API {
 	 *
 	 * @return false|string
 	 */
-	public function render_text_group_field( array $group ) {
+	public function render_clonable_text_field( array $group ) {
 		ob_start();
 		$values = $group[ 'value' ] ?: [ 0 => '' ];
 		$slug   = $group[ 'slug' ] ?? '';
 		?>
-		<div id="<?php echo $slug; ?>_content" class="<?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> mt-4 mx-14">
+		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> mt-4 mx-14">
 			<div class="flex justify-between items-center">
 				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo esc_attr( $group[ 'description' ] ); ?></div>
-				<button type="button" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-medium rounded-md px-3.5 py-2.5 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-400 dark:disabled:text-white dark:disabled:text-gray-400 dark:disabled:bg-gray-700 bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600 " id="add-goal-button">
+				<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-medium rounded-md px-3.5 py-2.5 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-400 bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600">
 					<?php echo __( 'Add Field', 'plausible-analytics' ); ?>
 				</button>
 			</div>
-			<ol class="m-0 mt-4 list-none">
+			<ol id="<?php echo $slug; ?>_list" class="m-0 mt-4 list-none mb-6">
 				<?php foreach ( $values as $key => $value ) : ?>
-					<li class="flex justify-between items-end">
+					<li class="<?php echo str_replace( '_', '-', $slug ); ?>-field flex justify-between items-end">
 						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => "{$slug}[$key]", 'classes' => 'flex-1' ] ); ?>
-						<a class="ml-2 cursor-pointer text-red-800 hover:text-red-500 dark:text-red-500 dark:hover:text-red-400" id="remove_<?php echo $slug . '_' . $key; ?>">
+						<a onclick="plausibleRemoveField('<?php echo "{$slug}[$key]"; ?>')" class="ml-2 cursor-pointer text-red-800 hover:text-red-500 dark:text-red-500 dark:hover:text-red-400">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" fill="none" stroke-width="1.5">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
 							</svg>
@@ -641,6 +641,7 @@ class API {
 					</li>
 				<?php endforeach; ?>
 			</ol>
+			<?php echo $this->render_button_field( [ 'slug' => 'save-' . $slug, 'label' => __( 'Save', 'plausible-analytics' ) ] ); ?>
 		</div>
 		<?php
 		return ob_get_clean();

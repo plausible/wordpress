@@ -187,7 +187,7 @@ class Page extends API {
 						'affiliate-links-patterns' => [
 							'slug'        => 'affiliate_links',
 							'description' => __( 'Enter the URLs (or patterns; regular expressions are allowed) you want to track.', 'plausible-analytics' ),
-							'type'        => 'text_group',
+							'type'        => 'clonable_text',
 							'value'       => Helpers::get_settings()[ 'affiliate_links' ] ?? [],
 							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ),
 						],

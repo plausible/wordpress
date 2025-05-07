@@ -140,7 +140,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			plausible.maybeDisableOptions(data.capabilities);
 		},
-		
+
+		/**
+		 * Adds an input node.
+		 *
+		 * @param target
+		 */
+		addField: function (target) {
+			let clone = document.getElementsByClassName(target.replace('_', '-') + '-field')[0].cloneNode(true);
+			let rows = document.getElementsByClassName(target.replace('_', '-') + '-field');
+			let current_row = rows.length;
+			let input = clone.querySelector('input');
+			let trash = clone.querySelector('a');
+
+			input.setAttribute('id', target + '[' + current_row + ']');
+			input.setAttribute('name', target + '[' + current_row + ']');
+			trash.setAttribute('onclick', 'plausibleRemoveField("' + target + '[' + current_row + ']")');
+
+			document.getElementById(target + '_list').appendChild(clone);
+		},
+
+		/**
+		 * Make sure all items in a list have properly incremented id, name and onclick attributes.
+		 *
+		 * @param listItems
+		 * @param list
+		 */
+		resetListItems: function (listItems, list) {
+			if (listItems === null || listItems === undefined || listItems.length === 0) {
+				return;
+			}
+
+			for (let i = 0; i < listItems.length; i++) {
+				let item = listItems[i];
+				let input = item.querySelector('input');
+				let trash = item.querySelector('a');
+
+				input.setAttribute('id', list + '[' + i + ']');
+				input.setAttribute('name', list + '[' + i + ']');
+				trash.setAttribute('onclick', 'plausibleRemoveField("' + list + '[' + i + ']")');
+			}
+		},
+
+		/**
+		 * Removes an input node.
+		 *
+		 * @param target
+		 */
+		removeField: function (target) {
+			let rowClass = target.replace(/\[[0-9]+\]/, '').replace('_', '-');
+			let rows = document.getElementsByClassName(rowClass + '-field');
+			let input = document.getElementById(target);
+			let listItem = input.closest('.' + rowClass + '-field');
+
+			listItem.remove();
+
+			plausible.resetListItems(rows, rowClass);
+		},
+
 		/**
 		 * Toggles a collapsable section and rotates a chevron if it exists.
 		 *
@@ -236,6 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (input.name === 'domain_name' && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
 				input.value = input.value.replace(/^(https?:\/\/)?(www.)?/, '');
 			}
+
+			debugger;
 
 			return input;
 		},
@@ -594,6 +653,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	plausibleToggleSection = plausible.toggleSection;
+	plausibleAddField = plausible.addField;
+	plausibleRemoveField = plausible.removeField;
 
 	plausible.init();
 });
