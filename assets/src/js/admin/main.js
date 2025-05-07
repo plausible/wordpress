@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			input.setAttribute('id', target + '[' + current_row + ']');
 			input.setAttribute('name', target + '[' + current_row + ']');
 			trash.setAttribute('onclick', 'plausibleRemoveField("' + target + '[' + current_row + ']")');
+			trash.classList.remove('hidden');
 
 			document.getElementById(target + '_list').appendChild(clone);
 		},
@@ -174,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			listItem.remove();
 
-			plausible.resetListItems(rows, rowClass);
+			plausible.resetListItems(rows, target.replace(/\[[0-9]+]/, ''));
 		},
 
 		/**

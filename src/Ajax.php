@@ -293,7 +293,7 @@ class Ajax {
 		$input_array_elements = array_filter(
 			$options,
 			function ( $option ) {
-				return preg_match( '/\[[0-9]+]/', $option->name ) && $option->value;
+				return preg_match( '/\[[0-9]+]/', $option->name );
 			}
 		);
 
@@ -304,7 +304,9 @@ class Ajax {
 			$options[ 0 ]->name = $array_name;
 
 			foreach ( $input_array_elements as $input_array_element ) {
-				$options[ 0 ]->value[] = $input_array_element->value;
+				if ( $input_array_element->value ) {
+					$options[ 0 ]->value[] = $input_array_element->value;
+				}
 			}
 		}
 
