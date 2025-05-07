@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			let input = clone.querySelector('input');
 			let trash = clone.querySelector('a');
 
-			input.setAttribute('value', '');
+			input.value = '';
 			input.setAttribute('id', target + '[' + current_row + ']');
 			input.setAttribute('name', target + '[' + current_row + ']');
 			trash.setAttribute('onclick', 'plausibleRemoveField("' + target + '[' + current_row + ']")');
