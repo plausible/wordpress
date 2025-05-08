@@ -79,19 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			this.showMessages();
 		},
 
-		toggleSection: function (target) {
-			let section = document.getElementById(target + '_content');
-			let chevron = document.getElementById(target + '_chevron');
-
-			if (section.className.indexOf('hidden') !== -1) {
-				section.className = 'block';
-				chevron.classList.add('rotate-180');
-			} else {
-				section.className = 'hidden';
-				chevron.classList.remove('rotate-180');
-			}
-		},
-
 		/**
 		 * Toggle Option and store in DB.
 		 *
@@ -132,6 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				toggleStatus = 'on';
 			}
 
+			if (button.dataset.addtlOpts === '1') {
+				plausible.toggleSection(button.value.replace('-', '_'));
+			}
+
 			const form = new FormData();
 			form.append('action', 'plausible_analytics_toggle_option');
 			form.append('option_name', button.name);
@@ -151,6 +142,91 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
+		 * Adds an input node.
+		 *
+		 * @param target
+		 */
+		addField: function (target) {
+			let clone = document.getElementsByClassName(target.replace('_', '-') + '-field')[0].cloneNode(true);
+			let rows = document.getElementsByClassName(target.replace('_', '-') + '-field');
+			let current_row = rows.length;
+			let input = clone.querySelector('input');
+			let trash = clone.querySelector('a');
+
+			input.value = '';
+			input.setAttribute('id', target + '[' + current_row + ']');
+			input.setAttribute('name', target + '[' + current_row + ']');
+			trash.setAttribute('onclick', 'plausibleRemoveField("' + target + '[' + current_row + ']")');
+			trash.classList.remove('hidden');
+
+			document.getElementById(target + '_list').appendChild(clone);
+		},
+
+		/**
+		 * Removes an input node.
+		 *
+		 * @param target
+		 */
+		removeField: function (target) {
+			let rowClass = target.replace(/\[[0-9]+]/, '').replace('_', '-');
+			let rows = document.getElementsByClassName(rowClass + '-field');
+			let input = document.getElementById(target);
+			let listItem = input.closest('.' + rowClass + '-field');
+
+			listItem.remove();
+
+			plausible.resetListItems(rows, target.replace(/\[[0-9]+]/, ''));
+		},
+
+		/**
+		 * Make sure all items in a list have properly incremented id, name and onclick attributes.
+		 *
+		 * @param listItems
+		 * @param list
+		 */
+		resetListItems: function (listItems, list) {
+			if (listItems === null || listItems === undefined || listItems.length === 0) {
+				return;
+			}
+
+			for (let i = 0; i < listItems.length; i++) {
+				let item = listItems[i];
+				let input = item.querySelector('input');
+				let trash = item.querySelector('a');
+
+				input.setAttribute('id', list + '[' + i + ']');
+				input.setAttribute('name', list + '[' + i + ']');
+				trash.setAttribute('onclick', 'plausibleRemoveField("' + list + '[' + i + ']")');
+			}
+		},
+
+		/**
+		 * Toggles a collapsable section and rotates a chevron if it exists.
+		 *
+		 * @param target
+		 */
+		toggleSection: function (target) {
+			let section = document.getElementById(target + '_content');
+			let chevron = document.getElementById(target + '_chevron');
+
+			if (section.className.indexOf('hidden') !== -1) {
+				section.classList.add('block');
+				section.classList.remove('hidden');
+
+				if (chevron !== null) {
+					chevron.classList.add('rotate-180');
+				}
+			} else {
+				section.classList.add('hidden');
+				section.classList.remove('block');
+
+				if (chevron !== null) {
+					chevron.classList.remove('rotate-180');
+				}
+			}
+		},
+
+		/**
 		 * Save value of input or text area to DB.
 		 *
 		 * @param e
@@ -160,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			const section = button.closest('.plausible-analytics-section');
 			const inputs = section.querySelectorAll('input, textarea');
 			const form = new FormData();
-			const options = [];
+			let options = [];
 
 			inputs.forEach(function (input) {
 				input = plausible.validateInput(input);
@@ -577,6 +653,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	plausibleToggleSection = plausible.toggleSection;
+	plausibleAddField = plausible.addField;
+	plausibleRemoveField = plausible.removeField;
 
 	plausible.init();
 });
