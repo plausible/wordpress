@@ -89,7 +89,7 @@ class API {
 					'Would you like to view your site\'s stats in your WordPress dashboard?',
 					'plausible-analytics'
 				),
-				'enhanced_measurements'      => __( 'Enable enhanced measurements.', 'plausible-analytics' ),
+				'enhanced_measurements'      => __( 'Enable enhanced measurements to automatically track actions that visitors take on your site.', 'plausible-analytics' ),
 				'proxy_enabled'              => __(
 					'Run our script as a first party connection from your domain name to count visitors who use ad blockers',
 					'plausible-analytics'
