@@ -60,10 +60,6 @@ class Upgrades {
 			$this->upgrade_to_126();
 		}
 
-		if ( version_compare( $plausible_analytics_version, '1.3.1', '<' ) ) {
-			$this->upgrade_to_131();
-		}
-
 		if ( version_compare( $plausible_analytics_version, '1.3.2', '<' ) ) {
 			$this->upgrade_to_132();
 		}
@@ -116,9 +112,6 @@ class Upgrades {
 			unset( $new_settings[ 'is_custom_domain' ] );
 		}
 
-		// Enable Outbound links by default.
-		$new_settings[ 'enhanced_measurements' ] = [ 'outbound-links' ];
-
 		if ( ! empty( $old_settings[ 'track_administrator' ] ) && $old_settings[ 'track_administrator' ] === 'true' ) {
 			$new_settings[ 'tracked_user_roles' ] = [ 'administrator' ];
 		}
@@ -146,25 +139,6 @@ class Upgrades {
 		update_option( 'plausible_analytics_settings', $new_settings );
 
 		update_option( 'plausible_analytics_version', '1.2.6' );
-	}
-
-	/**
-	 * Upgrade to 1.3.1
-	 * - Enables 404 pages tracking by default.
-	 *
-	 * @return void
-	 * @codeCoverageIgnore
-	 */
-	public function upgrade_to_131() {
-		$settings = Helpers::get_settings();
-
-		if ( ! in_array( '404', $settings[ 'enhanced_measurements' ], true ) ) {
-			array_unshift( $settings[ 'enhanced_measurements' ], '404' );
-		}
-
-		update_option( 'plausible_analytics_settings', $settings );
-
-		update_option( 'plausible_analytics_version', '1.3.1' );
 	}
 
 	/**
