@@ -624,10 +624,7 @@ class API {
 		?>
 		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> !mt-1 mx-14">
 			<div class="flex justify-between items-center">
-				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo esc_attr( $group[ 'description' ] ); ?></div>
-				<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-medium rounded-md px-3.5 py-2.5 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-400 bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600">
-					<?php echo __( 'Add Field', 'plausible-analytics' ); ?>
-				</button>
+				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group[ 'description' ], 'post' ); ?></div>
 			</div>
 			<ol id="<?php echo $slug; ?>_list" class="m-0 mt-4 list-none mb-6">
 				<?php foreach ( $values as $key => $value ) : ?>
@@ -643,6 +640,9 @@ class API {
 				<?php endforeach; ?>
 			</ol>
 			<?php echo $this->render_button_field( [ 'slug' => 'save-' . $slug, 'label' => __( 'Save', 'plausible-analytics' ) ] ); ?>
+			<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-semibold px-3.5 py-2.5 text-sm bg-transparent text-indigo-600 hover:text-indigo-700">
+				<?php echo __( 'Add More', 'plausible-analytics' ); ?>
+			</button>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -691,20 +691,18 @@ class API {
 		ob_start();
 		$disabled = isset( $field[ 'disabled' ] ) && $field[ 'disabled' ] === true;
 		?>
-		<div>
-			<button
-				class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
-				id="<?php esc_attr_e( $field[ 'slug' ], 'plausible-analytics' ); ?>"
-				type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
-				<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
-					 fill="none" viewBox="0 0 24 24">
-					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-					<path class="opacity-75" fill="currentColor"
-						  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-				</svg>
-				<?php esc_attr_e( $field[ 'label' ], 'plausible-analytics' ); ?>
-			</button>
-		</div>
+		<button
+			class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
+			id="<?php esc_attr_e( $field[ 'slug' ], 'plausible-analytics' ); ?>"
+			type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
+			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
+				 fill="none" viewBox="0 0 24 24">
+				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+				<path class="opacity-75" fill="currentColor"
+					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+			</svg>
+			<?php esc_attr_e( $field[ 'label' ], 'plausible-analytics' ); ?>
+		</button>
 		<?php
 		return ob_get_clean();
 	}

@@ -177,7 +177,7 @@ class Page extends API {
 						],
 						'affiliate-links'          => [
 							'label'      => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/custom-automatic-link-tracking',
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-cloaked-affiliate-link-clicks',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
 							'value'      => 'affiliate-links',
@@ -186,7 +186,13 @@ class Page extends API {
 						],
 						'affiliate-links-patterns' => [
 							'slug'        => 'affiliate_links',
-							'description' => __( 'Enter the URLs (or patterns; regular expressions are allowed) you want to track.', 'plausible-analytics' ),
+							'description' => sprintf(
+								__(
+									'Enter the (partial) URLs you want to track (e.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>)',
+									'plausible-analytics'
+								),
+								get_home_url() . '/recommends/affiliate-product/'
+							),
 							'type'        => 'clonable_text',
 							'value'       => Helpers::get_settings()[ 'affiliate_links' ] ?? [],
 							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ),
