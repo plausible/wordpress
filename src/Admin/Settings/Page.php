@@ -188,7 +188,7 @@ class Page extends API {
 							'slug'        => 'affiliate_links',
 							'description' => sprintf(
 								__(
-									'Enter the (partial) URLs you want to track (e.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>)',
+									'Enter the (partial) URLs you\'d like to track. E.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>.',
 									'plausible-analytics'
 								),
 								get_home_url() . '/recommends/affiliate-product/'
