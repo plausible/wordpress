@@ -92,7 +92,7 @@ class Helpers {
 		$defaults = [
 			'domain_name'                => '',
 			'api_token'                  => '',
-			'enhanced_measurements'      => [],
+			'enhanced_measurements'      => [ '404', 'file-downloads', 'form-completions', 'search', 'outbound-links' ],
 			'affiliate-links'            => [],
 			'proxy_enabled'              => '',
 			'enable_analytics_dashboard' => '',
