@@ -267,7 +267,7 @@ class Ajax {
 	 * @throws ApiException
 	 */
 	public function save_options() {
-		// Sanitize all the post data before using.
+		// Sanitize all the post-data before using.
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
@@ -285,11 +285,40 @@ class Ajax {
 			wp_send_json_error( null, 400 );
 		}
 
+		/**
+		 * If we're dealing with an array of inputs (e.g. item[0], item[1], etc.), we need to convert $options , before storing it in the database.
+		 *
+		 * @since 2.4.0
+		 */
+		$input_array_elements = array_filter(
+			$options,
+			function ( $option ) {
+				return preg_match( '/\[[0-9]+]/', $option->name );
+			}
+		);
+
+		if ( count( $input_array_elements ) > 0 ) {
+			$options            = [];
+			$array_name         = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[ 0 ]->name );
+			$options[ 0 ]       = (object) [];
+			$options[ 0 ]->name = $array_name;
+
+			foreach ( $input_array_elements as $input_array_element ) {
+				if ( $input_array_element->value ) {
+					$options[ 0 ]->value[] = $input_array_element->value;
+				}
+			}
+		}
+
 		foreach ( $options as $option ) {
 			// Clean spaces
-			$settings[ $option->name ] = trim( $option->value );
+			if ( is_string( $option->value ) ) {
+				$settings[ $option->name ] = trim( $option->value );
+			} else {
+				$settings[ $option->name ] = $option->value;
+			}
 
-			// Validate Plugin Token, if this is the Plugin Token field.
+			// Validate Plugin Token if this is the Plugin Token field.
 			if ( $option->name === 'api_token' ) {
 				$this->validate_api_token( $option->value );
 

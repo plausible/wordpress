@@ -60,9 +60,7 @@ class Helpers {
 		/**
 		 * Custom Events needs to be enabled, if Revenue Tracking is enabled and any of the available integrations are available.
 		 */
-		if ( ! self::is_enhanced_measurement_enabled( 'tagged-events' ) &&
-			self::is_enhanced_measurement_enabled( 'revenue' ) &&
-			( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
+		if ( ! self::is_enhanced_measurement_enabled( 'tagged-events' ) && self::is_enhanced_measurement_enabled( 'revenue' ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
 			$file_name .= '.tagged-events';
 		}
 
@@ -95,6 +93,7 @@ class Helpers {
 			'domain_name'                => '',
 			'api_token'                  => '',
 			'enhanced_measurements'      => [ '404', 'file-downloads', 'form-completions', 'search', 'outbound-links' ],
+			'affiliate-links'            => [],
 			'proxy_enabled'              => '',
 			'enable_analytics_dashboard' => '',
 			'shared_link'                => '',
