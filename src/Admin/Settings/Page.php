@@ -464,7 +464,7 @@ class Page extends API {
 		if ( ! empty( $settings[ 'self_hosted_domain' ] ) ) {
 			$fields = $this->fields[ 'general' ][ 1 ][ 'fields' ];
 
-			array_splice( $fields, 5, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
+			array_splice( $fields, 7, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
 
 			$this->fields[ 'general' ][ 1 ][ 'fields' ] = $fields;
 		}
