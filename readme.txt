@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 7.2
-Stable tag: 2.3.3
+Stable tag: 2.4.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -154,6 +154,11 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.4.0 | May 21st, 2025 =
+* Added: Cloaked Affiliate Link tracking feature.
+* Improved: Custom Events, Hash based routing and IE compatibility are now grouped under a new Advanced Options section.
+* Improved: Enhanced Measurements 404, File Downloads, Outbound Links, Form Completions and Search Queries are now enabled by default on new installs.
 
 = 2.3.3 | May 5th, 2025 =
 * Added: W3 Total Cache compatibility.
