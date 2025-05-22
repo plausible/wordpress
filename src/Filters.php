@@ -54,7 +54,7 @@ class Filters {
 		/**
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
 		 */
-		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}' data-cfasync='false'";
+		$params = "data-domain='{$domain_name}' data-api='{$api_url}' data-cfasync='false'";
 
 		// Triggered when exclude pages is enabled.
 		if ( ! empty( $settings[ 'excluded_pages' ] ) && $settings[ 'excluded_pages' ] ) {
