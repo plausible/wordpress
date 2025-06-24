@@ -24,12 +24,28 @@ class Actions {
 	/**
 	 * This <meta> tag "tells" the Plausible API which version of the plugin is used, to allow tailored error messages,
 	 * specific to the plugin version.
+	 *
 	 * @return void
 	 */
 	public function insert_version_meta_tag() {
-		$version = PLAUSIBLE_ANALYTICS_VERSION;
+		$version = $this->get_plugin_version();
 
-		echo "<meta name='plausible-analytics-version' content='$version' />\n";
+		if ( $version ) {
+			echo "<meta name='plausible-analytics-version' content='$version' />\n";
+		}
+	}
+
+	/**
+	 * Retrieves the plugin's current version.
+	 */
+	private function get_plugin_version() {
+		static $data = null;
+
+		if ( $data === null ) {
+			$data = get_plugin_data( PLAUSIBLE_ANALYTICS_PLUGIN_FILE );
+		}
+
+		return $data[ 'Version' ] ?? '';
 	}
 
 	/**
@@ -44,13 +60,13 @@ class Actions {
 
 		/**
 		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or,
-		 * if current role should not be tracked.
+		 * if the current role should not be tracked.
 		 */
 		if ( ( ! empty( $user_role ) && ! isset( $settings[ 'tracked_user_roles' ] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings[ 'tracked_user_roles' ], true ) ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : PLAUSIBLE_ANALYTICS_VERSION;
+		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : $this->get_plugin_version();
 
 		wp_enqueue_script(
 			'plausible-analytics',
