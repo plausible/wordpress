@@ -123,6 +123,28 @@ document.addEventListener('DOMContentLoaded', () => {
 				plausible.toggleSection(button.value.replace('-', '_'));
 			}
 
+			if (button.value === 'all') {
+				let allButtons = button.parentNode.parentNode.childNodes;
+
+				allButtons.forEach((button) => {
+					if (button.childNodes.length === 0) {
+						return;
+					}
+
+					let childButton = button.getElementsByTagName('button');
+
+					if (childButton.length === 0) {
+						return;
+					}
+
+					if (childButton[0].dataset.status !== 'on') {
+						childButton[0].click();
+					}
+				});
+
+				return;
+			}
+
 			const form = new FormData();
 			form.append('action', 'plausible_analytics_toggle_option');
 			form.append('option_name', button.name);

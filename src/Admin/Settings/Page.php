@@ -519,7 +519,7 @@ class Page extends API {
 	}
 
 	/**
-	 * Load all available user roles as a list (sorted alphabetically) of checkboxes to be processed by the Settings
+	 * Load all available user roles as an array (sorted alphabetically) to be processed by the Settings
 	 * API.
 	 *
 	 * @param string $slug
@@ -527,7 +527,14 @@ class Page extends API {
 	 * @return array
 	 */
 	private function build_user_roles_array( $slug, $disable_elements = [] ) {
-		$wp_roles = wp_roles()->roles ?? [];
+		$wp_roles          = wp_roles()->roles ?? [];
+		$roles_array       = [];
+		$roles_array [ 0 ] = [
+			'label' => __( 'Select All', 'plausible-analytics' ),
+			'slug'  => 'all',
+			'type'  => 'checkbox',
+			'value' => 'all',
+		];
 
 		foreach ( $wp_roles as $id => $role ) {
 			$roles_array[ $id ] = [
