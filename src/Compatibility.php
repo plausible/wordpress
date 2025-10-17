@@ -43,6 +43,11 @@ class Compatibility {
 			add_filter( 'sgo_javascript_combine_excluded_external_paths', [ $this, 'exclude_plausible_js' ] );
 		}
 
+		// TranslatePress
+		if ( defined( 'TRP_PLUGIN_VERSION' ) ) {
+			add_filter( 'rest_url', [ $this, 'multilingual_compatibility' ], 10, 1 );
+		}
+
 		// W3 Total Cache
 		if ( defined( 'W3TC_VERSION' ) ) {
 			add_filter( 'w3tc_minify_js_script_tags', [ $this, 'unset_plausible_js' ] );
@@ -50,7 +55,7 @@ class Compatibility {
 
 		// WPML
 		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
-			add_filter( 'rest_url', [ $this, 'wpml_compatibility' ], 10, 1 );
+			add_filter( 'rest_url', [ $this, 'multilingual_compatibility' ], 10, 1 );
 		}
 
 		// WP Optimize
@@ -188,15 +193,19 @@ class Compatibility {
 	}
 
 	/**
-	 * WPML overrides the REST API URL to include the language 'subdirectory', which leads to 404s.
-	 * This forces it back to default behavior.
+	 * Multilingual plugins, e.g., TranslatePress and WPML, override the REST API URL to include
+	 * the language 'subdirectory', which leads to 404 errors.
+	 *
+	 * This filter forces it back to default behavior.
+	 *
+	 * @filter rest_url
 	 *
 	 * @param mixed $url
 	 *
 	 * @return string|void
 	 * @throws Exception
 	 */
-	public function wpml_compatibility( $url ) {
+	public function multilingual_compatibility( $url ) {
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
 		if ( strpos( $url, $rest_endpoint ) !== false ) {
