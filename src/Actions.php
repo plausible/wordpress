@@ -16,7 +16,7 @@ class Actions {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'wp_head', [ $this, 'insert_version_meta_tag' ] );
+		add_action( 'wp_head', [ $this, 'maybe_insert_version_meta_tag' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_register_assets' ] );
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
 	}
@@ -27,10 +27,11 @@ class Actions {
 	 *
 	 * @return void
 	 */
-	public function insert_version_meta_tag() {
-		$version = $this->get_plugin_version();
+	public function maybe_insert_version_meta_tag() {
+		$version       = $this->get_plugin_version();
+		$running_tests = array_key_exists( 'plausible_verification', $_GET );
 
-		if ( $version ) {
+		if ( $version && $running_tests ) {
 			echo "<meta name='plausible-analytics-version' content='$version' />\n";
 		}
 	}
