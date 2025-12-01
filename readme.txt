@@ -3,9 +3,9 @@ Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
 Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,6 +155,11 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.4.1 | December 1st, 2025 =
+* Tested with WP 6.9
+* Improved: version meta tag is no longer displayed by default, to clean up HTML.
+* Added: compatibility for TranslatePress.
 
 = 2.4.0 | May 21st, 2025 =
 * Added: Cloaked Affiliate Link tracking feature.
