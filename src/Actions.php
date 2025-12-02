@@ -56,6 +56,7 @@ class Actions {
 	 * @since  1.0.0
 	 * @access public
 	 * @return void
+	 * @throws \Exception
 	 */
 	public function maybe_register_assets() {
 		$settings  = Helpers::get_settings();
