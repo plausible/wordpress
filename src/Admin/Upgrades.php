@@ -305,6 +305,8 @@ class Upgrades {
 	 * If Search Queries is enabled, make sure the custom properties are created after updating.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
 	 */
 	public function upgrade_to_242() {
 		$settings = Helpers::get_settings();
