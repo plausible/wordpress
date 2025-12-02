@@ -19,6 +19,8 @@ class Actions {
 		add_action( 'wp_head', [ $this, 'maybe_insert_version_meta_tag' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_register_assets' ] );
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
+		add_filter( 'get_search_form', [ $this, 'maybe_add_hidden_input_to_search_form' ], 10, 1 );
+		add_filter( 'render_block', [ $this, 'maybe_add_hidden_input_to_search_block' ], 10, 2 );
 	}
 
 	/**
@@ -122,17 +124,18 @@ class Actions {
 		if ( Helpers::is_enhanced_measurement_enabled( 'search' ) && is_search() ) {
 			global $wp_query;
 
-			$data   = wp_json_encode(
+			$search_source = isset( $_REQUEST[ 'search_source' ] ) ? sanitize_text_field( $_REQUEST[ 'search_source' ] ) : wp_get_referer();
+			$data          = wp_json_encode(
 				[
 					'props' => [
 						// convert queries to lowercase and remove trailing whitespace to ensure same terms are grouped together
 						'search_query'  => strtolower( trim( get_search_query() ) ),
 						'result_count'  => $wp_query->found_posts,
-						'search_source' => wp_get_referer(),
+						'search_source' => $search_source,
 					],
 				]
 			);
-			$script = "plausible('WP Search Queries', $data );";
+			$script        = "plausible('WP Search Queries', $data );";
 
 			wp_add_inline_script(
 				'plausible-analytics',
@@ -142,6 +145,74 @@ class Actions {
 
 		// This action allows you to add your own custom scripts!
 		do_action( 'plausible_analytics_after_register_assets', $settings );
+	}
+
+	/**
+	 * Adds a hidden input field to the search form for enhanced measurement of search referrer.
+	 *
+	 * This method checks if enhanced measurement is enabled for search, and if so, it appends
+	 * a hidden input field containing a reference to the search's referrer URL.
+	 *
+	 * @param string $form The HTML markup of the search form.
+	 *
+	 * @return string The modified HTML markup of the search form with the hidden input added,
+	 *                or the original form if enhanced measurement is not enabled.
+	 */
+	public function maybe_add_hidden_input_to_search_form( $form ) {
+		if ( ! Helpers::is_enhanced_measurement_enabled( 'search' ) ) {
+			return $form;
+		}
+
+		$referrer     = $this->get_referrer();
+		$hidden_input = '<input type="hidden" name="search_source" value="' . $referrer . '" />';
+
+		return str_replace( '</form>', $hidden_input . '</form>', $form );
+	}
+
+	/**
+	 * Retrieves the current page URL to be used as a referrer.
+	 *
+	 * This method constructs the referrer by obtaining the current page URL and ensures
+	 * it is sanitized. If the referrer cannot be determined, an empty string is returned.
+	 *
+	 * @return string The sanitized referrer URL or an empty string if unavailable.
+	 */
+	private function get_referrer() {
+		$referrer = esc_url( home_url( add_query_arg( null, null ) ) );
+
+		if ( ! $referrer ) {
+			$referrer = '';
+		}
+
+		return esc_attr( $referrer );
+	}
+
+	/**
+	 * Adds a hidden input field to the content of a search block for enhanced measurement of search referrer.
+	 *
+	 * This method checks if the given block is a WordPress core search block. If so, it appends
+	 * a hidden input field containing a reference to the current page's URL as the search's referrer.
+	 * The hidden input is inserted before the button element if present or at the end of the block content otherwise.
+	 *
+	 * @param string $block_content The current content of the block.
+	 * @param array  $block         The block attributes and settings.
+	 *
+	 * @return string The modified content of the block with the hidden input added if it is a core search block,
+	 *                or the original block content if the block is not a search block.
+	 */
+	public function maybe_add_hidden_input_to_search_block( $block_content, $block ) {
+		if ( $block[ 'blockName' ] === 'core/search' ) {
+			$referrer     = $this->get_referrer();
+			$hidden_input = '<input type="hidden" name="search_source" value="' . $referrer . '"/>';
+
+			if ( str_contains( $block_content, '<button' ) ) {
+				$block_content = str_replace( '<button', $hidden_input . '<button', $block_content );
+			} else {
+				$block_content .= $hidden_input;
+			}
+		}
+
+		return $block_content;
 	}
 
 	/**
