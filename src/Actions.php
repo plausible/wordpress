@@ -28,10 +28,15 @@ class Actions {
 	 * @return void
 	 */
 	public function maybe_insert_version_meta_tag() {
-		$version       = $this->get_plugin_version();
 		$running_tests = array_key_exists( 'plausible_verification', $_GET );
 
-		if ( $version && $running_tests ) {
+		if ( ! $running_tests ) {
+			return;
+		}
+
+		$version = $this->get_plugin_version();
+
+		if ( $version ) {
 			echo "<meta name='plausible-analytics-version' content='$version' />\n";
 		}
 	}
@@ -40,6 +45,10 @@ class Actions {
 	 * Retrieves the plugin's current version.
 	 */
 	private function get_plugin_version() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		static $data = null;
 
 		if ( $data === null ) {
