@@ -467,7 +467,7 @@ class Configuration {
 	 *
 	 * @return string URL based on host settings
 	 */
-	public static function getHostString( array $hostsSettings, $hostIndex, array $variables = null ) {
+	public static function getHostString( array $hostsSettings, $hostIndex, ?array $variables = null ) {
 		if ( null === $variables ) {
 			$variables = [];
 		}

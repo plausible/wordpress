@@ -142,7 +142,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 * @param mixed[] $data Associated array of property values
 	 *                      initializing the model
 	 */
-	public function __construct( array $data = null ) {
+	public function __construct( ?array $data = null ) {
 		$this->setIfExists( 'goals', $data ?? [], null );
 		$this->setIfExists( 'goal', $data ?? [], null );
 		$this->setIfExists( 'goal_type', $data ?? [], 'Goal.Pageview' );

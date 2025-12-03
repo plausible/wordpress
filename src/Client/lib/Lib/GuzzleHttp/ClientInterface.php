@@ -80,5 +80,5 @@ interface ClientInterface
      *
      * @deprecated ClientInterface::getConfig will be removed in Plausible\Analytics\WP\Client\Lib\GuzzleHttp/guzzle:8.0.
      */
-    public function getConfig(string $option = null);
+    public function getConfig(?string $option = null);
 }
