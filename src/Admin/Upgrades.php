@@ -84,6 +84,10 @@ class Upgrades {
 			$this->upgrade_to_231();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.4.2', '<' ) ) {
+			$this->upgrade_to_242();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -295,5 +299,29 @@ class Upgrades {
 		$setup->activate_cron();
 
 		update_option( 'plausible_analytics_version', '2.3.1' );
+	}
+
+	/**
+	 * If Search Queries is enabled, make sure the custom properties are created after updating.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
+	 */
+	public function upgrade_to_242() {
+		$settings = Helpers::get_settings();
+
+		if ( Helpers::is_enhanced_measurement_enabled( 'search' ) ) {
+			$provisioning = new Provisioning();
+
+			// No token entered.
+			if ( ! $provisioning->client instanceof Client ) {
+				return;
+			}
+
+			$provisioning->maybe_create_custom_properties( [], $settings );
+		}
+
+		update_option( 'plausible_analytics_version', '2.4.2' );
 	}
 }

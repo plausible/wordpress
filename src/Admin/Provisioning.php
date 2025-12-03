@@ -66,6 +66,7 @@ class Provisioning {
 	private $custom_search_properties = [
 		'search_query',
 		'result_count',
+		'search_source',
 	];
 
 	/**
@@ -365,7 +366,7 @@ class Provisioning {
 			$caps = get_option( 'plausible_analytics_api_token_caps', [] );
 
 			foreach ( $this->custom_search_properties as $property ) {
-				if ( empty( $caps[ 'props' ] ) && $property === 'result_count' ) {
+				if ( empty( $caps[ 'props' ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
 					continue;
 				}
 
