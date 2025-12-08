@@ -152,7 +152,7 @@ class Actions {
 
 				wp_add_inline_script(
 					'plausible-analytics',
-					"document.addEventListener('DOMContentLoaded', function() {\n$script\n});"
+					"document.addEventListener('DOMContentLoaded', function () {\n$script\n});"
 				);
 			}
 		}
@@ -176,7 +176,7 @@ class Actions {
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', function() {\n$script\n});"
+				"document.addEventListener('DOMContentLoaded', function () {\n$script\n});"
 			);
 		}
 
