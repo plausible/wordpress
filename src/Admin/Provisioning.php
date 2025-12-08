@@ -91,6 +91,7 @@ class Provisioning {
 			'file-downloads'   => __( 'File Download', 'plausible-analytics' ),
 			'form-completions' => __( 'WP Form Completions', 'plausible-analytics' ),
 			'outbound-links'   => __( 'Outbound Link: Click', 'plausible-analytics' ),
+			'query-params'     => __( 'WP Query Parameters', 'plausible-analytics' ),
 			'search'           => __( 'WP Search Queries', 'plausible-analytics' ),
 		];
 
@@ -334,7 +335,8 @@ class Provisioning {
 
 		if ( ! Helpers::is_enhanced_measurement_enabled( 'pageview-props', $enhanced_measurements ) &&
 			! Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) ) {
+			! Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) &&
+			! Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -356,6 +358,15 @@ class Provisioning {
 		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
 			foreach ( self::CUSTOM_PROPERTIES as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
+			}
+		}
+
+		/**
+		 * Create Custom Properties for Query Parameters option.
+		 */
+		if ( Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
+			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
+				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
 		}
 
