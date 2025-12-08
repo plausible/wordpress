@@ -130,6 +130,7 @@ class Actions {
 			);
 		}
 
+		// Track query parameters (if enabled and set)
 		if ( Helpers::is_enhanced_measurement_enabled( 'query-params' ) ) {
 			$query_params = Helpers::get_settings()['query_params'] ?? [];
 			$props        = [];
@@ -147,7 +148,7 @@ class Actions {
 					]
 				);
 
-				$script = "plausible('Query Parameters', $data );";
+				$script = "plausible('WP Query Parameters', $data );";
 
 				wp_add_inline_script(
 					'plausible-analytics',
