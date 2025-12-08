@@ -240,7 +240,7 @@ class Page extends API {
 								get_home_url() . '?lang=en'
 							),
 							'type'        => 'clonable_text',
-							'value'       => Helpers::get_settings()['query-params'] ?? [],
+							'value' => Helpers::get_settings()['query_params'] ?? [],
 							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'query-params' ),
 						],
 						'search'                   => [
