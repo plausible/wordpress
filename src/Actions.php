@@ -130,6 +130,32 @@ class Actions {
 			);
 		}
 
+		if ( Helpers::is_enhanced_measurement_enabled( 'query-params' ) ) {
+			$query_params = Helpers::get_settings()['query_params'] ?? [];
+			$props        = [];
+
+			foreach ( $query_params as $query_param ) {
+				if ( isset( $_REQUEST[ $query_param ] ) ) {
+					$props[ $query_param ] = $_REQUEST[ $query_param ];
+				}
+			}
+
+			if ( ! empty( $props ) ) {
+				$data = wp_json_encode(
+					[
+						'props' => $props,
+					]
+				);
+
+				$script = "plausible('Query Parameters', $data );";
+
+				wp_add_inline_script(
+					'plausible-analytics',
+					"document.addEventListener('DOMContentLoaded', function() {\n$script\n});"
+				);
+			}
+		}
+
 		// Track search results. Tracks a search event with the search term and the number of results, and a pageview with the site's search URL.
 		if ( Helpers::is_enhanced_measurement_enabled( 'search' ) && is_search() ) {
 			global $wp_query;
@@ -138,7 +164,7 @@ class Actions {
 			$data          = wp_json_encode(
 				[
 					'props' => [
-						// convert queries to lowercase and remove trailing whitespace to ensure same terms are grouped together
+						// convert queries to lowercase and remove trailing whitespace to ensure the same terms are grouped together
 						'search_query'  => strtolower( trim( get_search_query() ) ),
 						'result_count'  => $wp_query->found_posts,
 						'search_source' => $search_source,
