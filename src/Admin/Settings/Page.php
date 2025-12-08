@@ -221,6 +221,28 @@ class Page extends API {
 							'value' => 'user-logged-in',
 							'caps'  => [ self::CAP_PROPS ],
 						],
+						'query-params'          => [
+							'label'      => esc_html__( 'Query parameters', 'plausible-analytics' ),
+							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-query-parameters',
+							'slug'       => 'enhanced_measurements',
+							'type'       => 'checkbox',
+							'value'      => 'query-params',
+							'addtl_opts' => true,
+							'caps'       => [ self::CAP_PROPS ],
+						],
+						'query-params-patterns' => [
+							'slug'        => 'query_params',
+							'description' => sprintf(
+								__(
+									'Enter the query parameters you\'d like to track. E.g. enter <strong>lang</strong> if you want to track <code>%s</code>.',
+									'plausible-analytics'
+								),
+								get_home_url() . '?lang=en'
+							),
+							'type'        => 'clonable_text',
+							'value'       => Helpers::get_settings()['query-params'] ?? [],
+							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'query-params' ),
+						],
 						'search'                   => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-site-search-tracking',
