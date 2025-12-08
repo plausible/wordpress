@@ -91,7 +91,7 @@ class Provisioning {
 			'file-downloads'   => __( 'File Download', 'plausible-analytics' ),
 			'form-completions' => __( 'WP Form Completions', 'plausible-analytics' ),
 			'outbound-links'   => __( 'Outbound Link: Click', 'plausible-analytics' ),
-			'query-params' => __( 'Query Parameters', 'plausible-analytics' ),
+			'query-params'     => __( 'WP Query Parameters', 'plausible-analytics' ),
 			'search'           => __( 'WP Search Queries', 'plausible-analytics' ),
 		];
 
