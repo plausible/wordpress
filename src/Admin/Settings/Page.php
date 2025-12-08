@@ -223,7 +223,7 @@ class Page extends API {
 						],
 						'query-params'          => [
 							'label'      => esc_html__( 'Query parameters', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-query-parameters',
+							'docs' => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-custom-query-parameters',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
 							'value'      => 'query-params',
