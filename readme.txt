@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.4.2
+Stable tag: 2.5.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,6 +155,11 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.5.0 | December 9th, 2025 =
+* Improved: PHP 8.4 compatibility
+* Added: Query Parameters option to Enhanced Measurements
+* Improved: Search Queries now also shows on which page the search was triggered.
 
 = 2.4.2 | December 2nd, 2025 =
 * Fixed: some instances would get an Uncaught Error: call to undefined function get_plugin_data() error.
