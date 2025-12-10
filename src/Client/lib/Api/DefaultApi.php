@@ -1630,7 +1630,7 @@ class DefaultApi {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
 				$httpBody =
-					\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
+					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
 			} else {
 				$httpBody = $goal_create_request;
 			}

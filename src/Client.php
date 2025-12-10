@@ -296,7 +296,7 @@ class Client {
 	 */
 	public function create_goals( $goals ) {
 		try {
-			return $this->api_instance->plausibleWebPluginsAPIControllersGoalsCreate( $goals );
+			return $this->api_instance->goalGetOrCreate( $goals );
 		} catch ( Exception $e ) {
 			$this->send_json_error( $e, __( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ) );
 		}
@@ -313,7 +313,7 @@ class Client {
 	 */
 	public function create_funnel( $funnel ) {
 		try {
-			return $this->api_instance->plausibleWebPluginsAPIControllersFunnelsCreate( $funnel );
+			return $this->api_instance->funnelGetOrCreate( $funnel );
 		} catch ( Exception $e ) {
 			$this->send_json_error( $e, __( 'Something went wrong while creating Funnel: %s', 'plausible-analytics' ) );
 		}
@@ -351,7 +351,7 @@ class Client {
 	 */
 	public function enable_custom_property( $enable_request ) {
 		try {
-			$this->api_instance->plausibleWebPluginsAPIControllersCustomPropsEnable( $enable_request );
+			$this->api_instance->customPropGetOrEnable( $enable_request );
 		} catch ( Exception $e ) {
 			$this->send_json_error(
 				$e,
