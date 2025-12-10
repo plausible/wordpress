@@ -132,6 +132,10 @@ etc. to a minimum. But, since
 this is a WordPress plugin, some manual modifications need to be done to make sure it doesn't conflict with other
 plugins:
 
+> [!IMPORTANT]
+> You need to have Java and [OpenAPI Generator](https://openapi-generator.tech/docs/installation/) installed
+> globally.
+
 - (Re)generate the PHP client using the following command (trigger it from the Plugin's root dir as output will be saved
   to `src/Client`):
   `openapi-generator-cli generate -i https://plausible.io/api/plugins/spec/openapi -g php -o src/Client --additional-properties=identifierNamingConvention=snake_case,invokerPackage="Plausible\\Analytics\\WP\\Client" --global-property=apis,models,supportingFiles,modelDocs=false,modelTests=false,apiDocs=false,apiTests=false`
