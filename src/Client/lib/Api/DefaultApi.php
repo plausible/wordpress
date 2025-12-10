@@ -344,7 +344,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_disable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
 				);
 			} else {
@@ -699,7 +699,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_enable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
 				);
 			} else {
@@ -1050,7 +1050,7 @@ class DefaultApi {
 		if ( isset( $funnel_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $funnel_create_request )
 				);
 			} else {
@@ -1274,7 +1274,7 @@ class DefaultApi {
 		if ( isset( $goal_delete_bulk_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
 				);
 			} else {
@@ -3918,7 +3918,7 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
 					);
 			} else {
@@ -5325,7 +5325,7 @@ class DefaultApi {
 		if ( isset( $tracker_script_configuration_update_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \GuzzleHttp\Utils::jsonEncode(
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
 					ObjectSerializer::sanitizeForSerialization( $tracker_script_configuration_update_request )
 				);
 			} else {
