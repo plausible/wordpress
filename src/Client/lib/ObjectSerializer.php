@@ -1,9 +1,7 @@
 <?php
 /**
  * ObjectSerializer
- *
  * PHP version 7.4
- *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -33,7 +31,6 @@ use Plausible\Analytics\WP\Client\Model\ModelInterface;
 
 /**
  * ObjectSerializer Class Doc Comment
- *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -111,12 +108,16 @@ class ObjectSerializer {
 							$allowedEnumTypes = $callable();
 							if ( ! in_array( $value, $allowedEnumTypes, true ) ) {
 								$imploded = implode( "', '", $allowedEnumTypes );
-								throw new \InvalidArgumentException( "Invalid value for enum '$openAPIType', must be one of: '$imploded'" );
+								throw new \InvalidArgumentException(
+									"Invalid value for enum '$openAPIType', must be one of: '$imploded'"
+								);
 							}
 						}
 					}
-					if ( ( $data::isNullable( $property ) && $data->isNullableSetToNull( $property ) ) || $value !== null ) {
-						$values[ $data::attributeMap()[ $property ] ] = self::sanitizeForSerialization( $value, $openAPIType, $formats[ $property ] );
+					if ( ( $data::isNullable( $property ) && $data->isNullableSetToNull( $property ) ) ||
+						$value !== null ) {
+						$values[ $data::attributeMap()[ $property ] ] =
+							self::sanitizeForSerialization( $value, $openAPIType, $formats[ $property ] );
 					}
 				}
 			} else {
@@ -132,6 +133,37 @@ class ObjectSerializer {
 	}
 
 	/**
+	 * Sanitize filename by removing path.
+	 * e.g. ../../sun.gif becomes sun.gif
+	 *
+	 * @param string $filename filename to be sanitized
+	 *
+	 * @return string the sanitized filename
+	 */
+	public static function sanitizeFilename( $filename ) {
+		if ( preg_match( "/.*[\/\\\\](.*)$/", $filename, $match ) ) {
+			return $match[1];
+		} else {
+			return $filename;
+		}
+	}
+
+	/**
+	 * Shorter timestamp microseconds to 6 digits length.
+	 *
+	 * @param string $timestamp Original timestamp
+	 *
+	 * @return string the shorten timestamp
+	 */
+	public static function sanitizeTimestamp( $timestamp ) {
+		if ( ! is_string( $timestamp ) ) {
+			return $timestamp;
+		}
+
+		return preg_replace( '/(:\d{2}.\d{6})\d*/', '$1', $timestamp );
+	}
+
+	/**
 	 * Take value and turn it into a string suitable for inclusion in
 	 * the path, by url-encoding.
 	 *
@@ -144,22 +176,44 @@ class ObjectSerializer {
 	}
 
 	/**
-	 * Take value and turn it into a string suitable for inclusion in
-	 * the parameter. If it's a string, pass through unchanged
-	 * If it's a datetime object, format it in ISO8601
-	 * If it's a boolean, convert it to "true" or "false".
+	 * Checks if a value is empty, based on its OpenAPI type.
 	 *
-	 * @param string|bool|\DateTime $value the value of the parameter
+	 * @param mixed  $value
+	 * @param string $openApiType
 	 *
-	 * @return string the header string
+	 * @return bool true if $value is empty
 	 */
-	public static function toString( $value ) {
-		if ( $value instanceof \DateTime ) { // datetime in ISO8601 format
-			return $value->format( self::$dateTimeFormat );
-		} elseif ( is_bool( $value ) ) {
-			return $value ? 'true' : 'false';
-		} else {
-			return (string) $value;
+	private static function isEmptyValue( $value, string $openApiType ): bool {
+		# If empty() returns false, it is not empty regardless of its type.
+		if ( ! empty( $value ) ) {
+			return false;
+		}
+
+		# Null is always empty, as we cannot send a real "null" value in a query parameter.
+		if ( $value === null ) {
+			return true;
+		}
+
+		switch ( $openApiType ) {
+			# For numeric values, false and '' are considered empty.
+			# This comparison is safe for floating point values, since the previous call to empty() will
+			# filter out values that don't match 0.
+			case 'int':
+			case 'integer':
+				return $value !== 0;
+
+			case 'number':
+			case 'float':
+				return $value !== 0 && $value !== 0.0;
+
+			# For boolean values, '' is considered empty
+			case 'bool':
+			case 'boolean':
+				return ! in_array( $value, [ false, 0 ], true );
+
+			# For all the other types, any value at this point can be considered empty.
+			default:
+				return true;
 		}
 	}
 
@@ -246,48 +300,6 @@ class ObjectSerializer {
 	}
 
 	/**
-	 * Checks if a value is empty, based on its OpenAPI type.
-	 *
-	 * @param mixed  $value
-	 * @param string $openApiType
-	 *
-	 * @return bool true if $value is empty
-	 */
-	private static function isEmptyValue( $value, string $openApiType ): bool {
-		# If empty() returns false, it is not empty regardless of its type.
-		if ( ! empty( $value ) ) {
-			return false;
-		}
-
-		# Null is always empty, as we cannot send a real "null" value in a query parameter.
-		if ( $value === null ) {
-			return true;
-		}
-
-		switch ( $openApiType ) {
-			# For numeric values, false and '' are considered empty.
-			# This comparison is safe for floating point values, since the previous call to empty() will
-			# filter out values that don't match 0.
-			case 'int':
-			case 'integer':
-				return $value !== 0;
-
-			case 'number':
-			case 'float':
-				return $value !== 0 && $value !== 0.0;
-
-			# For boolean values, '' is considered empty
-			case 'bool':
-			case 'boolean':
-				return ! in_array( $value, [ false, 0 ], true );
-
-			# For all the other types, any value at this point can be considered empty.
-			default:
-				return true;
-		}
-	}
-
-	/**
 	 * Convert boolean value to format for query string.
 	 *
 	 * @param bool $value Boolean value
@@ -295,11 +307,67 @@ class ObjectSerializer {
 	 * @return int|string Boolean value in format
 	 */
 	public static function convertBoolToQueryStringFormat( bool $value ) {
-		if ( Configuration::BOOLEAN_FORMAT_STRING == Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString() ) {
+		if ( Configuration::BOOLEAN_FORMAT_STRING ==
+			Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString() ) {
 			return $value ? 'true' : 'false';
 		}
 
 		return (int) $value;
+	}
+
+	/**
+	 * Take value and turn it into a string suitable for inclusion in
+	 * the header. If it's a string, pass through unchanged
+	 * If it's a datetime object, format it in ISO8601
+	 *
+	 * @param string $value a string which will be part of the header
+	 *
+	 * @return string the header string
+	 */
+	public static function toHeaderValue( $value ) {
+		$callable = [ $value, 'toHeaderValue' ];
+		if ( is_callable( $callable ) ) {
+			return $callable();
+		}
+
+		return self::toString( $value );
+	}
+
+	/**
+	 * Take value and turn it into a string suitable for inclusion in
+	 * the http body (form parameter). If it's a string, pass through unchanged
+	 * If it's a datetime object, format it in ISO8601
+	 *
+	 * @param string|\SplFileObject $value the value of the form parameter
+	 *
+	 * @return string the form string
+	 */
+	public static function toFormValue( $value ) {
+		if ( $value instanceof \SplFileObject ) {
+			return $value->getRealPath();
+		} else {
+			return self::toString( $value );
+		}
+	}
+
+	/**
+	 * Take value and turn it into a string suitable for inclusion in
+	 * the parameter. If it's a string, pass through unchanged
+	 * If it's a datetime object, format it in ISO8601
+	 * If it's a boolean, convert it to "true" or "false".
+	 *
+	 * @param string|bool|\DateTime $value the value of the parameter
+	 *
+	 * @return string the header string
+	 */
+	public static function toString( $value ) {
+		if ( $value instanceof \DateTime ) { // datetime in ISO8601 format
+			return $value->format( self::$dateTimeFormat );
+		} elseif ( is_bool( $value ) ) {
+			return $value ? 'true' : 'false';
+		} else {
+			return (string) $value;
+		}
 	}
 
 	/**
@@ -335,41 +403,6 @@ class ObjectSerializer {
 				// Deliberate fall through. CSV is default format.
 			default:
 				return implode( ',', $collection );
-		}
-	}
-
-	/**
-	 * Take value and turn it into a string suitable for inclusion in
-	 * the header. If it's a string, pass through unchanged
-	 * If it's a datetime object, format it in ISO8601
-	 *
-	 * @param string $value a string which will be part of the header
-	 *
-	 * @return string the header string
-	 */
-	public static function toHeaderValue( $value ) {
-		$callable = [ $value, 'toHeaderValue' ];
-		if ( is_callable( $callable ) ) {
-			return $callable();
-		}
-
-		return self::toString( $value );
-	}
-
-	/**
-	 * Take value and turn it into a string suitable for inclusion in
-	 * the http body (form parameter). If it's a string, pass through unchanged
-	 * If it's a datetime object, format it in ISO8601
-	 *
-	 * @param string|\SplFileObject $value the value of the form parameter
-	 *
-	 * @return string the form string
-	 */
-	public static function toFormValue( $value ) {
-		if ( $value instanceof \SplFileObject ) {
-			return $value->getRealPath();
-		} else {
-			return self::toString( $value );
 		}
 	}
 
@@ -411,7 +444,7 @@ class ObjectSerializer {
 			$deserialized = [];
 			if ( strrpos( $inner, "," ) !== false ) {
 				$subClass_array = explode( ',', $inner, 2 );
-				$subClass       = $subClass_array[ 1 ];
+				$subClass = $subClass_array[1];
 				foreach ( $data as $key => $value ) {
 					$deserialized[ $key ] = self::deserialize( $value, $subClass, null );
 				}
@@ -457,11 +490,15 @@ class ObjectSerializer {
 			/** @var \Psr\Http\Message\StreamInterface $data */
 
 			// determine file name
-			if ( is_array( $httpHeaders ) &&
-				array_key_exists( 'Content-Disposition', $httpHeaders ) &&
-				preg_match( '/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders[ 'Content-Disposition' ], $match ) ) {
+			if ( is_array( $httpHeaders ) && array_key_exists( 'Content-Disposition', $httpHeaders ) && preg_match(
+					'/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i',
+					$httpHeaders['Content-Disposition'],
+					$match
+				) ) {
 				$filename =
-					Configuration::getDefaultConfiguration()->getTempFolderPath() . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[ 1 ] );
+					Configuration::getDefaultConfiguration()->getTempFolderPath() .
+					DIRECTORY_SEPARATOR .
+					self::sanitizeFilename( $match[1] );
 			} else {
 				$filename = tempnam( Configuration::getDefaultConfiguration()->getTempFolderPath(), '' );
 			}
@@ -517,7 +554,9 @@ class ObjectSerializer {
 
 			// If a discriminator is defined and points to a valid subclass, use it.
 			$discriminator = $class::DISCRIMINATOR;
-			if ( ! empty( $discriminator ) && isset( $data->{$discriminator} ) && is_string( $data->{$discriminator} ) ) {
+			if ( ! empty( $discriminator ) &&
+				isset( $data->{$discriminator} ) &&
+				is_string( $data->{$discriminator} ) ) {
 				$subclass = '\Plausible\Analytics\WP\Client\Model\\' . $data->{$discriminator};
 				if ( is_subclass_of( $subclass, $class ) ) {
 					$class = $subclass;
@@ -552,45 +591,15 @@ class ObjectSerializer {
 	}
 
 	/**
-	 * Shorter timestamp microseconds to 6 digits length.
-	 *
-	 * @param string $timestamp Original timestamp
-	 *
-	 * @return string the shorten timestamp
-	 */
-	public static function sanitizeTimestamp( $timestamp ) {
-		if ( ! is_string( $timestamp ) ) {
-			return $timestamp;
-		}
-
-		return preg_replace( '/(:\d{2}.\d{6})\d*/', '$1', $timestamp );
-	}
-
-	/**
-	 * Sanitize filename by removing path.
-	 * e.g. ../../sun.gif becomes sun.gif
-	 *
-	 * @param string $filename filename to be sanitized
-	 *
-	 * @return string the sanitized filename
-	 */
-	public static function sanitizeFilename( $filename ) {
-		if ( preg_match( "/.*[\/\\\\](.*)$/", $filename, $match ) ) {
-			return $match[ 1 ];
-		} else {
-			return $filename;
-		}
-	}
-
-	/**
 	 * Native `http_build_query` wrapper.
-	 *
 	 * @see https://www.php.net/manual/en/function.http-build-query
 	 *
 	 * @param array|object $data           May be an array or object containing properties.
-	 * @param string       $numeric_prefix If numeric indices are used in the base array and this parameter is provided, it will be prepended to the
-	 *                                     numeric index for elements in the base array only.
-	 * @param string|null  $arg_separator  arg_separator.output is used to separate arguments but may be overridden by specifying this parameter.
+	 * @param string      $numeric_prefix  If numeric indices are used in the base array and this parameter is
+	 *                                     provided, it will be prepended to the numeric index for elements in the base
+	 *                                     array only.
+	 * @param string|null $arg_separator   arg_separator.output is used to separate arguments but may be overridden by
+	 *                                     specifying this parameter.
 	 * @param int          $encoding_type  Encoding type. By default, PHP_QUERY_RFC1738.
 	 *
 	 * @return string

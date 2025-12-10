@@ -10,16 +10,33 @@ namespace Plausible\Analytics\WP;
 
 class Actions {
 	/**
-	 * Constructor.
+	 * @var false|Client The Plausible Analytics API client.
+	 */
+	private $client;
+
+	/**
+	 * Build class.
 	 * @since  1.0.0
-	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct( $init = true ) {
+		$client       = new ClientFactory();
+		$this->client = $client->build();
+
+		if ( $init ) {
+			$this->init();
+		}
+	}
+
+	/**
+	 * Plugin actions/hooks
+	 * @return void
+	 */
+	private function init() {
 		add_action( 'wp_head', [ $this, 'maybe_insert_version_meta_tag' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_register_assets' ] );
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
-		add_filter( 'get_search_form', [ $this, 'maybe_add_hidden_input_to_search_form' ], 10, 1 );
+		add_filter( 'get_search_form', [ $this, 'maybe_add_hidden_input_to_search_form' ] );
 		add_filter( 'render_block', [ $this, 'maybe_add_hidden_input_to_search_block' ], 10, 2 );
 	}
 
@@ -79,21 +96,24 @@ class Actions {
 			return; // @codeCoverageIgnore
 		}
 
-		$version = Helpers::proxy_enabled() && file_exists( Helpers::get_js_path() ) ? filemtime( Helpers::get_js_path() ) : $this->get_plugin_version();
-
+		// Dummy script, which'll allow us to add inline scripts later.
+		wp_register_script( 'plausible-analytics', false );
 		wp_enqueue_script(
 			'plausible-analytics',
-			Helpers::get_js_url( true ),
-			'',
-			$version,
+			false,
+			[],
+			null,
 			apply_filters( 'plausible_load_js_in_footer', false )
 		);
 
-		// Goal tracking inline script (Don't disable this as it is required by 404).
-		wp_add_inline_script(
-			'plausible-analytics',
-			'window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }'
+		$id     = $this->client->get_config_id();
+		$script = sprintf(
+			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="<https://plausible.io/js/pa-%s.js>";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
+			$id
 		);
+		$script .= "\nplausible.init();";
+
+		wp_add_inline_script( 'plausible-analytics', $script );
 
 		// Track Cloaked Affiliate Links (if enabled)
 		if ( Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ) ) {
@@ -126,7 +146,7 @@ class Actions {
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', function () { plausible( '404', $data ); });"
+				"document.addEventListener('DOMContentLoaded', () => { plausible( '404', $data ); });"
 			);
 		}
 
@@ -152,7 +172,7 @@ class Actions {
 
 				wp_add_inline_script(
 					'plausible-analytics',
-					"document.addEventListener('DOMContentLoaded', function () {\n$script\n});"
+					"document.addEventListener('DOMContentLoaded', () => {\n$script\n});"
 				);
 			}
 		}
@@ -176,7 +196,7 @@ class Actions {
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', function () {\n$script\n});"
+				"document.addEventListener('DOMContentLoaded', () => {\n$script\n});"
 			);
 		}
 

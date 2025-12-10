@@ -145,8 +145,7 @@ plugins:
   sure Mozart is installed
   globally)
 - In the `src/Client/lib` directory, replace all occurrences of ` GuzzleHttp` (mind the space) with
-  ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (
-  again, mind the space at the beginning)
+  ` Plausible\Analytics\WP\Client\Lib\GuzzleHttp` (again, mind the space at the beginning)
 - In the same directory, replace all occurrences of ` \GuzzleHttp` (mind the space and backslash)
   with ` \Plausible\Analytics\WP\Client\Lib\GuzzleHttp`.
 - If escaping characters doesn't work in your bash instance, you might also have to replace `PlausibleAnalyticsWPClient`

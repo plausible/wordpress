@@ -1,6 +1,6 @@
 <?php
 /**
- * FunnelListResponse
+ * TrackerScriptConfiguration
  *
  * PHP version 7.4
  *
@@ -32,16 +32,16 @@ use \ArrayAccess;
 use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
- * FunnelListResponse Class Doc Comment
+ * TrackerScriptConfiguration Class Doc Comment
  *
  * @category Class
- * @description Funnels list response
+ * @description Tracker Script Configuration object
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class TrackerScriptConfiguration implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Funnel.ListResponse';
+    protected static $openAPIModelName = 'TrackerScriptConfiguration';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +58,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var string[]
       */
     protected static $openAPITypes = [
-        'funnels' => '\Plausible\Analytics\WP\Client\Model\Funnel[]',
-        'meta' => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta',
+        'tracker_script_configuration' => '\Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration'
     ];
 
     /**
@@ -70,8 +69,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'funnels' => null,
-        'meta' => null
+        'tracker_script_configuration' => null
     ];
 
     /**
@@ -80,8 +78,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'funnels' => false,
-		'meta' => false
+        'tracker_script_configuration' => false
     ];
 
     /**
@@ -170,8 +167,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $attributeMap = [
-        'funnels' => 'funnels',
-        'meta' => 'meta'
+        'tracker_script_configuration' => 'tracker_script_configuration'
     ];
 
     /**
@@ -180,8 +176,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $setters = [
-        'funnels' => 'setFunnels',
-        'meta' => 'setMeta'
+        'tracker_script_configuration' => 'setTrackerScriptConfiguration'
     ];
 
     /**
@@ -190,8 +185,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $getters = [
-        'funnels' => 'getFunnels',
-        'meta' => 'getMeta'
+        'tracker_script_configuration' => 'getTrackerScriptConfiguration'
     ];
 
     /**
@@ -249,10 +243,9 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @param mixed[] $data Associated array of property values
      *                      initializing the model
      */
-	public function __construct( array $data = null )
+    public function __construct(array $data = null)
     {
-        $this->setIfExists('funnels', $data ?? [], null);
-        $this->setIfExists('meta', $data ?? [], null);
+        $this->setIfExists('tracker_script_configuration', $data ?? [], null);
     }
 
     /**
@@ -282,11 +275,8 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $invalidProperties = [];
 
-        if ($this->container['funnels'] === null) {
-            $invalidProperties[] = "'funnels' can't be null";
-        }
-        if ($this->container['meta'] === null) {
-            $invalidProperties[] = "'meta' can't be null";
+        if ($this->container['tracker_script_configuration'] === null) {
+            $invalidProperties[] = "'tracker_script_configuration' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,54 +294,28 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
 
 
     /**
-     * Gets funnels
+     * Gets tracker_script_configuration
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Funnel[]
+     * @return \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
      */
-    public function getFunnels()
+    public function getTrackerScriptConfiguration()
     {
-        return $this->container['funnels'];
+        return $this->container['tracker_script_configuration'];
     }
 
     /**
-     * Sets funnels
+     * Sets tracker_script_configuration
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Funnel[] $funnels funnels
+     * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration $tracker_script_configuration tracker_script_configuration
      *
      * @return self
      */
-    public function setFunnels($funnels)
+    public function setTrackerScriptConfiguration($tracker_script_configuration)
     {
-        if (is_null($funnels)) {
-            throw new \InvalidArgumentException('non-nullable funnels cannot be null');
+        if (is_null($tracker_script_configuration)) {
+            throw new \InvalidArgumentException('non-nullable tracker_script_configuration cannot be null');
         }
-        $this->container['funnels'] = $funnels;
-
-        return $this;
-    }
-
-    /**
-     * Gets meta
-     * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
-     */
-    public function getMeta()
-    {
-        return $this->container['meta'];
-    }
-
-    /**
-     * Sets meta
-     *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
-     *
-     * @return self
-     */
-    public function setMeta($meta)
-    {
-        if (is_null($meta)) {
-            throw new \InvalidArgumentException('non-nullable meta cannot be null');
-        }
-        $this->container['meta'] = $meta;
+        $this->container['tracker_script_configuration'] = $tracker_script_configuration;
 
         return $this;
     }

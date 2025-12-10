@@ -20,13 +20,12 @@ lib/Model/Error.php
 lib/Model/Funnel.php
 lib/Model/FunnelCreateRequest.php
 lib/Model/FunnelCreateRequestFunnel.php
-lib/Model/FunnelCreateRequestFunnelStepsInner.php
 lib/Model/FunnelFunnel.php
 lib/Model/FunnelListResponse.php
-lib/Model/FunnelListResponseMeta.php
 lib/Model/Goal.php
 lib/Model/GoalCreateRequest.php
 lib/Model/GoalCreateRequestBulkGetOrCreate.php
+lib/Model/GoalCreateRequestBulkGetOrCreateGoalsInner.php
 lib/Model/GoalCreateRequestCustomEvent.php
 lib/Model/GoalCreateRequestCustomEventGoal.php
 lib/Model/GoalCreateRequestPageview.php
@@ -37,6 +36,7 @@ lib/Model/GoalCustomEvent.php
 lib/Model/GoalCustomEventAllOfGoal.php
 lib/Model/GoalDeleteBulkRequest.php
 lib/Model/GoalListResponse.php
+lib/Model/GoalListResponseMeta.php
 lib/Model/GoalPageview.php
 lib/Model/GoalPageviewAllOfGoal.php
 lib/Model/GoalRevenue.php
@@ -53,6 +53,10 @@ lib/Model/SharedLinkCreateRequest.php
 lib/Model/SharedLinkCreateRequestSharedLink.php
 lib/Model/SharedLinkListResponse.php
 lib/Model/SharedLinkSharedLink.php
+lib/Model/TrackerScriptConfiguration.php
+lib/Model/TrackerScriptConfigurationTrackerScriptConfiguration.php
+lib/Model/TrackerScriptConfigurationUpdateRequest.php
+lib/Model/TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration.php
 lib/Model/UnauthorizedError.php
 lib/Model/UnprocessableEntityError.php
 lib/ObjectSerializer.php

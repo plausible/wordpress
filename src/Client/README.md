@@ -61,12 +61,12 @@ $apiInstance = new PlausibleAnalyticsWPClient\Api\DefaultApi(
     new GuzzleHttp\Client(),
     $config
 );
+$custom_prop_disable_request = new \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest(); // \PlausibleAnalyticsWPClient\Model\CustomPropDisableRequest | CustomProp disable params
 
 try {
-    $result = $apiInstance->plausibleWebPluginsAPIControllersCapabilitiesIndex();
-    print_r($result);
+    $apiInstance->customPropDisableBulk($custom_prop_disable_request);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->plausibleWebPluginsAPIControllersCapabilitiesIndex: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->customPropDisableBulk: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -77,20 +77,22 @@ All URIs are relative to *https://plausible.io*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**customPropDisableBulk**](docs/Api/DefaultApi.md#custompropdisablebulk) | **DELETE** /api/plugins/v1/custom_props | Disable CustomProp(s)
+*DefaultApi* | [**customPropGetOrEnable**](docs/Api/DefaultApi.md#custompropgetorenable) | **PUT** /api/plugins/v1/custom_props | Get or enable CustomProp(s)
+*DefaultApi* | [**funnelGetOrCreate**](docs/Api/DefaultApi.md#funnelgetorcreate) | **PUT** /api/plugins/v1/funnels | Get or create Funnel
+*DefaultApi* | [**goalDeleteBulk**](docs/Api/DefaultApi.md#goaldeletebulk) | **DELETE** /api/plugins/v1/goals | Delete Goals in bulk
+*DefaultApi* | [**goalGetOrCreate**](docs/Api/DefaultApi.md#goalgetorcreate) | **PUT** /api/plugins/v1/goals | Get or create Goal
 *DefaultApi* | [**plausibleWebPluginsAPIControllersCapabilitiesIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscapabilitiesindex) | **GET** /api/plugins/v1/capabilities | Retrieve Capabilities
-*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsDisable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsdisable) | **DELETE** /api/plugins/v1/custom_props | Disable CustomProp(s)
-*DefaultApi* | [**plausibleWebPluginsAPIControllersCustomPropsEnable**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerscustompropsenable) | **PUT** /api/plugins/v1/custom_props | Get or enable CustomProp(s)
-*DefaultApi* | [**plausibleWebPluginsAPIControllersFunnelsCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersfunnelscreate) | **PUT** /api/plugins/v1/funnels | Get or create Funnel
 *DefaultApi* | [**plausibleWebPluginsAPIControllersFunnelsGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersfunnelsget) | **GET** /api/plugins/v1/funnels/{id} | Retrieve Funnel by ID
 *DefaultApi* | [**plausibleWebPluginsAPIControllersFunnelsIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersfunnelsindex) | **GET** /api/plugins/v1/funnels | Retrieve Funnels
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalscreate) | **PUT** /api/plugins/v1/goals | Get or create Goal
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDelete**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdelete) | **DELETE** /api/plugins/v1/goals/{id} | Delete Goal by ID
-*DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsDeleteBulk**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsdeletebulk) | **DELETE** /api/plugins/v1/goals | Delete Goals in bulk
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsget) | **GET** /api/plugins/v1/goals/{id} | Retrieve Goal by ID
 *DefaultApi* | [**plausibleWebPluginsAPIControllersGoalsIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollersgoalsindex) | **GET** /api/plugins/v1/goals | Retrieve Goals
 *DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksCreate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinkscreate) | **PUT** /api/plugins/v1/shared_links | Get or create Shared Link
 *DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksget) | **GET** /api/plugins/v1/shared_links/{id} | Retrieve Shared Link by ID
 *DefaultApi* | [**plausibleWebPluginsAPIControllersSharedLinksIndex**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerssharedlinksindex) | **GET** /api/plugins/v1/shared_links | Retrieve Shared Links
+*DefaultApi* | [**plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerstrackerscriptconfigurationget) | **GET** /api/plugins/v1/tracker_script_configuration | Retrieve Tracker Script Configuration
+*DefaultApi* | [**plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate**](docs/Api/DefaultApi.md#plausiblewebpluginsapicontrollerstrackerscriptconfigurationupdate) | **PUT** /api/plugins/v1/tracker_script_configuration | Update Tracker Script Configuration
 
 ## Models
 
@@ -107,13 +109,12 @@ Class | Method | HTTP request | Description
 - [Funnel](docs/Model/Funnel.md)
 - [FunnelCreateRequest](docs/Model/FunnelCreateRequest.md)
 - [FunnelCreateRequestFunnel](docs/Model/FunnelCreateRequestFunnel.md)
-- [FunnelCreateRequestFunnelStepsInner](docs/Model/FunnelCreateRequestFunnelStepsInner.md)
 - [FunnelFunnel](docs/Model/FunnelFunnel.md)
 - [FunnelListResponse](docs/Model/FunnelListResponse.md)
-- [FunnelListResponseMeta](docs/Model/FunnelListResponseMeta.md)
 - [Goal](docs/Model/Goal.md)
 - [GoalCreateRequest](docs/Model/GoalCreateRequest.md)
 - [GoalCreateRequestBulkGetOrCreate](docs/Model/GoalCreateRequestBulkGetOrCreate.md)
+- [GoalCreateRequestBulkGetOrCreateGoalsInner](docs/Model/GoalCreateRequestBulkGetOrCreateGoalsInner.md)
 - [GoalCreateRequestCustomEvent](docs/Model/GoalCreateRequestCustomEvent.md)
 - [GoalCreateRequestCustomEventGoal](docs/Model/GoalCreateRequestCustomEventGoal.md)
 - [GoalCreateRequestPageview](docs/Model/GoalCreateRequestPageview.md)
@@ -124,6 +125,7 @@ Class | Method | HTTP request | Description
 - [GoalCustomEventAllOfGoal](docs/Model/GoalCustomEventAllOfGoal.md)
 - [GoalDeleteBulkRequest](docs/Model/GoalDeleteBulkRequest.md)
 - [GoalListResponse](docs/Model/GoalListResponse.md)
+- [GoalListResponseMeta](docs/Model/GoalListResponseMeta.md)
 - [GoalPageview](docs/Model/GoalPageview.md)
 - [GoalPageviewAllOfGoal](docs/Model/GoalPageviewAllOfGoal.md)
 - [GoalRevenue](docs/Model/GoalRevenue.md)
@@ -139,6 +141,10 @@ Class | Method | HTTP request | Description
 - [SharedLinkCreateRequestSharedLink](docs/Model/SharedLinkCreateRequestSharedLink.md)
 - [SharedLinkListResponse](docs/Model/SharedLinkListResponse.md)
 - [SharedLinkSharedLink](docs/Model/SharedLinkSharedLink.md)
+- [TrackerScriptConfiguration](docs/Model/TrackerScriptConfiguration.md)
+- [TrackerScriptConfigurationTrackerScriptConfiguration](docs/Model/TrackerScriptConfigurationTrackerScriptConfiguration.md)
+- [TrackerScriptConfigurationUpdateRequest](docs/Model/TrackerScriptConfigurationUpdateRequest.md)
+- [TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration](docs/Model/TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration.md)
 - [UnauthorizedError](docs/Model/UnauthorizedError.md)
 - [UnprocessableEntityError](docs/Model/UnprocessableEntityError.md)
 

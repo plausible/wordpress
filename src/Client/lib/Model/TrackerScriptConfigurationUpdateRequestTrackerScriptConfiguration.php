@@ -1,6 +1,6 @@
 <?php
 /**
- * FunnelListResponse
+ * TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration
  *
  * PHP version 7.4
  *
@@ -32,16 +32,15 @@ use \ArrayAccess;
 use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
- * FunnelListResponse Class Doc Comment
+ * TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration Class Doc Comment
  *
  * @category Class
- * @description Funnels list response
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class TrackerScriptConfigurationUpdateRequestTrackerScriptConfiguration implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +49,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Funnel.ListResponse';
+    protected static $openAPIModelName = 'TrackerScriptConfiguration_UpdateRequest_tracker_script_configuration';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +57,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var string[]
       */
     protected static $openAPITypes = [
-        'funnels' => '\Plausible\Analytics\WP\Client\Model\Funnel[]',
-        'meta' => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta',
+        'file_downloads' => 'bool',
+        'form_submissions' => 'bool',
+        'hash_based_routing' => 'bool',
+        'installation_type' => 'string',
+        'outbound_links' => 'bool'
     ];
 
     /**
@@ -70,8 +72,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'funnels' => null,
-        'meta' => null
+        'file_downloads' => null,
+        'form_submissions' => null,
+        'hash_based_routing' => null,
+        'installation_type' => null,
+        'outbound_links' => null
     ];
 
     /**
@@ -80,8 +85,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'funnels' => false,
-		'meta' => false
+        'file_downloads' => false,
+		'form_submissions' => false,
+		'hash_based_routing' => false,
+		'installation_type' => false,
+		'outbound_links' => false
     ];
 
     /**
@@ -170,8 +178,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $attributeMap = [
-        'funnels' => 'funnels',
-        'meta' => 'meta'
+        'file_downloads' => 'file_downloads',
+        'form_submissions' => 'form_submissions',
+        'hash_based_routing' => 'hash_based_routing',
+        'installation_type' => 'installation_type',
+        'outbound_links' => 'outbound_links'
     ];
 
     /**
@@ -180,8 +191,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $setters = [
-        'funnels' => 'setFunnels',
-        'meta' => 'setMeta'
+        'file_downloads' => 'setFileDownloads',
+        'form_submissions' => 'setFormSubmissions',
+        'hash_based_routing' => 'setHashBasedRouting',
+        'installation_type' => 'setInstallationType',
+        'outbound_links' => 'setOutboundLinks'
     ];
 
     /**
@@ -190,8 +204,11 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @var string[]
      */
     protected static $getters = [
-        'funnels' => 'getFunnels',
-        'meta' => 'getMeta'
+        'file_downloads' => 'getFileDownloads',
+        'form_submissions' => 'getFormSubmissions',
+        'hash_based_routing' => 'getHashBasedRouting',
+        'installation_type' => 'getInstallationType',
+        'outbound_links' => 'getOutboundLinks'
     ];
 
     /**
@@ -235,6 +252,25 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
         return self::$openAPIModelName;
     }
 
+    public const INSTALLATION_TYPE_MANUAL = 'manual';
+    public const INSTALLATION_TYPE_WORDPRESS = 'wordpress';
+    public const INSTALLATION_TYPE_GTM = 'gtm';
+    public const INSTALLATION_TYPE_NPM = 'npm';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getInstallationTypeAllowableValues()
+    {
+        return [
+            self::INSTALLATION_TYPE_MANUAL,
+            self::INSTALLATION_TYPE_WORDPRESS,
+            self::INSTALLATION_TYPE_GTM,
+            self::INSTALLATION_TYPE_NPM,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -249,10 +285,13 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
      * @param mixed[] $data Associated array of property values
      *                      initializing the model
      */
-	public function __construct( array $data = null )
+    public function __construct(array $data = null)
     {
-        $this->setIfExists('funnels', $data ?? [], null);
-        $this->setIfExists('meta', $data ?? [], null);
+        $this->setIfExists('file_downloads', $data ?? [], null);
+        $this->setIfExists('form_submissions', $data ?? [], null);
+        $this->setIfExists('hash_based_routing', $data ?? [], null);
+        $this->setIfExists('installation_type', $data ?? [], null);
+        $this->setIfExists('outbound_links', $data ?? [], null);
     }
 
     /**
@@ -282,12 +321,18 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $invalidProperties = [];
 
-        if ($this->container['funnels'] === null) {
-            $invalidProperties[] = "'funnels' can't be null";
+        if ($this->container['installation_type'] === null) {
+            $invalidProperties[] = "'installation_type' can't be null";
         }
-        if ($this->container['meta'] === null) {
-            $invalidProperties[] = "'meta' can't be null";
+        $allowedValues = $this->getInstallationTypeAllowableValues();
+        if (!is_null($this->container['installation_type']) && !in_array($this->container['installation_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'installation_type', must be one of '%s'",
+                $this->container['installation_type'],
+                implode("', '", $allowedValues)
+            );
         }
+
         return $invalidProperties;
     }
 
@@ -304,54 +349,146 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
 
 
     /**
-     * Gets funnels
+     * Gets file_downloads
      *
-     * @return \Plausible\Analytics\WP\Client\Model\Funnel[]
+     * @return bool|null
      */
-    public function getFunnels()
+    public function getFileDownloads()
     {
-        return $this->container['funnels'];
+        return $this->container['file_downloads'];
     }
 
     /**
-     * Sets funnels
+     * Sets file_downloads
      *
-     * @param \Plausible\Analytics\WP\Client\Model\Funnel[] $funnels funnels
+     * @param bool|null $file_downloads Track File Downloads
      *
      * @return self
      */
-    public function setFunnels($funnels)
+    public function setFileDownloads($file_downloads)
     {
-        if (is_null($funnels)) {
-            throw new \InvalidArgumentException('non-nullable funnels cannot be null');
+        if (is_null($file_downloads)) {
+            throw new \InvalidArgumentException('non-nullable file_downloads cannot be null');
         }
-        $this->container['funnels'] = $funnels;
+        $this->container['file_downloads'] = $file_downloads;
 
         return $this;
     }
 
     /**
-     * Gets meta
-     * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
+     * Gets form_submissions
+     *
+     * @return bool|null
      */
-    public function getMeta()
+    public function getFormSubmissions()
     {
-        return $this->container['meta'];
+        return $this->container['form_submissions'];
     }
 
     /**
-     * Sets meta
+     * Sets form_submissions
      *
-     * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
+     * @param bool|null $form_submissions Track Form Submissions
      *
      * @return self
      */
-    public function setMeta($meta)
+    public function setFormSubmissions($form_submissions)
     {
-        if (is_null($meta)) {
-            throw new \InvalidArgumentException('non-nullable meta cannot be null');
+        if (is_null($form_submissions)) {
+            throw new \InvalidArgumentException('non-nullable form_submissions cannot be null');
         }
-        $this->container['meta'] = $meta;
+        $this->container['form_submissions'] = $form_submissions;
+
+        return $this;
+    }
+
+    /**
+     * Gets hash_based_routing
+     *
+     * @return bool|null
+     */
+    public function getHashBasedRouting()
+    {
+        return $this->container['hash_based_routing'];
+    }
+
+    /**
+     * Sets hash_based_routing
+     *
+     * @param bool|null $hash_based_routing Hash Based Routing
+     *
+     * @return self
+     */
+    public function setHashBasedRouting($hash_based_routing)
+    {
+        if (is_null($hash_based_routing)) {
+            throw new \InvalidArgumentException('non-nullable hash_based_routing cannot be null');
+        }
+        $this->container['hash_based_routing'] = $hash_based_routing;
+
+        return $this;
+    }
+
+    /**
+     * Gets installation_type
+     *
+     * @return string
+     */
+    public function getInstallationType()
+    {
+        return $this->container['installation_type'];
+    }
+
+    /**
+     * Sets installation_type
+     *
+     * @param string $installation_type Tracker Script Installation Type
+     *
+     * @return self
+     */
+    public function setInstallationType($installation_type)
+    {
+        if (is_null($installation_type)) {
+            throw new \InvalidArgumentException('non-nullable installation_type cannot be null');
+        }
+        $allowedValues = $this->getInstallationTypeAllowableValues();
+        if (!in_array($installation_type, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'installation_type', must be one of '%s'",
+                    $installation_type,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['installation_type'] = $installation_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets outbound_links
+     *
+     * @return bool|null
+     */
+    public function getOutboundLinks()
+    {
+        return $this->container['outbound_links'];
+    }
+
+    /**
+     * Sets outbound_links
+     *
+     * @param bool|null $outbound_links Track Outbound Links
+     *
+     * @return self
+     */
+    public function setOutboundLinks($outbound_links)
+    {
+        if (is_null($outbound_links)) {
+            throw new \InvalidArgumentException('non-nullable outbound_links cannot be null');
+        }
+        $this->container['outbound_links'] = $outbound_links;
 
         return $this;
     }

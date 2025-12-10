@@ -33,12 +33,11 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * CustomPropDisableRequest Class Doc Comment
- *
- * @category    Class
+ * @category Class
  * @description Custom Property disable params
- * @package     Plausible\Analytics\WP\Client
- * @author      OpenAPI Generator team
- * @link        https://openapi-generator.tech
+ * @package  Plausible\Analytics\WP\Client
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
 class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSerializable {
@@ -46,7 +45,6 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 
 	/**
 	 * The original name of the model.
-	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'CustomProp.DisableRequest';
@@ -84,6 +82,75 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	];
 
 	/**
+	 * If a nullable field gets set to null, insert it here
+	 * @var boolean[]
+	 */
+	protected array $openAPINullablesSetToNull = [];
+
+	/**
+	 * Array of property to type mappings. Used for (de)serialization
+	 * @return array
+	 */
+	public static function openAPITypes() {
+		return self::$openAPITypes;
+	}
+
+	/**
+	 * Array of property to format mappings. Used for (de)serialization
+	 * @return array
+	 */
+	public static function openAPIFormats() {
+		return self::$openAPIFormats;
+	}
+
+	/**
+	 * Array of nullable properties
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+	/**
 	 * Array of attributes where the key is the local name,
 	 * and the value is the original name
 	 *
@@ -115,11 +182,38 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	];
 
 	/**
-	 * If a nullable field gets set to null, insert it here
+	 * Array of attributes where the key is the local name,
+	 * and the value is the original name
 	 *
-	 * @var boolean[]
+	 * @return array
 	 */
-	protected array $openAPINullablesSetToNull = [];
+	public static function attributeMap() {
+		return self::$attributeMap;
+	}
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 * @return array
+	 */
+	public static function setters() {
+		return self::$setters;
+	}
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 * @return array
+	 */
+	public static function getters() {
+		return self::$getters;
+	}
+
+	/**
+	 * The original name of the model.
+	 * @return string
+	 */
+	public function getModelName() {
+		return self::$openAPIModelName;
+	}
 
 	/**
 	 * Associative array for storing property values
@@ -134,7 +228,7 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @param mixed[] $data Associated array of property values
 	 *                      initializing the model
 	 */
-	public function __construct( ?array $data = null ) {
+	public function __construct( array $data = null ) {
 		$this->setIfExists( 'custom_props', $data ?? [], null );
 		$this->setIfExists( 'custom_prop', $data ?? [], null );
 	}
@@ -149,7 +243,9 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @param mixed  $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) &&
+			array_key_exists( $variableName, $fields ) &&
+			is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -157,98 +253,26 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	}
 
 	/**
-	 * Checks if a property is nullable
+	 * Show all the invalid properties with reasons.
 	 *
-	 * @param string $property
-	 *
-	 * @return bool
+	 * @return array invalid properties with reasons
 	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
+	public function listInvalidProperties() {
+		$invalidProperties = [];
 
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
+		if ( $this->container['custom_props'] === null) {
+			$invalidProperties[] = "'custom_props' can't be null";
+		}
+		if ( ( count( $this->container['custom_props'] ) < 1 ) ) {
+			$invalidProperties[] =
+				"invalid value for 'custom_props', number of items must be greater than or equal to 1.";
+		}
 
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @return array
-	 */
-	public static function openAPITypes() {
-		return self::$openAPITypes;
-	}
+		if ( $this->container['custom_prop'] === null) {
+			$invalidProperties[] = "'custom_prop' can't be null";
+		}
 
-	/**
-	 * Array of property to format mappings. Used for (de)serialization
-	 *
-	 * @return array
-	 */
-	public static function openAPIFormats() {
-		return self::$openAPIFormats;
-	}
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @return array
-	 */
-	public static function attributeMap() {
-		return self::$attributeMap;
-	}
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @return array
-	 */
-	public static function setters() {
-		return self::$setters;
-	}
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @return array
-	 */
-	public static function getters() {
-		return self::$getters;
-	}
-
-	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
-	 * The original name of the model.
-	 *
-	 * @return string
-	 */
-	public function getModelName() {
-		return self::$openAPIModelName;
+		return $invalidProperties;
 	}
 
 	/**
@@ -262,34 +286,11 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	}
 
 	/**
-	 * Show all the invalid properties with reasons.
-	 *
-	 * @return array invalid properties with reasons
-	 */
-	public function listInvalidProperties() {
-		$invalidProperties = [];
-
-		if ( $this->container[ 'custom_props' ] === null ) {
-			$invalidProperties[] = "'custom_props' can't be null";
-		}
-		if ( ( count( $this->container[ 'custom_props' ] ) < 1 ) ) {
-			$invalidProperties[] = "invalid value for 'custom_props', number of items must be greater than or equal to 1.";
-		}
-
-		if ( $this->container[ 'custom_prop' ] === null ) {
-			$invalidProperties[] = "'custom_prop' can't be null";
-		}
-
-		return $invalidProperties;
-	}
-
-	/**
 	 * Gets custom_props
-	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CustomProp[]
 	 */
 	public function getCustomProps() {
-		return $this->container[ 'custom_props' ];
+		return $this->container['custom_props'];
 	}
 
 	/**
@@ -309,18 +310,17 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 				'invalid length for $custom_props when calling CustomPropDisableRequest., number of items must be greater than or equal to 1.'
 			);
 		}
-		$this->container[ 'custom_props' ] = $custom_props;
+		$this->container['custom_props'] = $custom_props;
 
 		return $this;
 	}
 
 	/**
 	 * Gets custom_prop
-	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CustomPropCustomProp
 	 */
 	public function getCustomProp() {
-		return $this->container[ 'custom_prop' ];
+		return $this->container['custom_prop'];
 	}
 
 	/**
@@ -334,7 +334,7 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 		if ( is_null( $custom_prop ) ) {
 			throw new \InvalidArgumentException( 'non-nullable custom_prop cannot be null' );
 		}
-		$this->container[ 'custom_prop' ] = $custom_prop;
+		$this->container['custom_prop'] = $custom_prop;
 
 		return $this;
 	}
@@ -391,7 +391,6 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -421,15 +420,6 @@ class CustomPropDisableRequest implements ModelInterface, ArrayAccess, \JsonSeri
 	 */
 	public function toHeaderValue() {
 		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
 	}
 }
 

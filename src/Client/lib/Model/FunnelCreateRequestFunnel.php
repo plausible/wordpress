@@ -58,7 +58,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'steps' => '\Plausible\Analytics\WP\Client\Model\FunnelCreateRequestFunnelStepsInner[]'
+        'steps' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
     ];
 
     /**
@@ -248,7 +248,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
      * @param mixed[] $data Associated array of property values
      *                      initializing the model
      */
-    public function __construct(?array $data = null)
+	public function __construct( array $data = null )
     {
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('steps', $data ?? [], null);
@@ -339,8 +339,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
 
     /**
      * Gets steps
-     *
-     * @return \Plausible\Analytics\WP\Client\Model\FunnelCreateRequestFunnelStepsInner[]
+     * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
      */
     public function getSteps()
     {
@@ -350,7 +349,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets steps
      *
-     * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequestFunnelStepsInner[] $steps Funnel Steps
+     * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[] $steps Funnel Steps
      *
      * @return self
      */

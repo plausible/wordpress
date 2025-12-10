@@ -33,12 +33,11 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalDeleteBulkRequest Class Doc Comment
- *
- * @category    Class
+ * @category Class
  * @description Goal deletion params
- * @package     Plausible\Analytics\WP\Client
- * @author      OpenAPI Generator team
- * @link        https://openapi-generator.tech
+ * @package  Plausible\Analytics\WP\Client
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
 class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSerializable {
@@ -46,7 +45,6 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 
 	/**
 	 * The original name of the model.
-	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Goal.DeleteBulkRequest';
@@ -81,6 +79,75 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	];
 
 	/**
+	 * If a nullable field gets set to null, insert it here
+	 * @var boolean[]
+	 */
+	protected array $openAPINullablesSetToNull = [];
+
+	/**
+	 * Array of property to type mappings. Used for (de)serialization
+	 * @return array
+	 */
+	public static function openAPITypes() {
+		return self::$openAPITypes;
+	}
+
+	/**
+	 * Array of property to format mappings. Used for (de)serialization
+	 * @return array
+	 */
+	public static function openAPIFormats() {
+		return self::$openAPIFormats;
+	}
+
+	/**
+	 * Array of nullable properties
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+	/**
 	 * Array of attributes where the key is the local name,
 	 * and the value is the original name
 	 *
@@ -109,11 +176,38 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	];
 
 	/**
-	 * If a nullable field gets set to null, insert it here
+	 * Array of attributes where the key is the local name,
+	 * and the value is the original name
 	 *
-	 * @var boolean[]
+	 * @return array
 	 */
-	protected array $openAPINullablesSetToNull = [];
+	public static function attributeMap() {
+		return self::$attributeMap;
+	}
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 * @return array
+	 */
+	public static function setters() {
+		return self::$setters;
+	}
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 * @return array
+	 */
+	public static function getters() {
+		return self::$getters;
+	}
+
+	/**
+	 * The original name of the model.
+	 * @return string
+	 */
+	public function getModelName() {
+		return self::$openAPIModelName;
+	}
 
 	/**
 	 * Associative array for storing property values
@@ -128,7 +222,7 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	 * @param mixed[] $data Associated array of property values
 	 *                      initializing the model
 	 */
-	public function __construct( ?array $data = null ) {
+	public function __construct( array $data = null ) {
 		$this->setIfExists( 'goal_ids', $data ?? [], null );
 	}
 
@@ -142,116 +236,13 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	 * @param mixed  $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) &&
+			array_key_exists( $variableName, $fields ) &&
+			is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
 		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
-
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @return array
-	 */
-	public static function openAPITypes() {
-		return self::$openAPITypes;
-	}
-
-	/**
-	 * Array of property to format mappings. Used for (de)serialization
-	 *
-	 * @return array
-	 */
-	public static function openAPIFormats() {
-		return self::$openAPIFormats;
-	}
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @return array
-	 */
-	public static function attributeMap() {
-		return self::$attributeMap;
-	}
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @return array
-	 */
-	public static function setters() {
-		return self::$setters;
-	}
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @return array
-	 */
-	public static function getters() {
-		return self::$getters;
-	}
-
-	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
-	 * The original name of the model.
-	 *
-	 * @return string
-	 */
-	public function getModelName() {
-		return self::$openAPIModelName;
-	}
-
-	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
-	 *
-	 * @return bool True if all properties are valid
-	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
 	}
 
 	/**
@@ -262,14 +253,14 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'goal_ids' ] === null ) {
+		if ( $this->container['goal_ids'] === null ) {
 			$invalidProperties[] = "'goal_ids' can't be null";
 		}
-		if ( ( count( $this->container[ 'goal_ids' ] ) > 8 ) ) {
+		if ( ( count( $this->container['goal_ids'] ) > 8 ) ) {
 			$invalidProperties[] = "invalid value for 'goal_ids', number of items must be less than or equal to 8.";
 		}
 
-		if ( ( count( $this->container[ 'goal_ids' ] ) < 1 ) ) {
+		if ( ( count( $this->container['goal_ids'] ) < 1)) {
 			$invalidProperties[] = "invalid value for 'goal_ids', number of items must be greater than or equal to 1.";
 		}
 
@@ -277,12 +268,20 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	}
 
 	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties() ) === 0;
+	}
+
+	/**
 	 * Gets goal_ids
-	 *
 	 * @return int[]
 	 */
 	public function getGoalIds() {
-		return $this->container[ 'goal_ids' ];
+		return $this->container['goal_ids'];
 	}
 
 	/**
@@ -307,7 +306,7 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 				'invalid length for $goal_ids when calling GoalDeleteBulkRequest., number of items must be greater than or equal to 1.'
 			);
 		}
-		$this->container[ 'goal_ids' ] = $goal_ids;
+		$this->container['goal_ids'] = $goal_ids;
 
 		return $this;
 	}
@@ -364,7 +363,6 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -394,15 +392,6 @@ class GoalDeleteBulkRequest implements ModelInterface, ArrayAccess, \JsonSeriali
 	 */
 	public function toHeaderValue() {
 		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
 	}
 }
 

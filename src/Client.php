@@ -86,6 +86,14 @@ class Client {
 		return isset( $valid_tokens[ $token ] ) && $valid_tokens[ $token ] === true;
 	}
 
+	public function get_config_id() {
+		try {
+			return '';
+		} catch ( \Exception $e ) {
+			return false;
+		}
+	}
+
 	/**
 	 * Retrieve Features from Capabilities object.
 	 *
