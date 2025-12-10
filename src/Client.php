@@ -86,9 +86,27 @@ class Client {
 		return isset( $valid_tokens[ $token ] ) && $valid_tokens[ $token ] === true;
 	}
 
-	public function get_config_id() {
+	/**
+	 * Retrieve the configured Tracker ID.
+	 *
+	 * @return string
+	 */
+	public function get_tracker_id() {
+		$tracker_configuration = $this->get_configuration();
+
+		return $tracker_configuration->getId();
+	}
+
+	/**
+	 * Retrieve the configured Tracker Script Configuration.
+	 *
+	 * @return false|Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
+	 */
+	private function get_configuration() {
 		try {
-			return '';
+			$configuration = $this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet();
+
+			return $configuration->getTrackerScriptConfiguration();
 		} catch ( \Exception $e ) {
 			return false;
 		}

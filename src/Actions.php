@@ -106,9 +106,9 @@ class Actions {
 			apply_filters( 'plausible_load_js_in_footer', false )
 		);
 
-		$id     = $this->client->get_config_id();
+		$id     = $this->client->get_tracker_id();
 		$script = sprintf(
-			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="<https://plausible.io/js/pa-%s.js>";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
+			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="https://plausible.io/js/%s.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
 			$id
 		);
 		$script .= "\nplausible.init();";
