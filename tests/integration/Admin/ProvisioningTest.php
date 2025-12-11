@@ -16,7 +16,7 @@ use function Brain\Monkey\Functions\when;
 
 class ProvisioningTest extends TestCase {
 	/**
-	 * @see Provisioning::create_shared_link()
+	 * @see Provisioning::maybe_create_shared_link()
 	 * @throws ApiException
 	 */
 	public function testCreateSharedLink() {
@@ -38,7 +38,7 @@ class ProvisioningTest extends TestCase {
 
 		$class = new Provisioning( $mock );
 
-		$class->create_shared_link( [], $settings );
+		$class->maybe_create_shared_link( [], $settings );
 
 		$sharedLink = Helpers::get_settings()[ 'shared_link' ];
 

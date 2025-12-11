@@ -88,9 +88,7 @@ class Provisioning {
 		$this->custom_event_goals = [
 			'404'              => __( '404', 'plausible-analytics' ),
 			'affiliate-links'  => __( 'Cloaked Link: Click', 'plausible-analytics' ),
-			'file-downloads'   => __( 'File Download', 'plausible-analytics' ),
 			'form-completions' => __( 'WP Form Completions', 'plausible-analytics' ),
-			'outbound-links'   => __( 'Outbound Link: Click', 'plausible-analytics' ),
 			'query-params'     => __( 'WP Query Parameters', 'plausible-analytics' ),
 			'search'           => __( 'WP Search Queries', 'plausible-analytics' ),
 		];
@@ -109,11 +107,12 @@ class Provisioning {
 			return; // @codeCoverageIgnore
 		}
 
-		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_shared_link' ], 10, 2 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_customer_user_roles' ] );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'update_tracker_script_config' ], 10, 2 );
 	}
 
 	/**
@@ -122,7 +121,7 @@ class Provisioning {
 	 * @param $old_settings
 	 * @param $settings
 	 */
-	public function create_shared_link( $old_settings, $settings ) {
+	public function maybe_create_shared_link( $old_settings, $settings ) {
 		if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
 			return; // @codeCoverageIgnore
 		}
@@ -420,5 +419,39 @@ class Provisioning {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Updates the tracker script config based on the enabled enhanced measurements.
+	 */
+	public function update_tracker_script_config( $old_settings, $settings ) {
+		$config = [
+			'file_downloads'     => false,
+			'form_submissions'   => false,
+			'hash_based_routing' => false,
+			'installation_type'  => 'wordpress',
+			'outbound_links'     => false,
+		];
+
+		if ( Helpers::is_enhanced_measurement_enabled( 'file-downloads', $settings['enhanced_measurements'] ) ) {
+			$config['file_downloads'] = true;
+		}
+
+		if ( Helpers::is_enhanced_measurement_enabled( 'form-completions', $settings['enhanced_measurements'] ) ) {
+			$config['form_submissions'] = true;
+		}
+
+		if ( Helpers::is_enhanced_measurement_enabled( 'hash', $settings['enhanced_measurements'] ) ) {
+			$config['hash_based_routing'] = true;
+		}
+
+		if ( Helpers::is_enhanced_measurement_enabled( 'outbound-links', $settings['enhanced_measurements'] ) ) {
+			$config['outbound_links'] = true;
+		}
+
+		$config  = [ 'tracker_script_configuration' => $config ];
+		$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+
+		$this->client->update_tracker_script_configuration( $request );
 	}
 }

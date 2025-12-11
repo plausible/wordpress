@@ -167,6 +167,29 @@ class Client {
 	}
 
 	/**
+	 * Update the configured Tracker Script Configuration.
+	 *
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_config_update_request
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function update_tracker_script_configuration( $tracker_script_config_update_request ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
+				$tracker_script_config_update_request
+			);
+		} catch ( Exception $e ) {
+			$this->send_json_error(
+				$e,
+				__(
+					'Something went wrong while updating tracker script configuration: %s',
+					'plausible-analytics'
+				)
+			);
+		}
+	}
+
+	/**
 	 * Stores the capabilities for the currently entered API token in the DB for later use.
 	 *
 	 * @param $token
