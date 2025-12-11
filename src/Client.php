@@ -87,14 +87,21 @@ class Client {
 	}
 
 	/**
-	 * Retrieve the configured Tracker ID.
+	 * Retrieve the configured Tracker ID and stores it in the options table.
 	 *
 	 * @return string
 	 */
 	public function get_tracker_id() {
-		$tracker_configuration = $this->get_configuration();
+		$id = get_option( 'plausible_analytics_tracker_id' );
 
-		return $tracker_configuration->getId();
+		if ( ! $id ) {
+			$tracker_configuration = $this->get_configuration();
+			$id                    = $tracker_configuration->getId();
+
+			update_option( 'plausible_analytics_tracker_id', $id );
+		}
+
+		return $id;
 	}
 
 	/**
