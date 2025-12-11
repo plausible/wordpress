@@ -111,7 +111,8 @@ class Actions {
 			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="%s";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
 			$url
 		);
-		$script .= "\nplausible.init();";
+		$options = wp_json_encode( apply_filters( 'plausible_analytics_init_options', [] ) );
+		$script .= "\nplausible.init($options);";
 
 		wp_add_inline_script( 'plausible-analytics', $script );
 
@@ -146,7 +147,7 @@ class Actions {
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', () => { plausible( '404', $data ); });"
+				"document.addEventListener('DOMContentLoaded', () => { track( '404', $data ); });"
 			);
 		}
 
@@ -168,7 +169,7 @@ class Actions {
 					]
 				);
 
-				$script = "plausible('WP Query Parameters', $data );";
+				$script = "track('WP Query Parameters', $data );";
 
 				wp_add_inline_script(
 					'plausible-analytics',
@@ -192,7 +193,7 @@ class Actions {
 					],
 				]
 			);
-			$script        = "plausible('WP Search Queries', $data );";
+			$script = "track('WP Search Queries', $data );";
 
 			wp_add_inline_script(
 				'plausible-analytics',

@@ -335,7 +335,7 @@ class WooCommerce {
 		$props = wp_json_encode( $props );
 		$label = $this->event_goals[ 'checkout' ];
 
-		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
+		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.track( '$label', $props )" );
 	}
 
 	/**
@@ -360,7 +360,7 @@ class WooCommerce {
 		);
 		$label = $this->event_goals[ 'purchase' ];
 
-		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
+		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.track( '$label', $props )" );
 
 		$order->add_meta_data( Integrations::PURCHASE_TRACKED_META_KEY, true );
 		$order->save();

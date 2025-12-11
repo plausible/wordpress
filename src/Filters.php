@@ -21,7 +21,7 @@ class Filters {
 	 */
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
-		add_filter( 'plausible_analytics_script_params', [ $this, 'maybe_add_pageview_props' ] );
+		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
 		add_filter( 'plausible_analytics_script_params', [ $this, 'maybe_track_logged_in_users' ] );
 	}
 
@@ -70,21 +70,21 @@ class Filters {
 	/**
 	 * Adds custom parameters Author and Category if Custom Pageview Properties is enabled.
 	 *
-	 * @param $params
+	 * @param $options array
 	 *
-	 * @return mixed|void
+	 * @return array
 	 */
-	public function maybe_add_pageview_props( $params ) {
+	public function maybe_add_pageview_props( $options = [] ) {
 		$settings = Helpers::get_settings();
 
 		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
-			return $params; // @codeCoverageIgnore
+			return $options; // @codeCoverageIgnore
 		}
 
 		global $post;
 
 		if ( ! $post instanceof \WP_Post ) {
-			return $params; // @codeCoverageIgnore
+			return $options; // @codeCoverageIgnore
 		}
 
 		$author = $post->post_author;
@@ -92,17 +92,17 @@ class Filters {
 		if ( $author ) {
 			$author_name = get_the_author_meta( 'display_name', $author );
 
-			$params .= " event-author='$author_name'";
+			$options['customProperties']['author'] = $author_name;
 		}
 
-		// Add support for post category and tags along with custom taxonomies.
+		// Add support for the post-category and tags along with custom taxonomies.
 		$taxonomies = get_object_taxonomies( $post->post_type );
 
 		// Loop through existing taxonomies.
 		foreach ( $taxonomies as $taxonomy ) {
 			$terms = get_the_terms( $post->ID, $taxonomy );
 
-			// Skip the iteration, if `$terms` is not array.
+			// Skip the iteration if `$terms` is not an array.
 			if ( ! is_array( $terms ) ) {
 				continue; // @codeCoverageIgnore;
 			}
@@ -110,12 +110,12 @@ class Filters {
 			// Loop through the terms.
 			foreach ( $terms as $term ) {
 				if ( $term instanceof WP_Term ) {
-					$params .= " event-{$taxonomy}=\"{$term->name}\"";
+					$options['customProperties'][ $taxonomy ] = $term->name;
 				}
 			}
 		}
 
-		return $params;
+		return $options;
 	}
 
 	/**
