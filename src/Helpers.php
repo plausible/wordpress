@@ -18,18 +18,16 @@ class Helpers {
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param bool $local Return the Local JS file IF proxy is enabled.
-	 *
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function get_js_url( $local = false ) {
-		$file_name = self::get_filename( $local );
+	public static function get_js_url() {
+		$file_name = self::get_filename();
 
 		/**
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
-		if ( $local && self::proxy_enabled() ) {
+		if ( self::proxy_enabled() ) {
 			return esc_url( self::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
 		}
 
@@ -43,42 +41,11 @@ class Helpers {
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function get_filename( $local = false ) {
-		$settings  = self::get_settings();
-		$file_name = 'plausible';
+	public static function get_filename() {
+		$client = new ClientFactory();
+		$client = $client->build();
 
-		if ( $local && self::proxy_enabled() ) {
-			return self::get_proxy_resource( 'file_alias' );
-		}
-
-		foreach ( [ 'outbound-links', 'file-downloads', 'tagged-events', 'revenue', 'pageview-props', 'compat', 'hash' ] as $extension ) {
-			if ( self::is_enhanced_measurement_enabled( $extension ) ) {
-				$file_name .= '.' . $extension;
-			}
-		}
-
-		/**
-		 * Custom Events needs to be enabled, if Revenue Tracking is enabled and any of the available integrations are available.
-		 */
-		if ( ! self::is_enhanced_measurement_enabled( 'tagged-events' ) && self::is_enhanced_measurement_enabled( 'revenue' ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
-			$file_name .= '.tagged-events';
-		}
-
-		if ( ! self::is_enhanced_measurement_enabled( 'pageview-props' ) && self::is_enhanced_measurement_enabled( 'search' ) ) {
-			$file_name .= '.pageview-props'; // @codeCoverageIgnore
-		}
-
-		// Load exclusions.js if any excluded pages are set.
-		if ( ! empty( $settings[ 'excluded_pages' ] ) ) {
-			$file_name .= '.exclusions';
-		}
-
-		// Add the manual scripts as we need it to track the search parameter.
-		if ( is_search() && self::is_enhanced_measurement_enabled( 'search' ) ) {
-			$file_name .= '.manual'; // @codeCoverageIgnore
-		}
-
-		return $file_name;
+		return $client->get_tracker_id();
 	}
 
 	/**
@@ -188,7 +155,6 @@ class Helpers {
 				'endpoint'   => bin2hex( random_bytes( 4 ) ),
 				'cache_dir'  => trailingslashit( $upload_dir[ 'basedir' ] ) . trailingslashit( $cache_dir ),
 				'cache_url'  => trailingslashit( $upload_dir[ 'baseurl' ] ) . trailingslashit( $cache_dir ),
-				'file_alias' => bin2hex( random_bytes( 4 ) ),
 			];
 
 			update_option( 'plausible_analytics_proxy_resources', $resources );
@@ -201,7 +167,7 @@ class Helpers {
 	 * Check if a certain Enhanced Measurement is enabled.
 	 *
 	 * @param string $name                  Name of the option to check, valid values are
-	 *                                      404|outbound-links|file-downloads|tagged-events|revenue|pageview-props|hash|compat.
+	 *                                      404|outbound-links|file-downloads|tagged-events|revenue|pageview-props|hash.
 	 * @param array  $enhanced_measurements Allows checking against a different set of options.
 	 *
 	 * @return bool
@@ -260,7 +226,7 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_js_path() {
-		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename( true ) . '.js';
+		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename() . '.js';
 	}
 
 	/**

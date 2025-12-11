@@ -135,7 +135,7 @@ class Module {
 		 * Clean up generated JS files in /uploads dir.
 		 */
 		$cache_dir = Helpers::get_proxy_resource( 'cache_dir' );
-		$js_file   = Helpers::get_proxy_resource( 'file_alias' );
+		$js_file   = Helpers::get_filename();
 
 		if ( file_exists( $cache_dir . $js_file . '.js' ) ) {
 			unlink( $cache_dir . $js_file . '.js' ); // @codeCoverageIgnore

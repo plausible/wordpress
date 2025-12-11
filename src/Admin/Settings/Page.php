@@ -302,9 +302,7 @@ class Page extends API {
 						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
 								ABSPATH,
 								'',
-								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource(
-									'file_alias'
-								) . '.js</code>'
+								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_filename() . '.js</code>'
 							),
 						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),
