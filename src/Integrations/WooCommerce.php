@@ -335,7 +335,7 @@ class WooCommerce {
 		$props = wp_json_encode( $props );
 		$label = $this->event_goals[ 'checkout' ];
 
-		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.track( '$label', $props )" );
+		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
 	}
 
 	/**
@@ -349,9 +349,9 @@ class WooCommerce {
 		$order      = wc_get_order( $order_id );
 		$is_tracked = $order->get_meta( Integrations::PURCHASE_TRACKED_META_KEY );
 
-		if ( $is_tracked ) {
-			return; // @codeCoverageIgnore
-		}
+		//		if ( $is_tracked ) {
+		//			return; // @codeCoverageIgnore
+		//		}
 
 		$props = wp_json_encode(
 			[
@@ -360,7 +360,7 @@ class WooCommerce {
 		);
 		$label = $this->event_goals[ 'purchase' ];
 
-		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.track( '$label', $props )" );
+		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
 
 		$order->add_meta_data( Integrations::PURCHASE_TRACKED_META_KEY, true );
 		$order->save();

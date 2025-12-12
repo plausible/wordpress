@@ -147,7 +147,7 @@ class Actions {
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', () => { track( '404', $data ); });"
+				"document.addEventListener('DOMContentLoaded', () => { plausible( '404', $data ); });"
 			);
 		}
 
@@ -169,7 +169,7 @@ class Actions {
 					]
 				);
 
-				$script = "track('WP Query Parameters', $data );";
+				$script = "plausible('WP Query Parameters', $data );";
 
 				wp_add_inline_script(
 					'plausible-analytics',
@@ -193,7 +193,7 @@ class Actions {
 					],
 				]
 			);
-			$script = "track('WP Search Queries', $data );";
+			$script = "plausible('WP Search Queries', $data );";
 
 			wp_add_inline_script(
 				'plausible-analytics',

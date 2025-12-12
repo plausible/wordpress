@@ -211,7 +211,7 @@ class EDD {
 		);
 		$label = $this->event_goals[ 'purchase' ];
 
-		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.track( '$label', $props )" );
+		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
 
 		edd_add_order_meta( $order->id, Integrations::PURCHASE_TRACKED_META_KEY, true );
 	}
