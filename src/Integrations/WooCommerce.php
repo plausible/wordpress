@@ -315,7 +315,7 @@ class WooCommerce {
 	 * @return void
 	 */
 	public function track_entered_checkout() {
-		if ( ! is_checkout() ) {
+		if ( ! is_checkout() || is_wc_endpoint_url( 'order-received' ) ) {
 			return; // @codeCoverageIgnore
 		}
 
