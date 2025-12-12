@@ -22,7 +22,7 @@ class Filters {
 	public function __construct() {
 		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
-		add_filter( 'plausible_analytics_script_params', [ $this, 'maybe_track_logged_in_users' ] );
+		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_track_logged_in_users' ] );
 	}
 
 	/**
@@ -119,34 +119,34 @@ class Filters {
 	}
 
 	/**
-	 * Adds custom parameter User Logged In if Custom Properties is enabled.
+	 * Adds a custom parameter User Logged In if Custom Properties is enabled.
 	 *
+	 * @param $options
+	 *
+	 * @return array
 	 * @since v2.4.0
 	 *
-	 * @param $params
-	 *
-	 * @return mixed|string
 	 */
-	public function maybe_track_logged_in_users( $params ) {
+	public function maybe_track_logged_in_users( $options = [] ) {
 		$settings = Helpers::get_settings();
 
 		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
-			return $params; // @codeCoverageIgnore
+			return $options; // @codeCoverageIgnore
 		}
 
 		$logged_in = _x( 'no', __( 'Value when user is not logged in.', 'plausible-analytics' ), 'plausible-analytics' );
 
 		if ( is_user_logged_in() ) {
 			$user  = wp_get_current_user();
-			$roles = (array) $user->roles;
+			$roles = $user->roles;
 
 			if ( ! empty( $roles ) ) {
 				$logged_in = $roles[ 0 ];
 			}
 		}
 
-		$params .= " event-user_logged_in='$logged_in'";
+		$options['customProperties']['user_logged_in'] = $logged_in;
 
-		return $params;
+		return $options;
 	}
 }
