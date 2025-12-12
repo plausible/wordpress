@@ -349,9 +349,9 @@ class WooCommerce {
 		$order      = wc_get_order( $order_id );
 		$is_tracked = $order->get_meta( Integrations::PURCHASE_TRACKED_META_KEY );
 
-		//		if ( $is_tracked ) {
-		//			return; // @codeCoverageIgnore
-		//		}
+		if ( $is_tracked ) {
+			return; // @codeCoverageIgnore
+		}
 
 		$props = wp_json_encode(
 			[
