@@ -194,7 +194,7 @@ class WooCommerce {
 	}
 
 	/**
-	 * Track regular (i.e. interactivity API) add to cart events.
+	 * Track regular (i.e., interactivity API) add to cart events.
 	 *
 	 * @param WC_Product $product          General information about the product added to cart.
 	 * @param array      $add_to_cart_data Cart data for the product added to the cart, e.g. quantity, variation ID, etc.
@@ -248,7 +248,7 @@ class WooCommerce {
 	}
 
 	/**
-	 * Track (non-Interactivity API, i.e. AJAX) add to cart events.
+	 * Track (non-Interactivity API i.e., AJAX) add to cart events.
 	 *
 	 * @param string|int $product_id ID of the product added to the cart.
 	 *
