@@ -251,20 +251,13 @@ class Page extends API {
 							'value' => 'search',
 							'caps'  => [ self::CAP_GOALS ],
 						],
-						'advanced-options'         => [
-							'label'  => esc_html__( 'Advanced options', 'plausible-analytics' ),
-							'slug'   => 'advanced_options',
-							'type'   => 'toggle_group',
-							'fields' => [
-								'hash'          => [
-									'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'hash',
-									'caps'  => [],
-								],
-							],
+						'hash' => [
+							'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => 'hash',
+							'caps'  => [],
 						],
 					],
 				],
