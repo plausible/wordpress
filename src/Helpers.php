@@ -21,13 +21,13 @@ class Helpers {
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function get_js_url() {
+	public static function get_js_url( $local = false ) {
 		$file_name = self::get_filename();
 
 		/**
 		 * If Avoid ad blockers is enabled, return URL to local file.
 		 */
-		if ( self::proxy_enabled() ) {
+		if ( $local && self::proxy_enabled() ) {
 			return esc_url( self::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
 		}
 
@@ -256,7 +256,7 @@ class Helpers {
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function get_data_api_url() {
+	public static function get_endpoint_url() {
 		if ( self::proxy_enabled() ) {
 			// This will make sure the API endpoint is properly registered when we're testing.
 			$append = isset( $_GET[ 'plausible_proxy' ] ) ? '?plausible_proxy=1' : '';

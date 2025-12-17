@@ -20,46 +20,9 @@ class Filters {
 	 * @return void
 	 */
 	public function __construct() {
-		add_filter( 'script_loader_tag', [ $this, 'add_plausible_attributes' ], 10, 2 );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
+		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_proxy_options' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_track_logged_in_users' ] );
-	}
-
-	/**
-	 * Add Plausible Analytics attributes.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 *
-	 * @param string $handle Script handle.
-	 * @param string $tag    Script tag.
-	 *
-	 * @return string
-	 */
-	public function add_plausible_attributes( $tag, $handle ) {
-		// Bail if it's not our script.
-		if ( 'plausible-analytics' !== $handle ) {
-			return $tag; // @codeCoverageIgnore
-		}
-
-		$settings    = Helpers::get_settings();
-		$api_url     = Helpers::get_data_api_url();
-		$domain_name = Helpers::get_domain();
-
-		/**
-		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
-		 */
-		$params = "defer data-domain='{$domain_name}' data-api='{$api_url}' data-cfasync='false'";
-
-		// Triggered when exclude pages is enabled.
-		if ( ! empty( $settings[ 'excluded_pages' ] ) && $settings[ 'excluded_pages' ] ) {
-			$excluded_pages = $settings[ 'excluded_pages' ]; // @codeCoverageIgnore
-			$params         .= " data-exclude='{$excluded_pages}'"; // @codeCoverageIgnore
-		}
-
-		$params = apply_filters( 'plausible_analytics_script_params', $params );
-
-		return str_replace( ' src', " {$params} src", $tag );
 	}
 
 	/**
@@ -109,6 +72,25 @@ class Filters {
 				}
 			}
 		}
+
+		return $options;
+	}
+
+	/**
+	 * Modify the endpoint option if Proxy is enabled.
+	 *
+	 * @param array $options
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 */
+	public function maybe_add_proxy_options( $options = [] ) {
+		if ( ! Helpers::proxy_enabled() ) {
+			return $options;
+		}
+
+		$options['endpoint'] = Helpers::get_endpoint_url();
 
 		return $options;
 	}

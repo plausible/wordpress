@@ -235,17 +235,17 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * @see Helpers::get_data_api_url()
 	 * @return void
+	 * @see Helpers::get_endpoint_url()
 	 */
 	public function testGetDataApiUrl() {
-		$url = Helpers::get_data_api_url();
+		$url = Helpers::get_endpoint_url();
 
 		$this->assertEquals( 'https://plausible.io/api/event', $url );
 
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
-		$url = Helpers::get_data_api_url();
+		$url = Helpers::get_endpoint_url();
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
@@ -253,7 +253,7 @@ class HelpersTest extends TestCase {
 
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
 
-		$url = Helpers::get_data_api_url();
+		$url = Helpers::get_endpoint_url();
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
 

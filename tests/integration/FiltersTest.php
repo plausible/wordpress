@@ -10,11 +10,11 @@ use Plausible\Analytics\WP\Filters;
 
 class FiltersTest extends TestCase {
 	/**
-	 * @see Filters::add_plausible_attributes()
+	 * @see Filters::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testAddPlausibleAttributes() {
 		$class = new Filters();
-		$tag   = $class->add_plausible_attributes( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
+		$tag = $class->exclude_from_cloudflare_rocket_loader( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
 
 		$this->assertStringContainsString( 'example.org', $tag );
 		$this->assertStringContainsString( 'plausible.io/api/event', $tag );
@@ -23,7 +23,7 @@ class FiltersTest extends TestCase {
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableCompat' ] );
 
 		$class = new Filters();
-		$tag   = $class->add_plausible_attributes( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
+		$tag = $class->exclude_from_cloudflare_rocket_loader( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableCompat' ] );
 

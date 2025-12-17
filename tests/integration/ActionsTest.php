@@ -13,11 +13,11 @@ use WP_Admin_Bar;
 
 class ActionsTest extends TestCase {
 	/**
-	 * @see Actions::maybe_register_assets()
-	 * @see Filters::add_plausible_attributes()
-	 * @see Filters::maybe_add_pageview_props()
 	 * @return void
 	 * @throws \Exception
+	 * @see Filters::maybe_add_pageview_props()
+	 * @see Actions::maybe_register_assets()
+	 * @see Filters::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testRegisterAssets() {
 		global $post;

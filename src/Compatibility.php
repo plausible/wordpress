@@ -27,6 +27,9 @@ class Compatibility {
 			add_filter( 'autoptimize_filter_js_exclude', [ $this, 'exclude_plausible_js_as_string' ] );
 		}
 
+		// Cloudflare Rocket Loader
+		add_filter( 'script_loader_tag', [ $this, 'exclude_from_cloudflare_rocket_loader' ], 10, 2 );
+
 		// LiteSpeed Cache
 		if ( defined( 'LSCWP_V' ) ) {
 			add_filter( 'litespeed_optimize_js_excludes', [ $this, 'exclude_plausible_js' ] );
@@ -85,6 +88,41 @@ class Compatibility {
 		$exclude_js .= ', window.plausible, ' . Helpers::get_js_url( true );
 
 		return $exclude_js;
+	}
+
+	/**
+	 * Add Plausible Analytics attributes.
+	 *
+	 * @param string $handle Script handle.
+	 * @param string $tag Script tag.
+	 *
+	 * @return string
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 */
+	public function exclude_from_cloudflare_rocket_loader( $tag, $handle ) {
+		// Bail if it's not our script.
+		if ( 'plausible-analytics' !== $handle ) {
+			return $tag; // @codeCoverageIgnore
+		}
+
+		$settings = Helpers::get_settings();
+
+		/**
+		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
+		 */
+		$params = "defer data-cfasync='false'";
+
+		// Triggered when exclude pages is enabled.
+		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
+			$excluded_pages = $settings['excluded_pages']; // @codeCoverageIgnore
+			$params         .= " data-exclude='{$excluded_pages}'"; // @codeCoverageIgnore
+		}
+
+		$params = apply_filters( 'plausible_analytics_script_params', $params );
+
+		return str_replace( ' src', " {$params} src", $tag );
 	}
 
 	/**
