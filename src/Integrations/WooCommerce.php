@@ -67,8 +67,6 @@ class WooCommerce {
 		/**
 		 * Trigger tracking events.
 		 */
-		add_action( 'woocommerce_before_add_to_cart_quantity', [ $this, 'add_cart_form_hidden_input' ] );
-		add_action( 'woocommerce_after_add_to_cart_form', [ $this, 'track_add_to_cart_on_product_page' ] );
 		add_action( 'woocommerce_store_api_validate_add_to_cart', [ $this, 'track_add_to_cart' ], 10, 2 );
 		add_action( 'woocommerce_ajax_added_to_cart', [ $this, 'track_ajax_add_to_cart' ] );
 		/** @see \WC_Form_Handler::add_to_cart_action() runs on priority 20. We need to run before that, in case redirect is enabled. */
@@ -118,60 +116,6 @@ class WooCommerce {
 		}
 
 		return $add_to_cart_data;
-	}
-
-	/**
-	 * Adds a hidden input with the same name and value as the add-to-cart button.
-	 *
-	 * TODO: This hack can be removed when the JS library uses sendBeacon to send the event.
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore Because we can't test JS here.
-	 */
-	public function add_cart_form_hidden_input() {
-		$product = wc_get_product();
-
-		if ( ! $product ) {
-			return;
-		}
-		?>
-		<input type="hidden" name="add-to-cart" value="<?php echo $product->get_id(); ?>"/>
-		<?php
-	}
-
-	/**
-	 * A hacky approach (with lack of a proper solution) to make sure Add To Cart events are tracked on simple product pages.
-	 *
-	 * TODO: Once our JS library uses sendBeacon we might be able to refactor this into a less hacky approach.
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore Because we're not testing JS here.
-	 */
-	public function track_add_to_cart_on_product_page() {
-		$product = wc_get_product();
-
-		if ( ! $product ) {
-			return;
-		}
-		?>
-		<script>
-			let plausibleAddToCartForm = document.querySelector('form.cart');
-			let plausibleQuantity = document.querySelector('input[name="quantity"]');
-
-			plausibleAddToCartForm.classList.add('plausible-event-name=<?php echo str_replace( ' ', '+', $this->event_goals[ 'add-to-cart' ] ); ?>');
-			plausibleAddToCartForm.classList.add('plausible-event-quantity=' + plausibleQuantity.value);
-			plausibleAddToCartForm.classList.add('plausible-event-product_id=<?php echo $product->get_id(); ?>');
-			plausibleAddToCartForm.classList.add('plausible-event-product_name=<?php echo str_replace( [ ' ', '&' ], '+', addslashes( $product->get_name( null ) ) ); ?>');
-			plausibleAddToCartForm.classList.add('plausible-event-price=<?php echo $product->get_price( null ); ?>');
-
-			plausibleQuantity.addEventListener('change', function (e) {
-				let target = e.target;
-				plausibleAddToCartForm.className = plausibleAddToCartForm.className.replace(/(plausible-event-quantity=).+?/, "\$1" + target.value);
-			});
-		</script>
-		<?php
 	}
 
 	/**
