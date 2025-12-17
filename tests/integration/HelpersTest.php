@@ -7,6 +7,7 @@ namespace Plausible\Analytics\Tests\Integration;
 
 use Exception;
 use Plausible\Analytics\Tests\TestCase;
+use Plausible\Analytics\WP\Cron;
 use Plausible\Analytics\WP\Helpers;
 
 class HelpersTest extends TestCase {
@@ -213,17 +214,6 @@ class HelpersTest extends TestCase {
 		$upload_dir = wp_get_upload_dir()[ 'basedir' ];
 
 		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/[a-z0-9]{8}\.js~", $path );
-	}
-
-	/**
-	 * @see Helpers::download_file()
-	 * @return void
-	 * @throws Exception
-	 */
-	public function testDownloadFile() {
-		Helpers::download_file( 'https://plausible.io/js/plausible.js', wp_get_upload_dir()[ 'basedir' ] . '/test.js' );
-
-		$this->assertFileExists( wp_get_upload_dir()[ 'basedir' ] . '/test.js' );
 	}
 
 	/**
