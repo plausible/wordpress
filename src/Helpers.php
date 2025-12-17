@@ -167,7 +167,7 @@ class Helpers {
 	 * Check if a certain Enhanced Measurement is enabled.
 	 *
 	 * @param string $name                  Name of the option to check, valid values are
-	 *                                      404|outbound-links|file-downloads|tagged-events|revenue|pageview-props|hash.
+	 *                                      404|outbound-links|file-downloads|revenue|pageview-props|hash.
 	 * @param array  $enhanced_measurements Allows checking against a different set of options.
 	 *
 	 * @return bool

@@ -256,28 +256,12 @@ class Page extends API {
 							'slug'   => 'advanced_options',
 							'type'   => 'toggle_group',
 							'fields' => [
-								'tagged-events' => [
-									'label' => esc_html__( 'Custom events', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'tagged-events',
-									'caps'  => [ self::CAP_GOALS ],
-								],
 								'hash'          => [
 									'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
 									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
 									'slug'  => 'enhanced_measurements',
 									'type'  => 'checkbox',
 									'value' => 'hash',
-									'caps'  => [],
-								],
-								'compat'        => [
-									'label' => esc_html__( 'IE compatibility', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'compat',
 									'caps'  => [],
 								],
 							],

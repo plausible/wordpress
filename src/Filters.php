@@ -46,11 +46,6 @@ class Filters {
 		$api_url     = Helpers::get_data_api_url();
 		$domain_name = Helpers::get_domain();
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'compat' ) ) {
-			// We need the correct id attribute for IE compatibility.
-			$tag = preg_replace( "/\sid=(['\"])plausible-analytics-js(['\"])/", " id=$1plausible$2", $tag );
-		}
-
 		/**
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
 		 */
