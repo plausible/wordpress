@@ -3,6 +3,7 @@
 namespace Plausible\Analytics\WP;
 
 use Exception;
+use Plausible\Analytics\WP\Capabilities as WPCapabilities;
 use Plausible\Analytics\WP\Admin\Messages;
 use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Client as GuzzleClient;
@@ -215,11 +216,11 @@ class Client {
 		}
 
 		$caps = [
-			Capabilities::FUNNELS                    => $features->getFunnels(),
-			Capabilities::GOALS                      => $features->getGoals(),
-			Capabilities::PROPS                      => $features->getProps(),
-			EnhancedMeasurements::HASH_BASED_ROUTING => $features->getRevenueGoals(),
-			Capabilities::STATS                      => $features->getStatsApi(),
+			WPCapabilities::FUNNELS => $features->getFunnels(),
+			WPCapabilities::GOALS   => $features->getGoals(),
+			WPCapabilities::PROPS   => $features->getProps(),
+			WPCapabilities::REVENUE => $features->getRevenueGoals(),
+			WPCapabilities::STATS   => $features->getStatsApi(),
 		];
 
 		update_option( 'plausible_analytics_api_token_caps', $caps );
