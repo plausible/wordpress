@@ -2,7 +2,10 @@
 
 namespace Plausible\Analytics\WP;
 
-class Capabilities {
+/**
+ * This class behaves like an enum, while we can't really support yet, since WP hasn't dropped support yet for PHP 8.0 and lower.
+ */
+final class Capabilities {
 
 	const FUNNELS = 'funnels';
 
