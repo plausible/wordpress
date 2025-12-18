@@ -21,35 +21,9 @@ class Filters {
 	 * @return void
 	 */
 	public function __construct() {
-		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_enable_enhanced_measurement' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_proxy_options' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_track_logged_in_users' ] );
-	}
-
-	/**
-	 * @param $options
-	 *
-	 * @return void
-	 */
-	public function maybe_enable_enhanced_measurement( $options ) {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING ) ) {
-			$options['hashBasedRouting'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS ) ) {
-			$options['fileDownloads'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS ) ) {
-			$options['formSubmissions'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS ) ) {
-			$options['outboundLinks'] = true;
-		}
-
-		return $options;
 	}
 
 	/**
