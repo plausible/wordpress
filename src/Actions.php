@@ -112,6 +112,12 @@ class Actions {
 			$url
 		);
 		$options = wp_json_encode( apply_filters( 'plausible_analytics_init_options', [] ) );
+		// transformRequest and customProperties can contain a JS function.
+		$options = preg_replace(
+			'/"(transformRequest|customProperties)"\s*:\s*"(\(\)\s*=>\s*{[^}]*})"/',
+			'"$1": $2',
+			$options
+		);
 		$script .= "\nplausible.init($options);";
 
 		wp_add_inline_script( 'plausible-analytics', $script );

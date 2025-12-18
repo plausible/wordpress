@@ -23,6 +23,7 @@ class Filters {
 	public function __construct() {
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_proxy_options' ] );
+		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_exclude_pageview' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_track_logged_in_users' ] );
 	}
 
@@ -94,6 +95,61 @@ class Filters {
 		$options['endpoint'] = Helpers::get_endpoint_url();
 
 		return $options;
+	}
+
+	/**
+	 * Exclude this Pageview from tracking if it matches any of the defined patterns.
+	 *
+	 * @param $options
+	 *
+	 * @return array|mixed
+	 */
+	public function maybe_exclude_pageview( $options = [] ) {
+		$settings = Helpers::get_settings();
+
+		// Triggered when exclude pages is enabled.
+		if ( empty( $settings['excluded_pages'] ) ) {
+			return $options;
+		}
+
+		$excluded_pages  = $settings['excluded_pages'];
+		$current_request = add_query_arg( null, null );
+
+		if ( $this->url_matches_patterns( $current_request, $excluded_pages ) ) {
+			$options['transformRequest'] = '() => { return null; }';
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Does $url match any of the $patterns?
+	 *
+	 * @param $url
+	 * @param $patterns
+	 *
+	 * @return bool
+	 */
+	private function url_matches_patterns( $url, $patterns ) {
+		// Split string by new lines (\n) and comma (,)
+		$patterns = preg_split( "/[\n,]+/", $patterns, - 1, PREG_SPLIT_NO_EMPTY );
+
+		foreach ( $patterns as $pattern ) {
+			// Escape regex-symbols (can't use preg_quote() here, because it escapes dashes).
+			$regex = preg_replace( '/([\\^$+?{}()[\]|])/', '\\\\$1', $pattern );
+
+			// Convert * to regex syntax.
+			$regex = str_replace( '*', '.*', $regex );
+
+			// Full match.
+			$regex = "#$regex#i";
+
+			if ( preg_match( $regex, $url ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

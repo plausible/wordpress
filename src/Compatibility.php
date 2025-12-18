@@ -113,13 +113,6 @@ class Compatibility {
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
 		 */
 		$params = "defer data-cfasync='false'";
-
-		// Triggered when exclude pages is enabled.
-		if ( ! empty( $settings['excluded_pages'] ) && $settings['excluded_pages'] ) {
-			$excluded_pages = $settings['excluded_pages']; // @codeCoverageIgnore
-			$params         .= " data-exclude='{$excluded_pages}'"; // @codeCoverageIgnore
-		}
-
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );
