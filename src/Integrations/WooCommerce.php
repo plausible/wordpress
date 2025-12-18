@@ -10,6 +10,7 @@
 namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 use WC_Cart;
@@ -299,7 +300,10 @@ class WooCommerce {
 
 		$props = wp_json_encode(
 			[
-				'revenue' => [ 'amount' => (string) $order->get_total(), 'currency' => $order->get_currency() ],
+				EnhancedMeasurements::ECOMMERCE_REVENUE => [
+					'amount'   => (string) $order->get_total(),
+					'currency' => $order->get_currency()
+				],
 			]
 		);
 		$label = $this->event_goals[ 'purchase' ];

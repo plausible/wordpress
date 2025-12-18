@@ -9,7 +9,7 @@
 namespace Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
-use Plausible\Analytics\WP\Helpers;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 
 class WooCommerce {
@@ -49,7 +49,7 @@ class WooCommerce {
 	 * @codeCoverageIgnore Because it interacts with the Plugins API.
 	 */
 	public function maybe_create_woocommerce_funnel( $old_settings, $settings ) {
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'revenue', $settings[ 'enhanced_measurements' ] ) || ! Integrations::is_wc_active() ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $settings['enhanced_measurements'] ) || ! Integrations::is_wc_active() ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -73,7 +73,7 @@ class WooCommerce {
 		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
 
 		// Setting is enabled, no need to continue.
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) || ! Integrations::is_wc_active() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) || ! Integrations::is_wc_active() ) {
 			return;
 		}
 

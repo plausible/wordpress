@@ -9,6 +9,7 @@
 
 namespace Plausible\Analytics\WP;
 
+use WP_Post;
 use WP_Term;
 
 class Filters {
@@ -20,9 +21,35 @@ class Filters {
 	 * @return void
 	 */
 	public function __construct() {
+		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_enable_enhanced_measurement' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_proxy_options' ] );
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_track_logged_in_users' ] );
+	}
+
+	/**
+	 * @param $options
+	 *
+	 * @return void
+	 */
+	public function maybe_enable_enhanced_measurement( $options ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING ) ) {
+			$options['hashBasedRouting'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS ) ) {
+			$options['fileDownloads'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS ) ) {
+			$options['formSubmissions'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS ) ) {
+			$options['outboundLinks'] = true;
+		}
+
+		return $options;
 	}
 
 	/**
@@ -35,13 +62,13 @@ class Filters {
 	public function maybe_add_pageview_props( $options = [] ) {
 		$settings = Helpers::get_settings();
 
-		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
+		if ( ! is_array( $settings['enhanced_measurements'] ) || ! in_array( EnhancedMeasurements::PAGEVIEW_PROPS, $settings['enhanced_measurements'] ) ) {
 			return $options; // @codeCoverageIgnore
 		}
 
 		global $post;
 
-		if ( ! $post instanceof \WP_Post ) {
+		if ( ! $post instanceof WP_Post ) {
 			return $options; // @codeCoverageIgnore
 		}
 
@@ -107,7 +134,7 @@ class Filters {
 	public function maybe_track_logged_in_users( $options = [] ) {
 		$settings = Helpers::get_settings();
 
-		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) || ! in_array( 'pageview-props', $settings[ 'enhanced_measurements' ] ) ) {
+		if ( ! is_array( $settings['enhanced_measurements'] ) || ! in_array( EnhancedMeasurements::PAGEVIEW_PROPS, $settings['enhanced_measurements'] ) ) {
 			return $options; // @codeCoverageIgnore
 		}
 

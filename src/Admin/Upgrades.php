@@ -12,6 +12,7 @@ namespace Plausible\Analytics\WP\Admin;
 use Exception;
 use Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 use Plausible\Analytics\WP\Client;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Setup;
 
@@ -272,7 +273,7 @@ class Upgrades {
 	public function upgrade_to_230() {
 		$settings = Helpers::get_settings();
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
 			$edd_provisioning = new Provisioning\Integrations\EDD( new Integrations() );
 			$provisioning     = new Provisioning();
 
@@ -311,7 +312,7 @@ class Upgrades {
 	public function upgrade_to_242() {
 		$settings = Helpers::get_settings();
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'search' ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
 			$provisioning = new Provisioning();
 
 			// No token entered.

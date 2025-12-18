@@ -9,7 +9,7 @@
 namespace Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
-use Plausible\Analytics\WP\Helpers;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 
 class EDD {
@@ -48,7 +48,7 @@ class EDD {
 	 * @codeCoverageIgnore Because it interacts with the Plugins API
 	 */
 	public function maybe_create_edd_funnel( $old_settings, $settings ) {
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'revenue', $settings[ 'enhanced_measurements' ] ) || ! Integrations::is_edd_active() ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $settings['enhanced_measurements'] ) || ! Integrations::is_edd_active() ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -71,7 +71,7 @@ class EDD {
 	public function maybe_delete_edd_goals( $old_settings, $settings ) {
 		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
 			return;
 		}
 

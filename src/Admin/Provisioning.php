@@ -8,12 +8,14 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Plausible\Analytics\WP\Capabilities;
 use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageview;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestRevenue;
 use Plausible\Analytics\WP\ClientFactory;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 
@@ -86,11 +88,11 @@ class Provisioning {
 		}
 
 		$this->custom_event_goals = [
-			'404'              => __( '404', 'plausible-analytics' ),
-			'affiliate-links'  => __( 'Cloaked Link: Click', 'plausible-analytics' ),
-			'form-completions' => __( 'WP Form Completions', 'plausible-analytics' ),
-			'query-params'     => __( 'WP Query Parameters', 'plausible-analytics' ),
-			'search'           => __( 'WP Search Queries', 'plausible-analytics' ),
+			EnhancedMeasurements::FOUR_O_FOUR             => __( '404', 'plausible-analytics' ),
+			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => __( 'Cloaked Link: Click', 'plausible-analytics' ),
+			EnhancedMeasurements::FORM_COMPLETIONS        => __( 'WP Form Completions', 'plausible-analytics' ),
+			EnhancedMeasurements::QUERY_PARAMS            => __( 'WP Query Parameters', 'plausible-analytics' ),
+			EnhancedMeasurements::SEARCH_QUERIES          => __( 'WP Search Queries', 'plausible-analytics' ),
 		];
 
 		$this->init();
@@ -332,10 +334,10 @@ class Provisioning {
 	public function maybe_create_custom_properties( $old_settings, $settings ) {
 		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
 
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'pageview-props', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -345,7 +347,7 @@ class Provisioning {
 		/**
 		 * Enable Custom Properties for Authors & Categories option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'pageview-props', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) ) {
 			foreach ( $this->custom_pageview_properties as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 			}
@@ -354,7 +356,7 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for WooCommerce integration.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
 			foreach ( self::CUSTOM_PROPERTIES as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 			}
@@ -363,7 +365,7 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for Query Parameters option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
 			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
@@ -372,11 +374,11 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for Search Queries option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) ) {
 			$caps = get_option( 'plausible_analytics_api_token_caps', [] );
 
 			foreach ( $this->custom_search_properties as $property ) {
-				if ( empty( $caps[ 'props' ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
+				if ( empty( $caps[ Capabilities::PROPS ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
 					continue;
 				}
 
@@ -404,7 +406,7 @@ class Provisioning {
 	public function maybe_enable_customer_user_roles( $settings ) {
 		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
 			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings[ 'tracked_user_roles' ] ) ) {
 				$settings[ 'tracked_user_roles' ][] = 'customer';
 			}
@@ -433,19 +435,19 @@ class Provisioning {
 			'outbound_links'     => false,
 		];
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'file-downloads', $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
 			$config['file_downloads'] = true;
 		}
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'form-completions', $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
 			$config['form_submissions'] = true;
 		}
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'hash', $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
 			$config['hash_based_routing'] = true;
 		}
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'outbound-links', $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
 			$config['outbound_links'] = true;
 		}
 

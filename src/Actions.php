@@ -117,7 +117,7 @@ class Actions {
 		wp_add_inline_script( 'plausible-analytics', $script );
 
 		// Track Cloaked Affiliate Links (if enabled)
-		if ( Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ) ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
@@ -131,7 +131,7 @@ class Actions {
 		}
 
 		// Track 404 pages (if enabled)
-		if ( Helpers::is_enhanced_measurement_enabled( '404' ) && is_404() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && is_404() ) {
 			$data = wp_json_encode(
 				[
 					'props' => [
@@ -143,16 +143,17 @@ class Actions {
 			/**
 			 * document.location.pathname is a variable. @see wp_json_encode() doesn't allow passing variable, only strings. This fixes that.
 			 */
-			$data = str_replace( '"document.location.pathname"', 'document.location.pathname', $data );
+			$data       = str_replace( '"document.location.pathname"', 'document.location.pathname', $data );
+			$event_name = EnhancedMeasurements::FOUR_O_FOUR;
 
 			wp_add_inline_script(
 				'plausible-analytics',
-				"document.addEventListener('DOMContentLoaded', () => { plausible( '404', $data ); });"
+				"document.addEventListener('DOMContentLoaded', () => { plausible( $event_name, $data ); });"
 			);
 		}
 
 		// Track query parameters (if enabled and set)
-		if ( Helpers::is_enhanced_measurement_enabled( 'query-params' ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ) ) {
 			$query_params = Helpers::get_settings()['query_params'] ?? [];
 			$props        = [];
 
@@ -179,7 +180,7 @@ class Actions {
 		}
 
 		// Track search results. Tracks a search event with the search term and the number of results, and a pageview with the site's search URL.
-		if ( Helpers::is_enhanced_measurement_enabled( 'search' ) && is_search() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && is_search() ) {
 			global $wp_query;
 
 			$search_source = isset( $_REQUEST[ 'search_source' ] ) ? sanitize_text_field( $_REQUEST[ 'search_source' ] ) : wp_get_referer();
@@ -217,7 +218,7 @@ class Actions {
 	 *                or the original form if enhanced measurement is not enabled.
 	 */
 	public function maybe_add_hidden_input_to_search_form( $form ) {
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'search' ) ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
 			return $form;
 		}
 

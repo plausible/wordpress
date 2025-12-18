@@ -10,7 +10,6 @@
 namespace Plausible\Analytics\WP;
 
 use Exception;
-use WpOrg\Requests\Exception\InvalidArgument;
 
 class Helpers {
 	/**
@@ -59,8 +58,15 @@ class Helpers {
 		$defaults = [
 			'domain_name'                => '',
 			'api_token'                  => '',
-			'enhanced_measurements'      => [ '404', 'file-downloads', 'form-completions', 'search', 'outbound-links' ],
-			'affiliate-links'            => [],
+			'enhanced_measurements' => [
+				EnhancedMeasurements::FOUR_O_FOUR,
+				EnhancedMeasurements::FILE_DOWNLOADS,
+				EnhancedMeasurements::FORM_COMPLETIONS,
+				EnhancedMeasurements::SEARCH_QUERIES,
+				EnhancedMeasurements::OUTBOUND_LINKS
+			],
+			'affiliate_links'       => [],
+			'query_params'          => [],
 			'proxy_enabled'              => '',
 			'enable_analytics_dashboard' => '',
 			'shared_link'                => '',
@@ -161,27 +167,6 @@ class Helpers {
 		}
 
 		return $resources;
-	}
-
-	/**
-	 * Check if a certain Enhanced Measurement is enabled.
-	 *
-	 * @param string $name                  Name of the option to check, valid values are
-	 *                                      404|outbound-links|file-downloads|revenue|pageview-props|hash.
-	 * @param array  $enhanced_measurements Allows checking against a different set of options.
-	 *
-	 * @return bool
-	 */
-	public static function is_enhanced_measurement_enabled( $name, $enhanced_measurements = [] ) {
-		if ( empty( $enhanced_measurements ) ) {
-			$enhanced_measurements = Helpers::get_settings()[ 'enhanced_measurements' ];
-		}
-
-		if ( ! is_array( $enhanced_measurements ) ) {
-			return false; // @codeCoverageIgnore
-		}
-
-		return in_array( $name, $enhanced_measurements );
 	}
 
 	/**

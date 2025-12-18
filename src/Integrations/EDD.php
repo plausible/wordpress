@@ -9,6 +9,7 @@
 
 namespace Plausible\Analytics\WP\Integrations;
 
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 
@@ -202,7 +203,7 @@ class EDD {
 			apply_filters(
 				'plausible_analytics_edd_purchase_custom_properties',
 				[
-					'revenue' => [
+					EnhancedMeasurements::ECOMMERCE_REVENUE => [
 						'amount'   => $order->total,
 						'currency' => $order->currency,
 					],

@@ -27,17 +27,17 @@ class Integrations {
 	 */
 	private function init() {
 		// WooCommerce
-		if ( self::is_wc_active() && Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
+		if ( self::is_wc_active() && EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
 			new Integrations\WooCommerce();
 		}
 
 		// Easy Digital Downloads
-		if ( self::is_edd_active() && Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
+		if ( self::is_edd_active() && EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
 			new Integrations\EDD();
 		}
 
 		// Form Plugins
-		if ( Helpers::is_enhanced_measurement_enabled( 'form-completions' ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS ) ) {
 			new Integrations\FormSubmit();
 		}
 	}

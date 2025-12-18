@@ -215,11 +215,11 @@ class Client {
 		}
 
 		$caps = [
-			'funnels' => $features->getFunnels(),
-			'goals'   => $features->getGoals(),
-			'props'   => $features->getProps(),
-			'revenue' => $features->getRevenueGoals(),
-			'stats'   => $features->getStatsApi(),
+			Capabilities::FUNNELS                    => $features->getFunnels(),
+			Capabilities::GOALS                      => $features->getGoals(),
+			Capabilities::PROPS                      => $features->getProps(),
+			EnhancedMeasurements::HASH_BASED_ROUTING => $features->getRevenueGoals(),
+			Capabilities::STATS                      => $features->getStatsApi(),
 		];
 
 		update_option( 'plausible_analytics_api_token_caps', $caps );
