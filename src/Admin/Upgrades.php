@@ -327,7 +327,7 @@ class Upgrades {
 			$provisioning->maybe_create_custom_properties( [], $settings );
 		}
 
-		update_option( 'plausible_analytics_version', '2.4.2' );
+		update_option( 'plausible_analytics_version', '2.5.0' );
 	}
 
 	/**
@@ -345,5 +345,7 @@ class Upgrades {
 		$settings = Helpers::get_settings();
 
 		$provisioning->update_tracker_script_config( null, $settings );
+
+		update_option( 'plausible_analytics_version', '2.5.1' );
 	}
 }
