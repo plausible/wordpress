@@ -6,8 +6,8 @@
 namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
-use Plausible\Analytics\WP\Actions;
-use Plausible\Analytics\WP\Filters;
+use Plausible\Analytics\WP\Verification;
+use Plausible\Analytics\WP\InitOptions;
 use Plausible\Analytics\WP\Helpers;
 use WP_Admin_Bar;
 
@@ -15,14 +15,14 @@ class ActionsTest extends TestCase {
 	/**
 	 * @return void
 	 * @throws \Exception
-	 * @see Filters::maybe_add_pageview_props()
-	 * @see Actions::maybe_register_assets()
-	 * @see Filters::exclude_from_cloudflare_rocket_loader()
+	 * @see InitOptions::maybe_add_pageview_props()
+	 * @see Verification::maybe_register_assets()
+	 * @see InitOptions::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testRegisterAssets() {
 		global $post;
 
-		$class = new Actions();
+		$class = new Verification();
 
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 		add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
@@ -57,10 +57,10 @@ class ActionsTest extends TestCase {
 	}
 
 	/**
-	 * @see Actions::admin_bar_node()
+	 * @see Verification::admin_bar_node()
 	 */
 	public function testAdminBarNode() {
-		$class = new Actions();
+		$class = new Verification();
 
 		if ( ! class_exists( 'WP_Admin_Bar' ) ) {
 			require_once( ABSPATH . 'wp-includes/class-wp-admin-bar.php' );

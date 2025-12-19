@@ -40,6 +40,11 @@ class Integrations {
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS ) ) {
 			new Integrations\FormSubmit();
 		}
+
+		// Search Queries
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
+			new Integrations\Search();
+		}
 	}
 
 	/**

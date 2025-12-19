@@ -6,14 +6,14 @@
 namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
-use Plausible\Analytics\WP\Filters;
+use Plausible\Analytics\WP\InitOptions;
 
 class FiltersTest extends TestCase {
 	/**
-	 * @see Filters::exclude_from_cloudflare_rocket_loader()
+	 * @see InitOptions::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testAddPlausibleAttributes() {
-		$class = new Filters();
+		$class = new InitOptions();
 		$tag = $class->exclude_from_cloudflare_rocket_loader( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
 
 		$this->assertStringContainsString( 'example.org', $tag );
@@ -22,7 +22,7 @@ class FiltersTest extends TestCase {
 
 		add_filter( 'plausible_analytics_settings', [ $this, 'enableCompat' ] );
 
-		$class = new Filters();
+		$class = new InitOptions();
 		$tag = $class->exclude_from_cloudflare_rocket_loader( '<script id="plausible-analytics-js" src="test.js">', 'plausible-analytics' );
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableCompat' ] );
@@ -31,12 +31,12 @@ class FiltersTest extends TestCase {
 	}
 
 	/**
-	 * @see Filters::maybe_track_logged_in_users()
-	 *
 	 * @return void
+	 * @see InitOptions::maybe_track_logged_in_users()
+	 *
 	 */
 	public function testTrackLoggedInUsers() {
-		$class = new Filters();
+		$class = new InitOptions();
 
 		add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 

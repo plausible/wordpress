@@ -12,7 +12,7 @@ namespace Plausible\Analytics\WP;
 use WP_Post;
 use WP_Term;
 
-class Filters {
+class InitOptions {
 	/**
 	 * Constructor.
 	 *
