@@ -85,8 +85,12 @@ class Upgrades {
 			$this->upgrade_to_231();
 		}
 
-		if ( version_compare( $plausible_analytics_version, '2.4.2', '<' ) ) {
-			$this->upgrade_to_242();
+		if ( version_compare( $plausible_analytics_version, '2.5.0', '<' ) ) {
+			$this->upgrade_to_250();
+		}
+
+		if ( version_compare( $plausible_analytics_version, '2.5.1', '<' ) ) {
+			$this->upgrade_to_251();
 		}
 
 		// Add required upgrade routines for future versions here.
@@ -309,7 +313,7 @@ class Upgrades {
 	 *
 	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
 	 */
-	public function upgrade_to_242() {
+	public function upgrade_to_250() {
 		$settings = Helpers::get_settings();
 
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
@@ -324,5 +328,22 @@ class Upgrades {
 		}
 
 		update_option( 'plausible_analytics_version', '2.4.2' );
+	}
+
+	/**
+	 * Make sure configuration on Plausible's end matches our configuration.
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_251() {
+		$provisioning = new Provisioning();
+
+		if ( ! $provisioning->client instanceof Client ) {
+			return;
+		}
+
+		$settings = Helpers::get_settings();
+
+		$provisioning->update_tracker_script_config( null, $settings );
 	}
 }
