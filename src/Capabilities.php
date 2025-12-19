@@ -13,7 +13,6 @@ final class Capabilities {
 
 	const PROPS = 'props';
 
-
 	const REVENUE = 'revenue';
 
 	const STATS = 'stats';
