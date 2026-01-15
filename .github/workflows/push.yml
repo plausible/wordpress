@@ -61,14 +61,10 @@ jobs:
           ini-values: error_reporting=E_ALL, display_errors=On
           coverage: xdebug
 
-      # Install dependencies and handle caching in one go.
-      # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
-      - name: Install Composer dependencies - normal
-        uses: "ramsey/composer-install@v3"
-        continue-on-error: true
+      - name: Install composer dependencies
+        uses: php-actions/composer@v2
         with:
-          # Bust the cache at least once a month - output format: YYYY-MM.
-          custom-cache-suffix: $(date -u "+%Y-%m")
+          dev: yes
 
       - name: Lint PHP files against parse errors
         run: composer lint
