@@ -20,40 +20,42 @@ class ActionsTest extends TestCase {
 	 * @see InitOptions::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testRegisterAssets() {
-		global $post;
+		try {
+			global $post;
 
-		$class = new Verification();
+			$class = new Verification();
 
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
-		add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+			add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
+			add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 
-		$post_id   = wp_insert_post(
-			[
-				'id'           => 1,
-				'post_author'  => 1,
-				'post_title'   => 'Test',
-				'post_content' => 'Test',
-			]
-		);
-		$test_post = get_post( $post_id );
-		$post      = $test_post;
+			$post_id   = wp_insert_post(
+				[
+					'id'           => 1,
+					'post_author'  => 1,
+					'post_title'   => 'Test',
+					'post_content' => 'Test',
+				]
+			);
+			$test_post = get_post( $post_id );
+			$post      = $test_post;
 
-		$class->maybe_register_assets();
+			$class->maybe_register_assets();
 
-		$this->expectOutputContains( Helpers::get_filename( true ) );
-		$this->expectOutputContains( 'test.dev' );
-		$this->expectOutputContains( Helpers::get_rest_endpoint() );
-		$this->expectOutputContains( 'event-author=' );
-		$this->expectOutputContains( 'admin' );
-		$this->expectOutputContains( 'event-category=' );
-		$this->expectOutputContains( 'Uncategorized' );
+			$this->expectOutputContains( Helpers::get_filename( true ) );
+			$this->expectOutputContains( 'test.dev' );
+			$this->expectOutputContains( Helpers::get_rest_endpoint() );
+			$this->expectOutputContains( 'event-author=' );
+			$this->expectOutputContains( 'admin' );
+			$this->expectOutputContains( 'event-category=' );
+			$this->expectOutputContains( 'Uncategorized' );
 
-		wp_print_head_scripts();
-
-		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
-		remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+			wp_print_head_scripts();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+			remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+		}
 	}
 
 	/**
