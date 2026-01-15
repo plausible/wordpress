@@ -76,6 +76,19 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Dynamically disable the proxy.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function disableProxy( $settings ) {
+		$settings['proxy_enabled'] = '';
+
+		return $settings;
+	}
+
+	/**
 	 * Set domain_name option.
 	 *
 	 * @param $settings

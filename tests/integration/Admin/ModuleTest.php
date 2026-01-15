@@ -16,18 +16,21 @@ class ModuleTest extends TestCase {
 	 * @see Module::install()
 	 */
 	public function testInstallModule() {
-		$settings = Helpers::get_settings();
-
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
 
 		$old_settings = Helpers::get_settings();
+
+		remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+
+		$settings = Helpers::get_settings();
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
 		$this->addUserCap( 'install_plugins' );
 
 		$class = new Module();
-		$class->maybe_install_module( $settings, $old_settings );
+		$class->maybe_install_module( $old_settings, $settings );
 
 		$this->assertTrue( get_option( 'plausible_analytics_proxy_speed_module_installed' ) );
 	}
@@ -41,8 +44,11 @@ class ModuleTest extends TestCase {
 		$old_settings = Helpers::get_settings();
 
 		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
 
 		$settings = Helpers::get_settings();
+
+		remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
 
 		$this->addUserCap( 'install_plugins' );
 
