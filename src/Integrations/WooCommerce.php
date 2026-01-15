@@ -155,7 +155,7 @@ class WooCommerce {
 
 		$product_data  = $this->clean_data( $product->get_data() );
 		$added_to_cart = $this->clean_data( $add_to_cart_data );
-		$cart          = WC()->cart;
+		$cart = $this->get_wc_cart();
 		$props         = apply_filters(
 			'plausible_analytics_woocommerce_add_to_cart_custom_properties',
 			[
@@ -264,8 +264,7 @@ class WooCommerce {
 			return; // @codeCoverageIgnore
 		}
 
-		$cart = WC()->cart;
-
+		$cart = $this->get_wc_cart();
 		$props = apply_filters(
 			'plausible_analytics_woocommerce_entered_checkout_custom_properties',
 			[
@@ -281,6 +280,15 @@ class WooCommerce {
 		$label = $this->event_goals[ 'checkout' ];
 
 		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
+	}
+
+	/**
+	 * A wrapper to keep our code testable.
+	 *
+	 * @return WC_Cart|null
+	 */
+	protected function get_wc_cart() {
+		return WC()->cart;
 	}
 
 	/**

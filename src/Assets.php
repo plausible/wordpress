@@ -53,8 +53,8 @@ class Assets {
 			apply_filters( 'plausible_load_js_in_footer', false )
 		);
 
-		$url     = Helpers::get_js_url( true );
-		$script  = sprintf(
+		$url    = $this->get_js_url( true );
+		$script = sprintf(
 			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="%s";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
 			$url
 		);
@@ -157,5 +157,15 @@ class Assets {
 
 		// This action allows you to add your own custom scripts!
 		do_action( 'plausible_analytics_after_register_assets', $settings );
+	}
+
+	/**
+	 * @param bool $local
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	protected function get_js_url( bool $local = false ) {
+		return Helpers::get_js_url( $local );
 	}
 }

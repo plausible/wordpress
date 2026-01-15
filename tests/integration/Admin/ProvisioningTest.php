@@ -129,33 +129,39 @@ class ProvisioningTest extends TestCase {
 	 * @return void
 	 */
 	public function testMaybeEnableCustomerUserRole() {
-		$class                               = new Provisioning( false );
-		$settings                            = [];
-		$settings[ 'enhanced_measurements' ] = [ 'revenue' ];
-		$settings[ 'tracked_user_roles' ]    = [];
+		try {
+			$class                             = new Provisioning( false );
+			$settings                          = [];
+			$settings['enhanced_measurements'] = [ 'revenue' ];
+			$settings['tracked_user_roles']    = [];
 
-		add_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
+			add_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
 
-		$new_settings = $class->maybe_enable_customer_user_roles( $settings );
+			$new_settings = $class->maybe_enable_customer_user_roles( $settings );
 
-		remove_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
+			$this->assertTrue( in_array( 'customer', $new_settings['tracked_user_roles'] ) );
+		} finally {
+			remove_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
+		}
 
-		$this->assertTrue( in_array( 'customer', $new_settings[ 'tracked_user_roles' ] ) );
+		try {
+			add_filter( 'plausible_analytics_integrations_edd', '__return_true' );
 
-		add_filter( 'plausible_analytics_integrations_edd', '__return_true' );
+			$new_settings = $class->maybe_enable_customer_user_roles( $settings );
 
-		$new_settings = $class->maybe_enable_customer_user_roles( $settings );
+			$this->assertTrue( in_array( 'subscriber', $new_settings['tracked_user_roles'] ) );
+		} finally {
+			remove_filter( 'plausible_analytics_integrations_edd', '__return_true' );
+		}
 
-		remove_filter( 'plausible_analytics_integrations_edd', '__return_true' );
+		try {
+			add_filter( 'plausible_analytics_integrations_edd_recurring', '__return_true' );
 
-		$this->assertTrue( in_array( 'subscriber', $new_settings[ 'tracked_user_roles' ] ) );
+			$new_settings = $class->maybe_enable_customer_user_roles( $settings );
 
-		add_filter( 'plausible_analytics_integrations_edd_recurring', '__return_true' );
-
-		$new_settings = $class->maybe_enable_customer_user_roles( $settings );
-
-		remove_filter( 'plausible_analytics_integrations_edd_recurring', '__return_true' );
-
-		$this->assertTrue( in_array( 'edd_subscriber', $new_settings[ 'tracked_user_roles' ] ) );
+			$this->assertTrue( in_array( 'edd_subscriber', $new_settings['tracked_user_roles'] ) );
+		} finally {
+			remove_filter( 'plausible_analytics_integrations_edd_recurring', '__return_true' );
+		}
 	}
 }

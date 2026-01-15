@@ -6,6 +6,7 @@
 namespace Plausible\Analytics\Tests\Integration\Admin;
 
 use Exception;
+use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Admin\Module;
 use Plausible\Analytics\WP\Helpers;
@@ -16,16 +17,21 @@ class ModuleTest extends TestCase {
 	 * @see Module::install()
 	 */
 	public function testInstallModule() {
-		add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
 
-		$old_settings = Helpers::get_settings();
+			$old_settings = Helpers::get_settings();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+		}
 
-		remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
-		$settings = Helpers::get_settings();
-
-		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+			$settings = Helpers::get_settings();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		}
 
 		$this->addUserCap( 'install_plugins' );
 
@@ -39,21 +45,35 @@ class ModuleTest extends TestCase {
 	 * @see Module::uninstall()
 	 */
 	public function testUninstallModule() {
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
-		$old_settings = Helpers::get_settings();
+			$old_settings = Helpers::get_settings();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		}
 
-		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
 
-		$settings = Helpers::get_settings();
-
-		remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+			$settings = Helpers::get_settings();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'disableProxy' ] );
+		}
 
 		$this->addUserCap( 'install_plugins' );
 
-		$class = new Module();
-		$class->maybe_install_module( $old_settings, $settings );
+		$module = $this->getMockBuilder( Module::class )
+		               ->onlyMethods( [ 'get_filename', 'dir_is_empty' ] )
+		               ->getMock();
+
+		$module->method( 'get_filename' )
+		       ->willReturn( 'test-file' );
+
+		$module->method( 'dir_is_empty' )
+		       ->willReturn( true );
+
+		$module->maybe_install_module( $old_settings, $settings );
 
 		$this->assertFalse( get_option( 'plausible_analytics_proxy_speed_module_installed' ) );
 	}
@@ -63,19 +83,26 @@ class ModuleTest extends TestCase {
 	 * @throws Exception
 	 */
 	public function testEnableProxy() {
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
-		new Proxy();
+			new Proxy();
 
-		$settings = Helpers::get_settings();
+			$settings = Helpers::get_settings();
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		}
 
-		remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		add_filter( 'plausible_analytics_module_run_test_proxy', '__return_true' );
+		try {
+			add_filter( 'plausible_analytics_module_run_test_proxy', '__return_true' );
 
-		$old_settings = Helpers::get_settings();
-		$class        = new Module();
-		$new_settings = $class->maybe_enable_proxy( $settings, $old_settings );
+			$old_settings = Helpers::get_settings();
+			$class        = new Module();
+			$new_settings = $class->maybe_enable_proxy( $settings, $old_settings );
 
-		$this->assertEquals( 'on', $new_settings[ 'proxy_enabled' ] );
+			$this->assertEquals( 'on', $new_settings['proxy_enabled'] );
+		} finally {
+			remove_filter( 'plausible_analytics_module_run_test_proxy', '__return_true' );
+		}
 	}
 }

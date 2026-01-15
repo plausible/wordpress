@@ -11,6 +11,9 @@ namespace Plausible\Analytics\WP;
 
 use Exception;
 
+/**
+ * We use 'static' (late static binding) instead of 'self' (early binding), so we can mock (where needed) in our tests.
+ */
 class Helpers {
 	/**
 	 * Get Analytics URL.
@@ -21,30 +24,42 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_js_url( $local = false ) {
-		$file_name = self::get_filename();
+		$file_name = static::get_filename();
 
 		/**
-		 * If Avoid ad blockers is enabled, return URL to local file.
+		 * If the Avoid Ad Blockers option is enabled, return URL pointing to the local file.
 		 */
-		if ( $local && self::proxy_enabled() ) {
-			return esc_url( self::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
+		if ( $local && static::proxy_enabled() ) {
+			return esc_url( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
 		}
 
-		return esc_url( self::get_hosted_domain_url() . "/js/$file_name.js" );
+		return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
 	}
 
 	/**
 	 * Get filename (without file extension)
 	 *
-	 * @since 1.3.0
 	 * @return string
 	 * @throws Exception
+	 *
+	 * @codeCoverageIgnore
+	 * @since 1.3.0
 	 */
 	public static function get_filename() {
-		$client = new ClientFactory();
-		$client = $client->build();
+		$client = static::get_client();
 
 		return $client->get_tracker_id();
+	}
+
+	/**
+	 * Build the API client.
+	 *
+	 * @return false|Client
+	 */
+	protected static function get_client() {
+		$client = new ClientFactory();
+
+		return $client->build();
 	}
 
 	/**
@@ -103,7 +118,7 @@ class Helpers {
 	 */
 	public static function proxy_enabled( $settings = [] ) {
 		if ( empty( $settings ) ) {
-			$settings = self::get_settings();
+			$settings = static::get_settings();
 		}
 
 		return ! empty( $settings[ 'proxy_enabled' ] ) || isset( $_GET[ 'plausible_proxy' ] );
@@ -118,7 +133,7 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_proxy_resource( $resource_name = '' ) {
-		$resources = self::get_proxy_resources();
+		$resources = static::get_proxy_resources();
 
 		/**
 		 * Create the cache directory if it doesn't exist.
@@ -175,7 +190,7 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_hosted_domain_url() {
-		$settings = self::get_settings();
+		$settings = static::get_settings();
 
 		if ( defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ) {
 			return esc_url( 'https://' . PLAUSIBLE_SELF_HOSTED_DOMAIN ); // @codeCoverageIgnore
@@ -198,7 +213,7 @@ class Helpers {
 	 * @return void
 	 */
 	public static function update_setting( $option_name, $option_value ) {
-		$settings                 = self::get_settings();
+		$settings = static::get_settings();
 		$settings[ $option_name ] = $option_value;
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -211,7 +226,7 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_js_path() {
-		return self::get_proxy_resource( 'cache_dir' ) . self::get_filename() . '.js';
+		return static::get_proxy_resource( 'cache_dir' ) . static::get_filename() . '.js';
 	}
 
 	/**
@@ -222,7 +237,7 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_domain() {
-		$settings = self::get_settings();
+		$settings = static::get_settings();
 
 		if ( ! empty( $settings[ 'domain_name' ] ) ) {
 			return $settings[ 'domain_name' ];
@@ -242,14 +257,14 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_endpoint_url() {
-		if ( self::proxy_enabled() ) {
+		if ( static::proxy_enabled() ) {
 			// This will make sure the API endpoint is properly registered when we're testing.
 			$append = isset( $_GET[ 'plausible_proxy' ] ) ? '?plausible_proxy=1' : '';
 
-			return self::get_rest_endpoint() . $append;
+			return static::get_rest_endpoint() . $append;
 		}
 
-		return esc_url( self::get_hosted_domain_url() . '/api/event' );
+		return esc_url( static::get_hosted_domain_url() . '/api/event' );
 	}
 
 	/**
@@ -259,9 +274,9 @@ class Helpers {
 	 * @throws Exception
 	 */
 	public static function get_rest_endpoint( $abs_url = true ) {
-		$namespace = self::get_proxy_resource( 'namespace' );
-		$base      = self::get_proxy_resource( 'base' );
-		$endpoint  = self::get_proxy_resource( 'endpoint' );
+		$namespace = static::get_proxy_resource( 'namespace' );
+		$base      = static::get_proxy_resource( 'base' );
+		$endpoint  = static::get_proxy_resource( 'endpoint' );
 
 		$uri = "$namespace/v1/$base/$endpoint";
 

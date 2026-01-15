@@ -18,6 +18,7 @@ class WooCommerceTest extends TestCase {
 	 */
 	public function testTrackEnteredCheckout() {
 		when( 'is_checkout' )->justReturn( true );
+		when( 'is_wc_endpoint_url' )->justReturn( false );
 		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
 
 		$cart_mock = $this->getMockBuilder( 'WC_Cart' )->setMethods(
@@ -34,11 +35,11 @@ class WooCommerceTest extends TestCase {
 		$cart_mock->method( 'get_total_tax' )->willReturn( 1 );
 		$cart_mock->method( 'get_total' )->willReturn( "16.00" );
 
-		$woo_mock       = $this->getMockBuilder( 'WooCommerce' )->getMock();
-		$woo_mock->cart = $cart_mock;
-		when( 'WC' )->justReturn( $woo_mock );
-
-		$class = new WooCommerce( false );
+		$class = $this->getMockBuilder( WooCommerce::class )
+		              ->onlyMethods( [ 'get_wc_cart' ] )
+		              ->setConstructorArgs( [ false ] )
+		              ->getMock();
+		$class->method( 'get_wc_cart' )->willReturn( $cart_mock );
 
 		$this->expectOutputContains( '{"props":{"subtotal":10,"shipping":5,"tax":1,"total":"16.00"}}' );
 
@@ -51,7 +52,7 @@ class WooCommerceTest extends TestCase {
 	 */
 	public function testTrackPurchase() {
 		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
-		
+
 		$class = new WooCommerce( false );
 		$mock  = $this->getMockBuilder( 'WC_Order' )->setMethods(
 			[

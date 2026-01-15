@@ -135,7 +135,7 @@ class Module {
 		 * Clean up generated JS files in /uploads dir.
 		 */
 		$cache_dir = Helpers::get_proxy_resource( 'cache_dir' );
-		$js_file   = Helpers::get_filename();
+		$js_file = $this->get_filename();
 
 		if ( file_exists( $cache_dir . $js_file . '.js' ) ) {
 			unlink( $cache_dir . $js_file . '.js' ); // @codeCoverageIgnore
@@ -154,6 +154,13 @@ class Module {
 	}
 
 	/**
+	 * @throws Exception
+	 */
+	protected function get_filename() {
+		return Helpers::get_filename();
+	}
+
+	/**
 	 * Check if a directory is empty.
 	 * This works because a new FilesystemIterator will initially point to the first file in the folder -
 	 * if there are no files in the folder, valid() will return false.
@@ -165,7 +172,7 @@ class Module {
 	 *
 	 * @return bool
 	 */
-	private function dir_is_empty( $dir ) {
+	protected function dir_is_empty( $dir ) {
 		$iterator = new \FilesystemIterator( $dir );
 
 		return ! $iterator->valid();

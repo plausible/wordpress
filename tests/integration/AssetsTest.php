@@ -5,25 +5,19 @@
 
 namespace Plausible\Analytics\Tests\Integration;
 
+use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
-use Plausible\Analytics\WP\Verification;
-use Plausible\Analytics\WP\InitOptions;
+use Plausible\Analytics\WP\Assets;
 use Plausible\Analytics\WP\Helpers;
-use WP_Admin_Bar;
 
-class ActionsTest extends TestCase {
+class AssetsTest extends TestCase {
 	/**
 	 * @return void
 	 * @throws \Exception
-	 * @see InitOptions::maybe_add_pageview_props()
-	 * @see Verification::maybe_register_assets()
-	 * @see InitOptions::exclude_from_cloudflare_rocket_loader()
 	 */
 	public function testRegisterAssets() {
 		try {
 			global $post;
-
-			$class = new Verification();
 
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 			add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
@@ -40,9 +34,16 @@ class ActionsTest extends TestCase {
 			$test_post = get_post( $post_id );
 			$post      = $test_post;
 
+			$class = $this->getMockBuilder( Assets::class )
+			              ->onlyMethods( [ 'get_js_url' ] )
+			              ->getMock();
+
+			$class->method( 'get_js_url' )
+			      ->willReturn( 'https://plausible.test/js/plausible.js' );
+
 			$class->maybe_register_assets();
 
-			$this->expectOutputContains( Helpers::get_filename( true ) );
+			$this->expectOutputContains( TestableHelpers::get_filename() );
 			$this->expectOutputContains( 'test.dev' );
 			$this->expectOutputContains( Helpers::get_rest_endpoint() );
 			$this->expectOutputContains( 'event-author=' );
@@ -56,26 +57,5 @@ class ActionsTest extends TestCase {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 		}
-	}
-
-	/**
-	 * @see Verification::admin_bar_node()
-	 */
-	public function testAdminBarNode() {
-		$class = new Verification();
-
-		if ( ! class_exists( 'WP_Admin_Bar' ) ) {
-			require_once( ABSPATH . 'wp-includes/class-wp-admin-bar.php' );
-		}
-
-		wp_set_current_user( 1 );
-		$admin_bar = new WP_Admin_Bar();
-		$class->admin_bar_node( $admin_bar );
-		$this->assertNotEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
-
-		wp_set_current_user( 0 );
-		$admin_bar = new WP_Admin_Bar();
-		$class->admin_bar_node( $admin_bar );
-		$this->assertEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
 	}
 }

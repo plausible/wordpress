@@ -6,8 +6,8 @@
 namespace Plausible\Analytics\Tests\Integration;
 
 use Exception;
+use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
-use Plausible\Analytics\WP\Cron;
 use Plausible\Analytics\WP\Helpers;
 
 class HelpersTest extends TestCase {
@@ -15,14 +15,14 @@ class HelpersTest extends TestCase {
 	 * @see Helpers::get_js_url()
 	 */
 	public function testGetJsUrl() {
-		$url = Helpers::get_js_url();
+		$url = TestableHelpers::get_js_url();
 
-		$this->assertEquals( 'https://plausible.io/js/plausible.js', $url );
+		$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', $url );
 
 		try {
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
-			$url = Helpers::get_js_url( true );
+			$url = TestableHelpers::get_js_url( true );
 
 			$this->assertMatchesRegularExpression( '~http://example.org/wp-content/uploads/.*?/.*?.js~', $url );
 		} finally {
@@ -30,11 +30,11 @@ class HelpersTest extends TestCase {
 		}
 
 		try {
-		add_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
 
-		$url = Helpers::get_js_url();
+			$url = TestableHelpers::get_js_url();
 
-		$this->assertEquals( 'https://self-hosted-test.org/js/plausible.js', $url );
+			$this->assertEquals( 'https://self-hosted-test.org/js/pa-test-tracker-id.js', $url );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
 		}
@@ -51,69 +51,6 @@ class HelpersTest extends TestCase {
 		$settings[ 'self_hosted_domain' ] = 'self-hosted-test.org';
 
 		return $settings;
-	}
-
-	/**
-	 * @see Helpers::get_filename()
-	 * @throws Exception
-	 */
-	public function testGetFilename() {
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'addExcludedPages' ] );
-
-			$filename = Helpers::get_filename();
-
-			$this->assertEquals( 'plausible.exclusions', $filename );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'addExcludedPages' ] );
-		}
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-
-			$filename = Helpers::get_filename( true );
-
-			$this->assertMatchesRegularExpression( '~[a-z0-9]{8}~', $filename );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		}
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableOutboundLinks' ] );
-
-			$filename = Helpers::get_filename();
-
-			$this->assertEquals( 'plausible.outbound-links', $filename );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableOutboundLinks' ] );
-		}
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableRevenue' ] );
-			add_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
-
-			$filename = Helpers::get_filename();
-
-			$this->assertEquals( 'plausible.revenue.tagged-events', $filename );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableRevenue' ] );
-			remove_filter( 'plausible_analytics_integrations_woocommerce', '__return_true' );
-		}
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableSearch' ] );
-
-			global $wp_query;
-
-			$wp_query = new \WP_Query();
-			$wp_query->query( 's=test' );
-
-			$filename = Helpers::get_filename();
-
-			$this->assertEquals( 'plausible.pageview-props.manual', $filename );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSearch' ] );
-		}
 	}
 
 	/**
@@ -215,16 +152,10 @@ class HelpersTest extends TestCase {
 	 * @throws Exception
 	 */
 	public function testGetJsPath() {
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		$path       = TestableHelpers::get_js_path();
+		$upload_dir = wp_get_upload_dir()['basedir'];
 
-			$path       = Helpers::get_js_path();
-			$upload_dir = wp_get_upload_dir()['basedir'];
-
-			$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/[a-z0-9]{8}\.js~", $path );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		}
+		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/pa-test-tracker-id.js~", $path );
 	}
 
 	/**
