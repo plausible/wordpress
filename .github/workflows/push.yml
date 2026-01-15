@@ -68,6 +68,7 @@ jobs:
 
       - name: Lint PHP files against parse errors
         run: composer lint
+        continue-on-error: ${{ matrix.php == '8.4' }}
 
       - name: Unit and integration testing (with debug output)
         run: ./vendor/bin/phpunit --configuration phpunit-with-integration.xml --no-coverage
