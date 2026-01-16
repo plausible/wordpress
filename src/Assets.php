@@ -8,6 +8,8 @@ namespace Plausible\Analytics\WP;
 class Assets {
 	/**
 	 * Build class.
+	 *
+	 * @param bool $init
 	 */
 	public function __construct() {
 		$this->init();

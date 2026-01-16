@@ -24,6 +24,23 @@ class TestCase extends YoastTestCase {
 		parent::__construct();
 	}
 
+	public function removeAction( $hook, $callback, $priority = 10 ) {
+		global $wp_filter;
+
+		if ( ! isset( $wp_filter[ $hook ] ) ) {
+			return;
+		}
+
+		$callbacks = $wp_filter[ $hook ]->callbacks ?? [];
+		$callbacks = $callbacks[ $priority ] ?? [];
+
+		foreach ( $callbacks as $callback_key => $callback_data ) {
+			if ( str_contains( $callback_key, $callback ) ) {
+				unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $callback_key ] );
+			}
+		}
+	}
+
 	/**
 	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
 	 *
@@ -150,6 +167,14 @@ class TestCase extends YoastTestCase {
 	 */
 	public function enablePageviewProps( $settings ) {
 		$settings['enhanced_measurements'] = [ 'pageview-props' ];
+
+		return $settings;
+	}
+
+	public function setQueryParams( $settings ) {
+		$settings['query_params'] = [ 'test' ];
+
+		$_REQUEST['test'] = 1;
 
 		return $settings;
 	}
