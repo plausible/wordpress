@@ -179,7 +179,9 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_search_queries_script() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && is_search() ) {
+		$is_search = apply_filters( 'plausible_analytics_is_search', is_search() );
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && $is_search ) {
 			global $wp_query;
 
 			$search_source = isset( $_REQUEST['search_source'] ) ? sanitize_text_field( $_REQUEST['search_source'] ) : wp_get_referer();

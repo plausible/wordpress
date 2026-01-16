@@ -5,11 +5,9 @@
 
 namespace Plausible\Analytics\Tests\Integration;
 
-use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Assets;
 use Plausible\Analytics\WP\EnhancedMeasurements;
-use Plausible\Analytics\WP\Helpers;
 
 class AssetsTest extends TestCase {
 	/**
@@ -18,32 +16,38 @@ class AssetsTest extends TestCase {
 	 * @see Assets::maybe_enqueue_main_script()
 	 */
 	public function testEnqueueMainScript() {
-		global $post;
+		try {
+			global $post;
 
-		$post_id   = wp_insert_post(
-			[
-				'id'           => 1,
-				'post_author'  => 1,
-				'post_title'   => 'Test',
-				'post_content' => 'Test',
-			]
-		);
-		$test_post = get_post( $post_id );
-		$post      = $test_post;
+			$post_id   = wp_insert_post(
+				[
+					'id'           => 1,
+					'post_author'  => 1,
+					'post_title'   => 'Test',
+					'post_content' => 'Test',
+				]
+			);
+			$test_post = get_post( $post_id );
+			$post      = $test_post;
 
-		$class = $this->getMockBuilder( Assets::class )
-		              ->onlyMethods( [ 'get_js_url' ] )
-		              ->getMock();
+			$class = $this->getMockBuilder( Assets::class )
+			              ->onlyMethods( [ 'get_js_url' ] )
+			              ->getMock();
 
-		$class->method( 'get_js_url' )
-		      ->willReturn( 'https://plausible.test/js/plausible.js' );
+			$class->method( 'get_js_url' )
+			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-		$class->maybe_enqueue_main_script();
+			$class->maybe_enqueue_main_script();
 
-		$this->expectOutputContains( 'window.plausible' );
-		$this->expectOutputContains( 'plausible.init' );
+			do_action( 'wp_head' );
 
-		wp_print_head_scripts();
+			$this->expectOutputContains( 'window.plausible' );
+			$this->expectOutputContains( 'plausible.init' );
+
+			wp_print_head_scripts();
+		} finally {
+			wp_dequeue_script( 'plausible-analytics' );
+		}
 	}
 
 	/**
@@ -62,8 +66,9 @@ class AssetsTest extends TestCase {
 			$class->method( 'get_js_url' )
 			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-			$class->maybe_enqueue_main_script();
 			$class->maybe_enqueue_cloaked_affiliate_links_assets();
+
+			do_action( 'wp_head' );
 
 			$this->expectOutputContains( 'plausible-affiliate-links.js' );
 			$this->expectOutputContains( 'const plausibleAffiliateLinks' );
@@ -71,6 +76,7 @@ class AssetsTest extends TestCase {
 			wp_print_head_scripts();
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
+			wp_dequeue_script( 'plausible-affiliate' );
 		}
 	}
 
@@ -91,8 +97,9 @@ class AssetsTest extends TestCase {
 			$class->method( 'get_js_url' )
 			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-			$class->maybe_enqueue_main_script();
 			$class->maybe_enqueue_four_o_four_script();
+
+			do_action( 'wp_head' );
 
 			$this->expectOutputContains( EnhancedMeasurements::FOUR_O_FOUR );
 
@@ -100,6 +107,7 @@ class AssetsTest extends TestCase {
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
 			remove_filter( 'plausible_analytics_is_404', '__return_true' );
+			wp_dequeue_script( 'plausible-analytics' );
 		}
 	}
 
@@ -119,14 +127,16 @@ class AssetsTest extends TestCase {
 			$class->method( 'get_js_url' )
 			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-			$class->maybe_enqueue_main_script();
 			$class->maybe_enqueue_query_params_script();
+
+			do_action( 'wp_head' );
 
 			$this->expectOutputContains( 'WP Query Parameters' );
 
 			wp_print_head_scripts();
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableQueryParams' ] );
+			wp_dequeue_script( 'plausible-analytics' );
 		}
 	}
 
@@ -138,6 +148,7 @@ class AssetsTest extends TestCase {
 	public function testEnqueueSearchQueriesScript() {
 		try {
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableSearchQueries' ] );
+			add_filter( 'plausible_analytics_is_search', '__return_true' );
 
 			$class = $this->getMockBuilder( Assets::class )
 			              ->onlyMethods( [ 'get_js_url' ] )
@@ -146,7 +157,6 @@ class AssetsTest extends TestCase {
 			$class->method( 'get_js_url' )
 			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-			$class->maybe_enqueue_main_script();
 			$class->maybe_enqueue_search_queries_script();
 
 			$this->expectOutputContains( 'WP Search Queries' );
@@ -154,6 +164,7 @@ class AssetsTest extends TestCase {
 			wp_print_head_scripts();
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSearchQueries' ] );
+			remove_filter( 'plausible_analytics_is_search', '__return_true' );
 		}
 	}
 }
