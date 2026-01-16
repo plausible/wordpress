@@ -19,31 +19,36 @@ class Assets {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_register_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_main_script' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_cloaked_affiliate_links_assets' ], 11 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_four_o_four_script' ], 11 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_query_params_script' ], 11 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_search_queries_script' ], 11 );
 	}
 
 
 	/**
-	 * Register Assets.
+	 * Register main JS if this user should be tracked.
 	 *
 	 * @return void
 	 * @throws \Exception
 	 * @since  1.0.0
 	 * @access public
 	 */
-	public function maybe_register_assets() {
+	public function maybe_enqueue_main_script() {
 		$settings  = Helpers::get_settings();
 		$user_role = Helpers::get_user_role();
 
 		/**
-		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or,
-		 * if the current role should not be tracked.
+		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or if the current role should not be tracked.
 		 */
 		if ( ( ! empty( $user_role ) && ! isset( $settings['tracked_user_roles'] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings['tracked_user_roles'], true ) ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		// Dummy script, which'll allow us to add inline scripts later.
+		/**
+		 * This is a dummy script that will allow us to attach inline scripts further down the line.
+		 */
 		wp_register_script( 'plausible-analytics', false );
 		wp_enqueue_script(
 			'plausible-analytics',
@@ -53,8 +58,8 @@ class Assets {
 			apply_filters( 'plausible_load_js_in_footer', false )
 		);
 
-		$url    = $this->get_js_url( true );
-		$script = sprintf(
+		$url     = $this->get_js_url( true );
+		$script  = sprintf(
 			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="%s";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
 			$url
 		);
@@ -69,7 +74,28 @@ class Assets {
 
 		wp_add_inline_script( 'plausible-analytics', $script );
 
-		// Track Cloaked Affiliate Links (if enabled)
+		// This action allows you to add your own custom scripts!
+		do_action( 'plausible_analytics_after_register_assets', $settings );
+	}
+
+	/**
+	 * This seam keeps our code testable.
+	 *
+	 * @param bool $local
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	protected function get_js_url( bool $local = false ) {
+		return Helpers::get_js_url( $local );
+	}
+
+	/**
+	 * Enqueue cloaked affiliate links assets if the option is enabled.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_cloaked_affiliate_links_assets() {
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ) ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
@@ -82,8 +108,14 @@ class Assets {
 
 			wp_add_inline_script( 'plausible-affiliate-links', 'const plausibleAffiliateLinks = ' . wp_json_encode( $affiliate_links ) . ';', 'before' );
 		}
+	}
 
-		// Track 404 pages (if enabled)
+	/**
+	 * Enqueue 404 script if the option is enabled.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_four_o_four_script() {
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && is_404() ) {
 			$data = wp_json_encode(
 				[
@@ -104,8 +136,14 @@ class Assets {
 				"document.addEventListener('DOMContentLoaded', () => { plausible( $event_name, $data ); });"
 			);
 		}
+	}
 
-		// Track query parameters (if enabled and set)
+	/**
+	 * Enqueue Query Params script if the option is enabled.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_query_params_script() {
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ) ) {
 			$query_params = Helpers::get_settings()['query_params'] ?? [];
 			$props        = [];
@@ -131,8 +169,14 @@ class Assets {
 				);
 			}
 		}
+	}
 
-		// Track search results. Tracks a search event with the search term and the number of results, and a pageview with the site's search URL.
+	/**
+	 * Enqueue the Search Queries script if the option is enabled.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_search_queries_script() {
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && is_search() ) {
 			global $wp_query;
 
@@ -154,18 +198,5 @@ class Assets {
 				"document.addEventListener('DOMContentLoaded', () => {\n$script\n});"
 			);
 		}
-
-		// This action allows you to add your own custom scripts!
-		do_action( 'plausible_analytics_after_register_assets', $settings );
-	}
-
-	/**
-	 * @param bool $local
-	 *
-	 * @return string
-	 * @throws \Exception
-	 */
-	protected function get_js_url( bool $local = false ) {
-		return Helpers::get_js_url( $local );
 	}
 }
