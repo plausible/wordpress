@@ -45,6 +45,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Goal_Revenue_allOf_goal';
@@ -56,9 +57,10 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
      */
 	protected static $openAPITypes = [
 		'currency'     => 'string',
+		'custom_props' => 'array<string,string>',
 		'display_name' => 'string',
 		'event_name'   => 'string',
-		'id'           => 'int',
+		'id'           => 'int'
 	];
 
 	/**
@@ -70,9 +72,10 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	protected static $openAPIFormats = [
 		'currency'     => null,
+		'custom_props' => null,
 		'display_name' => null,
 		'event_name'   => null,
-		'id'           => null,
+		'id'           => null
 	];
 
 	/**
@@ -82,19 +85,22 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	protected static array $openAPINullables = [
 		'currency'     => false,
+		'custom_props' => false,
 		'display_name' => false,
 		'event_name'   => false,
-		'id'           => false,
+		'id'           => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -103,6 +109,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -111,6 +118,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -119,6 +127,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -156,17 +165,18 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
 	}
 
-	/**
+    /**
      * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
+     * and the value is the original name
+     *
+     * @var string[]
+     */
 	protected static $attributeMap = [
 		'currency'     => 'currency',
+		'custom_props' => 'custom_props',
 		'display_name' => 'display_name',
 		'event_name'   => 'event_name',
-		'id'           => 'id',
+		'id'           => 'id'
 	];
 
 	/**
@@ -176,9 +186,10 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	protected static $setters = [
 		'currency'     => 'setCurrency',
+		'custom_props' => 'setCustomProps',
 		'display_name' => 'setDisplayName',
 		'event_name'   => 'setEventName',
-		'id'           => 'setId',
+		'id'           => 'setId'
 	];
 
 	/**
@@ -188,9 +199,10 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	protected static $getters = [
 		'currency'     => 'getCurrency',
+		'custom_props' => 'getCustomProps',
 		'display_name' => 'getDisplayName',
 		'event_name'   => 'getEventName',
-		'id'           => 'getId',
+		'id'           => 'getId'
 	];
 
 	/**
@@ -205,6 +217,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -213,6 +226,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -221,11 +235,13 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -242,6 +258,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	public function __construct( array $data = null ) {
 		$this->setIfExists( 'currency', $data ?? [], null );
+		$this->setIfExists( 'custom_props', $data ?? [], null );
 		$this->setIfExists( 'display_name', $data ?? [], null );
 		$this->setIfExists( 'event_name', $data ?? [], null );
 		$this->setIfExists( 'id', $data ?? [], null );
@@ -253,17 +270,15 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
-		$this->container[ $variableName ] = $fields[$variableName ] ?? $defaultValue;
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -274,7 +289,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container['currency'] === null) {
+		if ( $this->container['currency'] === null ) {
 			$invalidProperties[] = "'currency' can't be null";
 		}
 		if ( $this->container['display_name'] === null ) {
@@ -297,11 +312,13 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets currency
+	 *
 	 * @return string
 	 */
 	public function getCurrency() {
@@ -325,7 +342,33 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	}
 
 	/**
+	 * Gets custom_props
+	 *
+	 * @return array<string,string>|null
+	 */
+	public function getCustomProps() {
+		return $this->container['custom_props'];
+	}
+
+	/**
+	 * Sets custom_props
+	 *
+	 * @param array<string,string>|null $custom_props Custom properties (string keys and values)
+	 *
+	 * @return self
+	 */
+	public function setCustomProps( $custom_props ) {
+		if ( is_null( $custom_props ) ) {
+			throw new \InvalidArgumentException( 'non-nullable custom_props cannot be null' );
+		}
+		$this->container['custom_props'] = $custom_props;
+
+		return $this;
+	}
+
+	/**
 	 * Gets display_name
+	 *
 	 * @return string
 	 */
 	public function getDisplayName() {
@@ -350,6 +393,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets event_name
+	 *
 	 * @return string
 	 */
 	public function getEventName() {
@@ -424,7 +468,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -456,7 +500,7 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -477,8 +521,8 @@ class GoalRevenueAllOfGoal implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

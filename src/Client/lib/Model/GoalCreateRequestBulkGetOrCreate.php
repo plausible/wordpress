@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalCreateRequestBulkGetOrCreate Class Doc Comment
+ *
  * @category Class
  * @description Bulk goal creation request
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Goal_CreateRequest_BulkGetOrCreate';
@@ -55,7 +57,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @var string[]
 	 */
 	protected static $openAPITypes = [
-		'goals' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
+		'goals' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]'
 	];
 
 	/**
@@ -66,7 +68,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'goals' => null,
+		'goals' => null
 	];
 
 	/**
@@ -75,17 +77,19 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'goals' => false,
+		'goals' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -94,6 +98,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -102,6 +107,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -110,6 +116,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -154,7 +161,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @var string[]
 	 */
 	protected static $attributeMap = [
-		'goals' => 'goals',
+		'goals' => 'goals'
 	];
 
 	/**
@@ -163,7 +170,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @var string[]
 	 */
 	protected static $setters = [
-		'goals' => 'setGoals',
+		'goals' => 'setGoals'
 	];
 
 	/**
@@ -172,7 +179,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @var string[]
 	 */
 	protected static $getters = [
-		'goals' => 'getGoals',
+		'goals' => 'getGoals'
 	];
 
 	/**
@@ -187,6 +194,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -195,6 +203,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -203,11 +212,13 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -232,13 +243,11 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -270,14 +279,17 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	/**
 	 * Validate all the properties in the model
 	 * return true if all passed
+	 *
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets goals
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
 	 */
 	public function getGoals() {
@@ -297,14 +309,10 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 		}
 
 		if ( ( count( $goals ) > 8 ) ) {
-			throw new \InvalidArgumentException(
-				'invalid value for $goals when calling GoalCreateRequestBulkGetOrCreate., number of items must be less than or equal to 8.'
-			);
+			throw new \InvalidArgumentException( 'invalid value for $goals when calling GoalCreateRequestBulkGetOrCreate., number of items must be less than or equal to 8.' );
 		}
 		if ( ( count( $goals ) < 1 ) ) {
-			throw new \InvalidArgumentException(
-				'invalid length for $goals when calling GoalCreateRequestBulkGetOrCreate., number of items must be greater than or equal to 1.'
-			);
+			throw new \InvalidArgumentException( 'invalid length for $goals when calling GoalCreateRequestBulkGetOrCreate., number of items must be greater than or equal to 1.' );
 		}
 		$this->container['goals'] = $goals;
 
@@ -338,7 +346,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -370,7 +378,7 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -391,8 +399,8 @@ class GoalCreateRequestBulkGetOrCreate implements ModelInterface, ArrayAccess, \
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

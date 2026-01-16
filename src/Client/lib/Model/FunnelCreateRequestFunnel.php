@@ -58,7 +58,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'steps' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
+        'steps' => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]'
     ];
 
     /**
@@ -339,6 +339,7 @@ class FunnelCreateRequestFunnel implements ModelInterface, ArrayAccess, \JsonSer
 
     /**
      * Gets steps
+     *
      * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]
      */
     public function getSteps()

@@ -45,6 +45,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'SharedLink_CreateRequest_shared_link';
@@ -56,7 +57,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
      */
 	protected static $openAPITypes = [
 		'name'     => 'string',
-		'password' => 'string',
+		'password' => 'string'
 	];
 
 	/**
@@ -68,7 +69,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 */
 	protected static $openAPIFormats = [
 		'name'     => null,
-		'password' => null,
+		'password' => null
 	];
 
 	/**
@@ -78,17 +79,19 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 */
 	protected static array $openAPINullables = [
 		'name'     => false,
-		'password' => false,
+		'password' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -97,6 +100,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -105,6 +109,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -113,6 +118,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -150,15 +156,15 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
 	}
 
-	/**
+    /**
      * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
+     * and the value is the original name
+     *
+     * @var string[]
+     */
 	protected static $attributeMap = [
 		'name'     => 'name',
-		'password' => 'password',
+		'password' => 'password'
 	];
 
 	/**
@@ -168,7 +174,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 */
 	protected static $setters = [
 		'name'     => 'setName',
-		'password' => 'setPassword',
+		'password' => 'setPassword'
 	];
 
 	/**
@@ -178,7 +184,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 */
 	protected static $getters = [
 		'name'     => 'getName',
-		'password' => 'getPassword',
+		'password' => 'getPassword'
 	];
 
 	/**
@@ -193,6 +199,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -201,6 +208,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -209,11 +217,13 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -239,17 +249,15 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
-		$this->container[ $variableName ] = $fields[$variableName ] ?? $defaultValue;
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -274,11 +282,13 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets name
+	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -303,6 +313,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 
 	/**
 	 * Gets password
+	 *
 	 * @return string|null
 	 */
 	public function getPassword() {
@@ -352,7 +363,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -384,7 +395,7 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -405,8 +416,8 @@ class SharedLinkCreateRequestSharedLink implements ModelInterface, ArrayAccess, 
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

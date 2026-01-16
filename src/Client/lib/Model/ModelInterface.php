@@ -37,12 +37,14 @@ namespace Plausible\Analytics\WP\Client\Model;
 interface ModelInterface {
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName();
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes();
@@ -94,6 +96,7 @@ interface ModelInterface {
 	 * Checks if a property is nullable
 	 *
 	 * @param string $property
+	 *
 	 * @return bool
 	 */
 	public static function isNullable( string $property ): bool;

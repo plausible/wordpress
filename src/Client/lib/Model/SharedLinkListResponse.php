@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * SharedLinkListResponse Class Doc Comment
+ *
  * @category Class
  * @description Shared Links list response
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'SharedLink.ListResponse';
@@ -56,7 +58,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static $openAPITypes = [
 		'meta'         => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta',
-		'shared_links' => '\Plausible\Analytics\WP\Client\Model\SharedLink[]',
+		'shared_links' => '\Plausible\Analytics\WP\Client\Model\SharedLink[]'
 	];
 
 	/**
@@ -68,7 +70,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static $openAPIFormats = [
 		'meta'         => null,
-		'shared_links' => null,
+		'shared_links' => null
 	];
 
 	/**
@@ -78,17 +80,19 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static array $openAPINullables = [
 		'meta'         => false,
-		'shared_links' => false,
+		'shared_links' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -97,6 +101,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -105,6 +110,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -113,6 +119,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -158,7 +165,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static $attributeMap = [
 		'meta'         => 'meta',
-		'shared_links' => 'shared_links',
+		'shared_links' => 'shared_links'
 	];
 
 	/**
@@ -168,7 +175,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static $setters = [
 		'meta'         => 'setMeta',
-		'shared_links' => 'setSharedLinks',
+		'shared_links' => 'setSharedLinks'
 	];
 
 	/**
@@ -178,7 +185,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	protected static $getters = [
 		'meta'         => 'getMeta',
-		'shared_links' => 'getSharedLinks',
+		'shared_links' => 'getSharedLinks'
 	];
 
 	/**
@@ -193,6 +200,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -201,6 +209,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -209,11 +218,13 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -239,13 +250,11 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -277,11 +286,13 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets meta
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
 	 */
 	public function getMeta() {
@@ -306,6 +317,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 
 	/**
 	 * Gets shared_links
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\SharedLink[]
 	 */
 	public function getSharedLinks() {
@@ -355,7 +367,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -387,7 +399,7 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -408,8 +420,8 @@ class SharedLinkListResponse implements ModelInterface, ArrayAccess, \JsonSerial
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

@@ -37,7 +37,7 @@ namespace Plausible\Analytics\WP\Client;
  * @link     https://openapi-generator.tech
  */
 class Configuration {
-	public const BOOLEAN_FORMAT_INT    = 'int';
+	public const BOOLEAN_FORMAT_INT = 'int';
 
 	public const BOOLEAN_FORMAT_STRING = 'string';
 
@@ -48,6 +48,7 @@ class Configuration {
 
 	/**
 	 * Associate array to store API key(s)
+	 *
 	 * @var string[]
 	 */
 	protected $apiKeys = [];
@@ -133,7 +134,7 @@ class Configuration {
 	 * Sets API key
 	 *
 	 * @param string $apiKeyIdentifier API key identifier (authentication scheme)
-	 * @param string $key              API key or token
+	 * @param string $key API key or token
 	 *
 	 * @return $this
 	 */
@@ -158,7 +159,7 @@ class Configuration {
 	 * Sets the prefix for API key (e.g. Bearer)
 	 *
 	 * @param string $apiKeyIdentifier API key identifier (authentication scheme)
-	 * @param string $prefix           API key prefix, e.g. Bearer
+	 * @param string $prefix API key prefix, e.g. Bearer
 	 *
 	 * @return $this
 	 */
@@ -294,8 +295,8 @@ class Configuration {
 	 *
 	 * @param string $userAgent the user agent of the api client
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return $this
+	 * @throws \InvalidArgumentException
 	 */
 	public function setUserAgent( $userAgent ) {
 		if ( ! is_string( $userAgent ) ) {
@@ -384,6 +385,7 @@ class Configuration {
 
 	/**
 	 * Gets the default configuration instance
+	 *
 	 * @return Configuration
 	 */
 	public static function getDefaultConfiguration() {
@@ -407,6 +409,7 @@ class Configuration {
 
 	/**
 	 * Gets the essential information for debugging
+	 *
 	 * @return string The report for debugging
 	 */
 	public static function toDebugReport() {
@@ -430,7 +433,7 @@ class Configuration {
 		$prefix = $this->getApiKeyPrefix( $apiKeyIdentifier );
 		$apiKey = $this->getApiKey( $apiKeyIdentifier );
 
-		if ($apiKey === null ) {
+		if ( $apiKey === null ) {
 			return null;
 		}
 
@@ -453,17 +456,17 @@ class Configuration {
 			[
 				"url"         => "https://plausible.io",
 				"description" => "This server",
-			],
+			]
 		];
 	}
 
 	/**
 	 * Returns URL based on host settings, index and variables
 	 *
-	 * @param array      $hostSettings array of host settings, generated from getHostSettings() or equivalent from the
-	 *                                 API clients
-	 * @param int        $hostIndex    index of the host settings
-	 * @param array|null $variables    hash of variable and the corresponding value (optional)
+	 * @param array $hostSettings array of host settings, generated from getHostSettings() or equivalent from the API clients
+	 * @param int $hostIndex index of the host settings
+	 * @param array|null $variables hash of variable and the corresponding value (optional)
+	 *
 	 * @return string URL based on host settings
 	 */
 	public static function getHostString( array $hostsSettings, $hostIndex, array $variables = null ) {
@@ -473,9 +476,7 @@ class Configuration {
 
 		// check array index out of bound
 		if ( $hostIndex < 0 || $hostIndex >= count( $hostsSettings ) ) {
-			throw new \InvalidArgumentException(
-				"Invalid index $hostIndex when selecting the host. Must be less than " . count( $hostsSettings )
-			);
+			throw new \InvalidArgumentException( "Invalid index $hostIndex when selecting the host. Must be less than " . count( $hostsSettings ) );
 		}
 
 		$host = $hostsSettings[ $hostIndex ];
@@ -484,21 +485,10 @@ class Configuration {
 		// go through variable and assign a value
 		foreach ( $host["variables"] ?? [] as $name => $variable ) {
 			if ( array_key_exists( $name, $variables ) ) { // check to see if it's in the variables provided by the user
-				if ( ! isset( $variable['enum_values'] ) ||
-					in_array(
-						$variables[ $name ],
-						$variable["enum_values"],
-						true
-					) ) { // check to see if the value is in the enum
+				if ( ! isset( $variable['enum_values'] ) || in_array( $variables[ $name ], $variable["enum_values"], true ) ) { // check to see if the value is in the enum
 					$url = str_replace( "{" . $name . "}", $variables[ $name ], $url );
 				} else {
-					throw new \InvalidArgumentException(
-						"The variable `$name` in the host URL has invalid value " .
-						$variables[ $name ] .
-						". Must be " .
-						join( ',', $variable["enum_values"] ) .
-						"."
-					);
+					throw new \InvalidArgumentException( "The variable `$name` in the host URL has invalid value " . $variables[ $name ] . ". Must be " . join( ',', $variable["enum_values"] ) . "." );
 				}
 			} else {
 				// use default value
@@ -512,8 +502,9 @@ class Configuration {
 	/**
 	 * Returns URL based on the index and variables
 	 *
-	 * @param int        $index     index of the host settings
+	 * @param int $index index of the host settings
 	 * @param array|null $variables hash of variable and the corresponding value (optional)
+	 *
 	 * @return string URL based on host settings
 	 */
 	public function getHostFromSettings( $index, $variables = null ) {

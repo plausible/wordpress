@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * Capabilities Class Doc Comment
+ *
  * @category Class
  * @description Capabilities object
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Capabilities';
@@ -57,7 +59,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $openAPITypes = [
 		'authorized'  => 'bool',
 		'data_domain' => 'string',
-		'features'    => '\Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures',
+		'features'    => '\Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures'
 	];
 
 	/**
@@ -70,7 +72,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $openAPIFormats = [
 		'authorized'  => null,
 		'data_domain' => null,
-		'features'    => null,
+		'features'    => null
 	];
 
 	/**
@@ -79,19 +81,21 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'authorized'  => false,
+		'authorized' => false,
 		'data_domain' => true,
-		'features'    => false,
+		'features'   => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -100,6 +104,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -108,6 +113,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -116,6 +122,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -162,7 +169,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $attributeMap = [
 		'authorized'  => 'authorized',
 		'data_domain' => 'data_domain',
-		'features'    => 'features',
+		'features'    => 'features'
 	];
 
 	/**
@@ -173,7 +180,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $setters = [
 		'authorized'  => 'setAuthorized',
 		'data_domain' => 'setDataDomain',
-		'features'    => 'setFeatures',
+		'features'    => 'setFeatures'
 	];
 
 	/**
@@ -184,7 +191,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $getters = [
 		'authorized'  => 'getAuthorized',
 		'data_domain' => 'getDataDomain',
-		'features'    => 'getFeatures',
+		'features'    => 'getFeatures'
 	];
 
 	/**
@@ -199,6 +206,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -207,6 +215,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -215,11 +224,13 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -246,13 +257,11 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -287,11 +296,13 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets authorized
+	 *
 	 * @return bool
 	 */
 	public function getAuthorized() {
@@ -316,8 +327,9 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Gets data_domain
+	 *
 	 * @return string
-     */
+	 */
 	public function getDataDomain() {
 		return $this->container['data_domain'];
 	}
@@ -347,6 +359,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Gets features
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures
 	 */
 	public function getFeatures() {
@@ -396,7 +409,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -428,7 +441,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -449,8 +462,8 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * CustomPropEnableRequest Class Doc Comment
+ *
  * @category Class
  * @description Custom Property enable params
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'CustomProp.EnableRequest';
@@ -56,7 +58,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static $openAPITypes = [
 		'custom_props' => '\Plausible\Analytics\WP\Client\Model\CustomProp[]',
-		'custom_prop'  => '\Plausible\Analytics\WP\Client\Model\CustomPropCustomProp',
+		'custom_prop'  => '\Plausible\Analytics\WP\Client\Model\CustomPropCustomProp'
 	];
 
 	/**
@@ -68,7 +70,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static $openAPIFormats = [
 		'custom_props' => null,
-		'custom_prop'  => null,
+		'custom_prop'  => null
 	];
 
 	/**
@@ -78,17 +80,19 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static array $openAPINullables = [
 		'custom_props' => false,
-		'custom_prop'  => false,
+		'custom_prop'  => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -97,6 +101,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -105,6 +110,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -113,6 +119,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -158,7 +165,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static $attributeMap = [
 		'custom_props' => 'custom_props',
-		'custom_prop'  => 'custom_prop',
+		'custom_prop'  => 'custom_prop'
 	];
 
 	/**
@@ -168,7 +175,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static $setters = [
 		'custom_props' => 'setCustomProps',
-		'custom_prop'  => 'setCustomProp',
+		'custom_prop'  => 'setCustomProp'
 	];
 
 	/**
@@ -178,7 +185,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	protected static $getters = [
 		'custom_props' => 'getCustomProps',
-		'custom_prop'  => 'getCustomProp',
+		'custom_prop'  => 'getCustomProp'
 	];
 
 	/**
@@ -193,6 +200,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -201,6 +209,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -209,11 +218,13 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -239,13 +250,11 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -260,15 +269,14 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container['custom_props'] === null) {
+		if ( $this->container['custom_props'] === null ) {
 			$invalidProperties[] = "'custom_props' can't be null";
 		}
 		if ( ( count( $this->container['custom_props'] ) < 1 ) ) {
-			$invalidProperties[] =
-				"invalid value for 'custom_props', number of items must be greater than or equal to 1.";
+			$invalidProperties[] = "invalid value for 'custom_props', number of items must be greater than or equal to 1.";
 		}
 
-		if ( $this->container['custom_prop'] === null) {
+		if ( $this->container['custom_prop'] === null ) {
 			$invalidProperties[] = "'custom_prop' can't be null";
 		}
 
@@ -282,11 +290,13 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets custom_props
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CustomProp[]
 	 */
 	public function getCustomProps() {
@@ -305,10 +315,9 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 			throw new \InvalidArgumentException( 'non-nullable custom_props cannot be null' );
 		}
 
+
 		if ( ( count( $custom_props ) < 1 ) ) {
-			throw new \InvalidArgumentException(
-				'invalid length for $custom_props when calling CustomPropEnableRequest., number of items must be greater than or equal to 1.'
-			);
+			throw new \InvalidArgumentException( 'invalid length for $custom_props when calling CustomPropEnableRequest., number of items must be greater than or equal to 1.' );
 		}
 		$this->container['custom_props'] = $custom_props;
 
@@ -317,6 +326,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Gets custom_prop
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CustomPropCustomProp
 	 */
 	public function getCustomProp() {
@@ -366,7 +376,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -398,7 +408,7 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -419,8 +429,8 @@ class CustomPropEnableRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

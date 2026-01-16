@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * NotFoundError Class Doc Comment
+ *
  * @category Class
  * @description The response that is returned when the user makes a request to a non-existing resource
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'NotFoundError';
@@ -55,7 +57,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var string[]
 	 */
 	protected static $openAPITypes = [
-		'errors' => '\Plausible\Analytics\WP\Client\Model\Error[]',
+		'errors' => '\Plausible\Analytics\WP\Client\Model\Error[]'
 	];
 
 	/**
@@ -66,7 +68,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'errors' => null,
+		'errors' => null
 	];
 
 	/**
@@ -75,17 +77,19 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'errors' => false,
+		'errors' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -94,6 +98,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -102,6 +107,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -110,6 +116,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -154,7 +161,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var string[]
 	 */
 	protected static $attributeMap = [
-		'errors' => 'errors',
+		'errors' => 'errors'
 	];
 
 	/**
@@ -163,7 +170,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var string[]
 	 */
 	protected static $setters = [
-		'errors' => 'setErrors',
+		'errors' => 'setErrors'
 	];
 
 	/**
@@ -172,7 +179,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var string[]
 	 */
 	protected static $getters = [
-		'errors' => 'getErrors',
+		'errors' => 'getErrors'
 	];
 
 	/**
@@ -187,6 +194,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -195,6 +203,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -203,11 +212,13 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -232,13 +243,11 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -267,11 +276,13 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets errors
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\Error[]
 	 */
 	public function getErrors() {
@@ -321,7 +332,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -353,7 +364,7 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -374,8 +385,8 @@ class NotFoundError implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

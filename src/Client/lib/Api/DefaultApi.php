@@ -2,6 +2,7 @@
 /**
  * DefaultApi
  * PHP version 7.4
+ *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -40,6 +41,7 @@ use Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * DefaultApi Class Doc Comment
+ *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -120,9 +122,9 @@ class DefaultApi {
 
 	/**
 	 * @param ClientInterface $client
-	 * @param Configuration   $config
-	 * @param HeaderSelector  $selector
-	 * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+	 * @param Configuration $config
+	 * @param HeaderSelector $selector
+	 * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
 	 */
 	public function __construct(
 		ClientInterface $client = null,
@@ -147,6 +149,7 @@ class DefaultApi {
 
 	/**
 	 * Get the host index
+	 *
 	 * @return int Host index
 	 */
 	public function getHostIndex() {
@@ -162,37 +165,33 @@ class DefaultApi {
 
 	/**
 	 * Operation customPropDisableBulk
+	 *
 	 * Disable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                        $contentType                 The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
 	 *
 	 * @return void
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function customPropDisableBulk(
-		$custom_prop_disable_request = null,
-		string $contentType = self::contentTypes['customPropDisableBulk'][0]
-	) {
+	public function customPropDisableBulk( $custom_prop_disable_request = null, string $contentType = self::contentTypes['customPropDisableBulk'][0] ) {
 		$this->customPropDisableBulkWithHttpInfo( $custom_prop_disable_request, $contentType );
 	}
 
 	/**
 	 * Operation customPropDisableBulkWithHttpInfo
+	 *
 	 * Disable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                        $contentType                 The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function customPropDisableBulkWithHttpInfo(
-		$custom_prop_disable_request = null,
-		string $contentType = self::contentTypes['customPropDisableBulk'][0]
-	) {
+	public function customPropDisableBulkWithHttpInfo( $custom_prop_disable_request = null, string $contentType = self::contentTypes['customPropDisableBulk'][0] ) {
 		$request = $this->customPropDisableBulkRequest( $custom_prop_disable_request, $contentType );
 
 		try {
@@ -208,7 +207,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -220,7 +222,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -259,73 +264,73 @@ class DefaultApi {
 
 	/**
 	 * Operation customPropDisableBulkAsync
+	 *
 	 * Disable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                        $contentType                 The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropDisableBulkAsync(
-		$custom_prop_disable_request = null,
-		string $contentType = self::contentTypes['customPropDisableBulk'][0]
-	) {
-		return $this->customPropDisableBulkAsyncWithHttpInfo( $custom_prop_disable_request, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function customPropDisableBulkAsync( $custom_prop_disable_request = null, string $contentType = self::contentTypes['customPropDisableBulk'][0] ) {
+		return $this->customPropDisableBulkAsyncWithHttpInfo( $custom_prop_disable_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation customPropDisableBulkAsyncWithHttpInfo
+	 *
 	 * Disable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                        $contentType                 The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropDisableBulkAsyncWithHttpInfo(
-		$custom_prop_disable_request = null,
-		string $contentType = self::contentTypes['customPropDisableBulk'][0]
-	) {
+	public function customPropDisableBulkAsyncWithHttpInfo( $custom_prop_disable_request = null, string $contentType = self::contentTypes['customPropDisableBulk'][0] ) {
 		$returnType = '';
 		$request    = $this->customPropDisableBulkRequest( $custom_prop_disable_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				return [ null, $response->getStatusCode(), $response->getHeaders() ];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					return [ null, $response->getStatusCode(), $response->getHeaders() ];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'customPropDisableBulk'
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropDisableRequest $custom_prop_disable_request CustomProp disable params (optional)
-	 * @param string                                                        $contentType                 The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropDisableBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropDisableBulkRequest(
-		$custom_prop_disable_request = null,
-		string $contentType = self::contentTypes['customPropDisableBulk'][0]
-	) {
+	public function customPropDisableBulkRequest( $custom_prop_disable_request = null, string $contentType = self::contentTypes['customPropDisableBulk'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/custom_props';
 		$formParams   = [];
@@ -333,6 +338,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -344,9 +350,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_disable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request )
-				);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request ) );
 			} else {
 				$httpBody = $custom_prop_disable_request;
 			}
@@ -358,7 +362,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -376,8 +380,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -395,45 +398,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'DELETE', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'DELETE',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation customPropGetOrEnable
+	 *
 	 * Get or enable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                       $contentType                The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\CustomPropListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function customPropGetOrEnable(
-		$custom_prop_enable_request = null,
-		string $contentType = self::contentTypes['customPropGetOrEnable'][0]
-	) {
-		[ $response ] = $this->customPropGetOrEnableWithHttpInfo( $custom_prop_enable_request, $contentType );
+	public function customPropGetOrEnable( $custom_prop_enable_request = null, string $contentType = self::contentTypes['customPropGetOrEnable'][0] ) {
+		list( $response ) = $this->customPropGetOrEnableWithHttpInfo( $custom_prop_enable_request, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation customPropGetOrEnableWithHttpInfo
+	 *
 	 * Get or enable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                       $contentType                The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\CustomPropListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function customPropGetOrEnableWithHttpInfo(
-		$custom_prop_enable_request = null,
-		string $contentType = self::contentTypes['customPropGetOrEnable'][0]
-	) {
+	public function customPropGetOrEnableWithHttpInfo( $custom_prop_enable_request = null, string $contentType = self::contentTypes['customPropGetOrEnable'][0] ) {
 		$request = $this->customPropGetOrEnableRequest( $custom_prop_enable_request, $contentType );
 
 		try {
@@ -449,7 +451,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -461,7 +466,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -477,13 +485,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\CustomPropListResponse',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -496,13 +500,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 402:
 					if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' === '\SplFileObject' ) {
@@ -515,13 +515,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -534,13 +530,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -557,7 +549,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -601,86 +593,86 @@ class DefaultApi {
 
 	/**
 	 * Operation customPropGetOrEnableAsync
+	 *
 	 * Get or enable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                       $contentType                The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropGetOrEnableAsync(
-		$custom_prop_enable_request = null,
-		string $contentType = self::contentTypes['customPropGetOrEnable'][0]
-	) {
-		return $this->customPropGetOrEnableAsyncWithHttpInfo( $custom_prop_enable_request, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function customPropGetOrEnableAsync( $custom_prop_enable_request = null, string $contentType = self::contentTypes['customPropGetOrEnable'][0] ) {
+		return $this->customPropGetOrEnableAsyncWithHttpInfo( $custom_prop_enable_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation customPropGetOrEnableAsyncWithHttpInfo
+	 *
 	 * Get or enable CustomProp(s)
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                       $contentType                The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropGetOrEnableAsyncWithHttpInfo(
-		$custom_prop_enable_request = null,
-		string $contentType = self::contentTypes['customPropGetOrEnable'][0]
-	) {
+	public function customPropGetOrEnableAsyncWithHttpInfo( $custom_prop_enable_request = null, string $contentType = self::contentTypes['customPropGetOrEnable'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\CustomPropListResponse';
 		$request    = $this->customPropGetOrEnableRequest( $custom_prop_enable_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'customPropGetOrEnable'
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\CustomPropEnableRequest $custom_prop_enable_request CustomProp enable params (optional)
-	 * @param string                                                       $contentType                The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['customPropGetOrEnable'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function customPropGetOrEnableRequest(
-		$custom_prop_enable_request = null,
-		string $contentType = self::contentTypes['customPropGetOrEnable'][0]
-	) {
+	public function customPropGetOrEnableRequest( $custom_prop_enable_request = null, string $contentType = self::contentTypes['customPropGetOrEnable'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/custom_props';
 		$formParams   = [];
@@ -688,6 +680,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -699,9 +692,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_enable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request )
-				);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request ) );
 			} else {
 				$httpBody = $custom_prop_enable_request;
 			}
@@ -713,7 +704,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -731,8 +722,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -750,45 +740,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation funnelGetOrCreate
+	 *
 	 * Get or create Funnel
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequest $funnel_create_request Funnel params (optional)
-	 * @param string                                                   $contentType           The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\Funnel|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function funnelGetOrCreate(
-		$funnel_create_request = null,
-		string $contentType = self::contentTypes['funnelGetOrCreate'][0]
-	) {
-		[ $response ] = $this->funnelGetOrCreateWithHttpInfo( $funnel_create_request, $contentType );
+	public function funnelGetOrCreate( $funnel_create_request = null, string $contentType = self::contentTypes['funnelGetOrCreate'][0] ) {
+		list( $response ) = $this->funnelGetOrCreateWithHttpInfo( $funnel_create_request, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation funnelGetOrCreateWithHttpInfo
+	 *
 	 * Get or create Funnel
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequest $funnel_create_request Funnel params (optional)
-	 * @param string                                                   $contentType           The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\Funnel|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function funnelGetOrCreateWithHttpInfo(
-		$funnel_create_request = null,
-		string $contentType = self::contentTypes['funnelGetOrCreate'][0]
-	) {
+	public function funnelGetOrCreateWithHttpInfo( $funnel_create_request = null, string $contentType = self::contentTypes['funnelGetOrCreate'][0] ) {
 		$request = $this->funnelGetOrCreateRequest( $funnel_create_request, $contentType );
 
 		try {
@@ -804,7 +793,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -816,7 +808,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -834,7 +829,7 @@ class DefaultApi {
 					return [
 						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Funnel', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -847,13 +842,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 402:
 					if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' === '\SplFileObject' ) {
@@ -866,13 +857,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -885,13 +872,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -908,7 +891,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -952,86 +935,86 @@ class DefaultApi {
 
 	/**
 	 * Operation funnelGetOrCreateAsync
+	 *
 	 * Get or create Funnel
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequest $funnel_create_request Funnel params (optional)
-	 * @param string                                                   $contentType           The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function funnelGetOrCreateAsync(
-		$funnel_create_request = null,
-		string $contentType = self::contentTypes['funnelGetOrCreate'][0]
-	) {
-		return $this->funnelGetOrCreateAsyncWithHttpInfo( $funnel_create_request, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function funnelGetOrCreateAsync( $funnel_create_request = null, string $contentType = self::contentTypes['funnelGetOrCreate'][0] ) {
+		return $this->funnelGetOrCreateAsyncWithHttpInfo( $funnel_create_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation funnelGetOrCreateAsyncWithHttpInfo
+	 *
 	 * Get or create Funnel
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequest $funnel_create_request Funnel params (optional)
-	 * @param string                                                   $contentType           The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function funnelGetOrCreateAsyncWithHttpInfo(
-		$funnel_create_request = null,
-		string $contentType = self::contentTypes['funnelGetOrCreate'][0]
-	) {
+	public function funnelGetOrCreateAsyncWithHttpInfo( $funnel_create_request = null, string $contentType = self::contentTypes['funnelGetOrCreate'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\Funnel';
 		$request    = $this->funnelGetOrCreateRequest( $funnel_create_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'funnelGetOrCreate'
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\FunnelCreateRequest $funnel_create_request Funnel params (optional)
-	 * @param string                                                   $contentType           The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['funnelGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function funnelGetOrCreateRequest(
-		$funnel_create_request = null,
-		string $contentType = self::contentTypes['funnelGetOrCreate'][0]
-	) {
+	public function funnelGetOrCreateRequest( $funnel_create_request = null, string $contentType = self::contentTypes['funnelGetOrCreate'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/funnels';
 		$formParams   = [];
@@ -1039,6 +1022,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -1050,9 +1034,7 @@ class DefaultApi {
 		if ( isset( $funnel_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $funnel_create_request )
-				);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $funnel_create_request ) );
 			} else {
 				$httpBody = $funnel_create_request;
 			}
@@ -1064,7 +1046,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -1082,8 +1064,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -1101,7 +1082,10 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
@@ -1111,34 +1095,29 @@ class DefaultApi {
 	 * Delete Goals in bulk
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                     $contentType              The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
 	 *
-	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
-	 * @throws \InvalidArgumentException
 	 * @return void
+	 * @throws \InvalidArgumentException
+	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function goalDeleteBulk(
-		$goal_delete_bulk_request = null,
-		string $contentType = self::contentTypes['goalDeleteBulk'][0]
-	) {
+	public function goalDeleteBulk( $goal_delete_bulk_request = null, string $contentType = self::contentTypes['goalDeleteBulk'][0] ) {
 		$this->goalDeleteBulkWithHttpInfo( $goal_delete_bulk_request, $contentType );
 	}
 
 	/**
 	 * Operation goalDeleteBulkWithHttpInfo
+	 *
 	 * Delete Goals in bulk
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                     $contentType              The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function goalDeleteBulkWithHttpInfo(
-		$goal_delete_bulk_request = null,
-		string $contentType = self::contentTypes['goalDeleteBulk'][0]
-	) {
+	public function goalDeleteBulkWithHttpInfo( $goal_delete_bulk_request = null, string $contentType = self::contentTypes['goalDeleteBulk'][0] ) {
 		$request = $this->goalDeleteBulkRequest( $goal_delete_bulk_request, $contentType );
 
 		try {
@@ -1154,7 +1133,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1166,7 +1148,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1189,73 +1174,73 @@ class DefaultApi {
 
 	/**
 	 * Operation goalDeleteBulkAsync
+	 *
 	 * Delete Goals in bulk
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                     $contentType              The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalDeleteBulkAsync(
-		$goal_delete_bulk_request = null,
-		string $contentType = self::contentTypes['goalDeleteBulk'][0]
-	) {
-		return $this->goalDeleteBulkAsyncWithHttpInfo( $goal_delete_bulk_request, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function goalDeleteBulkAsync( $goal_delete_bulk_request = null, string $contentType = self::contentTypes['goalDeleteBulk'][0] ) {
+		return $this->goalDeleteBulkAsyncWithHttpInfo( $goal_delete_bulk_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation goalDeleteBulkAsyncWithHttpInfo
+	 *
 	 * Delete Goals in bulk
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                     $contentType              The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalDeleteBulkAsyncWithHttpInfo(
-		$goal_delete_bulk_request = null,
-		string $contentType = self::contentTypes['goalDeleteBulk'][0]
-	) {
+	public function goalDeleteBulkAsyncWithHttpInfo( $goal_delete_bulk_request = null, string $contentType = self::contentTypes['goalDeleteBulk'][0] ) {
 		$returnType = '';
 		$request    = $this->goalDeleteBulkRequest( $goal_delete_bulk_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				return [ null, $response->getStatusCode(), $response->getHeaders() ];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					return [ null, $response->getStatusCode(), $response->getHeaders() ];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'goalDeleteBulk'
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalDeleteBulkRequest $goal_delete_bulk_request Goal params (optional)
-	 * @param string                                                     $contentType              The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalDeleteBulk'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalDeleteBulkRequest(
-		$goal_delete_bulk_request = null,
-		string $contentType = self::contentTypes['goalDeleteBulk'][0]
-	) {
+	public function goalDeleteBulkRequest( $goal_delete_bulk_request = null, string $contentType = self::contentTypes['goalDeleteBulk'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
@@ -1263,6 +1248,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -1274,9 +1260,7 @@ class DefaultApi {
 		if ( isset( $goal_delete_bulk_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request )
-				);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request ) );
 			} else {
 				$httpBody = $goal_delete_bulk_request;
 			}
@@ -1288,7 +1272,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -1306,8 +1290,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -1325,45 +1308,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'DELETE', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'DELETE',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation goalGetOrCreate
+	 *
 	 * Get or create Goal
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                                 $contentType         The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function goalGetOrCreate(
-		$goal_create_request = null,
-		string $contentType = self::contentTypes['goalGetOrCreate'][0]
-	) {
-		[ $response ] = $this->goalGetOrCreateWithHttpInfo( $goal_create_request, $contentType );
+	public function goalGetOrCreate( $goal_create_request = null, string $contentType = self::contentTypes['goalGetOrCreate'][0] ) {
+		list( $response ) = $this->goalGetOrCreateWithHttpInfo( $goal_create_request, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation goalGetOrCreateWithHttpInfo
+	 *
 	 * Get or create Goal
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                                 $contentType         The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\PaymentRequiredError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function goalGetOrCreateWithHttpInfo(
-		$goal_create_request = null,
-		string $contentType = self::contentTypes['goalGetOrCreate'][0]
-	) {
+	public function goalGetOrCreateWithHttpInfo( $goal_create_request = null, string $contentType = self::contentTypes['goalGetOrCreate'][0] ) {
 		$request = $this->goalGetOrCreateRequest( $goal_create_request, $contentType );
 
 		try {
@@ -1379,7 +1361,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1391,7 +1376,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1407,13 +1395,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\GoalListResponse',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\GoalListResponse', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -1426,13 +1410,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 402:
 					if ( '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError' === '\SplFileObject' ) {
@@ -1445,13 +1425,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\PaymentRequiredError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\PaymentRequiredError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -1464,13 +1440,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -1487,7 +1459,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -1531,86 +1503,86 @@ class DefaultApi {
 
 	/**
 	 * Operation goalGetOrCreateAsync
+	 *
 	 * Get or create Goal
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                                 $contentType         The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalGetOrCreateAsync(
-		$goal_create_request = null,
-		string $contentType = self::contentTypes['goalGetOrCreate'][0]
-	) {
-		return $this->goalGetOrCreateAsyncWithHttpInfo( $goal_create_request, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function goalGetOrCreateAsync( $goal_create_request = null, string $contentType = self::contentTypes['goalGetOrCreate'][0] ) {
+		return $this->goalGetOrCreateAsyncWithHttpInfo( $goal_create_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation goalGetOrCreateAsyncWithHttpInfo
+	 *
 	 * Get or create Goal
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                                 $contentType         The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalGetOrCreateAsyncWithHttpInfo(
-		$goal_create_request = null,
-		string $contentType = self::contentTypes['goalGetOrCreate'][0]
-	) {
+	public function goalGetOrCreateAsyncWithHttpInfo( $goal_create_request = null, string $contentType = self::contentTypes['goalGetOrCreate'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
 		$request    = $this->goalGetOrCreateRequest( $goal_create_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'goalGetOrCreate'
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\GoalCreateRequest $goal_create_request Goal params (optional)
-	 * @param string                                                 $contentType         The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['goalGetOrCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function goalGetOrCreateRequest(
-		$goal_create_request = null,
-		string $contentType = self::contentTypes['goalGetOrCreate'][0]
-	) {
+	public function goalGetOrCreateRequest( $goal_create_request = null, string $contentType = self::contentTypes['goalGetOrCreate'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
@@ -1618,6 +1590,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -1629,8 +1602,7 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody =
-					\Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
 			} else {
 				$httpBody = $goal_create_request;
 			}
@@ -1642,7 +1614,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -1660,8 +1632,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -1679,12 +1650,16 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndex
+	 *
 	 * Retrieve Capabilities
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this operation
@@ -1693,16 +1668,15 @@ class DefaultApi {
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersCapabilitiesIndex(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo( $contentType );
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndex( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo( $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo
+	 *
 	 * Retrieve Capabilities
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this operation
@@ -1711,9 +1685,7 @@ class DefaultApi {
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexWithHttpInfo( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexRequest( $contentType );
 
 		try {
@@ -1729,7 +1701,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -1741,7 +1716,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -1757,13 +1735,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\Capabilities',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Capabilities', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -1780,7 +1754,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -1800,6 +1774,7 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexAsync
+	 *
 	 * Retrieve Capabilities
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this operation
@@ -1807,18 +1782,18 @@ class DefaultApi {
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsync(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo( $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsync( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo( $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo
+	 *
 	 * Retrieve Capabilities
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this operation
@@ -1826,56 +1801,56 @@ class DefaultApi {
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexAsyncWithHttpInfo( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\Capabilities';
 		$request    = $this->plausibleWebPluginsAPIControllersCapabilitiesIndexRequest( $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersCapabilitiesIndex'
 	 *
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the
-	 *                            possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersCapabilitiesIndexRequest(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersCapabilitiesIndexRequest( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersCapabilitiesIndex'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/capabilities';
 		$formParams   = [];
@@ -1883,6 +1858,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -1899,7 +1875,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -1917,8 +1893,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -1936,45 +1911,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsGet
+	 *
 	 * Retrieve Funnel by ID
 	 *
-	 * @param int    $id          Funnel ID (required)
+	 * @param int $id Funnel ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\Funnel|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsGet(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersFunnelsGetWithHttpInfo( $id, $contentType );
+	public function plausibleWebPluginsAPIControllersFunnelsGet( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersFunnelsGetWithHttpInfo( $id, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsGetWithHttpInfo
+	 *
 	 * Retrieve Funnel by ID
 	 *
-	 * @param int    $id          Funnel ID (required)
+	 * @param int $id Funnel ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\Funnel|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsGetWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsGetWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersFunnelsGetRequest( $id, $contentType );
 
 		try {
@@ -1990,7 +1964,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -2002,7 +1979,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2020,7 +2000,7 @@ class DefaultApi {
 					return [
 						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Funnel', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -2033,13 +2013,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 404:
 					if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' === '\SplFileObject' ) {
@@ -2052,13 +2028,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\NotFoundError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\NotFoundError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -2071,13 +2043,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -2094,7 +2062,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -2138,90 +2106,85 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsGetAsync
+	 *
 	 * Retrieve Funnel by ID
 	 *
-	 * @param int    $id          Funnel ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible
-	 *                            values for this operation
+	 * @param int $id Funnel ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsGetAsync(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersFunnelsGetAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersFunnelsGetAsync( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersFunnelsGetAsyncWithHttpInfo( $id, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsGetAsyncWithHttpInfo
+	 *
 	 * Retrieve Funnel by ID
 	 *
-	 * @param int    $id          Funnel ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible
-	 *                            values for this operation
+	 * @param int $id Funnel ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsGetAsyncWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsGetAsyncWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\Funnel';
 		$request    = $this->plausibleWebPluginsAPIControllersFunnelsGetRequest( $id, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersFunnelsGet'
 	 *
-	 * @param int    $id          Funnel ID (required)
+	 * @param int $id Funnel ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsGetRequest(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsGetRequest( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsGet'][0] ) {
 
 		// verify the required parameter 'id' is set
 		if ( $id === null || ( is_array( $id ) && count( $id ) === 0 ) ) {
@@ -2230,12 +2193,14 @@ class DefaultApi {
 			);
 		}
 
+
 		$resourcePath = '/api/plugins/v1/funnels/{id}';
 		$formParams   = [];
 		$queryParams = [];
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		// path params
 		if ( $id !== null ) {
@@ -2245,6 +2210,7 @@ class DefaultApi {
 				$resourcePath
 			);
 		}
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -2261,7 +2227,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -2279,8 +2245,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -2298,54 +2263,48 @@ class DefaultApi {
 		$query = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsIndex
+	 *
 	 * Retrieve Funnels
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\FunnelListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsIndex(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0]
-	) {
-		[ $response ] =
-			$this->plausibleWebPluginsAPIControllersFunnelsIndexWithHttpInfo( $limit, $after, $before, $contentType );
+	public function plausibleWebPluginsAPIControllersFunnelsIndex( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersFunnelsIndexWithHttpInfo( $limit, $after, $before, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsIndexWithHttpInfo
+	 *
 	 * Retrieve Funnels
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\FunnelListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsIndexWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsIndexWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersFunnelsIndexRequest( $limit, $after, $before, $contentType );
 
 		try {
@@ -2361,7 +2320,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -2373,7 +2335,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2389,13 +2354,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\FunnelListResponse',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\FunnelListResponse', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -2408,13 +2369,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -2431,7 +2388,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -2459,108 +2416,92 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsIndexAsync
+	 *
 	 * Retrieve Funnels
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the
-	 *                            possible values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsIndexAsync(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersFunnelsIndexAsyncWithHttpInfo(
-			$limit,
-			$after,
-			$before,
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersFunnelsIndexAsync( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersFunnelsIndexAsyncWithHttpInfo( $limit, $after, $before, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersFunnelsIndexAsyncWithHttpInfo
+	 *
 	 * Retrieve Funnels
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the
-	 *                            possible values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsIndexAsyncWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsIndexAsyncWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\FunnelListResponse';
-		$request    =
-			$this->plausibleWebPluginsAPIControllersFunnelsIndexRequest( $limit, $after, $before, $contentType );
+		$request = $this->plausibleWebPluginsAPIControllersFunnelsIndexRequest( $limit, $after, $before, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersFunnelsIndex'
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersFunnelsIndexRequest(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersFunnelsIndexRequest( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersFunnelsIndex'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/funnels';
 		$formParams   = [];
@@ -2570,41 +2511,33 @@ class DefaultApi {
 		$multipart    = false;
 
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$limit,
-				'limit', // param base name
-				'integer', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$limit,
+			'limit', // param base name
+			'integer', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$after,
-				'after', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$after,
+			'after', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$before,
-				'before', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$before,
+			'before', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -2621,7 +2554,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -2639,8 +2572,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -2658,43 +2590,42 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsDelete
+	 *
 	 * Delete Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the possible values for this operation
 	 *
 	 * @return void
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsDelete(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsDelete( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0] ) {
 		$this->plausibleWebPluginsAPIControllersGoalsDeleteWithHttpInfo( $id, $contentType );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteWithHttpInfo
+	 *
 	 * Delete Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the possible values for this operation
 	 *
 	 * @return array of null, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsDeleteWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsDeleteWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersGoalsDeleteRequest( $id, $contentType );
 
 		try {
@@ -2710,7 +2641,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -2722,7 +2656,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2745,73 +2682,72 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteAsync
+	 *
 	 * Delete Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsDeleteAsync(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo( $id, $contentType )->then(
-				function ( $response ) {
-					return $response[0];
-				}
-		);
+	public function plausibleWebPluginsAPIControllersGoalsDeleteAsync( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo( $id, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo
+	 *
 	 * Delete Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsDeleteAsyncWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0] ) {
 		$returnType = '';
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsDeleteRequest( $id, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
 				function ( $response ) use ( $returnType ) {
 					return [ null, $response->getStatusCode(), $response->getHeaders() ];
 				},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersGoalsDelete'
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsDeleteRequest(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsDeleteRequest( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsDelete'][0] ) {
 
 		// verify the required parameter 'id' is set
 		if ( $id === null || ( is_array( $id ) && count( $id ) === 0 ) ) {
@@ -2820,12 +2756,14 @@ class DefaultApi {
 			);
 		}
 
+
 		$resourcePath = '/api/plugins/v1/goals/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		// path params
 		if ( $id !== null ) {
@@ -2835,6 +2773,7 @@ class DefaultApi {
 				$resourcePath
 			);
 		}
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -2851,7 +2790,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -2869,8 +2808,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -2888,45 +2826,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'DELETE', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'DELETE',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsGet
+	 *
 	 * Retrieve Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\Goal|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
-	 *@throws \InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsGet(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo( $id, $contentType );
+	public function plausibleWebPluginsAPIControllersGoalsGet( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo( $id, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo
+	 *
 	 * Retrieve Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\Goal|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsGetWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersGoalsGetRequest( $id, $contentType );
 
 		try {
@@ -2942,7 +2879,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -2954,7 +2894,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -2972,7 +2915,7 @@ class DefaultApi {
 					return [
 						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\Goal', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -2985,13 +2928,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 404:
 					if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' === '\SplFileObject' ) {
@@ -3004,13 +2943,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\NotFoundError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\NotFoundError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -3023,13 +2958,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -3046,7 +2977,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -3093,88 +3024,82 @@ class DefaultApi {
 	 *
 	 * Retrieve Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible
-	 *                            values for this operation
+	 * @param int $id Goal ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible values for this operation
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsGetAsync(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersGoalsGetAsync( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo( $id, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo
+	 *
 	 * Retrieve Goal by ID
 	 *
-	 * @param int    $id          Goal ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible
-	 *                            values for this operation
+	 * @param int $id Goal ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsGetAsyncWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\Goal';
 		$request    = $this->plausibleWebPluginsAPIControllersGoalsGetRequest( $id, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersGoalsGet'
 	 *
-	 * @param int    $id          Goal ID (required)
+	 * @param int $id Goal ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsGetRequest(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsGetRequest( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsGet'][0] ) {
 
 		// verify the required parameter 'id' is set
 		if ( $id === null || ( is_array( $id ) && count( $id ) === 0 ) ) {
@@ -3183,12 +3108,14 @@ class DefaultApi {
 			);
 		}
 
+
 		$resourcePath = '/api/plugins/v1/goals/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		// path params
 		if ( $id !== null ) {
@@ -3198,6 +3125,7 @@ class DefaultApi {
 				$resourcePath
 			);
 		}
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -3214,7 +3142,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -3232,8 +3160,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -3251,54 +3178,48 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsIndex
+	 *
 	 * Retrieve Goals
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
-	 *@throws \InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsIndex(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0]
-	) {
-		[ $response ] =
-			$this->plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo( $limit, $after, $before, $contentType );
+	public function plausibleWebPluginsAPIControllersGoalsIndex( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo( $limit, $after, $before, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo
+	 *
 	 * Retrieve Goals
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\GoalListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsIndexWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit, $after, $before, $contentType );
 
 		try {
@@ -3314,7 +3235,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -3326,7 +3250,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -3342,13 +3269,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\GoalListResponse',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\GoalListResponse', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -3361,13 +3284,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -3384,14 +3303,14 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
 			switch ( $e->getCode() ) {
 				case 200:
 					$data = ObjectSerializer::deserialize(
-					$e->getResponseBody(),
+						$e->getResponseBody(),
 						'\Plausible\Analytics\WP\Client\Model\GoalListResponse',
 						$e->getResponseHeaders()
 					);
@@ -3415,106 +3334,89 @@ class DefaultApi {
 	 *
 	 * Retrieve Goals
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible
-	 *                            values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible values for this operation
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsIndexAsync(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo(
-			$limit,
-			$after,
-			$before,
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersGoalsIndexAsync( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo( $limit, $after, $before, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo
+	 *
 	 * Retrieve Goals
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible
-	 *                            values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsIndexAsyncWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\GoalListResponse';
-		$request    =
-			$this->plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit, $after, $before, $contentType );
+		$request = $this->plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit, $after, $before, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersGoalsIndex'
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersGoalsIndexRequest(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersGoalsIndexRequest( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersGoalsIndex'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/goals';
 		$formParams   = [];
@@ -3524,41 +3426,33 @@ class DefaultApi {
 		$multipart    = false;
 
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$limit,
-				'limit', // param base name
-				'integer', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$limit,
+			'limit', // param base name
+			'integer', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$after,
-				'after', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$after,
+			'after', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$before,
-				'before', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$before,
+			'before', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -3575,7 +3469,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -3593,8 +3487,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -3612,12 +3505,16 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreate
+	 *
 	 * Get or create Shared Link
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
@@ -3627,20 +3524,15 @@ class DefaultApi {
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksCreate(
-		$shared_link_create_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo(
-			$shared_link_create_request,
-			$contentType
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksCreate( $shared_link_create_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo( $shared_link_create_request, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo
+	 *
 	 * Get or create Shared Link
 	 *
 	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
@@ -3650,14 +3542,8 @@ class DefaultApi {
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo(
-		$shared_link_create_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0]
-	) {
-		$request = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest(
-			$shared_link_create_request,
-			$contentType
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksCreateWithHttpInfo( $shared_link_create_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0] ) {
+		$request = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest( $shared_link_create_request, $contentType );
 
 		try {
 			$options = $this->createHttpClientOption();
@@ -3672,7 +3558,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -3684,7 +3573,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -3702,7 +3594,7 @@ class DefaultApi {
 					return [
 						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLink', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -3715,13 +3607,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -3734,13 +3622,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -3757,7 +3641,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -3796,95 +3680,70 @@ class DefaultApi {
 	 *
 	 * Get or create Shared Link
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link
-	 *                                                                                                 params
-	 *                                                                                                 (optional)
-	 * @param string                                                       $contentType                The value for
-	 *                                                                                                 the
-	 *                                                                                                 Content-Type
-	 *                                                                                                 header. Check
-	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                                 to see the
-	 *                                                                                                 possible values
-	 *                                                                                                 for this
-	 *                                                                                                 operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'] to see the possible values for this operation
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsync(
-		$shared_link_create_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo(
-			$shared_link_create_request,
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsync( $shared_link_create_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo( $shared_link_create_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo
+	 *
 	 * Get or create Shared Link
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link
-	 *                                                                                                 params
-	 *                                                                                                 (optional)
-	 * @param string                                                       $contentType                The value for
-	 *                                                                                                 the
-	 *                                                                                                 Content-Type
-	 *                                                                                                 header. Check
-	 *                                                                                                 self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate']
-	 *                                                                                                 to see the
-	 *                                                                                                 possible values
-	 *                                                                                                 for this
-	 *                                                                                                 operation
+	 * @param \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequest $shared_link_create_request Shared Link params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo(
-		$shared_link_create_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksCreateAsyncWithHttpInfo( $shared_link_create_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
-		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest(
-			$shared_link_create_request,
-			$contentType
-		);
+		$request = $this->plausibleWebPluginsAPIControllersSharedLinksCreateRequest( $shared_link_create_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
@@ -3896,17 +3755,16 @@ class DefaultApi {
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksCreateRequest(
-		$shared_link_create_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksCreateRequest( $shared_link_create_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksCreate'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/shared_links';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
 		$httpBody     = '';
-        $multipart    = false;
+		$multipart = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -3918,9 +3776,7 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $shared_link_create_request )
-					);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $shared_link_create_request ) );
 			} else {
 				$httpBody = $shared_link_create_request;
 			}
@@ -3932,7 +3788,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -3950,8 +3806,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -3969,45 +3824,44 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksGet
+	 *
 	 * Retrieve Shared Link by ID
 	 *
-	 * @param int    $id          Shared Link ID (required)
+	 * @param int $id Shared Link ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError
-	 *@throws \InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksGet(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo( $id, $contentType );
+	public function plausibleWebPluginsAPIControllersSharedLinksGet( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo( $id, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo
+	 *
 	 * Retrieve Shared Link by ID
 	 *
-	 * @param int    $id          Shared Link ID (required)
+	 * @param int $id Shared Link ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\SharedLink|\Plausible\Analytics\WP\Client\Model\UnauthorizedError|\Plausible\Analytics\WP\Client\Model\NotFoundError|\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksGetWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersSharedLinksGetRequest( $id, $contentType );
 
 		try {
@@ -4023,7 +3877,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -4035,7 +3892,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -4053,7 +3913,7 @@ class DefaultApi {
 					return [
 						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLink', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -4066,13 +3926,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 404:
 					if ( '\Plausible\Analytics\WP\Client\Model\NotFoundError' === '\SplFileObject' ) {
@@ -4085,13 +3941,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\NotFoundError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\NotFoundError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 422:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError' === '\SplFileObject' ) {
@@ -4104,13 +3956,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -4127,7 +3975,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -4142,7 +3990,7 @@ class DefaultApi {
 					break;
 				case 401:
 					$data = ObjectSerializer::deserialize(
-					$e->getResponseBody(),
+						$e->getResponseBody(),
 						'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
 						$e->getResponseHeaders()
 					);
@@ -4150,7 +3998,7 @@ class DefaultApi {
 					break;
 				case 404:
 					$data = ObjectSerializer::deserialize(
-					$e->getResponseBody(),
+						$e->getResponseBody(),
 						'\Plausible\Analytics\WP\Client\Model\NotFoundError',
 						$e->getResponseHeaders()
 					);
@@ -4158,7 +4006,7 @@ class DefaultApi {
 					break;
 				case 422:
 					$data = ObjectSerializer::deserialize(
-					$e->getResponseBody(),
+						$e->getResponseBody(),
 						'\Plausible\Analytics\WP\Client\Model\UnprocessableEntityError',
 						$e->getResponseHeaders()
 					);
@@ -4174,88 +4022,82 @@ class DefaultApi {
 	 *
 	 * Retrieve Shared Link by ID
 	 *
-	 * @param int    $id          Shared Link ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the
-	 *                            possible values for this operation
+	 * @param int $id Shared Link ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the possible values for this operation
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksGetAsync(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo( $id, $contentType )->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksGetAsync( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo( $id, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo
+	 *
 	 * Retrieve Shared Link by ID
 	 *
-	 * @param int    $id          Shared Link ID (required)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the
-	 *                            possible values for this operation
+	 * @param int $id Shared Link ID (required)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksGetAsyncWithHttpInfo( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLink';
 		$request    = $this->plausibleWebPluginsAPIControllersSharedLinksGetRequest( $id, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersSharedLinksGet'
 	 *
-	 * @param int    $id          Shared Link ID (required)
+	 * @param int $id Shared Link ID (required)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksGetRequest(
-		$id,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksGetRequest( $id, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksGet'][0] ) {
 
 		// verify the required parameter 'id' is set
 		if ( $id === null || ( is_array( $id ) && count( $id ) === 0 ) ) {
@@ -4264,12 +4106,14 @@ class DefaultApi {
 			);
 		}
 
+
 		$resourcePath = '/api/plugins/v1/shared_links/{id}';
 		$formParams   = [];
 		$queryParams  = [];
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		// path params
 		if ( $id !== null ) {
@@ -4279,6 +4123,7 @@ class DefaultApi {
 				$resourcePath
 			);
 		}
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -4295,7 +4140,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -4313,8 +4158,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -4332,60 +4176,49 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksIndex
+	 *
 	 * Retrieve Shared Links
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\SharedLinkListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksIndex(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo(
-			$limit,
-			$after,
-			$before,
-			$contentType
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksIndex( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo( $limit, $after, $before, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo
+	 *
 	 * Retrieve Shared Links
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this operation
 	 *
 	 * @return array of \Plausible\Analytics\WP\Client\Model\SharedLinkListResponse|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0]
-	) {
-		$request =
-			$this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
+	public function plausibleWebPluginsAPIControllersSharedLinksIndexWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0] ) {
+		$request = $this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
 
 		try {
 			$options = $this->createHttpClientOption();
@@ -4400,7 +4233,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -4412,7 +4248,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -4428,13 +4267,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -4447,13 +4282,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -4470,7 +4301,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -4501,106 +4332,89 @@ class DefaultApi {
 	 *
 	 * Retrieve Shared Links
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the
-	 *                            possible values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this operation
 	 *
-	 * @throws \InvalidArgumentException
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsync(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo(
-			$limit,
-			$after,
-			$before,
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsync( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo( $limit, $after, $before, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo
+	 *
 	 * Retrieve Shared Links
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the
-	 *                            possible values for this operation
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksIndexAsyncWithHttpInfo( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\SharedLinkListResponse';
-		$request    =
-			$this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
+		$request = $this->plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit, $after, $before, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersSharedLinksIndex'
 	 *
-	 * @param int    $limit       Maximum entries per page (optional)
-	 * @param string $after       Cursor value to seek after - generated internally (optional)
-	 * @param string $before      Cursor value to seek before - generated internally (optional)
+	 * @param int $limit Maximum entries per page (optional)
+	 * @param string $after Cursor value to seek after - generated internally (optional)
+	 * @param string $before Cursor value to seek before - generated internally (optional)
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersSharedLinksIndexRequest(
-		$limit = null,
-		$after = null,
-		$before = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersSharedLinksIndexRequest( $limit = null, $after = null, $before = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersSharedLinksIndex'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/shared_links';
 		$formParams   = [];
@@ -4610,41 +4424,33 @@ class DefaultApi {
 		$multipart    = false;
 
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$limit,
-				'limit', // param base name
-				'integer', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$limit,
+			'limit', // param base name
+			'integer', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$after,
-				'after', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$after,
+			'after', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
 		// query params
-		$queryParams = array_merge(
-			$queryParams,
-			ObjectSerializer::toQueryValue(
-				$before,
-				'before', // param base name
-				'string', // openApiType
-				'form', // style
-				true, // explode
-				false // required
-			) ?? []
-		);
+		$queryParams = array_merge( $queryParams, ObjectSerializer::toQueryValue(
+			$before,
+			'before', // param base name
+			'string', // openApiType
+			'form', // style
+			true, // explode
+			false // required
+		) ?? [] );
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -4661,7 +4467,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -4679,8 +4485,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -4698,12 +4503,16 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet
+	 *
 	 * Retrieve Tracker Script Configuration
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'] to see the possible values for this operation
@@ -4712,32 +4521,24 @@ class DefaultApi {
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0]
-	) {
-		[ $response ] =
-			$this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetWithHttpInfo( $contentType );
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetWithHttpInfo( $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetWithHttpInfo
+	 *
 	 * Retrieve Tracker Script Configuration
 	 *
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet']
-	 *                            to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'] to see the possible values for this operation
 	 *
-	 * @return array of
-	 *               \Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration|\Plausible\Analytics\WP\Client\Model\UnauthorizedError,
-	 *               HTTP status code, HTTP response headers (array of strings)
+	 * @return array of \Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetWithHttpInfo(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetWithHttpInfo( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0] ) {
 		$request = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetRequest( $contentType );
 
 		try {
@@ -4753,7 +4554,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -4765,7 +4569,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -4781,13 +4588,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -4800,13 +4603,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -4823,7 +4622,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -4851,29 +4650,7 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsync
-	 * Retrieve Tracker Script Configuration
 	 *
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet']
-	 *                            to see the possible values for this operation
-	 *
-	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
-	 * @throws \InvalidArgumentException
-	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsync(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo(
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
-	}
-
-	/**
-	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo
 	 * Retrieve Tracker Script Configuration
 	 *
 	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'] to see the possible values for this operation
@@ -4881,56 +4658,75 @@ class DefaultApi {
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsync( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo( $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
+	}
+
+	/**
+	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo
+	 *
+	 * Retrieve Tracker Script Configuration
+	 *
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'] to see the possible values for this operation
+	 *
+	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
+	 * @throws \InvalidArgumentException
+	 */
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetAsyncWithHttpInfo( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration';
 		$request    = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetRequest( $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
-					$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
+						$content = $response->getBody(); //stream goes to serializer
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'
 	 *
-	 * @param string $contentType The value for the Content-Type header. Check
-	 *                            self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet']
-	 *                            to see the possible values for this operation
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetRequest(
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationGetRequest( string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/tracker_script_configuration';
 		$formParams   = [];
@@ -4938,6 +4734,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -4954,7 +4751,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -4972,8 +4769,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -4991,82 +4787,45 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'GET', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'GET',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate
+	 *
 	 * Update Tracker Script Configuration
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker
-	 *                                                                                                                                  Script
-	 *                                                                                                                                  Configuration
-	 *                                                                                                                                  params
-	 *                                                                                                                                  (optional)
-	 * @param string                                                                       $contentType                                 The
-	 *                                                                                                                                  value
-	 *                                                                                                                                  for
-	 *                                                                                                                                  the
-	 *                                                                                                                                  Content-Type
-	 *                                                                                                                                  header.
-	 *                                                                                                                                  Check
-	 *                                                                                                                                  self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate']
-	 *                                                                                                                                  to
-	 *                                                                                                                                  see
-	 *                                                                                                                                  the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker Script Configuration params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration|\Plausible\Analytics\WP\Client\Model\UnauthorizedError
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
-		$tracker_script_configuration_update_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0]
-	) {
-		[ $response ] = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateWithHttpInfo(
-			$tracker_script_configuration_update_request,
-			$contentType
-		);
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate( $tracker_script_configuration_update_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0] ) {
+		list( $response ) = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateWithHttpInfo( $tracker_script_configuration_update_request, $contentType );
 
 		return $response;
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateWithHttpInfo
+	 *
 	 * Update Tracker Script Configuration
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker
-	 *                                                                                                                                  Script
-	 *                                                                                                                                  Configuration
-	 *                                                                                                                                  params
-	 *                                                                                                                                  (optional)
-	 * @param string                                                                       $contentType                                 The
-	 *                                                                                                                                  value
-	 *                                                                                                                                  for
-	 *                                                                                                                                  the
-	 *                                                                                                                                  Content-Type
-	 *                                                                                                                                  header.
-	 *                                                                                                                                  Check
-	 *                                                                                                                                  self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate']
-	 *                                                                                                                                  to
-	 *                                                                                                                                  see
-	 *                                                                                                                                  the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker Script Configuration params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'] to see the possible values for this operation
 	 *
-	 * @return array of
-	 *               \Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration|\Plausible\Analytics\WP\Client\Model\UnauthorizedError,
-	 *               HTTP status code, HTTP response headers (array of strings)
+	 * @return array of \Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration|\Plausible\Analytics\WP\Client\Model\UnauthorizedError, HTTP status code, HTTP response headers (array of strings)
 	 * @throws \InvalidArgumentException
 	 * @throws \Plausible\Analytics\WP\Client\ApiException on non-2xx response
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateWithHttpInfo(
-		$tracker_script_configuration_update_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0]
-	) {
-		$request = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest(
-			$tracker_script_configuration_update_request,
-			$contentType
-		);
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateWithHttpInfo( $tracker_script_configuration_update_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0] ) {
+		$request = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest( $tracker_script_configuration_update_request, $contentType );
 
 		try {
 			$options = $this->createHttpClientOption();
@@ -5081,7 +4840,10 @@ class DefaultApi {
 				);
 			} catch ( ConnectException $e ) {
 				throw new ApiException(
-					"[{$e->getCode()}] {$e->getMessage()}", (int) $e->getCode(), null, null
+					"[{$e->getCode()}] {$e->getMessage()}",
+					(int) $e->getCode(),
+					null,
+					null
 				);
 			}
 
@@ -5093,7 +4855,10 @@ class DefaultApi {
 						'[%d] Error connecting to the API (%s)',
 						$statusCode,
 						(string) $request->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
+					),
+					$statusCode,
+					$response->getHeaders(),
+					(string) $response->getBody()
 				);
 			}
 
@@ -5109,13 +4874,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 				case 401:
 					if ( '\Plausible\Analytics\WP\Client\Model\UnauthorizedError' === '\SplFileObject' ) {
@@ -5128,13 +4889,9 @@ class DefaultApi {
 					}
 
 					return [
-						ObjectSerializer::deserialize(
-							$content,
-							'\Plausible\Analytics\WP\Client\Model\UnauthorizedError',
-							[]
-						),
+						ObjectSerializer::deserialize( $content, '\Plausible\Analytics\WP\Client\Model\UnauthorizedError', [] ),
 						$response->getStatusCode(),
-						$response->getHeaders(),
+						$response->getHeaders()
 					];
 			}
 
@@ -5151,7 +4908,7 @@ class DefaultApi {
 			return [
 				ObjectSerializer::deserialize( $content, $returnType, [] ),
 				$response->getStatusCode(),
-				$response->getHeaders(),
+				$response->getHeaders()
 			];
 
 		} catch ( ApiException $e ) {
@@ -5179,134 +4936,86 @@ class DefaultApi {
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsync
+	 *
 	 * Update Tracker Script Configuration
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker
-	 *                                                                                                                                  Script
-	 *                                                                                                                                  Configuration
-	 *                                                                                                                                  params
-	 *                                                                                                                                  (optional)
-	 * @param string                                                                       $contentType                                 The
-	 *                                                                                                                                  value
-	 *                                                                                                                                  for
-	 *                                                                                                                                  the
-	 *                                                                                                                                  Content-Type
-	 *                                                                                                                                  header.
-	 *                                                                                                                                  Check
-	 *                                                                                                                                  self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate']
-	 *                                                                                                                                  to
-	 *                                                                                                                                  see
-	 *                                                                                                                                  the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker Script Configuration params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsync(
-		$tracker_script_configuration_update_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0]
-	) {
-		return $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsyncWithHttpInfo(
-			$tracker_script_configuration_update_request,
-			$contentType
-		)->then(
-			function ( $response ) {
-				return $response[0];
-			}
-		);
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsync( $tracker_script_configuration_update_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0] ) {
+		return $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsyncWithHttpInfo( $tracker_script_configuration_update_request, $contentType )
+		            ->then(
+			            function ( $response ) {
+				            return $response[0];
+			            }
+		            );
 	}
 
 	/**
 	 * Operation plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsyncWithHttpInfo
+	 *
 	 * Update Tracker Script Configuration
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker
-	 *                                                                                                                                  Script
-	 *                                                                                                                                  Configuration
-	 *                                                                                                                                  params
-	 *                                                                                                                                  (optional)
-	 * @param string                                                                       $contentType                                 The
-	 *                                                                                                                                  value
-	 *                                                                                                                                  for
-	 *                                                                                                                                  the
-	 *                                                                                                                                  Content-Type
-	 *                                                                                                                                  header.
-	 *                                                                                                                                  Check
-	 *                                                                                                                                  self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate']
-	 *                                                                                                                                  to
-	 *                                                                                                                                  see
-	 *                                                                                                                                  the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker Script Configuration params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Promise\PromiseInterface
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsyncWithHttpInfo(
-		$tracker_script_configuration_update_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateAsyncWithHttpInfo( $tracker_script_configuration_update_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0] ) {
 		$returnType = '\Plausible\Analytics\WP\Client\Model\TrackerScriptConfiguration';
-		$request    = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest(
-			$tracker_script_configuration_update_request,
-			$contentType
-		);
+		$request = $this->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest( $tracker_script_configuration_update_request, $contentType );
 
-		return $this->client->sendAsync( $request, $this->createHttpClientOption() )->then(
-			function ( $response ) use ( $returnType ) {
-				if ( $returnType === '\SplFileObject' ) {
+		return $this->client
+			->sendAsync( $request, $this->createHttpClientOption() )
+			->then(
+				function ( $response ) use ( $returnType ) {
+					if ( $returnType === '\SplFileObject' ) {
 						$content = $response->getBody(); //stream goes to serializer
-				} else {
-					$content = (string) $response->getBody();
-					if ( $returnType !== 'string' ) {
-						$content = json_decode( $content );
+					} else {
+						$content = (string) $response->getBody();
+						if ( $returnType !== 'string' ) {
+							$content = json_decode( $content );
+						}
 					}
-				}
 
-				return [
-					ObjectSerializer::deserialize( $content, $returnType, [] ),
-					$response->getStatusCode(),
-					$response->getHeaders(),
-				];
-			},
-			function ( $exception ) {
-				$response   = $exception->getResponse();
-				$statusCode = $response->getStatusCode();
-				throw new ApiException(
-					sprintf(
-						'[%d] Error connecting to the API (%s)',
+					return [
+						ObjectSerializer::deserialize( $content, $returnType, [] ),
+						$response->getStatusCode(),
+						$response->getHeaders()
+					];
+				},
+				function ( $exception ) {
+					$response   = $exception->getResponse();
+					$statusCode = $response->getStatusCode();
+					throw new ApiException(
+						sprintf(
+							'[%d] Error connecting to the API (%s)',
+							$statusCode,
+							$exception->getRequest()->getUri()
+						),
 						$statusCode,
-						$exception->getRequest()->getUri()
-					), $statusCode, $response->getHeaders(), (string) $response->getBody()
-				);
-			}
-		);
+						$response->getHeaders(),
+						(string) $response->getBody()
+					);
+				}
+			);
 	}
 
 	/**
 	 * Create request for operation 'plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker
-	 *                                                                                                                                  Script
-	 *                                                                                                                                  Configuration
-	 *                                                                                                                                  params
-	 *                                                                                                                                  (optional)
-	 * @param string                                                                       $contentType                                 The
-	 *                                                                                                                                  value
-	 *                                                                                                                                  for
-	 *                                                                                                                                  the
-	 *                                                                                                                                  Content-Type
-	 *                                                                                                                                  header.
-	 *                                                                                                                                  Check
-	 *                                                                                                                                  self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate']
-	 *                                                                                                                                  to
-	 *                                                                                                                                  see
-	 *                                                                                                                                  the possible values for this operation
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_configuration_update_request Tracker Script Configuration params (optional)
+	 * @param string $contentType The value for the Content-Type header. Check self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'] to see the possible values for this operation
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Request
 	 * @throws \InvalidArgumentException
 	 */
-	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest(
-		$tracker_script_configuration_update_request = null,
-		string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0]
-	) {
+	public function plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdateRequest( $tracker_script_configuration_update_request = null, string $contentType = self::contentTypes['plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate'][0] ) {
+
 
 		$resourcePath = '/api/plugins/v1/tracker_script_configuration';
 		$formParams   = [];
@@ -5314,6 +5023,7 @@ class DefaultApi {
 		$headerParams = [];
 		$httpBody     = '';
 		$multipart    = false;
+
 
 		$headers = $this->headerSelector->selectHeaders(
 			[ 'application/json', ],
@@ -5325,9 +5035,7 @@ class DefaultApi {
 		if ( isset( $tracker_script_configuration_update_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode(
-					ObjectSerializer::sanitizeForSerialization( $tracker_script_configuration_update_request )
-				);
+				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $tracker_script_configuration_update_request ) );
 			} else {
 				$httpBody = $tracker_script_configuration_update_request;
 			}
@@ -5339,7 +5047,7 @@ class DefaultApi {
 					foreach ( $formParamValueItems as $formParamValueItem ) {
 						$multipartContents[] = [
 							'name'     => $formParamName,
-							'contents' => $formParamValueItem,
+							'contents' => $formParamValueItem
 						];
 					}
 				}
@@ -5357,8 +5065,7 @@ class DefaultApi {
 
 		// this endpoint requires HTTP basic authentication
 		if ( ! empty( $this->config->getUsername() ) || ! ( empty( $this->config->getPassword() ) ) ) {
-			$headers['Authorization'] =
-				'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
+			$headers['Authorization'] = 'Basic ' . base64_encode( $this->config->getUsername() . ":" . $this->config->getPassword() );
 		}
 
 		$defaultHeaders = [];
@@ -5376,12 +5083,16 @@ class DefaultApi {
 		$query         = ObjectSerializer::buildQuery( $queryParams );
 
 		return new Request(
-			'PUT', $operationHost . $resourcePath . ( $query ? "?{$query}" : '' ), $headers, $httpBody
+			'PUT',
+			$operationHost . $resourcePath . ( $query ? "?{$query}" : '' ),
+			$headers,
+			$httpBody
 		);
 	}
 
 	/**
 	 * Create http client option
+	 *
 	 * @return array of http client options
 	 * @throws \RuntimeException on file opening failure
 	 */

@@ -1,7 +1,9 @@
 <?php
 /**
  * ObjectSerializer
+ *
  * PHP version 7.4
+ *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -31,6 +33,7 @@ use Plausible\Analytics\WP\Client\Model\ModelInterface;
 
 /**
  * ObjectSerializer Class Doc Comment
+ *
  * @category Class
  * @package  Plausible\Analytics\WP\Client
  * @author   OpenAPI Generator team
@@ -52,8 +55,8 @@ class ObjectSerializer {
 	/**
 	 * Serialize data
 	 *
-	 * @param mixed  $data   the data to serialize
-	 * @param string $type   the OpenAPIToolsType of the data
+	 * @param mixed $data the data to serialize
+	 * @param string $type the OpenAPIToolsType of the data
 	 * @param string $format the format of the OpenAPITools type of the data
 	 *
 	 * @return scalar|object|array|null serialized form of $data
@@ -82,42 +85,34 @@ class ObjectSerializer {
 				foreach ( $data::openAPITypes() as $property => $openAPIType ) {
 					$getter = $data::getters()[ $property ];
 					$value  = $data->$getter();
-					if ( $value !== null && ! in_array(
-							$openAPIType,
-							[
-								'\DateTime',
-								'\SplFileObject',
-								'array',
-								'bool',
-								'boolean',
-								'byte',
-								'float',
-								'int',
-								'integer',
-								'mixed',
-								'number',
-								'object',
-								'string',
-								'void',
-							],
-							true
-						) ) {
+					if ( $value !== null && ! in_array( $openAPIType, [
+							'\DateTime',
+							'\SplFileObject',
+							'array',
+							'bool',
+							'boolean',
+							'byte',
+							'float',
+							'int',
+							'integer',
+							'mixed',
+							'number',
+							'object',
+							'string',
+							'void'
+						], true ) ) {
 						$callable = [ $openAPIType, 'getAllowableEnumValues' ];
 						if ( is_callable( $callable ) ) {
 							/** array $callable */
 							$allowedEnumTypes = $callable();
 							if ( ! in_array( $value, $allowedEnumTypes, true ) ) {
 								$imploded = implode( "', '", $allowedEnumTypes );
-								throw new \InvalidArgumentException(
-									"Invalid value for enum '$openAPIType', must be one of: '$imploded'"
-								);
+								throw new \InvalidArgumentException( "Invalid value for enum '$openAPIType', must be one of: '$imploded'" );
 							}
 						}
 					}
-					if ( ( $data::isNullable( $property ) && $data->isNullableSetToNull( $property ) ) ||
-						$value !== null ) {
-						$values[ $data::attributeMap()[ $property ] ] =
-							self::sanitizeForSerialization( $value, $openAPIType, $formats[ $property ] );
+					if ( ( $data::isNullable( $property ) && $data->isNullableSetToNull( $property ) ) || $value !== null ) {
+						$values[ $data::attributeMap()[ $property ] ] = self::sanitizeForSerialization( $value, $openAPIType, $formats[ $property ] );
 					}
 				}
 			} else {
@@ -178,7 +173,7 @@ class ObjectSerializer {
 	/**
 	 * Checks if a value is empty, based on its OpenAPI type.
 	 *
-	 * @param mixed  $value
+	 * @param mixed $value
 	 * @param string $openApiType
 	 *
 	 * @return bool true if $value is empty
@@ -209,7 +204,7 @@ class ObjectSerializer {
 			# For boolean values, '' is considered empty
 			case 'bool':
 			case 'boolean':
-				return ! in_array( $value, [ false, 0 ], true );
+			return ! in_array( $value, [ false, 0 ], true );
 
 			# For all the other types, any value at this point can be considered empty.
 			default:
@@ -221,12 +216,12 @@ class ObjectSerializer {
 	 * Take query parameter properties and turn it into an array suitable for
 	 * native http_build_query or Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Query::build.
 	 *
-	 * @param mixed  $value       Parameter value
-	 * @param string $paramName   Parameter name
+	 * @param mixed $value Parameter value
+	 * @param string $paramName Parameter name
 	 * @param string $openApiType OpenAPIType eg. array or object
-	 * @param string $style       Parameter serialization style
-	 * @param bool   $explode     Parameter explode option
-	 * @param bool   $required    Whether query param is required or not
+	 * @param string $style Parameter serialization style
+	 * @param bool $explode Parameter explode option
+	 * @param bool $required Whether query param is required or not
 	 *
 	 * @return array
 	 */
@@ -262,9 +257,8 @@ class ObjectSerializer {
 		// since \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Query::build fails with nested arrays
 		// need to flatten array first
 		$flattenArray = function ( $arr, $name, &$result = [] ) use ( &$flattenArray, $style, $explode ) {
-			if ( ! is_array( $arr ) ) {
+			if ( ! is_array( $arr ) )
 				return $arr;
-			}
 
 			foreach ( $arr as $k => $v ) {
 				$prop = ( $style === 'deepObject' ) ? $prop = "{$name}[{$k}]" : $k;
@@ -307,8 +301,7 @@ class ObjectSerializer {
 	 * @return int|string Boolean value in format
 	 */
 	public static function convertBoolToQueryStringFormat( bool $value ) {
-		if ( Configuration::BOOLEAN_FORMAT_STRING ==
-			Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString() ) {
+		if ( Configuration::BOOLEAN_FORMAT_STRING == Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString() ) {
 			return $value ? 'true' : 'false';
 		}
 
@@ -373,10 +366,10 @@ class ObjectSerializer {
 	/**
 	 * Serialize an array to a string.
 	 *
-	 * @param array  $collection                 collection to serialize to a string
-	 * @param string $style                      the format use for serialization (csv,
-	 *                                           ssv, tsv, pipes, multi)
-	 * @param bool   $allowCollectionFormatMulti allow collection format to be a multidimensional array
+	 * @param array $collection collection to serialize to a string
+	 * @param string $style the format use for serialization (csv,
+	 * ssv, tsv, pipes, multi)
+	 * @param bool $allowCollectionFormatMulti allow collection format to be a multidimensional array
 	 *
 	 * @return string
 	 */
@@ -389,14 +382,14 @@ class ObjectSerializer {
 		switch ( $style ) {
 			case 'pipeDelimited':
 			case 'pipes':
-				return implode( '|', $collection );
+			return implode( '|', $collection );
 
 			case 'tsv':
 				return implode( "\t", $collection );
 
 			case 'spaceDelimited':
 			case 'ssv':
-				return implode( ' ', $collection );
+			return implode( ' ', $collection );
 
 			case 'simple':
 			case 'csv':
@@ -409,10 +402,10 @@ class ObjectSerializer {
 	/**
 	 * Deserialize a JSON string into an object
 	 *
-	 * @param mixed    $data          object or primitive to be deserialized
-	 * @param string   $class         class name is passed as a string
-	 * @param string[] $httpHeaders   HTTP headers
-	 * @param string   $discriminator discriminator if polymorphism is used
+	 * @param mixed $data object or primitive to be deserialized
+	 * @param string $class class name is passed as a string
+	 * @param string[] $httpHeaders HTTP headers
+	 * @param string $discriminator discriminator if polymorphism is used
 	 *
 	 * @return object|array|null a single or an array of $class instances
 	 */
@@ -490,15 +483,12 @@ class ObjectSerializer {
 			/** @var \Psr\Http\Message\StreamInterface $data */
 
 			// determine file name
-			if ( is_array( $httpHeaders ) && array_key_exists( 'Content-Disposition', $httpHeaders ) && preg_match(
-					'/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i',
-					$httpHeaders['Content-Disposition'],
-					$match
-				) ) {
-				$filename =
-					Configuration::getDefaultConfiguration()->getTempFolderPath() .
-					DIRECTORY_SEPARATOR .
-					self::sanitizeFilename( $match[1] );
+			if (
+				is_array( $httpHeaders )
+				&& array_key_exists( 'Content-Disposition', $httpHeaders )
+				&& preg_match( '/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders['Content-Disposition'], $match )
+			) {
+				$filename = Configuration::getDefaultConfiguration()->getTempFolderPath() . DIRECTORY_SEPARATOR . self::sanitizeFilename( $match[1] );
 			} else {
 				$filename = tempnam( Configuration::getDefaultConfiguration()->getTempFolderPath(), '' );
 			}
@@ -513,30 +503,27 @@ class ObjectSerializer {
 		}
 
 		/** @psalm-suppress ParadoxicalCondition */
-		if ( in_array(
-			$class,
-			[
-				'\DateTime',
-				'\SplFileObject',
-				'array',
-				'bool',
-				'boolean',
-				'byte',
-				'float',
-				'int',
-				'integer',
-				'mixed',
-				'number',
-				'object',
-				'string',
-				'void',
-			],
-			true
-		) ) {
+		if ( in_array( $class, [
+			'\DateTime',
+			'\SplFileObject',
+			'array',
+			'bool',
+			'boolean',
+			'byte',
+			'float',
+			'int',
+			'integer',
+			'mixed',
+			'number',
+			'object',
+			'string',
+			'void'
+		], true ) ) {
 			settype( $data, $class );
 
 			return $data;
 		}
+
 
 		if ( method_exists( $class, 'getAllowableEnumValues' ) ) {
 			if ( ! in_array( $data, $class::getAllowableEnumValues(), true ) ) {
@@ -554,9 +541,7 @@ class ObjectSerializer {
 
 			// If a discriminator is defined and points to a valid subclass, use it.
 			$discriminator = $class::DISCRIMINATOR;
-			if ( ! empty( $discriminator ) &&
-				isset( $data->{$discriminator} ) &&
-				is_string( $data->{$discriminator} ) ) {
+			if ( ! empty( $discriminator ) && isset( $data->{$discriminator} ) && is_string( $data->{$discriminator} ) ) {
 				$subclass = '\Plausible\Analytics\WP\Client\Model\\' . $data->{$discriminator};
 				if ( is_subclass_of( $subclass, $class ) ) {
 					$class = $subclass;
@@ -594,13 +579,10 @@ class ObjectSerializer {
 	 * Native `http_build_query` wrapper.
 	 * @see https://www.php.net/manual/en/function.http-build-query
 	 *
-	 * @param array|object $data           May be an array or object containing properties.
-	 * @param string      $numeric_prefix  If numeric indices are used in the base array and this parameter is
-	 *                                     provided, it will be prepended to the numeric index for elements in the base
-	 *                                     array only.
-	 * @param string|null $arg_separator   arg_separator.output is used to separate arguments but may be overridden by
-	 *                                     specifying this parameter.
-	 * @param int          $encoding_type  Encoding type. By default, PHP_QUERY_RFC1738.
+	 * @param array|object $data May be an array or object containing properties.
+	 * @param string $numeric_prefix If numeric indices are used in the base array and this parameter is provided, it will be prepended to the numeric index for elements in the base array only.
+	 * @param string|null $arg_separator arg_separator.output is used to separate arguments but may be overridden by specifying this parameter.
+	 * @param int $encoding_type Encoding type. By default, PHP_QUERY_RFC1738.
 	 *
 	 * @return string
 	 */

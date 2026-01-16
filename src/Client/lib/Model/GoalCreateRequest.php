@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalCreateRequest Class Doc Comment
+ *
  * @category Class
  * @description Goal creation params
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Goal.CreateRequest';
@@ -57,7 +59,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static $openAPITypes = [
 		'goals'     => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestBulkGetOrCreateGoalsInner[]',
 		'goal'      => '\Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal',
-		'goal_type' => 'string',
+		'goal_type' => 'string'
 	];
 
 	/**
@@ -70,7 +72,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static $openAPIFormats = [
 		'goals'     => null,
 		'goal'      => null,
-		'goal_type' => null,
+		'goal_type' => null
 	];
 
 	/**
@@ -81,17 +83,19 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static array $openAPINullables = [
 		'goals'     => false,
 		'goal'      => false,
-		'goal_type' => false,
+		'goal_type' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -100,6 +104,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -108,6 +113,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -116,6 +122,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -162,7 +169,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static $attributeMap = [
 		'goals'     => 'goals',
 		'goal'      => 'goal',
-		'goal_type' => 'goal_type',
+		'goal_type' => 'goal_type'
 	];
 
 	/**
@@ -173,7 +180,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static $setters = [
 		'goals'     => 'setGoals',
 		'goal'      => 'setGoal',
-		'goal_type' => 'setGoalType',
+		'goal_type' => 'setGoalType'
 	];
 
 	/**
@@ -184,7 +191,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	protected static $getters = [
 		'goals'     => 'getGoals',
 		'goal'      => 'getGoal',
-		'goal_type' => 'getGoalType',
+		'goal_type' => 'getGoalType'
 	];
 
 	/**
@@ -199,6 +206,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -207,6 +215,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -215,6 +224,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
@@ -225,6 +235,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Gets allowable values of the enum
+	 *
 	 * @return string[]
 	 */
 	public function getGoalTypeAllowableValues() {
@@ -258,13 +269,11 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -297,8 +306,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 			$invalidProperties[] = "'goal_type' can't be null";
 		}
 		$allowedValues = $this->getGoalTypeAllowableValues();
-		if ( ! is_null( $this->container['goal_type'] ) &&
-			! in_array( $this->container['goal_type'], $allowedValues, true ) ) {
+		if ( ! is_null( $this->container['goal_type'] ) && ! in_array( $this->container['goal_type'], $allowedValues, true ) ) {
 			$invalidProperties[] = sprintf(
 				"invalid value '%s' for 'goal_type', must be one of '%s'",
 				$this->container['goal_type'],
@@ -312,11 +320,13 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	/**
 	 * Validate all the properties in the model
 	 * return true if all passed
+	 *
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets goals
@@ -340,14 +350,10 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 		}
 
 		if ( ( count( $goals ) > 8 ) ) {
-			throw new \InvalidArgumentException(
-				'invalid value for $goals when calling GoalCreateRequest., number of items must be less than or equal to 8.'
-			);
+			throw new \InvalidArgumentException( 'invalid value for $goals when calling GoalCreateRequest., number of items must be less than or equal to 8.' );
 		}
 		if ( ( count( $goals ) < 1 ) ) {
-			throw new \InvalidArgumentException(
-				'invalid length for $goals when calling GoalCreateRequest., number of items must be greater than or equal to 1.'
-			);
+			throw new \InvalidArgumentException( 'invalid length for $goals when calling GoalCreateRequest., number of items must be greater than or equal to 1.' );
 		}
 		$this->container['goals'] = $goals;
 
@@ -356,6 +362,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 
 	/**
 	 * Gets goal
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageviewGoal
 	 */
 	public function getGoal() {
@@ -440,7 +447,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -472,7 +479,7 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -493,8 +500,8 @@ class GoalCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

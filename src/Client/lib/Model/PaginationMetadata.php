@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * PaginationMetadata Class Doc Comment
+ *
  * @category Class
  * @description Pagination meta data
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'PaginationMetadata';
@@ -57,7 +59,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static $openAPITypes = [
 		'has_next_page' => 'bool',
 		'has_prev_page' => 'bool',
-		'links'         => '\Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks',
+		'links'         => '\Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks'
 	];
 
 	/**
@@ -70,7 +72,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static $openAPIFormats = [
 		'has_next_page' => null,
 		'has_prev_page' => null,
-		'links'         => null,
+		'links'         => null
 	];
 
 	/**
@@ -81,17 +83,19 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static array $openAPINullables = [
 		'has_next_page' => false,
 		'has_prev_page' => false,
-		'links' => false,
+		'links'         => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -100,6 +104,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -108,6 +113,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -116,6 +122,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -162,7 +169,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static $attributeMap = [
 		'has_next_page' => 'has_next_page',
 		'has_prev_page' => 'has_prev_page',
-		'links'         => 'links',
+		'links'         => 'links'
 	];
 
 	/**
@@ -173,7 +180,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static $setters = [
 		'has_next_page' => 'setHasNextPage',
 		'has_prev_page' => 'setHasPrevPage',
-		'links'         => 'setLinks',
+		'links'         => 'setLinks'
 	];
 
 	/**
@@ -184,7 +191,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	protected static $getters = [
 		'has_next_page' => 'getHasNextPage',
 		'has_prev_page' => 'getHasPrevPage',
-		'links'         => 'getLinks',
+		'links'         => 'getLinks'
 	];
 
 	/**
@@ -199,6 +206,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -207,6 +215,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -215,11 +224,13 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -246,13 +257,11 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -284,11 +293,13 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets has_next_page
+	 *
 	 * @return bool
 	 */
 	public function getHasNextPage() {
@@ -313,8 +324,9 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Gets has_prev_page
+	 *
 	 * @return bool
-     */
+	 */
 	public function getHasPrevPage() {
 		return $this->container['has_prev_page'];
 	}
@@ -337,6 +349,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 
 	/**
 	 * Gets links
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\PaginationMetadataLinks|null
 	 */
 	public function getLinks() {
@@ -386,7 +399,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -418,7 +431,7 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -439,8 +452,8 @@ class PaginationMetadata implements ModelInterface, ArrayAccess, \JsonSerializab
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

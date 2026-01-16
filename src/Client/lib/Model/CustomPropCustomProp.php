@@ -45,6 +45,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'CustomProp_custom_prop';
@@ -55,7 +56,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
      * @var string[]
      */
 	protected static $openAPITypes = [
-		'key' => 'string',
+		'key' => 'string'
 	];
 
 	/**
@@ -66,7 +67,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'key' => null,
+		'key' => null
 	];
 
 	/**
@@ -75,17 +76,19 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'key' => false,
+		'key' => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -94,6 +97,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -102,6 +106,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -110,6 +115,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -147,14 +153,14 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
 	}
 
-	/**
+    /**
      * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
+     * and the value is the original name
+     *
+     * @var string[]
+     */
 	protected static $attributeMap = [
-		'key' => 'key',
+		'key' => 'key'
 	];
 
 	/**
@@ -163,7 +169,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @var string[]
 	 */
 	protected static $setters = [
-		'key' => 'setKey',
+		'key' => 'setKey'
 	];
 
 	/**
@@ -172,7 +178,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @var string[]
 	 */
 	protected static $getters = [
-		'key' => 'getKey',
+		'key' => 'getKey'
 	];
 
 	/**
@@ -187,6 +193,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -195,6 +202,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -203,11 +211,13 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -232,17 +242,15 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
-		$this->container[ $variableName ] = $fields[$variableName ] ?? $defaultValue;
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -267,11 +275,13 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets key
+	 *
 	 * @return string
 	 */
 	public function getKey() {
@@ -321,7 +331,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -353,7 +363,7 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -374,8 +384,8 @@ class CustomPropCustomProp implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

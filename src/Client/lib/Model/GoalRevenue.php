@@ -33,6 +33,7 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 
 /**
  * GoalRevenue Class Doc Comment
+ *
  * @category Class
  * @description Revenue Goal object
  * @package  Plausible\Analytics\WP\Client
@@ -45,6 +46,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Goal.Revenue';
@@ -56,7 +58,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static $openAPITypes = [
 		'goal_type' => 'string',
-		'goal'      => '\Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal',
+		'goal'      => '\Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal'
 	];
 
 	/**
@@ -68,7 +70,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static $openAPIFormats = [
 		'goal_type' => null,
-		'goal'      => null,
+		'goal'      => null
 	];
 
 	/**
@@ -78,17 +80,19 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static array $openAPINullables = [
 		'goal_type' => false,
-		'goal'      => false,
+		'goal'      => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -97,6 +101,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -105,6 +110,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -113,6 +119,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -158,7 +165,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static $attributeMap = [
 		'goal_type' => 'goal_type',
-		'goal'      => 'goal',
+		'goal'      => 'goal'
 	];
 
 	/**
@@ -168,7 +175,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static $setters = [
 		'goal_type' => 'setGoalType',
-		'goal'      => 'setGoal',
+		'goal'      => 'setGoal'
 	];
 
 	/**
@@ -178,7 +185,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	protected static $getters = [
 		'goal_type' => 'getGoalType',
-		'goal'      => 'getGoal',
+		'goal'      => 'getGoal'
 	];
 
 	/**
@@ -193,6 +200,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -201,6 +209,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -209,11 +218,13 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -239,13 +250,11 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
@@ -277,11 +286,13 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets goal_type
+	 *
 	 * @return string
 	 */
 	public function getGoalType() {
@@ -306,6 +317,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Gets goal
+	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\GoalRevenueAllOfGoal
 	 */
 	public function getGoal() {
@@ -355,7 +367,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -387,7 +399,7 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -408,8 +420,8 @@ class GoalRevenue implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

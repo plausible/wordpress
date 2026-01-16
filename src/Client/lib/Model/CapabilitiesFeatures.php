@@ -45,6 +45,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @var string
 	 */
 	protected static $openAPIModelName = 'Capabilities_features';
@@ -64,7 +65,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => 'bool',
 		'site_segments'     => 'bool',
 		'sites_api'         => 'bool',
-		'stats_api'         => 'bool',
+		'stats_api'         => 'bool'
 	];
 
 	/**
@@ -84,7 +85,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => null,
 		'site_segments'     => null,
 		'sites_api'         => null,
-		'stats_api'         => null,
+		'stats_api'         => null
 	];
 
 	/**
@@ -102,17 +103,19 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => false,
 		'site_segments'     => false,
 		'sites_api'         => false,
-		'stats_api'         => false,
+		'stats_api'         => false
 	];
 
 	/**
 	 * If a nullable field gets set to null, insert it here
+	 *
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPITypes() {
@@ -121,6 +124,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of property to format mappings. Used for (de)serialization
+	 *
 	 * @return array
 	 */
 	public static function openAPIFormats() {
@@ -129,6 +133,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable properties
+	 *
 	 * @return array
 	 */
 	protected static function openAPINullables(): array {
@@ -137,6 +142,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of nullable field names deliberately set to null
+	 *
 	 * @return boolean[]
 	 */
 	private function getOpenAPINullablesSetToNull(): array {
@@ -174,12 +180,12 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
 	}
 
-	/**
+    /**
      * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
+     * and the value is the original name
+     *
+     * @var string[]
+     */
 	protected static $attributeMap = [
 		'consolidated_view' => 'ConsolidatedView',
 		'funnels'           => 'Funnels',
@@ -190,7 +196,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => 'SharedLinks',
 		'site_segments'     => 'SiteSegments',
 		'sites_api'         => 'SitesAPI',
-		'stats_api'         => 'StatsAPI',
+		'stats_api'         => 'StatsAPI'
 	];
 
 	/**
@@ -208,7 +214,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => 'setSharedLinks',
 		'site_segments'     => 'setSiteSegments',
 		'sites_api'         => 'setSitesApi',
-		'stats_api'         => 'setStatsApi',
+		'stats_api'         => 'setStatsApi'
 	];
 
 	/**
@@ -226,7 +232,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		'shared_links'      => 'getSharedLinks',
 		'site_segments'     => 'getSiteSegments',
 		'sites_api'         => 'getSitesApi',
-		'stats_api'         => 'getStatsApi',
+		'stats_api'         => 'getStatsApi'
 	];
 
 	/**
@@ -241,6 +247,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
 	 * @return array
 	 */
 	public static function setters() {
@@ -249,6 +256,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Array of attributes to getter functions (for serialization of requests)
+	 *
 	 * @return array
 	 */
 	public static function getters() {
@@ -257,11 +265,13 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * The original name of the model.
+	 *
 	 * @return string
 	 */
 	public function getModelName() {
 		return self::$openAPIModelName;
 	}
+
 
 	/**
 	 * Associative array for storing property values
@@ -295,17 +305,15 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * $this->openAPINullablesSetToNull array
 	 *
 	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
+	 * @param array $fields
+	 * @param mixed $defaultValue
 	 */
 	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) &&
-			array_key_exists( $variableName, $fields ) &&
-			is_null( $fields[ $variableName ] ) ) {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
 			$this->openAPINullablesSetToNull[] = $variableName;
 		}
 
-		$this->container[ $variableName ] = $fields[$variableName ] ?? $defaultValue;
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -357,11 +365,13 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool True if all properties are valid
 	 */
 	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+		return count( $this->listInvalidProperties()) === 0;
 	}
+
 
 	/**
 	 * Gets consolidated_view
+	 *
 	 * @return bool
 	 */
 	public function getConsolidatedView() {
@@ -386,6 +396,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets funnels
+	 *
 	 * @return bool
 	 */
 	public function getFunnels() {
@@ -460,6 +471,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets revenue_goals
+	 *
 	 * @return bool
 	 */
 	public function getRevenueGoals() {
@@ -509,6 +521,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets shared_links
+	 *
 	 * @return bool
 	 */
 	public function getSharedLinks() {
@@ -533,6 +546,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets site_segments
+	 *
 	 * @return bool
 	 */
 	public function getSiteSegments() {
@@ -557,6 +571,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets sites_api
+	 *
 	 * @return bool
 	 */
 	public function getSitesApi() {
@@ -581,6 +596,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets stats_api
+	 *
 	 * @return bool
 	 */
 	public function getStatsApi() {
@@ -630,7 +646,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -662,11 +678,12 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
 	 * Gets the string presentation of the object
+	 *
 	 * @return string
 	 */
 	public function __toString() {
@@ -678,11 +695,12 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Gets a header-safe presentation of the object
+	 *
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

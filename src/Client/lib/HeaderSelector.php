@@ -38,8 +38,8 @@ namespace Plausible\Analytics\WP\Client;
 class HeaderSelector {
 	/**
 	 * @param string[] $accept
-	 * @param string   $contentType
-	 * @param bool     $isMultipart
+	 * @param string $contentType
+	 * @param bool $isMultipart
 	 *
 	 * @return string[]
 	 */
@@ -96,7 +96,7 @@ class HeaderSelector {
 	/**
 	 * Create an Accept header string from the given "Accept" headers array, recalculating all weights
 	 *
-	 * @param string[] $accept          Array of Accept Headers
+	 * @param string[] $accept Array of Accept Headers
 	 * @param string[] $headersWithJson Array of Accept Headers of type "json"
 	 *
 	 * @return string "Accept" Header (e.g. "application/json, text/html; q=0.9")
@@ -163,18 +163,15 @@ class HeaderSelector {
 
 	/**
 	 * @param array[] $headers
-	 * @param float   $currentWeight
-	 * @param bool    $hasMoreThan28Headers
+	 * @param float $currentWeight
+	 * @param bool $hasMoreThan28Headers
 	 *
 	 * @return string[] array of adjusted "Accept" headers
 	 */
 	private function adjustWeight( array $headers, float &$currentWeight, bool $hasMoreThan28Headers ): array {
-		usort(
-			$headers,
-			function ( array $a, array $b ) {
-				return $b['weight'] - $a['weight'];
-			}
-		);
+		usort( $headers, function ( array $a, array $b ) {
+			return $b['weight'] - $a['weight'];
+		} );
 
 		$acceptHeaders = [];
 		foreach ( $headers as $index => $header ) {
@@ -194,7 +191,7 @@ class HeaderSelector {
 
 	/**
 	 * @param string $header
-	 * @param int    $weight
+	 * @param int $weight
 	 *
 	 * @return string
 	 */
@@ -208,17 +205,23 @@ class HeaderSelector {
 
 	/**
 	 * Calculate the next weight, based on the current one.
-	 * If there are less than 28 "Accept" headers, the weights will be decreased by 1 on its highest significant digit,
-	 * using the following formula: next weight = current weight - 10 ^ (floor(log(current weight - 1)))
-	 *    ( current weight minus ( 10 raised to the power of ( floor of (log to the base 10 of ( current weight minus 1
-	 *    ) ) ) ) ) Starting from 1000, this generates the following series:
-	 * 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-	 * The resulting quality codes are closer to the average "normal" usage of them (like "q=0.9", "q=0.8" and so on),
-	 * but it only works if there is a maximum of 28 "Accept" headers. If we have more than that (which is extremely
-	 * unlikely), then we fall back to a 1-by-1 decrement rule, which will result in quality codes like "q=0.999",
-	 * "q=0.998" etc.
 	 *
-	 * @param int  $currentWeight varying from 1 to 1000 (will be divided by 1000 to build the quality value)
+	 * If there are less than 28 "Accept" headers, the weights will be decreased by 1 on its highest significant digit, using the
+	 * following formula:
+	 *
+	 *    next weight = current weight - 10 ^ (floor(log(current weight - 1)))
+	 *
+	 *    ( current weight minus ( 10 raised to the power of ( floor of (log to the base 10 of ( current weight minus 1 ) ) ) ) )
+	 *
+	 * Starting from 1000, this generates the following series:
+	 *
+	 * 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+	 *
+	 * The resulting quality codes are closer to the average "normal" usage of them (like "q=0.9", "q=0.8" and so on), but it only works
+	 * if there is a maximum of 28 "Accept" headers. If we have more than that (which is extremely unlikely), then we fall back to a 1-by-1
+	 * decrement rule, which will result in quality codes like "q=0.999", "q=0.998" etc.
+	 *
+	 * @param int $currentWeight varying from 1 to 1000 (will be divided by 1000 to build the quality value)
 	 * @param bool $hasMoreThan28Headers
 	 *
 	 * @return int
@@ -226,12 +229,12 @@ class HeaderSelector {
 	public function getNextWeight( int $currentWeight, bool $hasMoreThan28Headers ): int {
 		if ( $currentWeight <= 1 ) {
 			return 1;
-        }
+		}
 
-        if ($hasMoreThan28Headers ) {
-	        return $currentWeight - 1;
-        }
+		if ( $hasMoreThan28Headers ) {
+			return $currentWeight - 1;
+		}
 
-		return $currentWeight - 10 ** floor( log10( $currentWeight - 1 ) );
-	}
+		return $currentWeight - 10 ** floor( log10($currentWeight - 1) );
+    }
 }
