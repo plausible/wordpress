@@ -35,9 +35,9 @@ class Verification {
 	 * @return void
 	 */
 	public function maybe_insert_version_meta_tag() {
-		$running_tests = array_key_exists( 'plausible_verification', $_GET );
+		$running_verification = array_key_exists( 'plausible_verification', $_GET );
 
-		if ( ! $running_tests ) {
+		if ( ! $running_verification ) {
 			return;
 		}
 
