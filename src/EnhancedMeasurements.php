@@ -66,7 +66,7 @@ final class EnhancedMeasurements {
 			return false; // @codeCoverageIgnore
 		}
 
-		return in_array( $name, $enhanced_measurements );
+		return apply_filters( 'plausible_analytics_enhanced_measurements_is_enabled', in_array( $name, $enhanced_measurements ) );
 	}
 
 	/**

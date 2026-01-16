@@ -16,7 +16,6 @@ class AssetsTest extends TestCase {
 	 * @return void
 	 * @throws \Exception
 	 * @see Assets::maybe_enqueue_main_script()
-	 *
 	 */
 	public function testEnqueueMainScript() {
 		global $post;
@@ -51,7 +50,6 @@ class AssetsTest extends TestCase {
 	 * @return void
 	 * @throws \Exception
 	 * @see Assets::maybe_enqueue_cloaked_affiliate_links_assets()
-	 *
 	 */
 	public function testEnqueueCloakedAffiliateLinksScript() {
 		try {
@@ -84,6 +82,7 @@ class AssetsTest extends TestCase {
 	public function testEnqueueFourOFourScript() {
 		try {
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
+			add_filter( 'plausible_analytics_is_404', '__return_true' );
 
 			$class = $this->getMockBuilder( Assets::class )
 			              ->onlyMethods( [ 'get_js_url' ] )
@@ -100,6 +99,7 @@ class AssetsTest extends TestCase {
 			wp_print_head_scripts();
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
+			remove_filter( 'plausible_analytics_is_404', '__return_true' );
 		}
 	}
 

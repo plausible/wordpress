@@ -116,7 +116,9 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_four_o_four_script() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && is_404() ) {
+		$is_404 = apply_filters( 'plausible_analytics_is_404', is_404() );
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && $is_404 ) {
 			$data = wp_json_encode(
 				[
 					'props' => [
