@@ -180,6 +180,24 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Checks an array for a (partial) match with $string.
+	 *
+	 * @param $string string Needle.
+	 * @param $array array Haystack.
+	 *
+	 * @return bool
+	 */
+	public function arrayHasString( $string, $array ) {
+		foreach ( $array as $element ) {
+			if ( str_contains( $element, $string ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Add user capability for testing.
 	 *
 	 * @return void
