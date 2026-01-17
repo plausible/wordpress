@@ -11,19 +11,20 @@ use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Model\Goal;
 use Plausible\Analytics\WP\Client\Model\GoalPageviewAllOfGoal;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 use function Brain\Monkey\Functions\when;
 
 class ProvisioningTest extends TestCase {
 	/**
-	 * @see Provisioning::maybe_create_shared_link()
 	 * @throws ApiException
+	 * @see Provisioning::maybe_create_shared_link()
 	 */
 	public function testCreateSharedLink() {
-		$settings                                 = [];
-		$settings[ 'enable_analytics_dashboard' ] = 1;
-		$mock                                     = $this->getMockBuilder( Client::class )->onlyMethods( [ 'bulk_create_shared_links' ] )->getMock();
-		$sharedLinkObject                         = new Client\Model\SharedLinkSharedLink(
+		$settings                               = [];
+		$settings['enable_analytics_dashboard'] = 1;
+		$mock                                   = $this->getMockBuilder( Client::class )->onlyMethods( [ 'bulk_create_shared_links' ] )->getMock();
+		$sharedLinkObject                       = new Client\Model\SharedLinkSharedLink(
 			[
 				'id'                 => 'test',
 				'name'               => 'Test',
@@ -31,7 +32,7 @@ class ProvisioningTest extends TestCase {
 				'password_protected' => false,
 			]
 		);
-		$sharedLink                               = new Client\Model\SharedLink();
+		$sharedLink                             = new Client\Model\SharedLink();
 
 		$sharedLink->setSharedLink( $sharedLinkObject );
 		$mock->method( 'bulk_create_shared_links' )->willReturn( $sharedLink );
@@ -40,50 +41,66 @@ class ProvisioningTest extends TestCase {
 
 		$class->maybe_create_shared_link( [], $settings );
 
-		$sharedLink = Helpers::get_settings()[ 'shared_link' ];
+		$sharedLink = Helpers::get_settings()['shared_link'];
 
 		$this->assertEquals( 'http://example.org/test', $sharedLink );
 	}
 
 	/**
-	 * @see Provisioning::maybe_create_goals()
 	 * @throws ApiException
+	 * @see Provisioning::maybe_create_goals()
 	 */
 	public function testCreateGoals() {
-		$settings[ 'enhanced_measurements' ] = [
+		$settings['enhanced_measurements'] = [
 			'404',
 			'outbound-links',
 			'file-downloads',
 			'search',
 		];
-		$mock                                = $this->getMockBuilder( Client::class )->onlyMethods( [ 'create_goals' ] )->getMock();
-		$goals_array                         = [
+		$mock                              = $this->getMockBuilder( Client::class )->onlyMethods( [ 'create_goals' ] )->getMock();
+		$goals_array                       = [
 			new Goal(
 				[
-					'goal'      => new GoalPageviewAllOfGoal( [ 'display_name' => '404', 'id' => 111, 'path' => null ] ),
+					'goal'      => new GoalPageviewAllOfGoal( [
+						'display_name' => '404',
+						'id'           => 111,
+						'path'         => null
+					] ),
 					'goal_type' => 'Goal.CustomEvent',
 				]
 			),
 			new Goal(
 				[
-					'goal'      => new GoalPageviewAllOfGoal( [ 'display_name' => 'Outbound Link: Click', 'id' => 222, 'path' => null ] ),
+					'goal'      => new GoalPageviewAllOfGoal( [
+						'display_name' => 'Outbound Link: Click',
+						'id'           => 222,
+						'path'         => null
+					] ),
 					'goal_type' => 'Goal.CustomEvent',
 				]
 			),
 			new Goal(
 				[
-					'goal'      => new GoalPageviewAllOfGoal( [ 'display_name' => 'File Downloads', 'id' => 333, 'path' => null ] ),
+					'goal'      => new GoalPageviewAllOfGoal( [
+						'display_name' => 'File Downloads',
+						'id'           => 333,
+						'path'         => null
+					] ),
 					'goal_type' => 'Goal.CustomEvent',
 				]
 			),
 			new Goal(
 				[
-					'goal'      => new GoalPageviewAllOfGoal( [ 'display_name' => 'Search', 'id' => 444, 'path' => null ] ),
+					'goal'      => new GoalPageviewAllOfGoal( [
+						'display_name' => 'Search',
+						'id'           => 444,
+						'path'         => null
+					] ),
 					'goal_type' => 'Goal.Pageview',
 				]
 			),
 		];
-		$goals                               = new Client\Model\GoalListResponse();
+		$goals                             = new Client\Model\GoalListResponse();
 
 		$goals->setGoals( $goals_array );
 		$goals->setMeta( new Client\Model\GoalListResponseMeta() );
@@ -105,8 +122,8 @@ class ProvisioningTest extends TestCase {
 	}
 
 	/**
-	 * @see Provisioning::create_goal_request()
 	 * @return void
+	 * @see Provisioning::create_goal_request()
 	 */
 	public function testCreateGoalRequest() {
 		$class = new Provisioning( false );
@@ -125,8 +142,8 @@ class ProvisioningTest extends TestCase {
 	}
 
 	/**
-	 * @see Provisioning::maybe_enable_customer_user_roles()
 	 * @return void
+	 * @see Provisioning::maybe_enable_customer_user_roles()
 	 */
 	public function testMaybeEnableCustomerUserRole() {
 		try {
@@ -162,6 +179,61 @@ class ProvisioningTest extends TestCase {
 			$this->assertTrue( in_array( 'edd_subscriber', $new_settings['tracked_user_roles'] ) );
 		} finally {
 			remove_filter( 'plausible_analytics_integrations_edd_recurring', '__return_true' );
+		}
+	}
+
+	/**
+	 * @throws ApiException
+	 * @see Provisioning::update_tracker_script_config()
+	 */
+	public function testUpdateTrackerScriptConfig() {
+		$mock = $this->getMockBuilder( Client::class )->onlyMethods( [ 'update_tracker_script_configuration' ] )->getMock();
+		$mock->method( 'update_tracker_script_configuration' )->willReturn( true );
+		$class    = new Provisioning( $mock );
+		$settings = [];
+
+		// File Downloads enabled.
+		try {
+			$settings['enhanced_measurements'] = [ EnhancedMeasurements::FILE_DOWNLOADS ];
+
+			$config = $class->update_tracker_script_config( [], $settings );
+
+			$this->assertTrue( $config['tracker_script_configuration']['file_downloads'] == true );
+		} finally {
+			$settings = [];
+		}
+
+		// Form Submissions enabled.
+		try {
+			$settings['enhanced_measurements'] = [ EnhancedMeasurements::FORM_COMPLETIONS ];
+
+			$config = $class->update_tracker_script_config( [], $settings );
+
+			$this->assertTrue( $config['tracker_script_configuration']['form_submissions'] == true );
+		} finally {
+			$settings = [];
+		}
+
+		// Hash-Based Routing enabled.
+		try {
+			$settings['enhanced_measurements'] = [ EnhancedMeasurements::HASH_BASED_ROUTING ];
+
+			$config = $class->update_tracker_script_config( [], $settings );
+
+			$this->assertTrue( $config['tracker_script_configuration']['hash_based_routing'] == true );
+		} finally {
+			$settings = [];
+		}
+
+		// Outbound Links enabled.
+		try {
+			$settings['enhanced_measurements'] = [ EnhancedMeasurements::OUTBOUND_LINKS ];
+
+			$config = $class->update_tracker_script_config( [], $settings );
+
+			$this->assertTrue( $config['tracker_script_configuration']['outbound_links'] == true );
+		} finally {
+			$settings = [];
 		}
 	}
 }

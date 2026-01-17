@@ -124,7 +124,7 @@ class Provisioning {
 	 * @param $settings
 	 */
 	public function maybe_create_shared_link( $old_settings, $settings ) {
-		if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
+		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -138,7 +138,7 @@ class Provisioning {
 	 * @param $settings
 	 */
 	public function maybe_create_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -159,8 +159,8 @@ class Provisioning {
 	}
 
 	/**
-	 * @param string $name     Event Name
-	 * @param string $type     CustomEvent|Revenue|Pageview
+	 * @param string $name Event Name
+	 * @param string $type CustomEvent|Revenue|Pageview
 	 * @param string $currency Required if $type is Revenue
 	 *
 	 * @return GoalCreateRequestCustomEvent|GoalCreateRequestPageview|GoalCreateRequestRevenue
@@ -174,13 +174,13 @@ class Provisioning {
 		];
 
 		if ( $type === 'Revenue' ) {
-			$props[ 'goal' ][ 'currency' ] = $currency;
+			$props['goal']['currency'] = $currency;
 		}
 
 		if ( $type === 'Pageview' ) {
-			unset( $props[ 'goal' ][ 'event_name' ] );
+			unset( $props['goal']['event_name'] );
 
-			$props[ 'goal' ][ 'path' ] = $path;
+			$props['goal']['path'] = $path;
 		}
 
 		switch ( $type ) {
@@ -274,8 +274,8 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
-		$enhanced_measurements_old = array_filter( $old_settings[ 'enhanced_measurements' ] );
-		$enhanced_measurements     = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
+		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
 		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
@@ -305,7 +305,7 @@ class Provisioning {
 	 * (USD), because these are added to revenue goals by Plausible.
 	 *
 	 * @param string $string
-	 * @param array  $haystack
+	 * @param array $haystack
 	 *
 	 * @return false|mixed
 	 * @codeCoverageIgnore Because it can't be unit tested.
@@ -332,7 +332,7 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_create_custom_properties( $old_settings, $settings ) {
-		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
+		$enhanced_measurements = $settings['enhanced_measurements'];
 
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
@@ -404,19 +404,19 @@ class Provisioning {
 	 * @return array
 	 */
 	public function maybe_enable_customer_user_roles( $settings ) {
-		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
+		$enhanced_measurements = $settings['enhanced_measurements'];
 
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
-			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'customer';
+			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'customer';
 			}
 
-			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'subscriber';
+			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'subscriber';
 			}
 
-			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'edd_subscriber';
+			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'edd_subscriber';
 			}
 		}
 
@@ -425,6 +425,8 @@ class Provisioning {
 
 	/**
 	 * Updates the tracker script config based on the enabled enhanced measurements.
+	 *
+	 * @return array The updated tracker script config.
 	 */
 	public function update_tracker_script_config( $old_settings, $settings ) {
 		$config = [
@@ -455,5 +457,7 @@ class Provisioning {
 		$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
 
 		$this->client->update_tracker_script_configuration( $request );
+
+		return $config;
 	}
 }
