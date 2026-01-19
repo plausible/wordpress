@@ -25,9 +25,9 @@ class Upgrades {
 	/**
 	 * Constructor for Upgrades.
 	 *
+	 * @return void
 	 * @since  1.3.0
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'run' ] );
@@ -37,13 +37,13 @@ class Upgrades {
 	 * Register routines for upgrades.
 	 * This is intended for automatic upgrade routines having less resource intensive tasks.
 	 *
-	 * @since  1.3.0
-	 * @access public
 	 * @return void
 	 *
 	 * @throws Exception
 	 *
 	 * @codeCoverageIgnore
+	 * @since  1.3.0
+	 * @access public
 	 */
 	public function run() {
 		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
@@ -100,29 +100,29 @@ class Upgrades {
 	 * Upgrade routine for 1.2.5
 	 * Cleans Custom Domain related options from database, as it was removed in this version.
 	 *
-	 * @since  1.2.5
-	 * @access public
 	 * @return void
 	 * @codeCoverageIgnore
+	 * @since  1.2.5
+	 * @access public
 	 */
 	public function upgrade_to_125() {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		if ( isset( $old_settings[ 'custom_domain_prefix' ] ) ) {
-			unset( $new_settings[ 'custom_domain_prefix' ] );
+		if ( isset( $old_settings['custom_domain_prefix'] ) ) {
+			unset( $new_settings['custom_domain_prefix'] );
 		}
 
-		if ( isset( $old_settings[ 'custom_domain' ] ) ) {
-			unset( $new_settings[ 'custom_domain' ] );
+		if ( isset( $old_settings['custom_domain'] ) ) {
+			unset( $new_settings['custom_domain'] );
 		}
 
-		if ( isset( $old_settings[ 'is_custom_domain' ] ) ) {
-			unset( $new_settings[ 'is_custom_domain' ] );
+		if ( isset( $old_settings['is_custom_domain'] ) ) {
+			unset( $new_settings['is_custom_domain'] );
 		}
 
-		if ( ! empty( $old_settings[ 'track_administrator' ] ) && $old_settings[ 'track_administrator' ] === 'true' ) {
-			$new_settings[ 'tracked_user_roles' ] = [ 'administrator' ];
+		if ( ! empty( $old_settings['track_administrator'] ) && $old_settings['track_administrator'] === 'true' ) {
+			$new_settings['tracked_user_roles'] = [ 'administrator' ];
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
@@ -133,16 +133,16 @@ class Upgrades {
 	/**
 	 * Get rid of the previous "example.com" default for self_hosted_domain.
 	 *
-	 * @since 1.2.6
 	 * @return void
 	 * @codeCoverageIgnore
+	 * @since 1.2.6
 	 */
 	public function upgrade_to_126() {
 		$old_settings = Helpers::get_settings();
 		$new_settings = $old_settings;
 
-		if ( ! empty( $old_settings[ 'self_hosted_domain' ] ) && strpos( $old_settings[ 'self_hosted_domain' ], 'example.com' ) !== false ) {
-			$new_settings[ 'self_hosted_domain' ] = '';
+		if ( ! empty( $old_settings['self_hosted_domain'] ) && strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
+			$new_settings['self_hosted_domain'] = '';
 		}
 
 		update_option( 'plausible_analytics_settings', $new_settings );
@@ -161,7 +161,7 @@ class Upgrades {
 	private function upgrade_to_132() {
 		$proxy_resources = Helpers::get_proxy_resources();
 
-		$proxy_resources[ 'cache_url' ] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources[ 'cache_url' ] );
+		$proxy_resources['cache_url'] = str_replace( [ 'https:', 'http:' ], '', $proxy_resources['cache_url'] );
 
 		update_option( 'plausible_analytics_proxy_resources', $proxy_resources );
 
@@ -211,9 +211,9 @@ class Upgrades {
 		/**
 		 * Migrate the shared link option for self hosters who use it.
 		 */
-		if ( ! empty( $settings[ 'self_hosted_domain' ] ) && ! empty( $settings[ 'shared_link' ] ) ) {
-			$settings[ 'self_hosted_shared_link' ] = $settings[ 'shared_link' ];
-			$settings[ 'shared_link' ]             = '';
+		if ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['shared_link'] ) ) {
+			$settings['self_hosted_shared_link'] = $settings['shared_link'];
+			$settings['shared_link']             = '';
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -238,8 +238,8 @@ class Upgrades {
 	private function upgrade_to_203() {
 		$settings = Helpers::get_settings();
 
-		if ( ! empty( $settings[ 'shared_link' ] ) ) {
-			$settings[ 'enable_analytics_dashboard' ] = 'on';
+		if ( ! empty( $settings['shared_link'] ) ) {
+			$settings['enable_analytics_dashboard'] = 'on';
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -256,8 +256,8 @@ class Upgrades {
 	public function upgrade_to_210() {
 		$settings = Helpers::get_settings();
 
-		if ( ! is_array( $settings[ 'enhanced_measurements' ] ) ) {
-			$settings[ 'enhanced_measurements' ] = [];
+		if ( ! is_array( $settings['enhanced_measurements'] ) ) {
+			$settings['enhanced_measurements'] = [];
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -268,11 +268,11 @@ class Upgrades {
 	/**
 	 * If EDD is active and Ecommerce is enabled, create goals after updating the plugin.
 	 *
-	 * @since              v2.3.0
-	 *
 	 * @return void
 	 *
 	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
+	 * @since              v2.3.0
+	 *
 	 */
 	public function upgrade_to_230() {
 		$settings = Helpers::get_settings();
@@ -331,9 +331,11 @@ class Upgrades {
 	}
 
 	/**
-	 * Make sure configuration on Plausible's end matches our configuration.
+	 * Make sure the configuration on Plausible's end matches our configuration.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore Because Provisioning is tested elsewhere.
 	 */
 	public function upgrade_to_251() {
 		$provisioning = new Provisioning();
