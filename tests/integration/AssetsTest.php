@@ -7,7 +7,6 @@ namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Assets;
-use Plausible\Analytics\WP\EnhancedMeasurements;
 
 class AssetsTest extends TestCase {
 	/**
@@ -16,19 +15,6 @@ class AssetsTest extends TestCase {
 	 * @see Assets::maybe_enqueue_main_script()
 	 */
 	public function testEnqueueMainScript() {
-		global $post;
-
-		$post_id   = wp_insert_post(
-			[
-				'id'           => 1,
-				'post_author'  => 1,
-				'post_title'   => 'Test',
-				'post_content' => 'Test',
-			]
-		);
-		$test_post = get_post( $post_id );
-		$post      = $test_post;
-
 		$class = $this->getMockBuilder( Assets::class )
 		              ->disableOriginalConstructor()
 		              ->onlyMethods( [ 'get_js_url' ] )

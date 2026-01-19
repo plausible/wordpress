@@ -11,11 +11,140 @@ use Plausible\Analytics\WP\InitOptions;
 class InitOptionsTest extends TestCase {
 	/**
 	 * @return void
+	 * @see InitOptions::maybe_add_pageview_props()
+	 */
+	public function testAddPageviewProps() {
+		try {
+			global $post;
+
+			$post_id   = wp_insert_post(
+				[
+					'id'           => 1,
+					'post_author'  => 1,
+					'post_title'   => 'Test',
+					'post_content' => 'Test',
+				]
+			);
+			$test_post = get_post( $post_id );
+			$post      = $test_post;
+
+			add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+
+			/** @var InitOptions $class */
+			$class   = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [] )->getMock();
+			$options = $class->maybe_add_pageview_props();
+
+			$this->assertArrayHasKey( 'customProperties', $options );
+			$this->assertArrayHasKey( 'author', $options['customProperties'] );
+			$this->assertEquals( 'admin', $options['customProperties']['author'] );
+			$this->assertArrayHasKey( 'category', $options['customProperties'] );
+			$this->assertEquals( 'Uncategorized', $options['customProperties']['category'] );
+		} finally {
+			$post = null;
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+		}
+	}
+
+	/**
+	 * @return void
+	 * @throws \Exception
+	 * @see InitOptions::maybe_add_proxy_options()
+	 */
+	public function testAddProxyOptions() {
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+
+			/** @var InitOptions $class */
+			$class   = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [] )->getMock();
+			$options = $class->maybe_add_proxy_options();
+
+			$this->assertArrayHasKey( 'endpoint', $options );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		}
+	}
+
+	/**
+	 * @return void
+	 * @see InitOptions::maybe_exclude_pageview()
+	 */
+	public function testExcludePageview() {
+		/**
+		 * Normal behavior.
+		 */
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageview' ] );
+
+			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
+				'get_current_request'
+			] )->getMock();
+
+			$class->method( 'get_current_request' )->willReturn( 'http://example.com/category/test' );
+
+			$options = $class->maybe_exclude_pageview();
+
+			$this->assertArrayNotHasKey( 'transformRequest', $options );
+
+			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
+				'get_current_request'
+			] )->getMock();
+
+			$class->method( 'get_current_request' )->willReturn( 'http://test.example.com/test' );
+
+			$options = $class->maybe_exclude_pageview();
+
+			$this->assertArrayHasKey( 'transformRequest', $options );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageview' ] );
+		}
+
+		/**
+		 * An asterisk should match everything.
+		 */
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseAsterisk' ] );
+
+			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
+				'get_current_request'
+			] )->getMock();
+
+			$class->method( 'get_current_request' )->willReturn( 'http://example.com/test' );
+
+			$options = $class->maybe_exclude_pageview();
+
+			$this->assertArrayHasKey( 'transformRequest', $options );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseAsterisk' ] );
+		}
+
+		/**
+		 * If a user accidentally entered a space in the option, it shouldn't match anything.
+		 */
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseSpace' ] );
+
+			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
+				'get_current_request'
+			] )->getMock();
+
+			$class->method( 'get_current_request' )->willReturn( 'http://example.com/test' );
+
+			$options = $class->maybe_exclude_pageview();
+
+			$this->assertArrayNotHasKey( 'transformRequest', $options );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseSpace' ] );
+		}
+	}
+
+	/**
+	 * @return void
 	 * @see InitOptions::maybe_track_logged_in_users()
 	 */
 	public function testTrackLoggedInUsers() {
 		try {
-			$class = new InitOptions();
+			/** @var InitOptions $class */
+			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [] )->getMock();
 
 			add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 

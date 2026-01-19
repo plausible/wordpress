@@ -16,9 +16,9 @@ class InitOptions {
 	/**
 	 * Constructor.
 	 *
+	 * @return void
 	 * @since  1.0.0
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
@@ -89,7 +89,7 @@ class InitOptions {
 	 */
 	public function maybe_add_proxy_options( $options = [] ) {
 		if ( ! Helpers::proxy_enabled() ) {
-			return $options;
+			return $options; // @codeCoverageIgnore
 		}
 
 		$options['endpoint'] = Helpers::get_endpoint_url();
@@ -109,17 +109,24 @@ class InitOptions {
 
 		// Triggered when exclude pages is enabled.
 		if ( empty( $settings['excluded_pages'] ) ) {
-			return $options;
+			return $options; // @codeCoverageIgnore
 		}
 
 		$excluded_pages  = $settings['excluded_pages'];
-		$current_request = add_query_arg( null, null );
+		$current_request = $this->get_current_request();
 
 		if ( $this->url_matches_patterns( $current_request, $excluded_pages ) ) {
 			$options['transformRequest'] = '() => { return null; }';
 		}
 
 		return $options;
+	}
+
+	/**
+	 * This a seam for @see add_query_arg() to be mocked in unit tests.
+	 */
+	protected function get_current_request() {
+		return add_query_arg( null, null );
 	}
 
 	/**
@@ -136,7 +143,7 @@ class InitOptions {
 
 		foreach ( $patterns as $pattern ) {
 			// Escape regex-symbols (can't use preg_quote() here, because it escapes dashes).
-			$regex = preg_replace( '/([\\^$+?{}()[\]|])/', '\\\\$1', $pattern );
+			$regex = preg_replace( '/([.^$+?{}()[\]|])/', '\\\\$1', $pattern );
 
 			// Convert * to regex syntax.
 			$regex = str_replace( '*', '.*', $regex );
@@ -175,7 +182,7 @@ class InitOptions {
 			$roles = $user->roles;
 
 			if ( ! empty( $roles ) ) {
-				$logged_in = $roles[ 0 ];
+				$logged_in = $roles[0];
 			}
 		}
 

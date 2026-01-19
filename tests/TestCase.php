@@ -159,6 +159,39 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function setExcludePageview( $settings ) {
+		$settings['excluded_pages'] = "/checkout*,utm_\n*.example.com";
+
+		return $settings;
+	}
+
+	/**
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function setExcludePageviewEdgeCaseAsterisk( $settings ) {
+		$settings['excluded_pages'] = '*';
+
+		return $settings;
+	}
+
+	/**
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function setExcludePageviewEdgeCaseSpace( $settings ) {
+		$settings['excluded_pages'] = ' ';
+
+		return $settings;
+	}
+
+	/**
 	 * Enable Enhanced Measurements > Categories & Authors.
 	 *
 	 * @param $settings
@@ -171,6 +204,13 @@ class TestCase extends YoastTestCase {
 		return $settings;
 	}
 
+	/**
+	 * Set some test query params.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	public function setQueryParams( $settings ) {
 		$settings['query_params'] = [ 'test' ];
 
