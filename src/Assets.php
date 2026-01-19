@@ -87,6 +87,8 @@ class Assets {
 	 *
 	 * @return string
 	 * @throws \Exception
+	 *
+	 * @codeCoverageIgnore Because Helpers are tested elsewhere.
 	 */
 	protected function get_js_url( bool $local = false ) {
 		return Helpers::get_js_url( $local );
