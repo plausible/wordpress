@@ -73,6 +73,15 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Debug package files
+        run: |
+          node -v
+          npm -v
+          echo "----- package.json -----"
+          cat package.json
+          echo "----- package-lock.json (header) -----"
+          head -n 20 package-lock.json
+
       - name: Install npm dependencies
         run: |
           npm ci
