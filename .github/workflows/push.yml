@@ -69,6 +69,15 @@ jobs:
       - name: Lint PHP files against parse errors
         run: composer lint
 
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies
+        run: |
+          npm ci
+          sudo npm run build
+
       - name: Unit and integration testing (with debug output)
         run: ./vendor/bin/phpunit --configuration phpunit-with-integration.xml --no-coverage
 
