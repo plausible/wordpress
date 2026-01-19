@@ -17,7 +17,7 @@ jobs:
         with:
           dev: no
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -32,7 +32,7 @@ jobs:
           rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" release/plausible-analytics/ --delete --delete-excluded
           cd "${GITHUB_WORKSPACE}/release" || exit
           zip -r "${GITHUB_WORKSPACE}/plausible-analytics.zip" .
-          
+
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
         env:

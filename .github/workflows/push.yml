@@ -69,7 +69,7 @@ jobs:
       - name: Lint PHP files against parse errors
         run: composer lint
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
