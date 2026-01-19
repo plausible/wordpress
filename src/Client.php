@@ -88,39 +88,6 @@ class Client {
 	}
 
 	/**
-	 * Retrieve the configured Tracker ID and stores it in the options table.
-	 *
-	 * @return string
-	 */
-	public function get_tracker_id() {
-		$id = get_option( 'plausible_analytics_tracker_id' );
-
-		if ( ! $id ) {
-			$tracker_configuration = $this->get_configuration();
-			$id                    = $tracker_configuration->getId();
-
-			update_option( 'plausible_analytics_tracker_id', $id );
-		}
-
-		return $id;
-	}
-
-	/**
-	 * Retrieve the configured Tracker Script Configuration.
-	 *
-	 * @return false|Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
-	 */
-	private function get_configuration() {
-		try {
-			$configuration = $this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet();
-
-			return $configuration->getTrackerScriptConfiguration();
-		} catch ( \Exception $e ) {
-			return false;
-		}
-	}
-
-	/**
 	 * Retrieve Features from Capabilities object.
 	 *
 	 * @return false|Client\Model\CapabilitiesFeatures
@@ -168,29 +135,6 @@ class Client {
 	}
 
 	/**
-	 * Update the configured Tracker Script Configuration.
-	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_config_update_request
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function update_tracker_script_configuration( $tracker_script_config_update_request ) {
-		try {
-			$this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
-				$tracker_script_config_update_request
-			);
-		} catch ( Exception $e ) {
-			$this->send_json_error(
-				$e,
-				__(
-					'Something went wrong while updating tracker script configuration: %s',
-					'plausible-analytics'
-				)
-			);
-		}
-	}
-
-	/**
 	 * Stores the capabilities for the currently entered API token in the DB for later use.
 	 *
 	 * @param $token
@@ -229,46 +173,68 @@ class Client {
 	}
 
 	/**
-	 * Create Shared Link in Plausible Dashboard.
+	 * Retrieve the configured Tracker ID and stores it in the options table.
 	 *
-	 * @return void
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because we don't want to test WordPress core functionality.
 	 */
-	public function create_shared_link() {
-		$shared_link = (object) [];
-		$result      = (object) [];
+	public function get_tracker_id() {
+		$id = get_option( 'plausible_analytics_tracker_id' );
 
+		if ( ! $id ) {
+			$tracker_configuration = $this->get_configuration();
+			$id                    = $tracker_configuration->getId();
+
+			update_option( 'plausible_analytics_tracker_id', $id );
+		}
+
+		return $id;
+	}
+
+	/**
+	 * Retrieve the configured Tracker Script Configuration.
+	 *
+	 * @return false|Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
+	 *
+	 * @codeCoverageIgnore Because we don't want to test the API's response.
+	 */
+	private function get_configuration() {
 		try {
-			$result = $this->bulk_create_shared_links();
-			// @codeCoverageIgnoreStart
-		} catch ( Exception $e ) {
-			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
-			// @codeCoverageIgnoreEnd
-		}
+			$configuration = $this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet();
 
-		if ( $result instanceof SharedLink ) {
-			$shared_link = $result->getSharedLink();
-		}
-
-		if ( ! empty( $shared_link->getHref() ) ) {
-			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+			return $configuration->getTrackerScriptConfiguration();
+		} catch ( \Exception $e ) {
+			return false;
 		}
 	}
 
 	/**
-	 * @return SharedLink|UnauthorizedError|UnprocessableEntityError
-	 * @throws ApiException
+	 * Update the configured Tracker Script Configuration.
+	 *
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_config_update_request
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function bulk_create_shared_links() {
-		return $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
-			[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
-		);
+	public function update_tracker_script_configuration( $tracker_script_config_update_request ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
+				$tracker_script_config_update_request
+			);
+		} catch ( Exception $e ) {
+			$this->send_json_error(
+				$e,
+				__(
+					'Something went wrong while updating tracker script configuration: %s',
+					'plausible-analytics'
+				)
+			);
+		}
 	}
 
 	/**
 	 * @param Exception $e
-	 * @param string    $error_message The human-readable part of the error message, requires a %s at the end!
+	 * @param string $error_message The human-readable part of the error message, requires a %s at the end!
 	 *
 	 * @return void
 	 *
@@ -314,6 +280,44 @@ class Client {
 		$caps = $this->update_capabilities();
 
 		wp_send_json_error( [ 'capabilities' => $caps ], $code );
+	}
+
+	/**
+	 * Create Shared Link in Plausible Dashboard.
+	 *
+	 * @return void
+	 */
+	public function create_shared_link() {
+		$shared_link = (object) [];
+		$result      = (object) [];
+
+		try {
+			$result = $this->bulk_create_shared_links();
+			// @codeCoverageIgnoreStart
+		} catch ( Exception $e ) {
+			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
+			// @codeCoverageIgnoreEnd
+		}
+
+		if ( $result instanceof SharedLink ) {
+			$shared_link = $result->getSharedLink();
+		}
+
+		if ( ! empty( $shared_link->getHref() ) ) {
+			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+		}
+	}
+
+	/**
+	 * @return SharedLink|UnauthorizedError|UnprocessableEntityError
+	 * @throws ApiException
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function bulk_create_shared_links() {
+		return $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
+			[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
+		);
 	}
 
 	/**
