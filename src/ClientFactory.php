@@ -35,7 +35,7 @@ class ClientFactory {
 		}
 
 		if ( ! $this->token ) {
-			$this->token = Helpers::get_settings()[ 'api_token' ];
+			$this->token = Helpers::get_settings()['api_token'];
 		}
 
 		if ( ! $this->token ) {
