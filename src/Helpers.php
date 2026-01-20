@@ -55,6 +55,8 @@ class Helpers {
 	 * Build the API client.
 	 *
 	 * @return false|Client
+	 *
+	 * @codeCoverageIgnore This seam's only function is to keep our code testable.
 	 */
 	protected static function get_client() {
 		$client = new ClientFactory();
