@@ -20,6 +20,8 @@ class AdminBar {
 	 */
 	private function init() {
 		add_action( 'admin_bar_menu', [ $this, 'admin_bar_node' ], 100 );
+		add_filter( 'plausible_analytics_admin_bar_args', [ $this, 'maybe_add_analytics' ], 10, 2 );
+		add_filter( 'plausible_analytics_admin_bar_args', [ $this, 'maybe_add_settings' ] );
 	}
 
 
@@ -30,8 +32,6 @@ class AdminBar {
 	 *
 	 * @return void
 	 * @since  1.3.0
-	 * @access public
-	 *
 	 */
 	public function admin_bar_node( $admin_bar ) {
 		$disable = ! empty( Helpers::get_settings()['disable_toolbar_menu'] );
@@ -61,11 +61,26 @@ class AdminBar {
 		}
 
 		// Add main admin bar node.
-		$args[] = [
-			'id'    => 'plausible-analytics',
-			'title' => 'Plausible Analytics',
-		];
+		$args = apply_filters( 'plausible_analytics_admin_bar_args', [
+			[
+				'id'    => 'plausible-analytics',
+				'title' => 'Plausible Analytics',
+			]
+		], $settings );
 
+		foreach ( $args as $arg ) {
+			$admin_bar->add_node( $arg );
+		}
+	}
+
+	/**
+	 * Adds the View Analytics link to the Admin Bar Menu if any of the related settings are enabled.
+	 *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	public function maybe_add_analytics( $args, $settings ) {
 		if ( ! empty( $settings['enable_analytics_dashboard'] ) || ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['self_hosted_shared_link'] ) ) ) {
 			$args[] = [
 				'id'     => 'view-analytics',
@@ -74,9 +89,10 @@ class AdminBar {
 				'parent' => 'plausible-analytics',
 			];
 
-			// Add link to individual page stats.
+			// Add a link to individual page stats.
 			if ( is_singular() ) {
 				global $post;
+
 				$uri = wp_make_link_relative( get_permalink( $post->ID ) );
 
 				$args[] = [
@@ -92,7 +108,17 @@ class AdminBar {
 			}
 		}
 
-		// Add link to Plausible Settings page.
+		return $args;
+	}
+
+	/**
+	 * Adds the Settings link to the Admin Bar Menu if the current user can manage options.
+	 *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	public function maybe_add_settings( $args ) {
 		if ( current_user_can( 'manage_options' ) ) {
 			$args[] = [
 				'id'     => 'settings',
@@ -102,8 +128,6 @@ class AdminBar {
 			];
 		}
 
-		foreach ( $args as $arg ) {
-			$admin_bar->add_node( $arg );
-		}
+		return $args;
 	}
 }
