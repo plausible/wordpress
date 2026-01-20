@@ -65,11 +65,13 @@ class EDD {
 	/**
 	 * Tracks the "add to cart" event with relevant product and cart data.
 	 *
-	 * @param int   $download_id The ID of the product being added to the cart.
-	 * @param array $options     Optional data associated with the product being added.
-	 * @param array $items       The current items in the cart.
+	 * @param int $download_id The ID of the product being added to the cart.
+	 * @param array $options Optional data associated with the product being added.
+	 * @param array $items The current items in the cart.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_add_to_cart( $download_id, $options, $items ) {
 		$download = new \EDD_Download( $download_id );
@@ -81,10 +83,10 @@ class EDD {
 		$quantity = array_filter(
 			$items,
 			function ( $item ) use ( $download_id ) {
-				return $item[ 'id' ] === $download_id;
+				return $item['id'] === $download_id;
 			}
 		);
-		$quantity = reset( $quantity )[ 'quantity' ] ?? 1;
+		$quantity = reset( $quantity )['quantity'] ?? 1;
 
 		$props = apply_filters(
 			'plausible_analytics_edd_add_to_cart_custom_properties',
@@ -101,7 +103,7 @@ class EDD {
 
 		$proxy = new Proxy( false );
 
-		$proxy->do_request( $this->event_goals[ 'add-to-cart' ], null, null, $props );
+		$proxy->do_request( $this->event_goals['add-to-cart'], null, null, $props );
 	}
 
 	/**
@@ -110,6 +112,8 @@ class EDD {
 	 * @param string|int $key The key of the item in the cart to be removed.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_remove_cart_item( $key ) {
 		$cart_contents          = edd_get_cart_contents();
@@ -122,22 +126,22 @@ class EDD {
 
 		unset( $cart_contents[ $key ] );
 
-		if ( isset( $item_removed_from_cart[ 'id' ] ) ) {
-			$product = new \EDD_Download( $item_removed_from_cart[ 'id' ] );
+		if ( isset( $item_removed_from_cart['id'] ) ) {
+			$product = new \EDD_Download( $item_removed_from_cart['id'] );
 		}
 
 		if ( ! $product ) {
 			return;
 		}
 
-		$total_removed_from_cart = edd_get_cart_total() - ( $product->get_price() * $item_removed_from_cart[ 'quantity' ] );
+		$total_removed_from_cart = edd_get_cart_total() - ( $product->get_price() * $item_removed_from_cart['quantity'] );
 
 		$props = apply_filters(
 			'plausible_analytics_edd_remove_cart_item_custom_properties',
 			[
 				'product_name'     => $product->get_name(),
-				'product_id'       => $item_removed_from_cart[ 'id' ],
-				'quantity'         => $item_removed_from_cart[ 'quantity' ],
+				'product_id'       => $item_removed_from_cart['id'],
+				'quantity'         => $item_removed_from_cart['quantity'],
 				'cart_total_items' => count( $cart_contents ),
 				'cart_total'       => $total_removed_from_cart,
 			]
@@ -145,13 +149,15 @@ class EDD {
 
 		$proxy = new Proxy( false );
 
-		$proxy->do_request( $this->event_goals[ 'remove-from-cart' ], null, null, $props );
+		$proxy->do_request( $this->event_goals['remove-from-cart'], null, null, $props );
 	}
 
 	/**
 	 * Tracks the "entered checkout" event with relevant cart data.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_entered_checkout() {
 		// Just to make sure we're where we're supposed to be.
@@ -171,7 +177,7 @@ class EDD {
 
 		$proxy = new Proxy( false );
 
-		$proxy->do_request( $this->event_goals[ 'checkout' ], null, null, $props );
+		$proxy->do_request( $this->event_goals['checkout'], null, null, $props );
 	}
 
 	/**
@@ -190,8 +196,8 @@ class EDD {
 		$session = edd_get_purchase_session();
 		$order   = null;
 
-		if ( ! empty( $session[ 'purchase_key' ] ) ) {
-			$order = edd_get_order_by( 'payment_key', $session[ 'purchase_key' ] );
+		if ( ! empty( $session['purchase_key'] ) ) {
+			$order = edd_get_order_by( 'payment_key', $session['purchase_key'] );
 		}
 
 		// Don't track on page reload.
@@ -210,7 +216,7 @@ class EDD {
 				]
 			)
 		);
-		$label = $this->event_goals[ 'purchase' ];
+		$label = $this->event_goals['purchase'];
 
 		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
 
