@@ -20,6 +20,8 @@ class Integrations {
 	 * Build class.
 	 *
 	 * We use DI to prevent circular dependency.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function __construct() {
 		$this->provisioning = new Provisioning();
@@ -41,7 +43,7 @@ class Integrations {
 	}
 
 	/**
-	 * @param array  $event_goals
+	 * @param array $event_goals
 	 * @param string $funnel_name
 	 *
 	 * @return void
