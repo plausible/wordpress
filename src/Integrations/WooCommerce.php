@@ -28,7 +28,7 @@ class WooCommerce {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct( $init = true ) {
-		$uri = wc_get_permalink_structure()[ 'product_base' ];
+		$uri = wc_get_permalink_structure()['product_base'];
 
 		if ( is_multisite() ) {
 			$uri = get_blog_details()->path . $uri;
@@ -99,24 +99,25 @@ class WooCommerce {
 	}
 
 	/**
-	 * A bit of a hacky approach to ensure the _wp_http_referer header is available to us when hitting the Proxy in @see self::track_add_to_cart()
-	 * and @see self::track_remove_cart_item().
+	 * A bit of a hacky approach to ensure the _wp_http_referer header is available to us when hitting the Proxy in @param $add_to_cart_data
 	 *
-	 * @param $add_to_cart_data
 	 * @param $request
 	 *
 	 * @return mixed
 	 *
 	 * @codeCoverageIgnore Because there's nothing to test here.
-	 */
+	 * @see self::track_remove_cart_item().
+	 *
+	 * @see self::track_add_to_cart()
+	 * and/
 	public function add_http_referer( $add_to_cart_data, $request ) {
-		$http_referer = $request->get_param( '_wp_http_referer' );
+	$http_referer = $request->get_param( '_wp_http_referer' );
 
-		if ( ! empty( $http_referer ) ) {
-			$_REQUEST[ '_wp_http_referer' ] = sanitize_url( $http_referer );
-		}
+	if ( ! empty( $http_referer ) ) {
+	$_REQUEST[ '_wp_http_referer' ] = sanitize_url( $http_referer );
+	}
 
-		return $add_to_cart_data;
+	return $add_to_cart_data;
 	}
 
 	/**
@@ -127,13 +128,13 @@ class WooCommerce {
 	 * @codeCoverageIgnore Because we can't test XHR here.
 	 */
 	public function track_direct_add_to_cart() {
-		if ( ! isset( $_REQUEST[ 'add-to-cart' ] ) || ! is_numeric( wp_unslash( $_REQUEST[ 'add-to-cart' ] ) ) ) {
+		if ( ! isset( $_REQUEST['add-to-cart'] ) || ! is_numeric( wp_unslash( $_REQUEST['add-to-cart'] ) ) ) {
 			return;
 		}
 
-		$product_id = absint( wp_unslash( $_REQUEST[ 'add-to-cart' ] ) );
+		$product_id = absint( wp_unslash( $_REQUEST['add-to-cart'] ) );
 		$product    = wc_get_product( $product_id );
-		$quantity   = isset( $_REQUEST[ 'quantity' ] ) ? absint( wp_unslash( $_REQUEST[ 'quantity' ] ) ) : 1;
+		$quantity   = isset( $_REQUEST['quantity'] ) ? absint( wp_unslash( $_REQUEST['quantity'] ) ) : 1;
 
 		$this->track_add_to_cart( $product, [ 'id' => $product_id, 'quantity' => $quantity ] );
 	}
@@ -141,8 +142,8 @@ class WooCommerce {
 	/**
 	 * Track regular (i.e., interactivity API) add to cart events.
 	 *
-	 * @param WC_Product $product          General information about the product added to cart.
-	 * @param array      $add_to_cart_data Cart data for the product added to the cart, e.g. quantity, variation ID, etc.
+	 * @param WC_Product $product General information about the product added to cart.
+	 * @param array $add_to_cart_data Cart data for the product added to the cart, e.g. quantity, variation ID, etc.
 	 *
 	 * @return void
 	 *
@@ -150,27 +151,27 @@ class WooCommerce {
 	 */
 	public function track_add_to_cart( $product, $add_to_cart_data ) {
 		if ( ! $product ) {
-		    return;
+			return;
 		}
 
 		$product_data  = $this->clean_data( $product->get_data() );
 		$added_to_cart = $this->clean_data( $add_to_cart_data );
-		$cart = $this->get_wc_cart();
+		$cart          = $this->get_wc_cart();
 		$props         = apply_filters(
 			'plausible_analytics_woocommerce_add_to_cart_custom_properties',
 			[
-				'product_name'     => $product_data[ 'name' ],
-				'product_id'       => $added_to_cart[ 'id' ],
-				'quantity'         => $added_to_cart[ 'quantity' ],
-				'price'            => $product_data[ 'price' ],
-				'tax_class'        => $product_data[ 'tax_class' ],
+				'product_name'     => $product_data['name'],
+				'product_id'       => $added_to_cart['id'],
+				'quantity'         => $added_to_cart['quantity'],
+				'price'            => $product_data['price'],
+				'tax_class'        => $product_data['tax_class'],
 				'cart_total_items' => count( $cart->get_cart_contents() ),
 				'cart_total'       => $cart->get_total( null ),
 			]
 		);
 		$proxy         = new Proxy( false );
 
-		$proxy->do_request( $this->event_goals[ 'add-to-cart' ], null, null, $props );
+		$proxy->do_request( $this->event_goals['add-to-cart'], null, null, $props );
 	}
 
 	/**
@@ -193,6 +194,17 @@ class WooCommerce {
 	}
 
 	/**
+	 * A wrapper to keep our code testable.
+	 *
+	 * @return WC_Cart|null
+	 *
+	 * @codeCoverageIgnore
+	 */
+	protected function get_wc_cart() {
+		return WC()->cart;
+	}
+
+	/**
 	 * Track (non-Interactivity API i.e., AJAX) add to cart events.
 	 *
 	 * @param string|int $product_id ID of the product added to the cart.
@@ -205,7 +217,7 @@ class WooCommerce {
 		$product          = wc_get_product( $product_id );
 		$add_to_cart_data = [
 			'id'       => $product_id,
-			'quantity' => $_POST[ 'quantity' ] ?? 1,
+			'quantity' => $_POST['quantity'] ?? 1,
 		];
 
 		$this->track_add_to_cart( $product, $add_to_cart_data );
@@ -214,8 +226,8 @@ class WooCommerce {
 	/**
 	 * Track Remove from cart events.
 	 *
-	 * @param string  $cart_item_key Key of item being removed from cart.
-	 * @param WC_Cart $cart          Instance of the current cart.
+	 * @param string $cart_item_key Key of item being removed from cart.
+	 * @param WC_Cart $cart Instance of the current cart.
 	 *
 	 * @return void
 	 *
@@ -226,8 +238,8 @@ class WooCommerce {
 		$item_removed_from_cart = $this->clean_data( $cart_contents[ $cart_item_key ] ?? [] );
 		$product                = null;
 
-		if ( isset( $item_removed_from_cart[ 'product_id' ] ) ) {
-			$product = wc_get_product( $item_removed_from_cart[ 'product_id' ] );
+		if ( isset( $item_removed_from_cart['product_id'] ) ) {
+			$product = wc_get_product( $item_removed_from_cart['product_id'] );
 		}
 
 		if ( ! $product ) {
@@ -238,16 +250,16 @@ class WooCommerce {
 			'plausible_analytics_woocommerce_remove_cart_item_custom_properties',
 			[
 				'product_name'     => $product->get_name(),
-				'product_id'       => $item_removed_from_cart[ 'product_id' ],
-				'variation_id'     => $item_removed_from_cart[ 'variation_id' ],
-				'quantity'         => $item_removed_from_cart[ 'quantity' ],
+				'product_id'       => $item_removed_from_cart['product_id'],
+				'variation_id'     => $item_removed_from_cart['variation_id'],
+				'quantity'         => $item_removed_from_cart['quantity'],
 				'cart_total_items' => count( $cart_contents ),
 				'cart_total'       => $cart->get_total( null ),
 			]
 		);
 		$proxy = new Proxy( false );
 
-		$proxy->do_request( $this->event_goals[ 'remove-from-cart' ], null, null, $props );
+		$proxy->do_request( $this->event_goals['remove-from-cart'], null, null, $props );
 	}
 
 	/**
@@ -264,7 +276,7 @@ class WooCommerce {
 			return; // @codeCoverageIgnore
 		}
 
-		$cart = $this->get_wc_cart();
+		$cart  = $this->get_wc_cart();
 		$props = apply_filters(
 			'plausible_analytics_woocommerce_entered_checkout_custom_properties',
 			[
@@ -277,18 +289,9 @@ class WooCommerce {
 			]
 		);
 		$props = wp_json_encode( $props );
-		$label = $this->event_goals[ 'checkout' ];
+		$label = $this->event_goals['checkout'];
 
 		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
-	}
-
-	/**
-	 * A wrapper to keep our code testable.
-	 *
-	 * @return WC_Cart|null
-	 */
-	protected function get_wc_cart() {
-		return WC()->cart;
 	}
 
 	/**
@@ -314,7 +317,7 @@ class WooCommerce {
 				],
 			]
 		);
-		$label = $this->event_goals[ 'purchase' ];
+		$label = $this->event_goals['purchase'];
 
 		echo sprintf( Integrations::SCRIPT_WRAPPER, "window.plausible( '$label', $props )" );
 

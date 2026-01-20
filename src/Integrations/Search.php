@@ -10,6 +10,8 @@ use Plausible\Analytics\WP\EnhancedMeasurements;
 class Search {
 	/**
 	 * Build class.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function __construct() {
 		$this->init();
@@ -19,6 +21,8 @@ class Search {
 	 * Filter/action hooks.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	private function init() {
 		add_filter( 'get_search_form', [ $this, 'maybe_add_hidden_input_to_search_form' ] );
