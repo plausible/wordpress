@@ -115,6 +115,8 @@ class AdminBar {
 	 * This seam is merely to keep our code testable.
 	 *
 	 * @return bool
+	 *
+	 * @codeCoverageIgnore Because we don't want to test WP core functions.
 	 */
 	protected function is_singular() {
 		return is_singular();
