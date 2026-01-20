@@ -56,6 +56,8 @@ class Search {
 	 * it is sanitized. If the referrer cannot be determined, an empty string is returned.
 	 *
 	 * @return string The sanitized referrer URL or an empty string if unavailable.
+	 *
+	 * @codeCoverageIgnore because it's parent methods aren't tested either.
 	 */
 	private function get_referrer() {
 		$referrer = esc_url( home_url( add_query_arg( null, null ) ) );

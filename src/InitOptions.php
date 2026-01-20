@@ -124,6 +124,8 @@ class InitOptions {
 
 	/**
 	 * This a seam for @see add_query_arg() to be mocked in unit tests.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	protected function get_current_request() {
 		return add_query_arg( null, null );
