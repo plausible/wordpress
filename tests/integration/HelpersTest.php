@@ -48,7 +48,7 @@ class HelpersTest extends TestCase {
 	 * @return mixed
 	 */
 	public function enableSelfHostedDomain( $settings ) {
-		$settings[ 'self_hosted_domain' ] = 'self-hosted-test.org';
+		$settings['self_hosted_domain'] = 'self-hosted-test.org';
 
 		return $settings;
 	}
@@ -61,7 +61,7 @@ class HelpersTest extends TestCase {
 	 * @return mixed
 	 */
 	public function addExcludedPages( $settings ) {
-		$settings[ 'excluded_pages' ] = 'test';
+		$settings['excluded_pages'] = 'test';
 
 		return $settings;
 	}
@@ -74,7 +74,7 @@ class HelpersTest extends TestCase {
 	 * @return mixed
 	 */
 	public function enableOutboundLinks( $settings ) {
-		$settings[ 'enhanced_measurements' ] = [ 'outbound-links' ];
+		$settings['enhanced_measurements'] = [ 'outbound-links' ];
 
 		return $settings;
 	}
@@ -87,19 +87,19 @@ class HelpersTest extends TestCase {
 	 * @return mixed
 	 */
 	public function enableSearch( $settings ) {
-		$settings[ 'enhanced_measurements' ] = [ 'search' ];
+		$settings['enhanced_measurements'] = [ 'search' ];
 
 		return $settings;
 	}
 
 	/**
+	 * @return void
 	 * @see Helpers::get_settings()
 	 *
-	 * @return void
 	 */
 	public function testGetPostSettings() {
-		$_POST[ 'action' ]  = 'plausible_analytics_save_options';
-		$_POST[ 'options' ] = wp_json_encode( [ [ 'name' => 'post_test', 'value' => 'post_test' ] ] );
+		$_POST['action']  = 'plausible_analytics_save_options';
+		$_POST['options'] = wp_json_encode( [ [ 'name' => 'post_test', 'value' => 'post_test' ] ] );
 
 		$settings = Helpers::get_settings();
 
@@ -107,9 +107,9 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * @see Helpers::get_proxy_resource()
 	 * @return void
 	 * @throws Exception
+	 * @see Helpers::get_proxy_resource()
 	 */
 	public function testGetProxyResource() {
 		$namespace = Helpers::get_proxy_resource( 'namespace' );
@@ -125,31 +125,33 @@ class HelpersTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/[a-z0-9]{8}/', $endpoint );
 
 		$cache_dir  = Helpers::get_proxy_resource( 'cache_dir' );
-		$upload_dir = wp_get_upload_dir()[ 'basedir' ];
+		$upload_dir = wp_get_upload_dir()['basedir'];
 
 		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/~", $cache_dir );
 		$this->assertTrue( is_dir( $cache_dir ) );
 
 		$cache_url  = Helpers::get_proxy_resource( 'cache_url' );
-		$upload_url = wp_get_upload_dir()[ 'baseurl' ];
+		$upload_url = wp_get_upload_dir()['baseurl'];
 
 		$this->assertMatchesRegularExpression( "~$upload_url/[a-z0-9]{10}/~", $cache_url );
 	}
 
 	/**
-	 * @see Helpers::update_setting()
 	 * @return void
+	 * @see Helpers::update_setting()
 	 */
 	public function testUpdateSetting() {
+		$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_delete_woocommerce_goals', 11 );
+
 		Helpers::update_setting( 'test', true );
 
-		$this->assertTrue( Helpers::get_settings()[ 'test' ] );
+		$this->assertTrue( Helpers::get_settings()['test'] );
 	}
 
 	/**
-	 * @see Helpers::get_js_path()
 	 * @return void
 	 * @throws Exception
+	 * @see Helpers::get_js_path()
 	 */
 	public function testGetJsPath() {
 		$path       = TestableHelpers::get_js_path();
@@ -159,8 +161,8 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * @see Helpers::get_domain()
 	 * @return void
+	 * @see Helpers::get_domain()
 	 */
 	public function testGetDomain() {
 		try {
@@ -208,9 +210,9 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * @see Helpers::get_rest_endpoint()
 	 * @return void
 	 * @throws Exception
+	 * @see Helpers::get_rest_endpoint()
 	 */
 	public function testGetRestEndpoint() {
 		$endpoint = Helpers::get_rest_endpoint( false );
