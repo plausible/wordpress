@@ -90,7 +90,7 @@ class AdminBar {
 			];
 
 			// Add a link to individual page stats.
-			if ( is_singular() ) {
+			if ( $this->is_singular() ) {
 				global $post;
 
 				$uri = wp_make_link_relative( get_permalink( $post->ID ) );
@@ -109,6 +109,15 @@ class AdminBar {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * This seam is merely to keep our code testable.
+	 *
+	 * @return bool
+	 */
+	protected function is_singular() {
+		return is_singular();
 	}
 
 	/**

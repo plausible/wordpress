@@ -42,6 +42,19 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Enable View Stats in WordPress.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableAnalyticsDashboard( $settings ) {
+		$settings['enable_analytics_dashboard'] = 'on';
+
+		return $settings;
+	}
+
+	/**
 	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
 	 *
 	 * @param $settings
