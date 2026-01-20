@@ -11,7 +11,8 @@ use function Brain\Monkey\Functions\when;
 
 class EDDTest extends TestCase {
 	/**
-	 *
+	 * @return void
+	 * @see EDD::track_purchase()
 	 */
 	public function testTrackPurchase() {
 		when( 'edd_is_success_page' )->justReturn( true );
