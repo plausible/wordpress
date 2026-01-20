@@ -53,7 +53,7 @@ class Verification {
 	 */
 	private function get_plugin_version() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			require_once ABSPATH . 'wp-admin/includes/plugin.php'; // @codeCoverageIgnore
 		}
 
 		static $data = null;
