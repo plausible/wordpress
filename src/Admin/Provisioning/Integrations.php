@@ -21,10 +21,16 @@ class Integrations {
 	 *
 	 * We use DI to prevent circular dependency.
 	 *
+	 * @param Provisioning|null $provisioning
+	 *
 	 * @codeCoverageIgnore
 	 */
-	public function __construct() {
-		$this->provisioning = new Provisioning();
+	public function __construct( $provisioning = null ) {
+		$this->provisioning = $provisioning;
+
+		if ( ! $this->provisioning ) {
+			$this->provisioning = new Provisioning();
+		}
 
 		$this->init();
 	}
