@@ -35,6 +35,8 @@ class Search {
 	 *
 	 * @return string The modified HTML markup of the search form with the hidden input added,
 	 *                or the original form if enhanced measurement is not enabled.
+	 *
+	 * @codeCoverageIgnore because we wouldn't be testing anything here. Whether this works depends on the filter, and that'd only break if WordPress changes the name of it.
 	 */
 	public function maybe_add_hidden_input_to_search_form( $form ) {
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
@@ -77,6 +79,8 @@ class Search {
 	 *
 	 * @return string The modified content of the block with the hidden input added if it is a core search block,
 	 *                or the original block content if the block is not a search block.
+	 *
+	 * @codeCoverageIgnore because we wouldn't be testing anything here. Whether this works depends on the filter, and that'd only break if WordPress changes the name of it.
 	 */
 	public function maybe_add_hidden_input_to_search_block( $block_content, $block ) {
 		if ( $block['blockName'] === 'core/search' ) {
