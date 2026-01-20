@@ -91,7 +91,6 @@ class Integrations {
 	 * @param object $integration The integration object containing event goals to be deleted.
 	 *
 	 * @return void
-	 * @codeCoverageIgnore Because we don't want to test the API.
 	 */
 	public function delete_integration_goals( $integration ) {
 		$goals = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
