@@ -142,10 +142,8 @@ class Upgrades {
 		$new_settings = $old_settings;
 
 		if ( ! empty( $old_settings['self_hosted_domain'] ) && strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
-			$new_settings['self_hosted_domain'] = '';
+			Helpers::update_setting( 'self_hosted_domain', '' );
 		}
-
-		update_option( 'plausible_analytics_settings', $new_settings );
 
 		update_option( 'plausible_analytics_version', '1.2.6' );
 	}
@@ -212,11 +210,9 @@ class Upgrades {
 		 * Migrate the shared link option for self hosters who use it.
 		 */
 		if ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['shared_link'] ) ) {
-			$settings['self_hosted_shared_link'] = $settings['shared_link'];
-			$settings['shared_link']             = '';
+			Helpers::update_setting( 'self_hosted_shared_link', $settings['shared_link'] );
+			Helpers::update_setting( 'shared_link', '' );
 		}
-
-		update_option( 'plausible_analytics_settings', $settings );
 
 		update_option( 'plausible_analytics_version', '2.0.0' );
 
@@ -239,10 +235,8 @@ class Upgrades {
 		$settings = Helpers::get_settings();
 
 		if ( ! empty( $settings['shared_link'] ) ) {
-			$settings['enable_analytics_dashboard'] = 'on';
+			Helpers::update_setting( 'enable_analytics_dashboard', 'on' );
 		}
-
-		update_option( 'plausible_analytics_settings', $settings );
 
 		update_option( 'plausible_analytics_version', '2.0.3' );
 	}
@@ -257,10 +251,8 @@ class Upgrades {
 		$settings = Helpers::get_settings();
 
 		if ( ! is_array( $settings['enhanced_measurements'] ) ) {
-			$settings['enhanced_measurements'] = [];
+			Helpers::update_setting( 'enhanced_measurements', [] );
 		}
-
-		update_option( 'plausible_analytics_settings', $settings );
 
 		update_option( 'plausible_analytics_version', '2.1.0' );
 	}
