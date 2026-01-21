@@ -24,6 +24,15 @@ class TestCase extends YoastTestCase {
 		parent::__construct();
 	}
 
+	/**
+	 * Removes any action that (partially) matches the given $callback.
+	 *
+	 * @param $hook
+	 * @param $callback
+	 * @param $priority
+	 *
+	 * @return void
+	 */
 	public function removeAction( $hook, $callback, $priority = 10 ) {
 		global $wp_filter;
 

@@ -19,8 +19,6 @@ class UpgradesTest extends TestCase {
 		$settings                          = Helpers::get_settings();
 		$settings['enhanced_measurements'] = 'on';
 
-		$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_delete_woocommerce_goals', 11 );
-
 		update_option( 'plausible_analytics_settings', $settings );
 
 		$class = new Upgrades();

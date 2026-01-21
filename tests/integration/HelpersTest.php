@@ -141,8 +141,6 @@ class HelpersTest extends TestCase {
 	 * @see Helpers::update_setting()
 	 */
 	public function testUpdateSetting() {
-		$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_delete_woocommerce_goals', 11 );
-
 		Helpers::update_setting( 'test', true );
 
 		$this->assertTrue( Helpers::get_settings()['test'] );

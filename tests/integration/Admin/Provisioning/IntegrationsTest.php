@@ -40,6 +40,8 @@ class IntegrationsTest extends TestCase {
 			$this->assertEmpty( $goal_ids );
 		} finally {
 			delete_option( 'plausible_analytics_enhanced_measurements_goal_ids' );
+			$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_create_' );
+			$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_delete_', 11 );
 		}
 	}
 }
