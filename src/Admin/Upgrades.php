@@ -12,6 +12,7 @@ namespace Plausible\Analytics\WP\Admin;
 use Exception;
 use Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 use Plausible\Analytics\WP\Client;
+use Plausible\Analytics\WP\Cron;
 use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Setup;
@@ -339,6 +340,9 @@ class Upgrades {
 		$settings = Helpers::get_settings();
 
 		$provisioning->update_tracker_script_config( null, $settings );
+
+		// This makes sure the new JS file is downloaded.
+		new Cron();
 
 		update_option( 'plausible_analytics_version', '2.5.1' );
 	}
