@@ -23,7 +23,7 @@ jobs:
 
       - name: Install npm dependencies
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Generate plugin artifact
