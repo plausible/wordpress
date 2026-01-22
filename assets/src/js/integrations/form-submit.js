@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * Send a custom event to Plausible.
 		 */
 		trackSubmission: function () {
-			plausible(plausible_analytics_i18n.form_completions, {'props': {'path': document.location.pathname}});
+			plausible(plausible_analytics_i18n.form_completions);
 		}
 	};
 
