@@ -326,6 +326,11 @@ class Ajax {
 
 				Messages::set_additional( $additional, $option->name );
 			}
+
+			// Refresh Tracker ID if Domain Name has changed (e.g. after migration from staging to production)
+			if ($option->name === 'domain_name') {
+				delete_option('plausible_analytics_tracker_id');
+			}
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
