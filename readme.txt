@@ -9,7 +9,7 @@ Stable tag: 2.5.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
-Plausible Analytics is an easy-to-use, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is a privacy-friendly web analytics plugin for WordPress that is an easy-to-use, lightweight and more accurate  alternative to Google Analytics.
 
 == Description ==
 
@@ -29,7 +29,7 @@ We're completely independent, self-funded, bootstrapped and debt-free. We're not
 
 Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics, a simple but powerful, lightweight, open source and privacy-friendly alternative. 
 
-Here's what makes Plausible a great Google Analytics alternative and why over 15,000 paying subscribers trust us with their website and business insights:
+Here's what makes Plausible a great Google Analytics alternative and why over 16,000 paying subscribers trust us with their website and business insights:
 
 ### Smooth transition from Google Analytics
 
@@ -74,7 +74,7 @@ Plausible is open source analytics. Our source code is available and accessible 
 * Enable WooCommerce or Easy Digital Downloads revenue tracking
 * Enable file downloads, external link clicks, cloaked affiliate link clicks, site search terms, form completions and 404 error pages tracking 
 * Enable automated tracking of post authors, post categories and custom taxonomies for better content analysis
-* Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor
+* Custom events and custom dimensions can be setup using CSS class names directly in the WordPress editor, no JS knowledge needed
 * Integrate with Google Search Console so you can see search queries people use to find your site in Google's search results
 * Import your historical Google Analytics stats
 * Keep an eye on your traffic with weekly and/or monthly email and Slack reports
@@ -123,7 +123,7 @@ Google Analytics is free because Google has built their company and their wealth
 
 With Plausible, you 100% own and control all of your website data. This data is not being shared with or sold to any third-parties. Since we don't make money from targeted advertisement, we must charge a subscription fee.
 
-Revenue from subscriptions is used to pay our rent, further develop Plausible and allow us to commit to Plausible and open source full time.
+Revenue from subscriptions is used to pay our rent, further develop Plausible and allow us to commit to Plausible and open source full time. There's a more elaborate explanation given here: https://plausible.io/paid-analytics-vs-free-ga
 
 = Is there a demo available? = 
 
