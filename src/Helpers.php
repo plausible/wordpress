@@ -48,7 +48,7 @@ class Helpers {
 	public static function get_filename() {
 		$client = static::get_client();
 
-		if ( ! $client instanceof Client ) {
+		if ( $client instanceof Client ) {
 			return $client->get_tracker_id();
 		}
 
