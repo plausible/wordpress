@@ -8,12 +8,14 @@
 
 namespace Plausible\Analytics\WP\Admin;
 
+use Plausible\Analytics\WP\Capabilities;
 use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageview;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestRevenue;
 use Plausible\Analytics\WP\ClientFactory;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 
@@ -86,13 +88,11 @@ class Provisioning {
 		}
 
 		$this->custom_event_goals = [
-			'404'              => __( '404', 'plausible-analytics' ),
-			'affiliate-links'  => __( 'Cloaked Link: Click', 'plausible-analytics' ),
-			'file-downloads'   => __( 'File Download', 'plausible-analytics' ),
-			'form-completions' => __( 'WP Form Completions', 'plausible-analytics' ),
-			'outbound-links'   => __( 'Outbound Link: Click', 'plausible-analytics' ),
-			'query-params'     => __( 'WP Query Parameters', 'plausible-analytics' ),
-			'search'           => __( 'WP Search Queries', 'plausible-analytics' ),
+			EnhancedMeasurements::FOUR_O_FOUR             => __( '404', 'plausible-analytics' ),
+			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => __( 'Cloaked Link: Click', 'plausible-analytics' ),
+			EnhancedMeasurements::FORM_COMPLETIONS        => __( 'WP Form Completions', 'plausible-analytics' ),
+			EnhancedMeasurements::QUERY_PARAMS            => __( 'WP Query Parameters', 'plausible-analytics' ),
+			EnhancedMeasurements::SEARCH_QUERIES          => __( 'WP Search Queries', 'plausible-analytics' ),
 		];
 
 		$this->init();
@@ -109,11 +109,12 @@ class Provisioning {
 			return; // @codeCoverageIgnore
 		}
 
-		add_action( 'update_option_plausible_analytics_settings', [ $this, 'create_shared_link' ], 10, 2 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_customer_user_roles' ] );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'update_tracker_script_config' ], 10, 2 );
 	}
 
 	/**
@@ -122,8 +123,8 @@ class Provisioning {
 	 * @param $old_settings
 	 * @param $settings
 	 */
-	public function create_shared_link( $old_settings, $settings ) {
-		if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
+	public function maybe_create_shared_link( $old_settings, $settings ) {
+		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -137,7 +138,7 @@ class Provisioning {
 	 * @param $settings
 	 */
 	public function maybe_create_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -158,8 +159,8 @@ class Provisioning {
 	}
 
 	/**
-	 * @param string $name     Event Name
-	 * @param string $type     CustomEvent|Revenue|Pageview
+	 * @param string $name Event Name
+	 * @param string $type CustomEvent|Revenue|Pageview
 	 * @param string $currency Required if $type is Revenue
 	 *
 	 * @return GoalCreateRequestCustomEvent|GoalCreateRequestPageview|GoalCreateRequestRevenue
@@ -173,13 +174,13 @@ class Provisioning {
 		];
 
 		if ( $type === 'Revenue' ) {
-			$props[ 'goal' ][ 'currency' ] = $currency;
+			$props['goal']['currency'] = $currency;
 		}
 
 		if ( $type === 'Pageview' ) {
-			unset( $props[ 'goal' ][ 'event_name' ] );
+			unset( $props['goal']['event_name'] );
 
-			$props[ 'goal' ][ 'path' ] = $path;
+			$props['goal']['path'] = $path;
 		}
 
 		switch ( $type ) {
@@ -273,8 +274,8 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
-		$enhanced_measurements_old = array_filter( $old_settings[ 'enhanced_measurements' ] );
-		$enhanced_measurements     = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
+		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
 		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
@@ -304,7 +305,7 @@ class Provisioning {
 	 * (USD), because these are added to revenue goals by Plausible.
 	 *
 	 * @param string $string
-	 * @param array  $haystack
+	 * @param array $haystack
 	 *
 	 * @return false|mixed
 	 * @codeCoverageIgnore Because it can't be unit tested.
@@ -331,12 +332,12 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_create_custom_properties( $old_settings, $settings ) {
-		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
+		$enhanced_measurements = $settings['enhanced_measurements'];
 
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'pageview-props', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) &&
-			! Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -346,7 +347,7 @@ class Provisioning {
 		/**
 		 * Enable Custom Properties for Authors & Categories option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'pageview-props', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) ) {
 			foreach ( $this->custom_pageview_properties as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 			}
@@ -355,7 +356,7 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for WooCommerce integration.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) && ( Integrations::is_wc_active() || Integrations::is_edd_active() ) ) {
 			foreach ( self::CUSTOM_PROPERTIES as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 			}
@@ -364,7 +365,7 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for Query Parameters option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'query-params', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
 			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
@@ -373,11 +374,11 @@ class Provisioning {
 		/**
 		 * Create Custom Properties for Search Queries option.
 		 */
-		if ( Helpers::is_enhanced_measurement_enabled( 'search', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) ) {
 			$caps = get_option( 'plausible_analytics_api_token_caps', [] );
 
 			foreach ( $this->custom_search_properties as $property ) {
-				if ( empty( $caps[ 'props' ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
+				if ( empty( $caps[ Capabilities::PROPS ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
 					continue;
 				}
 
@@ -403,22 +404,60 @@ class Provisioning {
 	 * @return array
 	 */
 	public function maybe_enable_customer_user_roles( $settings ) {
-		$enhanced_measurements = $settings[ 'enhanced_measurements' ];
+		$enhanced_measurements = $settings['enhanced_measurements'];
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) ) {
-			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'customer';
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
+			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'customer';
 			}
 
-			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'subscriber';
+			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'subscriber';
 			}
 
-			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings[ 'tracked_user_roles' ] ) ) {
-				$settings[ 'tracked_user_roles' ][] = 'edd_subscriber';
+			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'edd_subscriber';
 			}
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Updates the tracker script config based on the enabled enhanced measurements.
+	 *
+	 * @return array The updated tracker script config.
+	 */
+	public function update_tracker_script_config( $old_settings, $settings ) {
+		$config = [
+			'file_downloads'     => false,
+			'form_submissions'   => false,
+			'hash_based_routing' => false,
+			'installation_type'  => 'wordpress',
+			'outbound_links'     => false,
+		];
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
+			$config['file_downloads'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
+			$config['form_submissions'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
+			$config['hash_based_routing'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
+			$config['outbound_links'] = true;
+		}
+
+		$config  = [ 'tracker_script_configuration' => $config ];
+		$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+
+		$this->client->update_tracker_script_configuration( $request );
+
+		return $config;
 	}
 }

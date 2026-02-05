@@ -59,7 +59,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
       */
     protected static $openAPITypes = [
         'funnels' => '\Plausible\Analytics\WP\Client\Model\Funnel[]',
-        'meta' => '\Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta'
+        'meta' => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta'
     ];
 
     /**
@@ -246,7 +246,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Constructor
      *
-     * @param mixed[] $data Associated array of property values
+     * @param mixed[]|null $data Associated array of property values
      *                      initializing the model
      */
 	public function __construct( ?array $data = null )
@@ -333,7 +333,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets meta
      *
-     * @return \Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta
+     * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
      */
     public function getMeta()
     {
@@ -343,7 +343,7 @@ class FunnelListResponse implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets meta
      *
-     * @param \Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta $meta meta
+     * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
      *
      * @return self
      */

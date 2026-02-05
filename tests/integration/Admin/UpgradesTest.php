@@ -12,26 +12,26 @@ use Plausible\Analytics\WP\Helpers;
 
 class UpgradesTest extends TestCase {
 	/**
-	 * @see Upgrades::upgrade_to_210()
 	 * @return void
+	 * @see Upgrades::upgrade_to_210()
 	 */
 	public function testUpgradeTo210() {
-		$settings                            = Helpers::get_settings();
-		$settings[ 'enhanced_measurements' ] = 'on';
+		$settings                          = Helpers::get_settings();
+		$settings['enhanced_measurements'] = 'on';
 
 		update_option( 'plausible_analytics_settings', $settings );
 
 		$class = new Upgrades();
 		$class->upgrade_to_210();
 
-		$enhanced_measurements = Helpers::get_settings()[ 'enhanced_measurements' ];
+		$enhanced_measurements = Helpers::get_settings()['enhanced_measurements'];
 
 		$this->assertIsArray( $enhanced_measurements );
 	}
 
 	/**
-	 * @see Upgrades::upgrade_to_231()
 	 * @return void
+	 * @see Upgrades::upgrade_to_231()
 	 */
 	public function testUpgradeTo231() {
 		$class = new Upgrades();

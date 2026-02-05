@@ -50,17 +50,22 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	protected static $openAPIModelName = 'Capabilities_features';
 
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @var string[]
-	 */
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
 	protected static $openAPITypes = [
-		'funnels'       => 'bool',
-		'goals'         => 'bool',
-		'props'         => 'bool',
-		'revenue_goals' => 'bool',
-		'stats_api'     => 'bool',
+		'consolidated_view' => 'bool',
+		'funnels'           => 'bool',
+		'goals'             => 'bool',
+		'props'             => 'bool',
+		'revenue_goals'     => 'bool',
+		'sso'               => 'bool',
+		'shared_links'      => 'bool',
+		'site_segments'     => 'bool',
+		'sites_api'         => 'bool',
+		'stats_api'         => 'bool'
 	];
 
 	/**
@@ -71,11 +76,16 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'funnels'       => null,
-		'goals'         => null,
-		'props'         => null,
-		'revenue_goals' => null,
-		'stats_api'     => null,
+		'consolidated_view' => null,
+		'funnels'           => null,
+		'goals'             => null,
+		'props'             => null,
+		'revenue_goals'     => null,
+		'sso'               => null,
+		'shared_links'      => null,
+		'site_segments'     => null,
+		'sites_api'         => null,
+		'stats_api'         => null
 	];
 
 	/**
@@ -84,51 +94,16 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'funnels'       => false,
-		'goals'         => false,
-		'props'         => false,
+		'consolidated_view' => false,
+		'funnels'           => false,
+		'goals'             => false,
+		'props'             => false,
 		'revenue_goals' => false,
-		'stats_api'     => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'funnels'       => 'Funnels',
-		'goals'         => 'Goals',
-		'props'         => 'Props',
-		'revenue_goals' => 'RevenueGoals',
-		'stats_api'     => 'StatsAPI',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'funnels'       => 'setFunnels',
-		'goals'         => 'setGoals',
-		'props'         => 'setProps',
-		'revenue_goals' => 'setRevenueGoals',
-		'stats_api'     => 'setStatsApi',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'funnels'       => 'getFunnels',
-		'goals'         => 'getGoals',
-		'props'         => 'getProps',
-		'revenue_goals' => 'getRevenueGoals',
-		'stats_api'     => 'getStatsApi',
+		'sso'               => false,
+		'shared_links'      => false,
+		'site_segments'     => false,
+		'sites_api'         => false,
+		'stats_api'         => false
 	];
 
 	/**
@@ -137,64 +112,6 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'funnels', $data ?? [], null );
-		$this->setIfExists( 'goals', $data ?? [], null );
-		$this->setIfExists( 'props', $data ?? [], null );
-		$this->setIfExists( 'revenue_goals', $data ?? [], null );
-		$this->setIfExists( 'stats_api', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -213,6 +130,110 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var string[]
+     */
+	protected static $attributeMap = [
+		'consolidated_view' => 'ConsolidatedView',
+		'funnels'           => 'Funnels',
+		'goals'             => 'Goals',
+		'props'             => 'Props',
+		'revenue_goals'     => 'RevenueGoals',
+		'sso'               => 'SSO',
+		'shared_links'      => 'SharedLinks',
+		'site_segments'     => 'SiteSegments',
+		'sites_api'         => 'SitesAPI',
+		'stats_api'         => 'StatsAPI'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'consolidated_view' => 'setConsolidatedView',
+		'funnels'           => 'setFunnels',
+		'goals'             => 'setGoals',
+		'props'             => 'setProps',
+		'revenue_goals'     => 'setRevenueGoals',
+		'sso'               => 'setSso',
+		'shared_links'      => 'setSharedLinks',
+		'site_segments'     => 'setSiteSegments',
+		'sites_api'         => 'setSitesApi',
+		'stats_api'         => 'setStatsApi'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'consolidated_view' => 'getConsolidatedView',
+		'funnels'           => 'getFunnels',
+		'goals'             => 'getGoals',
+		'props'             => 'getProps',
+		'revenue_goals'     => 'getRevenueGoals',
+		'sso'               => 'getSso',
+		'shared_links'      => 'getSharedLinks',
+		'site_segments'     => 'getSiteSegments',
+		'sites_api'         => 'getSitesApi',
+		'stats_api'         => 'getStatsApi'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -243,26 +264,6 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -271,14 +272,48 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'consolidated_view', $data ?? [], null );
+		$this->setIfExists( 'funnels', $data ?? [], null );
+		$this->setIfExists( 'goals', $data ?? [], null );
+		$this->setIfExists( 'props', $data ?? [], null );
+		$this->setIfExists( 'revenue_goals', $data ?? [], null );
+		$this->setIfExists( 'sso', $data ?? [], null );
+		$this->setIfExists( 'shared_links', $data ?? [], null );
+		$this->setIfExists( 'site_segments', $data ?? [], null );
+		$this->setIfExists( 'sites_api', $data ?? [], null );
+		$this->setIfExists( 'stats_api', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -289,23 +324,74 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'funnels' ] === null ) {
+		if ( $this->container['consolidated_view'] === null ) {
+			$invalidProperties[] = "'consolidated_view' can't be null";
+		}
+		if ( $this->container['funnels'] === null ) {
 			$invalidProperties[] = "'funnels' can't be null";
 		}
-		if ( $this->container[ 'goals' ] === null ) {
+		if ( $this->container['goals'] === null ) {
 			$invalidProperties[] = "'goals' can't be null";
 		}
-		if ( $this->container[ 'props' ] === null ) {
+		if ( $this->container['props'] === null ) {
 			$invalidProperties[] = "'props' can't be null";
 		}
-		if ( $this->container[ 'revenue_goals' ] === null ) {
+		if ( $this->container['revenue_goals'] === null ) {
 			$invalidProperties[] = "'revenue_goals' can't be null";
 		}
-		if ( $this->container[ 'stats_api' ] === null ) {
+		if ( $this->container['sso'] === null ) {
+			$invalidProperties[] = "'sso' can't be null";
+		}
+		if ( $this->container['shared_links'] === null ) {
+			$invalidProperties[] = "'shared_links' can't be null";
+		}
+		if ( $this->container['site_segments'] === null ) {
+			$invalidProperties[] = "'site_segments' can't be null";
+		}
+		if ( $this->container['sites_api'] === null ) {
+			$invalidProperties[] = "'sites_api' can't be null";
+		}
+		if ( $this->container['stats_api'] === null ) {
 			$invalidProperties[] = "'stats_api' can't be null";
 		}
 
 		return $invalidProperties;
+	}
+
+	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
+	 * Gets consolidated_view
+	 *
+	 * @return bool
+	 */
+	public function getConsolidatedView() {
+		return $this->container['consolidated_view'];
+	}
+
+	/**
+	 * Sets consolidated_view
+	 *
+	 * @param bool $consolidated_view consolidated_view
+	 *
+	 * @return self
+	 */
+	public function setConsolidatedView( $consolidated_view ) {
+		if ( is_null( $consolidated_view ) ) {
+			throw new \InvalidArgumentException( 'non-nullable consolidated_view cannot be null' );
+		}
+		$this->container['consolidated_view'] = $consolidated_view;
+
+		return $this;
 	}
 
 	/**
@@ -314,7 +400,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool
 	 */
 	public function getFunnels() {
-		return $this->container[ 'funnels' ];
+		return $this->container['funnels'];
 	}
 
 	/**
@@ -328,7 +414,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		if ( is_null( $funnels ) ) {
 			throw new \InvalidArgumentException( 'non-nullable funnels cannot be null' );
 		}
-		$this->container[ 'funnels' ] = $funnels;
+		$this->container['funnels'] = $funnels;
 
 		return $this;
 	}
@@ -339,7 +425,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool
 	 */
 	public function getGoals() {
-		return $this->container[ 'goals' ];
+		return $this->container['goals'];
 	}
 
 	/**
@@ -353,7 +439,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		if ( is_null( $goals ) ) {
 			throw new \InvalidArgumentException( 'non-nullable goals cannot be null' );
 		}
-		$this->container[ 'goals' ] = $goals;
+		$this->container['goals'] = $goals;
 
 		return $this;
 	}
@@ -364,7 +450,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool
 	 */
 	public function getProps() {
-		return $this->container[ 'props' ];
+		return $this->container['props'];
 	}
 
 	/**
@@ -378,7 +464,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		if ( is_null( $props ) ) {
 			throw new \InvalidArgumentException( 'non-nullable props cannot be null' );
 		}
-		$this->container[ 'props' ] = $props;
+		$this->container['props'] = $props;
 
 		return $this;
 	}
@@ -389,7 +475,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool
 	 */
 	public function getRevenueGoals() {
-		return $this->container[ 'revenue_goals' ];
+		return $this->container['revenue_goals'];
 	}
 
 	/**
@@ -403,7 +489,107 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 		if ( is_null( $revenue_goals ) ) {
 			throw new \InvalidArgumentException( 'non-nullable revenue_goals cannot be null' );
 		}
-		$this->container[ 'revenue_goals' ] = $revenue_goals;
+		$this->container['revenue_goals'] = $revenue_goals;
+
+		return $this;
+	}
+
+	/**
+	 * Gets sso
+	 *
+	 * @return bool
+	 */
+	public function getSso() {
+		return $this->container['sso'];
+	}
+
+	/**
+	 * Sets sso
+	 *
+	 * @param bool $sso sso
+	 *
+	 * @return self
+	 */
+	public function setSso( $sso ) {
+		if ( is_null( $sso ) ) {
+			throw new \InvalidArgumentException( 'non-nullable sso cannot be null' );
+		}
+		$this->container['sso'] = $sso;
+
+		return $this;
+	}
+
+	/**
+	 * Gets shared_links
+	 *
+	 * @return bool
+	 */
+	public function getSharedLinks() {
+		return $this->container['shared_links'];
+	}
+
+	/**
+	 * Sets shared_links
+	 *
+	 * @param bool $shared_links shared_links
+	 *
+	 * @return self
+	 */
+	public function setSharedLinks( $shared_links ) {
+		if ( is_null( $shared_links ) ) {
+			throw new \InvalidArgumentException( 'non-nullable shared_links cannot be null' );
+		}
+		$this->container['shared_links'] = $shared_links;
+
+		return $this;
+	}
+
+	/**
+	 * Gets site_segments
+	 *
+	 * @return bool
+	 */
+	public function getSiteSegments() {
+		return $this->container['site_segments'];
+	}
+
+	/**
+	 * Sets site_segments
+	 *
+	 * @param bool $site_segments site_segments
+	 *
+	 * @return self
+	 */
+	public function setSiteSegments( $site_segments ) {
+		if ( is_null( $site_segments ) ) {
+			throw new \InvalidArgumentException( 'non-nullable site_segments cannot be null' );
+		}
+		$this->container['site_segments'] = $site_segments;
+
+		return $this;
+	}
+
+	/**
+	 * Gets sites_api
+	 *
+	 * @return bool
+	 */
+	public function getSitesApi() {
+		return $this->container['sites_api'];
+	}
+
+	/**
+	 * Sets sites_api
+	 *
+	 * @param bool $sites_api sites_api
+	 *
+	 * @return self
+	 */
+	public function setSitesApi( $sites_api ) {
+		if ( is_null( $sites_api ) ) {
+			throw new \InvalidArgumentException( 'non-nullable sites_api cannot be null' );
+		}
+		$this->container['sites_api'] = $sites_api;
 
 		return $this;
 	}
@@ -414,21 +600,21 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return bool
 	 */
 	public function getStatsApi() {
-		return $this->container[ 'stats_api' ];
+		return $this->container['stats_api'];
 	}
 
 	/**
 	 * Sets stats_api
 	 *
 	 * @param bool $stats_api stats_api
-	 *
-	 * @return self
+     *
+     * @return self
 	 */
 	public function setStatsApi( $stats_api ) {
 		if ( is_null( $stats_api ) ) {
 			throw new \InvalidArgumentException( 'non-nullable stats_api cannot be null' );
 		}
-		$this->container[ 'stats_api' ] = $stats_api;
+		$this->container['stats_api'] = $stats_api;
 
 		return $this;
 	}
@@ -460,7 +646,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -485,7 +671,6 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -493,7 +678,7 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -514,17 +699,8 @@ class CapabilitiesFeatures implements ModelInterface, ArrayAccess, \JsonSerializ
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

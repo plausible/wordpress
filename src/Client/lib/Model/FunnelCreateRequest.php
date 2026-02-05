@@ -240,7 +240,7 @@ class FunnelCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializa
     /**
      * Constructor
      *
-     * @param mixed[] $data Associated array of property values
+     * @param mixed[]|null $data Associated array of property values
      *                      initializing the model
      */
 	public function __construct( ?array $data = null )

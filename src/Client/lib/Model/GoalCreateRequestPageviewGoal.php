@@ -50,13 +50,14 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 */
 	protected static $openAPIModelName = 'Goal_CreateRequest_Pageview_goal';
 
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @var string[]
-	 */
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
 	protected static $openAPITypes = [
-		'path' => 'string',
+		'custom_props' => 'array<string,string>',
+		'path'         => 'string'
 	];
 
 	/**
@@ -67,7 +68,8 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'path' => null,
+		'custom_props' => null,
+		'path'         => null
 	];
 
 	/**
@@ -76,35 +78,8 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'path' => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'path' => 'path',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'path' => 'setPath',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'path' => 'getPath',
+		'custom_props' => false,
+		'path'         => false
 	];
 
 	/**
@@ -113,60 +88,6 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'path', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -185,6 +106,86 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var string[]
+     */
+	protected static $attributeMap = [
+		'custom_props' => 'custom_props',
+		'path'         => 'path'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'custom_props' => 'setCustomProps',
+		'path'         => 'setPath'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'custom_props' => 'getCustomProps',
+		'path'         => 'getPath'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -215,26 +216,6 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -243,14 +224,40 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'custom_props', $data ?? [], null );
+		$this->setIfExists( 'path', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -261,11 +268,55 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'path' ] === null ) {
+		if ( ! is_null( $this->container['custom_props'] ) && ( count( $this->container['custom_props'] ) > 3 ) ) {
+			$invalidProperties[] = "invalid value for 'custom_props', number of items must be less than or equal to 3.";
+		}
+
+		if ( $this->container['path'] === null ) {
 			$invalidProperties[] = "'path' can't be null";
 		}
 
 		return $invalidProperties;
+	}
+
+	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
+	 * Gets custom_props
+	 *
+	 * @return array<string,string>|null
+	 */
+	public function getCustomProps() {
+		return $this->container['custom_props'];
+	}
+
+	/**
+	 * Sets custom_props
+	 *
+	 * @param array<string,string>|null $custom_props Custom properties (max 3, string keys and values)
+	 *
+	 * @return self
+	 */
+	public function setCustomProps( $custom_props ) {
+		if ( is_null( $custom_props ) ) {
+			throw new \InvalidArgumentException( 'non-nullable custom_props cannot be null' );
+		}
+
+		if ( ( count( $custom_props ) > 3 ) ) {
+			throw new \InvalidArgumentException( 'invalid value for $custom_props when calling GoalCreateRequestPageviewGoal., number of items must be less than or equal to 3.' );
+		}
+		$this->container['custom_props'] = $custom_props;
+
+		return $this;
 	}
 
 	/**
@@ -274,7 +325,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * @return string
 	 */
 	public function getPath() {
-		return $this->container[ 'path' ];
+		return $this->container['path'];
 	}
 
 	/**
@@ -288,7 +339,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 		if ( is_null( $path ) ) {
 			throw new \InvalidArgumentException( 'non-nullable path cannot be null' );
 		}
-		$this->container[ 'path' ] = $path;
+		$this->container['path'] = $path;
 
 		return $this;
 	}
@@ -320,7 +371,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -345,7 +396,6 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -353,7 +403,7 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -374,17 +424,8 @@ class GoalCreateRequestPageviewGoal implements ModelInterface, ArrayAccess, \Jso
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

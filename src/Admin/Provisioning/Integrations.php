@@ -20,9 +20,17 @@ class Integrations {
 	 * Build class.
 	 *
 	 * We use DI to prevent circular dependency.
+	 *
+	 * @param Provisioning|null $provisioning
+	 *
+	 * @codeCoverageIgnore
 	 */
-	public function __construct() {
-		$this->provisioning = new Provisioning();
+	public function __construct( $provisioning = null ) {
+		$this->provisioning = $provisioning;
+
+		if ( ! $this->provisioning ) {
+			$this->provisioning = new Provisioning();
+		}
 
 		$this->init();
 	}
@@ -41,7 +49,7 @@ class Integrations {
 	}
 
 	/**
-	 * @param array  $event_goals
+	 * @param array $event_goals
 	 * @param string $funnel_name
 	 *
 	 * @return void
@@ -89,7 +97,6 @@ class Integrations {
 	 * @param object $integration The integration object containing event goals to be deleted.
 	 *
 	 * @return void
-	 * @codeCoverageIgnore Because we don't want to test the API.
 	 */
 	public function delete_integration_goals( $integration ) {
 		$goals = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );

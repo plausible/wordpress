@@ -9,7 +9,7 @@
 namespace Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
-use Plausible\Analytics\WP\Helpers;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 
 class WooCommerce {
@@ -20,6 +20,8 @@ class WooCommerce {
 
 	/**
 	 * Build class.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function __construct( $integrations ) {
 		$this->integrations = $integrations;
@@ -31,6 +33,8 @@ class WooCommerce {
 	 * Action & filters hooks.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	private function init() {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_woocommerce_funnel' ], 10, 2 );
@@ -42,14 +46,14 @@ class WooCommerce {
 	 * and creates the funnel if the conditions are met.
 	 *
 	 * @param array $old_settings The previous settings before the update.
-	 * @param array $settings     The updated settings to check for enhanced measurement and WooCommerce integration.
+	 * @param array $settings The updated settings to check for enhanced measurement and WooCommerce integration.
 	 *
 	 * @return void
 	 *
 	 * @codeCoverageIgnore Because it interacts with the Plugins API.
 	 */
 	public function maybe_create_woocommerce_funnel( $old_settings, $settings ) {
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'revenue', $settings[ 'enhanced_measurements' ] ) || ! Integrations::is_wc_active() ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $settings['enhanced_measurements'] ) || ! Integrations::is_wc_active() ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -70,10 +74,10 @@ class WooCommerce {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_delete_woocommerce_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
 
 		// Setting is enabled, no need to continue.
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) || ! Integrations::is_wc_active() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) || ! Integrations::is_wc_active() ) {
 			return;
 		}
 

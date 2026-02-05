@@ -34,11 +34,11 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 /**
  * Capabilities Class Doc Comment
  *
- * @category    Class
+ * @category Class
  * @description Capabilities object
- * @package     Plausible\Analytics\WP\Client
- * @author      OpenAPI Generator team
- * @link        https://openapi-generator.tech
+ * @package  Plausible\Analytics\WP\Client
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
 class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
@@ -59,7 +59,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $openAPITypes = [
 		'authorized'  => 'bool',
 		'data_domain' => 'string',
-		'features'    => '\Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures',
+		'features'    => '\Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures'
 	];
 
 	/**
@@ -72,7 +72,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	protected static $openAPIFormats = [
 		'authorized'  => null,
 		'data_domain' => null,
-		'features'    => null,
+		'features'    => null
 	];
 
 	/**
@@ -81,43 +81,9 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'authorized'  => false,
+		'authorized' => false,
 		'data_domain' => true,
-		'features'    => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'authorized'  => 'authorized',
-		'data_domain' => 'data_domain',
-		'features'    => 'features',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'authorized'  => 'setAuthorized',
-		'data_domain' => 'setDataDomain',
-		'features'    => 'setFeatures',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'authorized'  => 'getAuthorized',
-		'data_domain' => 'getDataDomain',
-		'features'    => 'getFeatures',
+		'features'   => false
 	];
 
 	/**
@@ -126,62 +92,6 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'authorized', $data ?? [], null );
-		$this->setIfExists( 'data_domain', $data ?? [], null );
-		$this->setIfExists( 'features', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -200,6 +110,89 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+	/**
+	 * Array of attributes where the key is the local name,
+	 * and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = [
+		'authorized'  => 'authorized',
+		'data_domain' => 'data_domain',
+		'features'    => 'features'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'authorized'  => 'setAuthorized',
+		'data_domain' => 'setDataDomain',
+		'features'    => 'setFeatures'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'authorized'  => 'getAuthorized',
+		'data_domain' => 'getDataDomain',
+		'features'    => 'getFeatures'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -230,26 +223,6 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -258,14 +231,41 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'authorized', $data ?? [], null );
+		$this->setIfExists( 'data_domain', $data ?? [], null );
+		$this->setIfExists( 'features', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -276,13 +276,13 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'authorized' ] === null ) {
+		if ( $this->container['authorized'] === null ) {
 			$invalidProperties[] = "'authorized' can't be null";
 		}
-		if ( $this->container[ 'data_domain' ] === null ) {
+		if ( $this->container['data_domain'] === null ) {
 			$invalidProperties[] = "'data_domain' can't be null";
 		}
-		if ( $this->container[ 'features' ] === null ) {
+		if ( $this->container['features'] === null ) {
 			$invalidProperties[] = "'features' can't be null";
 		}
 
@@ -290,12 +290,23 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	}
 
 	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
 	 * Gets authorized
 	 *
 	 * @return bool
 	 */
 	public function getAuthorized() {
-		return $this->container[ 'authorized' ];
+		return $this->container['authorized'];
 	}
 
 	/**
@@ -309,7 +320,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 		if ( is_null( $authorized ) ) {
 			throw new \InvalidArgumentException( 'non-nullable authorized cannot be null' );
 		}
-		$this->container[ 'authorized' ] = $authorized;
+		$this->container['authorized'] = $authorized;
 
 		return $this;
 	}
@@ -320,7 +331,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return string
 	 */
 	public function getDataDomain() {
-		return $this->container[ 'data_domain' ];
+		return $this->container['data_domain'];
 	}
 
 	/**
@@ -341,18 +352,9 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 				$this->setOpenAPINullablesSetToNull( $nullablesSetToNull );
 			}
 		}
-		$this->container[ 'data_domain' ] = $data_domain;
+		$this->container['data_domain'] = $data_domain;
 
 		return $this;
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
 	}
 
 	/**
@@ -361,7 +363,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return \Plausible\Analytics\WP\Client\Model\CapabilitiesFeatures
 	 */
 	public function getFeatures() {
-		return $this->container[ 'features' ];
+		return $this->container['features'];
 	}
 
 	/**
@@ -375,7 +377,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 		if ( is_null( $features ) ) {
 			throw new \InvalidArgumentException( 'non-nullable features cannot be null' );
 		}
-		$this->container[ 'features' ] = $features;
+		$this->container['features'] = $features;
 
 		return $this;
 	}
@@ -407,7 +409,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -432,7 +434,6 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -440,7 +441,7 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -461,8 +462,8 @@ class Capabilities implements ModelInterface, ArrayAccess, \JsonSerializable {
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

@@ -36,16 +36,16 @@ class Module {
 	/**
 	 * Decide whether we should install the module, or not.
 	 *
-	 * @since 1.3.0
-	 *
 	 * @param array $settings Current settings, already written to the DB.
 	 *
 	 * @return void
+	 * @since 1.3.0
+	 *
 	 */
 	public function maybe_install_module( $old_settings, $settings ) {
-		if ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] !== 'on' ) {
+		if ( $settings['proxy_enabled'] === 'on' && $old_settings['proxy_enabled'] !== 'on' ) {
 			$this->install();
-		} elseif ( $settings[ 'proxy_enabled' ] === '' && $old_settings[ 'proxy_enabled' ] === 'on' ) {
+		} elseif ( $settings['proxy_enabled'] === '' && $old_settings['proxy_enabled'] === 'on' ) {
 			$this->uninstall();
 		}
 	}
@@ -53,8 +53,8 @@ class Module {
 	/**
 	 * Takes care of installing the M(ust)U(se) plugin when the Proxy is enabled.
 	 *
-	 * @since 1.3.0
 	 * @return void.
+	 * @since 1.3.0
 	 */
 	public function install() {
 		if ( ! current_user_can( 'install_plugins' ) ) {
@@ -86,10 +86,10 @@ class Module {
 	}
 
 	/**
-	 * @since 1.3.0
 	 * @return void
 	 *
 	 * @codeCoverageIgnore
+	 * @since 1.3.0
 	 */
 	private function show_module_not_installed_error() {
 		$message = sprintf(
@@ -109,9 +109,9 @@ class Module {
 	/**
 	 * Uninstall the Speed Module, generates JS files and all related settings when the proxy is disabled.
 	 *
-	 * @since 1.3.0
 	 * @return void.
 	 * @throws Exception
+	 * @since 1.3.0
 	 */
 	public function uninstall() {
 		if ( ! current_user_can( 'install_plugins' ) ) {
@@ -135,7 +135,7 @@ class Module {
 		 * Clean up generated JS files in /uploads dir.
 		 */
 		$cache_dir = Helpers::get_proxy_resource( 'cache_dir' );
-		$js_file   = Helpers::get_proxy_resource( 'file_alias' );
+		$js_file   = $this->get_filename();
 
 		if ( file_exists( $cache_dir . $js_file . '.js' ) ) {
 			unlink( $cache_dir . $js_file . '.js' ); // @codeCoverageIgnore
@@ -164,28 +164,39 @@ class Module {
 	 * @param mixed $dir
 	 *
 	 * @return bool
+	 *
+	 * @codeCoverageIgnore Because we don't want to test the filesystem.
 	 */
-	private function dir_is_empty( $dir ) {
+	protected function dir_is_empty( $dir ) {
 		$iterator = new \FilesystemIterator( $dir );
 
 		return ! $iterator->valid();
 	}
 
 	/**
-	 * Test the proxy before enabling the option.
+	 * @throws Exception
 	 *
-	 * @since 1.3.0
+	 * @codeCoverageIgnore because Helpers are tested elsewhere.
+	 */
+	protected function get_filename() {
+		return Helpers::get_filename();
+	}
+
+	/**
+	 * Test the proxy before enabling the option.
 	 *
 	 * @param mixed $settings
 	 *
 	 * @return mixed
 	 * @throws Exception
+	 * @since 1.3.0
+	 *
 	 */
 	public function maybe_enable_proxy( $settings, $old_settings ) {
 		/**
 		 * No need to run this on each update run, or when the proxy is disabled.
 		 */
-		if ( empty( $settings[ 'proxy_enabled' ] ) || ( $settings[ 'proxy_enabled' ] === 'on' && $old_settings[ 'proxy_enabled' ] === 'on' ) ) {
+		if ( empty( $settings['proxy_enabled'] ) || ( $settings['proxy_enabled'] === 'on' && $old_settings['proxy_enabled'] === 'on' ) ) {
 			return $settings;
 		}
 
@@ -243,9 +254,9 @@ class Module {
 	/**
 	 * Runs a quick internal call to the WordPress API to make sure it's accessible.
 	 *
-	 * @since 1.3.0
 	 * @return bool
 	 * @throws Exception
+	 * @since 1.3.0
 	 */
 	private function test_proxy( $run = true ) {
 		// Should we run the test?

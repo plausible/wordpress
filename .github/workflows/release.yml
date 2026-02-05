@@ -17,14 +17,15 @@ jobs:
         with:
           dev: no
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Install npm dependencies
         run: |
-          npm ci
-          sudo npm run build
+          npm install
+          npm run build
+
       - name: WordPress Plugin Deploy
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable

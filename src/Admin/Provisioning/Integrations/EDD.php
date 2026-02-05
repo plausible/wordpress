@@ -9,7 +9,7 @@
 namespace Plausible\Analytics\WP\Admin\Provisioning\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
-use Plausible\Analytics\WP\Helpers;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Integrations;
 
 class EDD {
@@ -20,6 +20,8 @@ class EDD {
 
 	/**
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function __construct( $integrations ) {
 		$this->integrations = $integrations;
@@ -31,6 +33,8 @@ class EDD {
 	 * Action and filter hooks.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	private function init() {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_edd_funnel' ], 10, 2 );
@@ -41,14 +45,14 @@ class EDD {
 	 * Creates an EDD purchase funnel if enhanced measurement is enabled and EDD is active.
 	 *
 	 * @param array $old_settings The previous settings before the update.
-	 * @param array $settings     The updated settings array.
+	 * @param array $settings The updated settings array.
 	 *
 	 * @return void
 	 *
 	 * @codeCoverageIgnore Because it interacts with the Plugins API
 	 */
 	public function maybe_create_edd_funnel( $old_settings, $settings ) {
-		if ( ! Helpers::is_enhanced_measurement_enabled( 'revenue', $settings[ 'enhanced_measurements' ] ) || ! Integrations::is_edd_active() ) {
+		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $settings['enhanced_measurements'] ) || ! Integrations::is_edd_active() ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -62,16 +66,16 @@ class EDD {
 	 * * required no. of goals is no longer met.
 	 *
 	 * @param array $old_settings The previous settings before the update.
-	 * @param array $settings     The current updated settings.
+	 * @param array $settings The current updated settings.
 	 *
 	 * @return void
 	 *
 	 * @codeCoverageIgnore Because it interacts with the Plugins API.
 	 */
 	public function maybe_delete_edd_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings[ 'enhanced_measurements' ] );
+		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
 
-		if ( Helpers::is_enhanced_measurement_enabled( 'revenue', $enhanced_measurements ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
 			return;
 		}
 

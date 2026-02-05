@@ -50,15 +50,16 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 */
 	protected static $openAPIModelName = 'Goal_CustomEvent_allOf_goal';
 
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @var string[]
-	 */
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
 	protected static $openAPITypes = [
+		'custom_props' => 'array<string,string>',
 		'display_name' => 'string',
 		'event_name'   => 'string',
-		'id'           => 'int',
+		'id'           => 'int'
 	];
 
 	/**
@@ -69,9 +70,10 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
+		'custom_props' => null,
 		'display_name' => null,
 		'event_name'   => null,
-		'id'           => null,
+		'id'           => null
 	];
 
 	/**
@@ -80,43 +82,10 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
+		'custom_props' => false,
 		'display_name' => false,
 		'event_name'   => false,
-		'id'           => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'display_name' => 'display_name',
-		'event_name'   => 'event_name',
-		'id'           => 'id',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'display_name' => 'setDisplayName',
-		'event_name'   => 'setEventName',
-		'id'           => 'setId',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'display_name' => 'getDisplayName',
-		'event_name'   => 'getEventName',
-		'id'           => 'getId',
+		'id'           => false
 	];
 
 	/**
@@ -125,62 +94,6 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'display_name', $data ?? [], null );
-		$this->setIfExists( 'event_name', $data ?? [], null );
-		$this->setIfExists( 'id', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -199,6 +112,92 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var string[]
+     */
+	protected static $attributeMap = [
+		'custom_props' => 'custom_props',
+		'display_name' => 'display_name',
+		'event_name'   => 'event_name',
+		'id'           => 'id'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'custom_props' => 'setCustomProps',
+		'display_name' => 'setDisplayName',
+		'event_name'   => 'setEventName',
+		'id'           => 'setId'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'custom_props' => 'getCustomProps',
+		'display_name' => 'getDisplayName',
+		'event_name'   => 'getEventName',
+		'id'           => 'getId'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -229,26 +228,6 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -257,14 +236,42 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'custom_props', $data ?? [], null );
+		$this->setIfExists( 'display_name', $data ?? [], null );
+		$this->setIfExists( 'event_name', $data ?? [], null );
+		$this->setIfExists( 'id', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -275,17 +282,53 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'display_name' ] === null ) {
+		if ( $this->container['display_name'] === null ) {
 			$invalidProperties[] = "'display_name' can't be null";
 		}
-		if ( $this->container[ 'event_name' ] === null ) {
+		if ( $this->container['event_name'] === null ) {
 			$invalidProperties[] = "'event_name' can't be null";
 		}
-		if ( $this->container[ 'id' ] === null ) {
+		if ( $this->container['id'] === null ) {
 			$invalidProperties[] = "'id' can't be null";
 		}
 
 		return $invalidProperties;
+	}
+
+	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
+	 * Gets custom_props
+	 *
+	 * @return array<string,string>|null
+	 */
+	public function getCustomProps() {
+		return $this->container['custom_props'];
+	}
+
+	/**
+	 * Sets custom_props
+	 *
+	 * @param array<string,string>|null $custom_props Custom properties (string keys and values)
+	 *
+	 * @return self
+	 */
+	public function setCustomProps( $custom_props ) {
+		if ( is_null( $custom_props ) ) {
+			throw new \InvalidArgumentException( 'non-nullable custom_props cannot be null' );
+		}
+		$this->container['custom_props'] = $custom_props;
+
+		return $this;
 	}
 
 	/**
@@ -294,7 +337,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @return string
 	 */
 	public function getDisplayName() {
-		return $this->container[ 'display_name' ];
+		return $this->container['display_name'];
 	}
 
 	/**
@@ -308,7 +351,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 		if ( is_null( $display_name ) ) {
 			throw new \InvalidArgumentException( 'non-nullable display_name cannot be null' );
 		}
-		$this->container[ 'display_name' ] = $display_name;
+		$this->container['display_name'] = $display_name;
 
 		return $this;
 	}
@@ -319,7 +362,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @return string
 	 */
 	public function getEventName() {
-		return $this->container[ 'event_name' ];
+		return $this->container['event_name'];
 	}
 
 	/**
@@ -333,7 +376,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 		if ( is_null( $event_name ) ) {
 			throw new \InvalidArgumentException( 'non-nullable event_name cannot be null' );
 		}
-		$this->container[ 'event_name' ] = $event_name;
+		$this->container['event_name'] = $event_name;
 
 		return $this;
 	}
@@ -344,7 +387,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @return int
 	 */
 	public function getId() {
-		return $this->container[ 'id' ];
+		return $this->container['id'];
 	}
 
 	/**
@@ -358,7 +401,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 		if ( is_null( $id ) ) {
 			throw new \InvalidArgumentException( 'non-nullable id cannot be null' );
 		}
-		$this->container[ 'id' ] = $id;
+		$this->container['id'] = $id;
 
 		return $this;
 	}
@@ -390,7 +433,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -415,7 +458,6 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -423,7 +465,7 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -444,17 +486,8 @@ class GoalCustomEventAllOfGoal implements ModelInterface, ArrayAccess, \JsonSeri
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

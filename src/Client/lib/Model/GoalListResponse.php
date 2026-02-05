@@ -34,11 +34,11 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 /**
  * GoalListResponse Class Doc Comment
  *
- * @category    Class
+ * @category Class
  * @description Goals list response
- * @package     Plausible\Analytics\WP\Client
- * @author      OpenAPI Generator team
- * @link        https://openapi-generator.tech
+ * @package  Plausible\Analytics\WP\Client
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
 class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable {
@@ -58,7 +58,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	protected static $openAPITypes = [
 		'goals' => '\Plausible\Analytics\WP\Client\Model\Goal[]',
-		'meta'  => '\Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta',
+		'meta'  => '\Plausible\Analytics\WP\Client\Model\GoalListResponseMeta'
 	];
 
 	/**
@@ -70,7 +70,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	protected static $openAPIFormats = [
 		'goals' => null,
-		'meta'  => null,
+		'meta'  => null
 	];
 
 	/**
@@ -80,38 +80,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	protected static array $openAPINullables = [
 		'goals' => false,
-		'meta'  => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'goals' => 'goals',
-		'meta'  => 'meta',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'goals' => 'setGoals',
-		'meta'  => 'setMeta',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'goals' => 'getGoals',
-		'meta'  => 'getMeta',
+		'meta'  => false
 	];
 
 	/**
@@ -120,61 +89,6 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'goals', $data ?? [], null );
-		$this->setIfExists( 'meta', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -193,6 +107,86 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+	/**
+	 * Array of attributes where the key is the local name,
+	 * and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = [
+		'goals' => 'goals',
+		'meta'  => 'meta'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'goals' => 'setGoals',
+		'meta'  => 'setMeta'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'goals' => 'getGoals',
+		'meta'  => 'getMeta'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -223,26 +217,6 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -251,14 +225,40 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'goals', $data ?? [], null );
+		$this->setIfExists( 'meta', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -269,10 +269,10 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'goals' ] === null ) {
+		if ( $this->container['goals'] === null ) {
 			$invalidProperties[] = "'goals' can't be null";
 		}
-		if ( $this->container[ 'meta' ] === null ) {
+		if ( $this->container['meta'] === null ) {
 			$invalidProperties[] = "'meta' can't be null";
 		}
 
@@ -280,12 +280,23 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	}
 
 	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
 	 * Gets goals
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\Goal[]
 	 */
 	public function getGoals() {
-		return $this->container[ 'goals' ];
+		return $this->container['goals'];
 	}
 
 	/**
@@ -299,7 +310,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 		if ( is_null( $goals ) ) {
 			throw new \InvalidArgumentException( 'non-nullable goals cannot be null' );
 		}
-		$this->container[ 'goals' ] = $goals;
+		$this->container['goals'] = $goals;
 
 		return $this;
 	}
@@ -307,16 +318,16 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	/**
 	 * Gets meta
 	 *
-	 * @return \Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta
+	 * @return \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta
 	 */
 	public function getMeta() {
-		return $this->container[ 'meta' ];
+		return $this->container['meta'];
 	}
 
 	/**
 	 * Sets meta
 	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\FunnelListResponseMeta $meta meta
+	 * @param \Plausible\Analytics\WP\Client\Model\GoalListResponseMeta $meta meta
 	 *
 	 * @return self
 	 */
@@ -324,7 +335,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 		if ( is_null( $meta ) ) {
 			throw new \InvalidArgumentException( 'non-nullable meta cannot be null' );
 		}
-		$this->container[ 'meta' ] = $meta;
+		$this->container['meta'] = $meta;
 
 		return $this;
 	}
@@ -356,7 +367,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -381,7 +392,6 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -389,7 +399,7 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -410,17 +420,8 @@ class GoalListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 

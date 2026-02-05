@@ -12,7 +12,7 @@ namespace Plausible\Analytics\WP;
 class Integrations {
 	const PURCHASE_TRACKED_META_KEY = '_plausible_analytics_purchase_tracked';
 
-	const SCRIPT_WRAPPER            = '<script defer id="plausible-analytics-integration-tracking">document.addEventListener("DOMContentLoaded", () => { %s });</script>';
+	const SCRIPT_WRAPPER = '<script defer id="plausible-analytics-integration-tracking">document.addEventListener("DOMContentLoaded", () => { %s });</script>';
 
 	/**
 	 * Build class.
@@ -27,18 +27,23 @@ class Integrations {
 	 */
 	private function init() {
 		// WooCommerce
-		if ( self::is_wc_active() && Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
-			new Integrations\WooCommerce();
+		if ( self::is_wc_active() && EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
+			new Integrations\WooCommerce(); // @codeCoverageIgnore
 		}
 
 		// Easy Digital Downloads
-		if ( self::is_edd_active() && Helpers::is_enhanced_measurement_enabled( 'revenue' ) ) {
-			new Integrations\EDD();
+		if ( self::is_edd_active() && EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
+			new Integrations\EDD(); // @codeCoverageIgnore
 		}
 
 		// Form Plugins
-		if ( Helpers::is_enhanced_measurement_enabled( 'form-completions' ) ) {
-			new Integrations\FormSubmit();
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS ) ) {
+			new Integrations\FormSubmit(); // @codeCoverageIgnore
+		}
+
+		// Search Queries
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) ) {
+			new Integrations\Search(); // @codeCoverageIgnore
 		}
 	}
 

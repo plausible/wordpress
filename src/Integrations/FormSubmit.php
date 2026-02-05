@@ -33,7 +33,7 @@ class FormSubmit {
 		 */
 		add_action( 'wp_enqueue_scripts', [ $this, 'add_js' ], 1 );
 		/**
-		 * Contact Form 7 doesn't respect JS checkValidity() function, so this is a custom compatibility fix.
+		 * Contact Form 7 doesn't respect JS' checkValidity() function, so this is a custom compatibility fix.
 		 */
 		add_filter( 'wpcf7_validate', [ $this, 'maybe_track_submission' ], 10, 2 );
 		/**
@@ -71,7 +71,7 @@ class FormSubmit {
 	 * @filter             wpcf7_validate
 	 *
 	 * @param \WPCF7_Validation $result Form submission result object containing validation results.
-	 * @param array             $tags   Array of tags associated with the form fields.
+	 * @param array $tags Array of tags associated with the form fields.
 	 *
 	 * @return \WPCF7_Validation
 	 *
@@ -81,7 +81,7 @@ class FormSubmit {
 		$invalid_fields = $result->get_invalid_fields();
 
 		if ( empty( $invalid_fields ) ) {
-			$post = get_post( $_POST[ '_wpcf7_container_post' ] );
+			$post = get_post( $_POST['_wpcf7_container_post'] );
 			$uri  = '/' . $post->post_name . '/';
 
 			$this->track_submission( $uri );
@@ -123,7 +123,7 @@ class FormSubmit {
 	 * @codeCoverageIgnore because we can't test XHR requests here.
 	 */
 	public function track_gravity_forms_submission( $form ) {
-		$uri = str_replace( home_url(), '', $form[ 'source_url' ] ) ?? '';
+		$uri = str_replace( home_url(), '', $form['source_url'] ) ?? '';
 
 		if ( empty( $uri ) ) {
 			return;

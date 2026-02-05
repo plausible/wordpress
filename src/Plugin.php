@@ -54,11 +54,14 @@ final class Plugin {
 		}
 
 		add_action( 'init', [ $this, 'load_integrations' ] );
-		new Actions();
+
+		new AdminBar();
+		new Assets();
 		new Ajax();
 		new Compatibility();
-		new Filters();
+		new InitOptions();
 		new Proxy();
+		new Verification();
 	}
 
 	/**

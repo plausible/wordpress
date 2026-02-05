@@ -10,8 +10,10 @@
 namespace Plausible\Analytics\WP\Admin\Settings;
 
 use Exception;
+use Plausible\Analytics\WP\Capabilities;
 use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\ClientFactory;
+use Plausible\Analytics\WP\EnhancedMeasurements;
 use Plausible\Analytics\WP\Helpers;
 
 class Page extends API {
@@ -53,14 +55,6 @@ class Page extends API {
 		'type'      => 'hook',
 		'hook_type' => 'success',
 	];
-
-	const CAP_GOALS                                 = 'goals';
-
-	const CAP_PROPS                                 = 'props';
-
-	const CAP_FUNNELS                               = 'funnels';
-
-	const CAP_REVENUE                               = 'revenue';
 
 	/**
 	 * @var array|array[] $fields
@@ -143,48 +137,48 @@ class Page extends API {
 						'plausible-analytics'
 					),
 					'fields' => [
-						'404'                      => [
+						EnhancedMeasurements::FOUR_O_FOUR             => [
 							'label' => esc_html__( '404 error pages', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => '404',
-							'caps'  => [ self::CAP_GOALS ],
+							'value' => EnhancedMeasurements::FOUR_O_FOUR,
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'file-downloads'           => [
+						EnhancedMeasurements::FILE_DOWNLOADS          => [
 							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'file-downloads',
-							'caps'  => [ self::CAP_GOALS ],
+							'value' => EnhancedMeasurements::FILE_DOWNLOADS,
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'outbound-links'           => [
+						EnhancedMeasurements::OUTBOUND_LINKS          => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'outbound-links',
-							'caps'  => [ self::CAP_GOALS ],
+							'value' => EnhancedMeasurements::OUTBOUND_LINKS,
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'pageview-props'           => [
+						EnhancedMeasurements::PAGEVIEW_PROPS          => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'pageview-props',
-							'caps'  => [ self::CAP_PROPS ],
+							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
+							'caps'  => [ Capabilities::PROPS ],
 						],
-						'affiliate-links'          => [
+						EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => [
 							'label'      => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
 							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-cloaked-affiliate-link-clicks',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => 'affiliate-links',
+							'value' => EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS,
 							'addtl_opts' => true,
-							'caps'       => [ self::CAP_GOALS ],
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'affiliate-links-patterns' => [
+						'affiliate-links-patterns'                    => [
 							'slug'        => 'affiliate_links',
 							'description' => sprintf(
 								__(
@@ -195,40 +189,45 @@ class Page extends API {
 							),
 							'type'        => 'clonable_text',
 							'value'       => Helpers::get_settings()[ 'affiliate_links' ] ?? [],
-							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'affiliate-links' ),
+							'hidden' => ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ),
 						],
-						'revenue'                  => [
+						EnhancedMeasurements::ECOMMERCE_REVENUE       => [
 							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'revenue',
-							'caps'  => [ self::CAP_GOALS, self::CAP_FUNNELS, self::CAP_PROPS, self::CAP_REVENUE ],
+							'value' => EnhancedMeasurements::ECOMMERCE_REVENUE,
+							'caps'  => [
+								Capabilities::GOALS,
+								Capabilities::FUNNELS,
+								Capabilities::PROPS,
+								Capabilities::REVENUE
+							],
 						],
-						'form-completions'         => [
+						EnhancedMeasurements::FORM_COMPLETIONS        => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-form-completions',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'form-completions',
-							'caps'  => [ self::CAP_GOALS ],
+							'value' => EnhancedMeasurements::FORM_COMPLETIONS,
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'user-logged-in'           => [
+						EnhancedMeasurements::LOGGED_IN_USER_STATUS   => [
 							'label' => esc_html__( 'Logged-in user status', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-logged-in-user-status',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'user-logged-in',
-							'caps'  => [ self::CAP_PROPS ],
+							'value' => EnhancedMeasurements::LOGGED_IN_USER_STATUS,
+							'caps'  => [ Capabilities::PROPS ],
 						],
-						'query-params'          => [
+						EnhancedMeasurements::QUERY_PARAMS            => [
 							'label'      => esc_html__( 'Query parameters', 'plausible-analytics' ),
 							'docs' => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-custom-query-parameters',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
-							'value'      => 'query-params',
+							'value' => EnhancedMeasurements::QUERY_PARAMS,
 							'addtl_opts' => true,
-							'caps'       => [ self::CAP_PROPS ],
+							'caps'  => [ Capabilities::PROPS ],
 						],
 						'query-params-patterns' => [
 							'slug'        => 'query_params',
@@ -241,46 +240,23 @@ class Page extends API {
 							),
 							'type'        => 'clonable_text',
 							'value' => Helpers::get_settings()['query_params'] ?? [],
-							'hidden'      => ! Helpers::is_enhanced_measurement_enabled( 'query-params' ),
+							'hidden' => ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ),
 						],
-						'search'                   => [
+						EnhancedMeasurements::SEARCH_QUERIES          => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-site-search-tracking',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
-							'value' => 'search',
-							'caps'  => [ self::CAP_GOALS ],
+							'value' => EnhancedMeasurements::SEARCH_QUERIES,
+							'caps'  => [ Capabilities::GOALS ],
 						],
-						'advanced-options'         => [
-							'label'  => esc_html__( 'Advanced options', 'plausible-analytics' ),
-							'slug'   => 'advanced_options',
-							'type'   => 'toggle_group',
-							'fields' => [
-								'tagged-events' => [
-									'label' => esc_html__( 'Custom events', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-setup-custom-events-to-track-goal-conversions',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'tagged-events',
-									'caps'  => [ self::CAP_GOALS ],
-								],
-								'hash'          => [
-									'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'hash',
-									'caps'  => [],
-								],
-								'compat'        => [
-									'label' => esc_html__( 'IE compatibility', 'plausible-analytics' ),
-									'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-visitors-who-use-internet-explorer',
-									'slug'  => 'enhanced_measurements',
-									'type'  => 'checkbox',
-									'value' => 'compat',
-									'caps'  => [],
-								],
-							],
+						EnhancedMeasurements::HASH_BASED_ROUTING      => [
+							'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => EnhancedMeasurements::HASH_BASED_ROUTING,
+							'caps'  => [],
 						],
 					],
 				],
@@ -302,9 +278,7 @@ class Page extends API {
 						) ? 'a random directory/file for storing the JS file' : 'a JS file, called <code>' . str_replace(
 								ABSPATH,
 								'',
-								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_proxy_resource(
-									'file_alias'
-								) . '.js</code>'
+								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_filename() . '.js</code>'
 							),
 						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
 					),

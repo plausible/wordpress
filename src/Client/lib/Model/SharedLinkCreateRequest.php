@@ -34,11 +34,11 @@ use \Plausible\Analytics\WP\Client\ObjectSerializer;
 /**
  * SharedLinkCreateRequest Class Doc Comment
  *
- * @category    Class
+ * @category Class
  * @description Shared Links creation params
- * @package     Plausible\Analytics\WP\Client
- * @author      OpenAPI Generator team
- * @link        https://openapi-generator.tech
+ * @package  Plausible\Analytics\WP\Client
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
 class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSerializable {
@@ -57,7 +57,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @var string[]
 	 */
 	protected static $openAPITypes = [
-		'shared_link' => '\Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink',
+		'shared_link' => '\Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink'
 	];
 
 	/**
@@ -68,7 +68,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @psalm-var array<string, string|null>
 	 */
 	protected static $openAPIFormats = [
-		'shared_link' => null,
+		'shared_link' => null
 	];
 
 	/**
@@ -77,35 +77,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @var boolean[]
 	 */
 	protected static array $openAPINullables = [
-		'shared_link' => false,
-	];
-
-	/**
-	 * Array of attributes where the key is the local name,
-	 * and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = [
-		'shared_link' => 'shared_link',
-	];
-
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = [
-		'shared_link' => 'setSharedLink',
-	];
-
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = [
-		'shared_link' => 'getSharedLink',
+		'shared_link' => false
 	];
 
 	/**
@@ -114,60 +86,6 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @var boolean[]
 	 */
 	protected array $openAPINullablesSetToNull = [];
-
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = [];
-
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values
-	 *                      initializing the model
-	 */
-	public function __construct( ?array $data = null ) {
-		$this->setIfExists( 'shared_link', $data ?? [], null );
-	}
-
-	/**
-	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
-	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
-	 * $this->openAPINullablesSetToNull array
-	 *
-	 * @param string $variableName
-	 * @param array  $fields
-	 * @param mixed  $defaultValue
-	 */
-	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
-		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
-			$this->openAPINullablesSetToNull[] = $variableName;
-		}
-
-		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
-	}
-
-	/**
-	 * Checks if a property is nullable
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public static function isNullable( string $property ): bool {
-		return self::openAPINullables()[ $property ] ?? false;
-	}
-
-	/**
-	 * Array of nullable properties
-	 *
-	 * @return array
-	 */
-	protected static function openAPINullables(): array {
-		return self::$openAPINullables;
-	}
 
 	/**
 	 * Array of property to type mappings. Used for (de)serialization
@@ -186,6 +104,83 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	public static function openAPIFormats() {
 		return self::$openAPIFormats;
 	}
+
+	/**
+	 * Array of nullable properties
+	 *
+	 * @return array
+	 */
+	protected static function openAPINullables(): array {
+		return self::$openAPINullables;
+	}
+
+	/**
+	 * Array of nullable field names deliberately set to null
+	 *
+	 * @return boolean[]
+	 */
+	private function getOpenAPINullablesSetToNull(): array {
+		return $this->openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Setter - Array of nullable field names deliberately set to null
+	 *
+	 * @param boolean[] $openAPINullablesSetToNull
+	 */
+	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
+		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+	}
+
+	/**
+	 * Checks if a property is nullable
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public static function isNullable( string $property ): bool {
+		return self::openAPINullables()[ $property ] ?? false;
+	}
+
+	/**
+	 * Checks if a nullable property is set to null.
+	 *
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function isNullableSetToNull( string $property ): bool {
+		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
+	}
+
+	/**
+	 * Array of attributes where the key is the local name,
+	 * and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = [
+		'shared_link' => 'shared_link'
+	];
+
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = [
+		'shared_link' => 'setSharedLink'
+	];
+
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = [
+		'shared_link' => 'getSharedLink'
+	];
 
 	/**
 	 * Array of attributes where the key is the local name,
@@ -216,26 +211,6 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	}
 
 	/**
-	 * Checks if a nullable property is set to null.
-	 *
-	 * @param string $property
-	 *
-	 * @return bool
-	 */
-	public function isNullableSetToNull( string $property ): bool {
-		return in_array( $property, $this->getOpenAPINullablesSetToNull(), true );
-	}
-
-	/**
-	 * Array of nullable field names deliberately set to null
-	 *
-	 * @return boolean[]
-	 */
-	private function getOpenAPINullablesSetToNull(): array {
-		return $this->openAPINullablesSetToNull;
-	}
-
-	/**
 	 * The original name of the model.
 	 *
 	 * @return string
@@ -244,14 +219,39 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 		return self::$openAPIModelName;
 	}
 
+
 	/**
-	 * Validate all the properties in the model
-	 * return true if all passed
+	 * Associative array for storing property values
 	 *
-	 * @return bool True if all properties are valid
+	 * @var mixed[]
 	 */
-	public function valid() {
-		return count( $this->listInvalidProperties() ) === 0;
+	protected $container = [];
+
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[]|null $data Associated array of property values
+	 *                      initializing the model
+	 */
+	public function __construct( ?array $data = null ) {
+		$this->setIfExists( 'shared_link', $data ?? [], null );
+	}
+
+	/**
+	 * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+	 * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+	 * $this->openAPINullablesSetToNull array
+	 *
+	 * @param string $variableName
+	 * @param array $fields
+	 * @param mixed $defaultValue
+	 */
+	private function setIfExists( string $variableName, array $fields, $defaultValue ): void {
+		if ( self::isNullable( $variableName ) && array_key_exists( $variableName, $fields ) && is_null( $fields[ $variableName ] ) ) {
+			$this->openAPINullablesSetToNull[] = $variableName;
+		}
+
+		$this->container[ $variableName ] = $fields[ $variableName ] ?? $defaultValue;
 	}
 
 	/**
@@ -262,7 +262,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	public function listInvalidProperties() {
 		$invalidProperties = [];
 
-		if ( $this->container[ 'shared_link' ] === null ) {
+		if ( $this->container['shared_link'] === null ) {
 			$invalidProperties[] = "'shared_link' can't be null";
 		}
 
@@ -270,12 +270,23 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	}
 
 	/**
+	 * Validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		return count( $this->listInvalidProperties()) === 0;
+	}
+
+
+	/**
 	 * Gets shared_link
 	 *
 	 * @return \Plausible\Analytics\WP\Client\Model\SharedLinkCreateRequestSharedLink
 	 */
 	public function getSharedLink() {
-		return $this->container[ 'shared_link' ];
+		return $this->container['shared_link'];
 	}
 
 	/**
@@ -289,7 +300,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 		if ( is_null( $shared_link ) ) {
 			throw new \InvalidArgumentException( 'non-nullable shared_link cannot be null' );
 		}
-		$this->container[ 'shared_link' ] = $shared_link;
+		$this->container['shared_link'] = $shared_link;
 
 		return $this;
 	}
@@ -321,7 +332,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * Sets value based on offset.
 	 *
 	 * @param int|null $offset Offset
-	 * @param mixed    $value  Value to be set
+	 * @param mixed $value Value to be set
 	 *
 	 * @return void
 	 */
@@ -346,7 +357,6 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 
 	/**
 	 * Serializes the object to a value that can be serialized natively by json_encode().
-	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 *
 	 * @return mixed Returns data which can be serialized by json_encode(), which is a value
@@ -354,7 +364,7 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return ObjectSerializer::sanitizeForSerialization( $this );
+		return ObjectSerializer::sanitizeForSerialization($this );
 	}
 
 	/**
@@ -375,17 +385,8 @@ class SharedLinkCreateRequest implements ModelInterface, ArrayAccess, \JsonSeria
 	 * @return string
 	 */
 	public function toHeaderValue() {
-		return json_encode( ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
-
-	/**
-	 * Setter - Array of nullable field names deliberately set to null
-	 *
-	 * @param boolean[] $openAPINullablesSetToNull
-	 */
-	private function setOpenAPINullablesSetToNull( array $openAPINullablesSetToNull ): void {
-		$this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
-	}
+		return json_encode( ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
 
 
