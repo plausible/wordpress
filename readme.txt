@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,6 +155,12 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.5.1 | February 5th, 2026 =
+* Migrated: this plugin now uses the new tracking code.
+* Improved: the Custom Events option is now on by default.
+* Removed: IE compatibility.
+* Improved: PHP 8.5 compatibility (not fully tested yet)
 
 = 2.5.0 | December 9th, 2025 =
 * Improved: PHP 8.4 compatibility
