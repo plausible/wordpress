@@ -184,7 +184,12 @@ class Client {
 
 		if ( ! $id ) {
 			$tracker_configuration = $this->get_configuration();
-			$id                    = $tracker_configuration->getId();
+
+			if ( ! $tracker_configuration instanceof Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration ) {
+				return '';
+			}
+
+			$id = $tracker_configuration->getId();
 
 			update_option( 'plausible_analytics_tracker_id', $id );
 		}
