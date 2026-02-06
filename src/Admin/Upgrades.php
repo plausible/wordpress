@@ -380,7 +380,7 @@ class Upgrades {
 
 		?>
 		<div class="notice notice-warning">
-			<p><?php echo sprintf( __( 'An API token for Plausible Analytics is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.',
+			<p><?php echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.',
 						'plausible-analytics' )
 					, $url ); ?></p>
 		</div>
