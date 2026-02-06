@@ -94,6 +94,10 @@ class Upgrades {
 			$this->upgrade_to_251();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.5.3', '<' ) ) {
+			$this->upgrade_to_253();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -345,5 +349,41 @@ class Upgrades {
 		new Cron();
 
 		update_option( 'plausible_analytics_version', '2.5.1' );
+	}
+
+	/**
+	 * Show an admin-wide notice to CE users that haven't entered an API token yet.
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_253() {
+		$self_hosted_domain = Helpers::get_settings()['self_hosted_domain'];
+		$api_token          = Helpers::get_settings()['api_token'];
+
+		// Not a CE user or a CE user already using the Plugins API.
+		if ( empty( $self_hosted_domain ) || ! empty( $api_token ) ) {
+			update_option( 'plausible_analytics_version', '2.5.3' );
+
+			return;
+		}
+
+		add_action( 'admin_notices', [ $this, 'show_api_token_notice' ] );
+	}
+
+	/**
+	 * Display a notice to CE users that haven't entered an API token yet.
+	 *
+	 * @return void
+	 */
+	public function show_api_token_notice() {
+		$url = admin_url( 'options-general.php?page=plausible_analytics' );
+
+		?>
+		<div class="notice notice-warning">
+			<p><?php echo sprintf( __( 'An API token for Plausible Analytics is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.',
+						'plausible-analytics' )
+					, $url ); ?></p>
+		</div>
+		<?php
 	}
 }
