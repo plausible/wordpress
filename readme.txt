@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.5.3
+Stable tag: 2.5.4
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -156,9 +156,12 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 2.5.4 =
+* Improved: added a separate notice for Cloud users that haven't entered the Plugin token yet.
+
 = 2.5.3 =
-* Fixed: display a notice to CE users that haven't entered an API token yet.
-* Fixed: a critical error would occur if the entered API token was invalid.
+* Fixed: display a notice to CE users that haven't entered the Plugin token yet.
+* Fixed: a critical error would occur if the entered Plugin token was invalid.
 
 = 2.5.2 =
 * Fixed: CE users still using a self-hosted version without Plugins API support would get a critical error after updating to 2.5.1.
