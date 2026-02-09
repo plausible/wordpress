@@ -380,10 +380,11 @@ class Upgrades {
 	 * @return void
 	 */
 	public function upgrade_to_254() {
-		$api_token = Helpers::get_settings()['api_token'];
+		$self_hosted_domain = Helpers::get_settings()['self_hosted_domain'];
+		$api_token          = Helpers::get_settings()['api_token'];
 
 		// This user apparently hasn't entered an API token yet.
-		if ( ! empty( $api_token ) ) {
+		if ( ! empty( $api_token ) && empty ( $self_hosted_domain ) ) {
 			update_option( 'plausible_analytics_version', '2.5.4' );
 
 			return;
@@ -417,7 +418,7 @@ class Upgrades {
 
 		?>
 		<div class="notice notice-warning">
-			<p><?php echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create a token in your <a href="%s">Settings</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
+			<p><?php echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}
