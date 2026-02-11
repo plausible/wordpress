@@ -375,7 +375,7 @@ class Upgrades {
 	}
 
 	/**
-	 * Show an admin-wide notice to CE users that haven't entered an API token yet.
+	 * Show an admin-wide notice to Cloud users that haven't entered an API token yet.
 	 *
 	 * @return void
 	 */
