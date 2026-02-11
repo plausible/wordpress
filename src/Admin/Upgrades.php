@@ -94,10 +94,6 @@ class Upgrades {
 			$this->upgrade_to_251();
 		}
 
-		if ( version_compare( $plausible_analytics_version, '2.5.3', '<' ) ) {
-			$this->upgrade_to_253();
-		}
-
 		if ( version_compare( $plausible_analytics_version, '2.5.4', '<' ) ) {
 			$this->upgrade_to_254();
 		}
@@ -356,26 +352,7 @@ class Upgrades {
 	}
 
 	/**
-	 * Show an admin-wide notice to CE users that haven't entered an API token yet.
-	 *
-	 * @return void
-	 */
-	public function upgrade_to_253() {
-		$self_hosted_domain = Helpers::get_settings()['self_hosted_domain'];
-		$api_token          = Helpers::get_settings()['api_token'];
-
-		// Not a CE user or a CE user already using the Plugins API.
-		if ( empty( $self_hosted_domain ) || ! empty( $api_token ) ) {
-			update_option( 'plausible_analytics_version', '2.5.3' );
-
-			return;
-		}
-
-		add_action( 'admin_notices', [ $this, 'show_ce_api_token_notice' ] );
-	}
-
-	/**
-	 * Show an admin-wide notice to Cloud users that haven't entered an API token yet.
+	 * Show an admin-wide notice to CE or Cloud users that haven't entered an API token yet.
 	 *
 	 * @return void
 	 */
@@ -383,14 +360,21 @@ class Upgrades {
 		$self_hosted_domain = Helpers::get_settings()['self_hosted_domain'];
 		$api_token          = Helpers::get_settings()['api_token'];
 
-		// This user apparently hasn't entered an API token yet.
-		if ( empty( $api_token ) && empty ( $self_hosted_domain ) ) {
+		// API token already entered, no notice needed.
+		if ( ! empty( $api_token ) ) {
 			update_option( 'plausible_analytics_version', '2.5.4' );
 
 			return;
 		}
 
-		add_action( 'admin_notices', [ $this, 'show_api_token_notice' ] );
+		// Show CE notice if self-hosted domain is set, otherwise show Cloud notice.
+		if ( ! empty( $self_hosted_domain ) ) {
+			add_action( 'admin_notices', [ $this, 'show_ce_api_token_notice' ] );
+
+			return;
+		}
+
+		add_action( 'admin_notices', [ $this, 'show_cloud_api_token_notice' ] );
 	}
 
 	/**
@@ -409,11 +393,11 @@ class Upgrades {
 	}
 
 	/**
-	 * Display a notice to CE users that haven't entered an API token yet.
+	 * Display a notice to Cloud users that haven't entered an API token yet.
 	 *
 	 * @return void
 	 */
-	public function show_api_token_notice() {
+	public function show_cloud_api_token_notice() {
 		$url = admin_url( 'options-general.php?page=plausible_analytics' );
 
 		?>
