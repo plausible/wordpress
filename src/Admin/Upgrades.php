@@ -384,7 +384,7 @@ class Upgrades {
 		$api_token          = Helpers::get_settings()['api_token'];
 
 		// This user apparently hasn't entered an API token yet.
-		if ( ! empty( $api_token ) && empty ( $self_hosted_domain ) ) {
+		if ( empty( $api_token ) && empty ( $self_hosted_domain ) ) {
 			update_option( 'plausible_analytics_version', '2.5.4' );
 
 			return;
