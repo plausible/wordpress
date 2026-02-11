@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.5.4
+Stable tag: 2.5.5
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,6 +155,9 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.5.5 =
+* Fixed: a typo would cause users to with a valid API token to get a notice that the Plugin token should be entered.
 
 = 2.5.4 =
 * Improved: added a separate notice for Cloud users that haven't entered the Plugin token yet.
