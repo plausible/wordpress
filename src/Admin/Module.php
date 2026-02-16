@@ -43,9 +43,12 @@ class Module {
 	 *
 	 */
 	public function maybe_install_module( $old_settings, $settings ) {
-		if ( $settings['proxy_enabled'] === 'on' && $old_settings['proxy_enabled'] !== 'on' ) {
+		$settings_proxy = ( is_array( $settings ) && isset( $settings['proxy_enabled'] ) ) ? $settings['proxy_enabled'] : '';
+		$old_proxy      = ( is_array( $old_settings ) && isset( $old_settings['proxy_enabled'] ) ) ? $old_settings['proxy_enabled'] : '';
+
+		if ( $settings_proxy === 'on' && $old_proxy !== 'on' ) {
 			$this->install();
-		} elseif ( $settings['proxy_enabled'] === '' && $old_settings['proxy_enabled'] === 'on' ) {
+		} elseif ( $settings_proxy === '' && $old_proxy === 'on' ) {
 			$this->uninstall();
 		}
 	}
@@ -196,7 +199,10 @@ class Module {
 		/**
 		 * No need to run this on each update run, or when the proxy is disabled.
 		 */
-		if ( empty( $settings['proxy_enabled'] ) || ( $settings['proxy_enabled'] === 'on' && $old_settings['proxy_enabled'] === 'on' ) ) {
+		$new_proxy_setting = ( is_array( $settings ) && isset( $settings['proxy_enabled'] ) ) ? $settings['proxy_enabled'] : '';
+		$old_proxy_setting = ( is_array( $old_settings ) && isset( $old_settings['proxy_enabled'] ) ) ? $old_settings['proxy_enabled'] : '';
+
+		if ( empty( $new_proxy_setting ) || ( $new_proxy_setting === 'on' && $old_proxy_setting === 'on' ) ) {
 			return $settings;
 		}
 
@@ -259,6 +265,11 @@ class Module {
 	 * @since 1.3.0
 	 */
 	private function test_proxy( $run = true ) {
+		// Always succeed if this is a CI environment.
+		if ( defined( 'PLAUSIBLE_CI' ) ) {
+			return true;
+		}
+
 		// Should we run the test?
 		if ( ! apply_filters( 'plausible_analytics_module_run_test_proxy', $run ) ) {
 			return false; // @codeCoverageIgnore

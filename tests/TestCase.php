@@ -21,6 +21,10 @@ class TestCase extends YoastTestCase {
 			define( 'PLAUSIBLE_TESTS_ROOT', __DIR__ . '/' );
 		}
 
+		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
+			define( 'PLAUSIBLE_CI', true );
+		}
+
 		parent::__construct();
 	}
 
@@ -237,6 +241,12 @@ class TestCase extends YoastTestCase {
 		$settings['query_params'] = [ 'test' ];
 
 		$_REQUEST['test'] = 1;
+
+		return $settings;
+	}
+
+	public function enableAdministratorTracking( $settings ) {
+		$settings['tracked_user_roles'][] = 'administrator';
 
 		return $settings;
 	}

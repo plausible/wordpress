@@ -21,6 +21,8 @@ class AdminBarTest extends TestCase {
 		}
 
 		wp_set_current_user( 1 );
+		$user = wp_get_current_user();
+		$user->add_role( 'administrator' );
 		$admin_bar = new WP_Admin_Bar();
 		$class->admin_bar_node( $admin_bar );
 		$this->assertNotEmpty( $admin_bar->get_node( 'plausible-analytics' ) );

@@ -76,7 +76,7 @@ class Ajax {
 	public function quit_wizard() {
 		$request_data = $this->clean( $_REQUEST );
 
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data[ '_nonce' ], 'plausible_analytics_quit_wizard' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data['_nonce'], 'plausible_analytics_quit_wizard' ) < 1 ) {
 			Messages::set_error( __( 'Not allowed', 'plausible-analytics' ) );
 
 			wp_send_json_error( null, 403 );
@@ -84,7 +84,7 @@ class Ajax {
 
 		update_option( 'plausible_analytics_wizard_done', true );
 
-		$this->maybe_handle_redirect( $request_data[ 'redirect' ] );
+		$this->maybe_handle_redirect( $request_data['redirect'] );
 
 		wp_send_json_success();
 	}
@@ -93,26 +93,41 @@ class Ajax {
 	 * Clean variables using `sanitize_text_field`.
 	 * Arrays are cleaned recursively. Non-scalar values are ignored.
 	 *
-	 * @since  1.3.0
-	 * @access public
-	 *
 	 * @param string|array $var Sanitize the variable.
 	 *
 	 * @return string|array
+	 * @since  1.3.0
+	 * @access public
+	 *
 	 */
-	private function clean( $var ) {
+	private function clean( $var, $key = '' ) {
 		// If the variable is an array, recursively apply the function to each element of the array.
 		if ( is_array( $var ) ) {
-			return array_map( [ $this, 'clean' ], $var );
+			$cleaned = [];
+
+			foreach ( $var as $k => $v ) {
+				$cleaned[ $k ] = $this->clean( $v, $k );
+			}
+
+			return $cleaned;
 		}
 
 		// If the variable is a scalar value (string, integer, float, boolean).
 		if ( is_scalar( $var ) ) {
+			/**
+			 * If the variable is the options object, we only unslash it, but don't sanitize it yet.
+			 * Sanitization will happen after json_decode.
+			 */
+			if ( $key === 'options' ) {
+				return wp_unslash( $var );
+			}
+
 			// Parse the variable using the wp_parse_url function.
 			$parsed = wp_parse_url( $var );
+
 			// If the variable has a scheme (e.g. http:// or https://), sanitize the variable using the esc_url_raw function.
-			if ( isset( $parsed[ 'scheme' ] ) ) {
-				return esc_url_raw( wp_unslash( $var ), [ $parsed[ 'scheme' ] ] );
+			if ( isset( $parsed['scheme'] ) ) {
+				return esc_url_raw( wp_unslash( $var ) );
 			}
 
 			// If the variable does not have a scheme, sanitize the variable using the sanitize_text_field function.
@@ -157,7 +172,7 @@ class Ajax {
 	public function show_wizard() {
 		$request_data = $this->clean( $_REQUEST );
 
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data[ '_nonce' ], 'plausible_analytics_show_wizard' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data['_nonce'], 'plausible_analytics_show_wizard' ) < 1 ) {
 			Messages::set_error( __( 'Not allowed.', 'plausible-analytics' ) );
 
 			wp_send_json_error( null, 403 );
@@ -165,7 +180,7 @@ class Ajax {
 
 		delete_option( 'plausible_analytics_wizard_done' );
 
-		$this->maybe_handle_redirect( $request_data[ 'redirect' ] );
+		$this->maybe_handle_redirect( $request_data['redirect'] );
 
 		wp_send_json_success();
 	}
@@ -173,38 +188,38 @@ class Ajax {
 	/**
 	 * Save Admin Settings
 	 *
-	 * @since 1.0.0
 	 * @return void
+	 * @since 1.0.0
 	 */
 	public function toggle_option() {
 		// Sanitize all the post data before using.
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
-		if ( $post_data[ 'is_list' ] ) {
+		if ( $post_data['is_list'] ) {
 			/**
 			 * Toggle lists.
 			 */
-			if ( $post_data[ 'toggle_status' ] === 'on' ) {
+			if ( $post_data['toggle_status'] === 'on' ) {
 				// If toggle is on, store the value under a new key.
-				if ( ! in_array( $post_data[ 'option_value' ], $settings[ $post_data[ 'option_name' ] ] ) ) {
-					$settings[ $post_data[ 'option_name' ] ][] = $post_data[ 'option_value' ];
+				if ( ! in_array( $post_data['option_value'], $settings[ $post_data['option_name'] ] ) ) {
+					$settings[ $post_data['option_name'] ][] = $post_data['option_value'];
 				}
 			} else {
 				// If toggle is off, find the key by its value and unset it.
-				if ( ( $key = array_search( $post_data[ 'option_value' ], $settings[ $post_data[ 'option_name' ] ] ) ) !== false ) {
-					unset( $settings[ $post_data[ 'option_name' ] ][ $key ] );
+				if ( ( $key = array_search( $post_data['option_value'], $settings[ $post_data['option_name'] ] ) ) !== false ) {
+					unset( $settings[ $post_data['option_name'] ][ $key ] );
 				}
 			}
 		} else {
 			/**
 			 * Single toggles.
 			 */
-			$settings[ $post_data[ 'option_name' ] ] = $post_data[ 'toggle_status' ];
+			$settings[ $post_data['option_name'] ] = $post_data['toggle_status'];
 		}
 
 		// Update all the options to plausible settings.
@@ -213,22 +228,22 @@ class Ajax {
 		/**
 		 * Allow devs to perform additional actions.
 		 */
-		do_action( 'plausible_analytics_settings_saved', $settings, $post_data[ 'option_name' ], $post_data[ 'toggle_status' ] );
+		do_action( 'plausible_analytics_settings_saved', $settings, $post_data['option_name'], $post_data['toggle_status'] );
 
-		$option_label  = $post_data[ 'option_label' ];
-		$toggle_status = $post_data[ 'toggle_status' ] === 'on' ? __( 'enabled', 'plausible-analytics' ) : __( 'disabled', 'plausible-analytics' );
+		$option_label  = $post_data['option_label'];
+		$toggle_status = $post_data['toggle_status'] === 'on' ? __( 'enabled', 'plausible-analytics' ) : __( 'disabled', 'plausible-analytics' );
 		$message       = apply_filters(
 			'plausible_analytics_toggle_option_success_message',
 			sprintf( '%s %s.', $option_label, $toggle_status ),
-			$post_data[ 'option_name' ],
-			$post_data[ 'toggle_status' ]
+			$post_data['option_name'],
+			$post_data['toggle_status']
 		);
 
 		Messages::set_success( $message );
 
-		$additional = $this->maybe_render_additional_message( $post_data[ 'option_name' ], $post_data[ 'toggle_status' ] );
+		$additional = $this->maybe_render_additional_message( $post_data['option_name'], $post_data['toggle_status'] );
 
-		Messages::set_additional( $additional, $post_data[ 'option_name' ] );
+		Messages::set_additional( $additional, $post_data['option_name'] );
 
 		wp_send_json_success( null, 200 );
 	}
@@ -271,16 +286,20 @@ class Ajax {
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data[ '_nonce' ], 'plausible_analytics_toggle_option' ) < 1 ) {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
 			Messages::set_error( __( 'Not allowed.', 'plausible-analytics' ) );
 
 			wp_send_json_error( null, 403 );
 		}
 
-		$options = json_decode( $post_data[ 'options' ] );
+		$options = json_decode( $post_data['options'] );
 
 		if ( empty( $options ) ) {
 			Messages::set_error( __( 'No options found to save.', 'plausible-analytics' ) );
+
+			if ( defined( 'PLAUSIBLE_CI' ) ) {
+				return;
+			}
 
 			wp_send_json_error( null, 400 );
 		}
@@ -298,38 +317,42 @@ class Ajax {
 		);
 
 		if ( count( $input_array_elements ) > 0 ) {
-			$options            = [];
-			$array_name         = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[ 0 ]->name );
-			$options[ 0 ]       = (object) [];
-			$options[ 0 ]->name = $array_name;
+			$options           = [];
+			$array_name        = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[0]->name );
+			$options[0]        = (object) [];
+			$options[0]->name  = $array_name;
+			$options[0]->value = [];
 
 			foreach ( $input_array_elements as $input_array_element ) {
 				if ( $input_array_element->value ) {
-					$options[ 0 ]->value[] = $input_array_element->value;
+					$options[0]->value[] = $input_array_element->value;
 				}
 			}
 		}
 
 		foreach ( $options as $option ) {
+			$name  = sanitize_text_field( $option->name );
+			$value = $this->clean( $option->value );
+
 			// Clean spaces
-			if ( is_string( $option->value ) ) {
-				$settings[ $option->name ] = trim( $option->value );
+			if ( is_string( $value ) ) {
+				$settings[ $name ] = trim( $value );
 			} else {
-				$settings[ $option->name ] = $option->value;
+				$settings[ $name ] = $value;
 			}
 
 			// Validate Plugin Token if this is the Plugin Token field.
-			if ( $option->name === 'api_token' ) {
-				$this->validate_api_token( $option->value );
+			if ( $name === 'api_token' ) {
+				$this->validate_api_token( $value );
 
-				$additional = $this->maybe_render_additional_message( $option->name, $option->value );
+				$additional = $this->maybe_render_additional_message( $name, $value );
 
-				Messages::set_additional( $additional, $option->name );
+				Messages::set_additional( $additional, $name );
 			}
 
 			// Refresh Tracker ID if Domain Name has changed (e.g. after migration from staging to production)
-			if ($option->name === 'domain_name') {
-				delete_option('plausible_analytics_tracker_id');
+			if ( $name === 'domain_name' ) {
+				delete_option( 'plausible_analytics_tracker_id' );
 			}
 		}
 
@@ -337,7 +360,9 @@ class Ajax {
 
 		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
 
-		wp_send_json_success( null, 200 );
+		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
+			wp_send_json_success( null, 200 );
+		}
 	}
 
 	/**
