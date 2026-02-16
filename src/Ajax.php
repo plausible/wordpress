@@ -100,16 +100,31 @@ class Ajax {
 	 * @access public
 	 *
 	 */
-	private function clean( $var ) {
+	private function clean( $var, $key = '' ) {
 		// If the variable is an array, recursively apply the function to each element of the array.
 		if ( is_array( $var ) ) {
-			return array_map( [ $this, 'clean' ], $var );
+			$cleaned = [];
+
+			foreach ( $var as $k => $v ) {
+				$cleaned[ $k ] = $this->clean( $v, $k );
+			}
+
+			return $cleaned;
 		}
 
 		// If the variable is a scalar value (string, integer, float, boolean).
 		if ( is_scalar( $var ) ) {
+			/**
+			 * If the variable is the options object, we only unslash it, but don't sanitize it yet.
+			 * Sanitization will happen after json_decode.
+			 */
+			if ( $key === 'options' ) {
+				return wp_unslash( $var );
+			}
+
 			// Parse the variable using the wp_parse_url function.
 			$parsed = wp_parse_url( $var );
+
 			// If the variable has a scheme (e.g. http:// or https://), sanitize the variable using the esc_url_raw function.
 			if ( isset( $parsed['scheme'] ) ) {
 				return esc_url_raw( wp_unslash( $var ), [ $parsed['scheme'] ] );
@@ -277,7 +292,7 @@ class Ajax {
 			wp_send_json_error( null, 403 );
 		}
 
-		$options = json_decode( stripslashes( $post_data['options'] ) );
+		$options = json_decode( $post_data['options'] );
 
 		if ( empty( $options ) ) {
 			Messages::set_error( __( 'No options found to save.', 'plausible-analytics' ) );
@@ -315,24 +330,27 @@ class Ajax {
 		}
 
 		foreach ( $options as $option ) {
+			$name  = sanitize_text_field( $option->name );
+			$value = $this->clean( $option->value );
+
 			// Clean spaces
-			if ( is_string( $option->value ) ) {
-				$settings[ $option->name ] = trim( $option->value );
+			if ( is_string( $value ) ) {
+				$settings[ $name ] = trim( $value );
 			} else {
-				$settings[ $option->name ] = $option->value;
+				$settings[ $name ] = $value;
 			}
 
 			// Validate Plugin Token if this is the Plugin Token field.
-			if ( $option->name === 'api_token' ) {
-				$this->validate_api_token( $option->value );
+			if ( $name === 'api_token' ) {
+				$this->validate_api_token( $value );
 
-				$additional = $this->maybe_render_additional_message( $option->name, $option->value );
+				$additional = $this->maybe_render_additional_message( $name, $value );
 
-				Messages::set_additional( $additional, $option->name );
+				Messages::set_additional( $additional, $name );
 			}
 
 			// Refresh Tracker ID if Domain Name has changed (e.g. after migration from staging to production)
-			if ( $option->name === 'domain_name' ) {
+			if ( $name === 'domain_name' ) {
 				delete_option( 'plausible_analytics_tracker_id' );
 			}
 		}
