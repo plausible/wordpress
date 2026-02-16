@@ -5,6 +5,7 @@
 
 namespace Plausible\Analytics\Tests;
 
+use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Helpers;
 
 /**
@@ -15,7 +16,7 @@ class TestableHelpers extends Helpers {
 	 * @return
 	 */
 	protected static function get_client() {
-		return new class {
+		return new class extends Client {
 			public function get_tracker_id() {
 				return 'pa-test-tracker-id';
 			}
