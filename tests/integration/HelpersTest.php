@@ -164,6 +164,7 @@ class HelpersTest extends TestCase {
 	 */
 	public function testGetDomain() {
 		try {
+			delete_option( 'plausible_analytics_settings' );
 			$domain = Helpers::get_domain();
 
 			$this->assertEquals( 'example.org', $domain );
@@ -183,6 +184,7 @@ class HelpersTest extends TestCase {
 	 * @see Helpers::get_endpoint_url()
 	 */
 	public function testGetDataApiUrl() {
+		delete_option( 'plausible_analytics_settings' );
 		$url = Helpers::get_endpoint_url();
 		$this->assertEquals( 'https://plausible.io/api/event', $url );
 

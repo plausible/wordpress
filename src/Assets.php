@@ -21,7 +21,7 @@ class Assets {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_main_script' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_main_script' ], 1 );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_cloaked_affiliate_links_assets' ], 11 );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_four_o_four_script' ], 11 );
 		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_query_params_script' ], 11 );
@@ -42,16 +42,17 @@ class Assets {
 		$user_role = Helpers::get_user_role();
 
 		/**
+		 * This is a dummy script that will allow us to attach inline scripts further down the line.
+		 */
+		wp_register_script( 'plausible-analytics', '' );
+
+		/**
 		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or if the current role should not be tracked.
 		 */
 		if ( ( ! empty( $user_role ) && ! isset( $settings['tracked_user_roles'] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings['tracked_user_roles'], true ) ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		/**
-		 * This is a dummy script that will allow us to attach inline scripts further down the line.
-		 */
-		wp_register_script( 'plausible-analytics', '' );
 		wp_enqueue_script(
 			'plausible-analytics',
 			'',

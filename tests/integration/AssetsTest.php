@@ -15,27 +15,35 @@ class AssetsTest extends TestCase {
 	 * @see Assets::maybe_enqueue_main_script()
 	 */
 	public function testEnqueueMainScript() {
-		$class = $this->getMockBuilder( Assets::class )
-		              ->disableOriginalConstructor()
-		              ->onlyMethods( [ 'get_js_url' ] )
-		              ->getMock();
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableAdministratorTracking' ] );
 
-		$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue' );
-		$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue', 11 );
+			$class = $this->getMockBuilder( Assets::class )
+			              ->disableOriginalConstructor()
+			              ->onlyMethods( [ 'get_js_url' ] )
+			              ->getMock();
 
-		$class->method( 'get_js_url' )
-		      ->willReturn( 'https://plausible.test/js/plausible.js' );
+			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue' );
+			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue', 11 );
 
-		ob_start();
+			$class->method( 'get_js_url' )
+			      ->willReturn( 'https://plausible.test/js/plausible.js' );
 
-		$class->maybe_enqueue_main_script();
+			wp_set_current_user( 1 );
+			$user = wp_get_current_user();
+			$user->add_role( 'administrator' );
 
-		do_action( 'wp_head' );
+			$class->maybe_enqueue_main_script();
 
-		$output = ob_get_clean();
+			global $wp_scripts;
+			$data = $wp_scripts->get_data( 'plausible-analytics', 'after' );
 
-		$this->assertStringContainsString( 'window.plausible', $output );
-		$this->assertStringContainsString( 'plausible.init', $output );
+			$this->assertStringContainsString( 'window.plausible', implode( '', $data ) );
+			$this->assertStringContainsString( 'plausible.init', implode( '', $data ) );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableAdministratorTracking' ] );
+			wp_set_current_user( null );
+		}
 	}
 
 	/**

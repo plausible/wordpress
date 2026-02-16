@@ -245,6 +245,12 @@ class TestCase extends YoastTestCase {
 		return $settings;
 	}
 
+	public function enableAdministratorTracking( $settings ) {
+		$settings['tracked_user_roles'][] = 'administrator';
+
+		return $settings;
+	}
+
 	/**
 	 * Checks an array for a (partial) match with $string.
 	 *
