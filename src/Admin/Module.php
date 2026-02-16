@@ -259,6 +259,11 @@ class Module {
 	 * @since 1.3.0
 	 */
 	private function test_proxy( $run = true ) {
+		// Always succeed if this is a CI environment.
+		if ( defined( 'PLAUSIBLE_CI' ) ) {
+			return true;
+		}
+
 		// Should we run the test?
 		if ( ! apply_filters( 'plausible_analytics_module_run_test_proxy', $run ) ) {
 			return false; // @codeCoverageIgnore

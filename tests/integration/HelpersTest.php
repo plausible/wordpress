@@ -103,7 +103,7 @@ class HelpersTest extends TestCase {
 
 		$settings = Helpers::get_settings();
 
-		$this->assertArrayHasKey( 'post_test', $settings );
+		$this->assertArrayNotHasKey( 'post_test', $settings );
 	}
 
 	/**

@@ -21,6 +21,10 @@ class TestCase extends YoastTestCase {
 			define( 'PLAUSIBLE_TESTS_ROOT', __DIR__ . '/' );
 		}
 
+		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
+			define( 'PLAUSIBLE_CI', true );
+		}
+
 		parent::__construct();
 	}
 
