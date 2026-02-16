@@ -127,7 +127,7 @@ class Ajax {
 
 			// If the variable has a scheme (e.g. http:// or https://), sanitize the variable using the esc_url_raw function.
 			if ( isset( $parsed['scheme'] ) ) {
-				return esc_url_raw( wp_unslash( $var ), [ $parsed['scheme'] ] );
+				return esc_url_raw( wp_unslash( $var ) );
 			}
 
 			// If the variable does not have a scheme, sanitize the variable using the sanitize_text_field function.
@@ -317,10 +317,11 @@ class Ajax {
 		);
 
 		if ( count( $input_array_elements ) > 0 ) {
-			$options          = [];
-			$array_name       = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[0]->name );
-			$options[0]       = (object) [];
-			$options[0]->name = $array_name;
+			$options           = [];
+			$array_name        = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[0]->name );
+			$options[0]        = (object) [];
+			$options[0]->name  = $array_name;
+			$options[0]->value = [];
 
 			foreach ( $input_array_elements as $input_array_element ) {
 				if ( $input_array_element->value ) {
