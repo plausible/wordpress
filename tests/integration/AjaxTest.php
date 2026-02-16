@@ -30,6 +30,19 @@ class AjaxTest extends TestCase {
 	}
 
 	/**
+	 * Clean up after each test.
+	 *
+	 * @return void
+	 */
+	public function tearDown(): void {
+		parent::tearDown();
+
+		$_POST = [];
+
+		remove_filter( 'nonce_user_logged_out', '__return_true' );
+	}
+
+	/**
 	 * Test save_options with normal JSON data.
 	 */
 	public function testSaveOptionsSuccess() {
