@@ -199,10 +199,10 @@ class Module {
 		/**
 		 * No need to run this on each update run, or when the proxy is disabled.
 		 */
-		$settings_proxy = ( is_array( $settings ) && isset( $settings['proxy_enabled'] ) ) ? $settings['proxy_enabled'] : '';
-		$old_proxy      = ( is_array( $old_settings ) && isset( $old_settings['proxy_enabled'] ) ) ? $old_settings['proxy_enabled'] : '';
+		$new_proxy_setting = ( is_array( $settings ) && isset( $settings['proxy_enabled'] ) ) ? $settings['proxy_enabled'] : '';
+		$old_proxy_setting = ( is_array( $old_settings ) && isset( $old_settings['proxy_enabled'] ) ) ? $old_settings['proxy_enabled'] : '';
 
-		if ( empty( $settings_proxy ) || ( $settings_proxy === 'on' && $old_proxy === 'on' ) ) {
+		if ( empty( $new_proxy_setting ) || ( $new_proxy_setting === 'on' && $old_proxy_setting === 'on' ) ) {
 			return $settings;
 		}
 
