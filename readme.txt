@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.5.5
+Stable tag: 2.5.6
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -156,8 +156,14 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 2.5.6 =
+* Fixed: users with a valid API token would get a notice that the Plugin token should be entered.
+* Fixed: users still on PHP 7.4 would get an error when enabling/disabling the Proxy.
+* Fixed: a minor XSS vulnerability in the Options API.
+* Fixed: in some cases, settings could get corrupted when saving.
+
 = 2.5.5 =
-* Fixed: a typo would cause users to with a valid API token to get a notice that the Plugin token should be entered.
+* Fixed: a typo would cause users with a valid API token to get a notice that the Plugin token should be entered.
 
 = 2.5.4 =
 * Improved: added a separate notice for Cloud users that haven't entered the Plugin token yet.
