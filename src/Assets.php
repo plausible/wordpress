@@ -32,10 +32,10 @@ class Assets {
 	/**
 	 * Register main JS if this user should be tracked.
 	 *
-	 * @return void
-	 * @throws \Exception
 	 * @since  1.0.0
 	 * @access public
+	 * @return void
+	 * @throws \Exception
 	 */
 	public function maybe_enqueue_main_script() {
 		$settings  = Helpers::get_settings();
@@ -44,7 +44,7 @@ class Assets {
 		/**
 		 * This is a dummy script that will allow us to attach inline scripts further down the line.
 		 */
-		wp_register_script( 'plausible-analytics', '' );
+		wp_register_script( 'plausible-analytics', $this->get_js_url( true ), [], null, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		/**
 		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or if the current role should not be tracked.
@@ -53,19 +53,9 @@ class Assets {
 			return; // @codeCoverageIgnore
 		}
 
-		wp_enqueue_script(
-			'plausible-analytics',
-			'',
-			[],
-			null,
-			apply_filters( 'plausible_load_js_in_footer', false )
-		);
+		wp_enqueue_script( 'plausible-analytics' );
 
-		$url     = $this->get_js_url( true );
-		$script  = sprintf(
-			'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)},window.plausible.init=function(i){window.plausible.o=i||{}};var script=document.createElement("script");script.type="text/javascript",script.defer=!0,script.src="%s";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(script,r);',
-			$url
-		);
+		$script  = 'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};';
 		$options = wp_json_encode( apply_filters( 'plausible_analytics_init_options', [] ) );
 		// transformRequest and customProperties can contain a JS function.
 		$options = preg_replace(
