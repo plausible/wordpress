@@ -122,17 +122,25 @@ class Compatibility {
 	}
 
 	/**
-	 * Append a global no-minify attribute to the script tag, to make sure optimization plugins who respect this attribute don't minify our script.
+	 * Append attributes to the script tag, to make sure optimization plugins who respect this attribute don't minify our script.
 	 *
-	 * Tested on:
+	 * "data-no-minify" is respected by:
 	 * - WP Rocket
+	 * - WP Optimize
+	 * - WP Fastest Cache
+	 *
+	 * "data-no-optimize" is respected by:
+	 * - LiteSpeed Cache
+	 *
+	 * "data-noptimize" is respected by:
+	 * - Autoptimize
 	 *
 	 * @param $params
 	 *
 	 * @return string
 	 */
 	public function exclude_from_minification( $params ) {
-		$params .= ' data-no-minify="true"';
+		$params .= ' data-no-minify="true" data-no-optimize="1" data-noptimize="1"';
 
 		return $params;
 	}
