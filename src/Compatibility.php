@@ -30,7 +30,7 @@ class Compatibility {
 		// Cloudflare Rocket Loader
 		add_filter( 'script_loader_tag', [ $this, 'exclude_from_cloudflare_rocket_loader' ], 10, 2 );
 
-		// Global Ecxlusion from Minification
+		// Global Exclusion from Minification
 		add_filter( 'plausible_analytics_script_params', [ $this, 'exclude_from_minification' ] );
 
 		// LiteSpeed Cache
