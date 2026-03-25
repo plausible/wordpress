@@ -5,15 +5,12 @@
 [![Github CI](https://github.com/plausible/wordpress/actions/workflows/push.yml/badge.svg)](https://github.com/plausible/wordpress/actions/workflows/push.yml) ![WordPress version](https://img.shields.io/wordpress/plugin/v/plausible-analytics.svg) ![WordPress Rating](https://img.shields.io/wordpress/plugin/r/plausible-analytics.svg) ![WordPress Downloads](https://img.shields.io/wordpress/plugin/dt/plausible-analytics.svg)
 
 Welcome to the Plausible Analytics WordPress Plugin GitHub repository. This is the code source and the center of active
-development. Here you can
-browse the source, look at open issues, and contribute to the project.
+development. Here you can browse the source, look at open issues, and contribute to the project.
 
 ## Getting Started
 
 If you're looking to contribute or actively develop on Plausible Analytics then skip ahead to
-the [Local Development](https://github.com/plausible/wordpress/#local-development) section below. The following is if
-you're looking to actively use
-the plugin on your WordPress site.
+the [Local Development](https://github.com/plausible/wordpress/#local-development) section below. The following is if you're looking to actively use the plugin on your WordPress site.
 
 ### Minimum Requirements
 
@@ -24,20 +21,16 @@ the plugin on your WordPress site.
 ### Automatic installation
 
 Automatic installation is the easiest option as WordPress handles the file transfers itself, and you don't need to leave
-your web browser. To do an
-automatic installation of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and
-click "Add New".
+your web browser. To do an automatic installation of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu, and
+click "Add New."
 
-In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view
-details about it such as the
-point release, rating and description. Most importantly of course, you can install it by simply clicking "Install Now".
+In the search field, type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view
+details about it such as the point release, rating, and description. Most importantly, of course, you can install it by simply clicking "Install Now."
 
 ### Manual installation
 
 The manual installation method involves downloading our plugin and uploading it to your server via your favorite FTP
-application. The
-WordPress codex
-contains [instructions on how to do this](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+application. The WordPress codex contains [instructions on how to do this](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
 ### Support
 
@@ -46,7 +39,7 @@ use the following channels:
 
 * [WP.org Support Forums](https://wordpress.org/support/plugin/plausible-analytics) - for all users
 
-## Available Actions, Filters and Toggles
+## Available Actions, Filters, and Toggles
 
 ### Filters
 
@@ -58,7 +51,7 @@ use the following channels:
     enabled.
 - `plausible_analytics_pageview_properties`: Allows you to add custom pageview properties when the Pageview Properties
   option is enabled under
-  Enhanced Measurements. For examples, read
+  Enhanced Measurements. For example, read
   the [documentation on Pageview Properties](https://plausible.io/docs/custom-props/for-pageviews).
 - `plausible_analytics_api_timeout`: Allows you to modify the timeout for the total duration of Plausible API requests.
 - `plausible_analytics_api_connect_timeout`: Allows you to modify the connection timeout for Plausible API requests.
@@ -72,17 +65,13 @@ use the following channels:
 ### Toggles
 
 Using constants, you can modify the behavior of the plugin. `wp-config.php` is the best place to define constants. If
-you're using a custom plugin,
-make sure its code is loaded before this plugin.
+you're using a custom plugin, make sure its code is loaded before this plugin.
 
 - `PLAUSIBLE_SELF_HOSTED_DOMAIN`: Especially useful for Multisite instances using the self-hosted version of Plausible,
-  this constant allows you to
-  specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the
-  plugin's setting. So, if this
-  constant is defined, changing the setting won't have any effect.
-- `plausible_proxy`: Appending this `GET`-parameter will force enable the proxy on the page you\'re calling it. This
-  will allow you to test your proxy
-  in the frontend, before enabling the option.
+  this constant allows you to specify the Self-Hosted Domain for all subsites at once. **IMPORTANT**: this constant takes precedence over the
+  plugin's setting. So, if this constant is defined, changing the setting won't have any effect.
+- `plausible_proxy`: Appending this `GET`-parameter will force-enable the proxy on the page you\'re calling it. This
+  will allow you to test your proxy in the frontend before enabling the option.
 
 ## Local Development
 
@@ -102,10 +91,8 @@ That's it. You're now ready to start development.
 Plausible Analytics relies on several npm commands to get you started:
 
 * `npm run watch` - Live reloads JS and SASS files. Typically, you'll run this command before you start development.
-  It's necessary to build the
-  JS/CSS
-  however if you're working strictly within PHP it may not be necessary to run.
-* `npm run dev` - Runs a one time build for development. No production files are created.
+  It's necessary to build the JS/CSS, however, if you're working strictly within PHP it may not be necessary to run.
+* `npm run dev` - Runs a one-time build for development. No production files are created.
 * `npm run production` - Builds the minified production files for release.
 
 ### Development Notes
@@ -129,10 +116,8 @@ Plausible Analytics relies on several npm commands to get you started:
 
 ### Regenerating the OpenAPI PHP Client
 
-This plugin uses a OpenAPI PHP Client which is autogenerated by the OpenAPI generator to reduce contract violations,
-etc. to a minimum. But, since
-this is a WordPress plugin, some manual modifications need to be done to make sure it doesn't conflict with other
-plugins:
+This plugin uses an OpenAPI PHP Client which is autogenerated by the OpenAPI generator to reduce contract violations, etc. to a minimum. But since this is a WordPress plugin, some manual modifications
+need to be done to make sure it doesn't conflict with other plugins:
 
 > [!IMPORTANT]
 > You need to have Java and [OpenAPI Generator](https://openapi-generator.tech/docs/installation/) installed
@@ -141,9 +126,9 @@ plugins:
 - (Re)generate the PHP client using the following command (trigger it from the Plugin's root dir as output will be saved
   to `src/Client`):
   `openapi-generator-cli generate -i https://plausible.io/api/plugins/spec/openapi -g php -o src/Client --additional-properties=identifierNamingConvention=snake_case,invokerPackage="Plausible\\Analytics\\WP\\Client" --global-property=apis,models,supportingFiles,modelDocs=false,modelTests=false,apiDocs=false,apiTests=false`
-- (When regenerating the PHP client this step can be skipped) Navigate to the `src/Client` director and install Composer
+- (When regenerating the PHP client, this step can be skipped) Navigate to the `src/Client` director and install Composer
   dependencies: `composer install --no-dev`
-- (When regenerating the PHP client this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make
+- (When regenerating the PHP client, this step can be skipped) Run `mozart compose` from the `src/Client` directory (Make
   sure Mozart is installed
   globally)
 - In the `src/Client/lib` directory, replace all occurrences of ` GuzzleHttp` (mind the space) with
