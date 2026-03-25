@@ -30,6 +30,9 @@ class Compatibility {
 		// Cloudflare Rocket Loader
 		add_filter( 'script_loader_tag', [ $this, 'exclude_from_cloudflare_rocket_loader' ], 10, 2 );
 
+		// Global Exclusion from Minification
+		add_filter( 'plausible_analytics_script_params', [ $this, 'exclude_from_minification' ] );
+
 		// LiteSpeed Cache
 		if ( defined( 'LSCWP_V' ) ) {
 			add_filter( 'litespeed_optimize_js_excludes', [ $this, 'exclude_plausible_js' ] );
@@ -83,6 +86,7 @@ class Compatibility {
 	 * @param mixed $exclude_js
 	 *
 	 * @return string
+	 * @throws Exception
 	 */
 	public function exclude_plausible_js_as_string( $exclude_js ) {
 		$exclude_js .= ', window.plausible, ' . Helpers::get_js_url( true );
@@ -93,21 +97,20 @@ class Compatibility {
 	/**
 	 * Add Plausible Analytics attributes.
 	 *
-	 * @param string $handle Script handle.
-	 * @param string $tag Script tag.
-	 *
-	 * @return string
 	 * @since  1.0.0
 	 * @access public
 	 *
+	 * @param string $tag    Script tag.
+	 *
+	 * @param string $handle Script handle.
+	 *
+	 * @return string
 	 */
 	public function exclude_from_cloudflare_rocket_loader( $tag, $handle ) {
 		// Bail if it's not our script.
 		if ( 'plausible-analytics' !== $handle ) {
 			return $tag; // @codeCoverageIgnore
 		}
-
-		$settings = Helpers::get_settings();
 
 		/**
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
@@ -116,6 +119,30 @@ class Compatibility {
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );
+	}
+
+	/**
+	 * Append attributes to the script tag, to make sure optimization plugins who respect this attribute don't minify our script.
+	 *
+	 * "data-no-minify" is respected by:
+	 * - WP Rocket
+	 * - WP Optimize
+	 * - WP Fastest Cache
+	 *
+	 * "data-no-optimize" is respected by:
+	 * - LiteSpeed Cache
+	 *
+	 * "data-noptimize" is respected by:
+	 * - Autoptimize
+	 *
+	 * @param $params
+	 *
+	 * @return string
+	 */
+	public function exclude_from_minification( $params ) {
+		$params .= ' data-no-minify="true" data-no-optimize="1" data-noptimize="1"';
+
+		return $params;
 	}
 
 	/**
@@ -129,7 +156,7 @@ class Compatibility {
 	 * @return array
 	 */
 	public function exclude_plausible_inline_js( $inline_js ) {
-		$inline_js[ 'plausible' ] = 'window.plausible';
+		$inline_js['plausible'] = 'window.plausible';
 
 		return $inline_js;
 	}
@@ -144,6 +171,7 @@ class Compatibility {
 	 * @param array $excluded_js
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
 	public function exclude_plausible_js( $excluded_js ) {
 		$excluded_js[] = Helpers::get_js_url( true );
@@ -181,6 +209,7 @@ class Compatibility {
 	 * @param array $excluded_js
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
 	public function exclude_plausible_js_by_relative_url( $excluded_js ) {
 		$excluded_js[] = preg_replace( '/http[s]?:\/\/.*?(\/)/', '$1', Helpers::get_js_url( true ) );
@@ -213,7 +242,7 @@ class Compatibility {
 	 * @filter rocket_minify_excluded_external_js
 	 * @since  1.2.5
 	 *
-	 * @param array $excluded_js
+	 * @param $excluded_handles
 	 *
 	 * @return array
 	 */
@@ -239,7 +268,7 @@ class Compatibility {
 	public function multilingual_compatibility( $url ) {
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
-		if ( strpos( $url, $rest_endpoint ) !== false ) {
+		if ( str_contains( $url, $rest_endpoint ) ) {
 			return get_option( 'home' ) . $rest_endpoint;
 		}
 
