@@ -21,7 +21,7 @@ use Plausible\Analytics\WP\Client\Model\UnauthorizedError;
 use Plausible\Analytics\WP\Client\Model\UnprocessableEntityError;
 
 /**
- * This class acts as middleware between our OpenAPI generated API client and our WP plugin, and takes care of setting
+ * This class acts as middleware between our OpenAPI generated API client and our WP plugin and takes care of setting
  * the required configuration, so we can use the Client in a unified manner.
  */
 class Client {
@@ -33,13 +33,14 @@ class Client {
 	/**
 	 * Setup basic authorization, basic_auth.
 	 *
-	 * @param string $token Allows to specify the token, e.g. when it's not stored in the DB yet.
+	 * @param string $token Allows specifying the token, e.g., when it's not stored in the DB yet.
 	 */
 	public function __construct( $token = '' ) {
-		$config             = Configuration::getDefaultConfiguration()->setUsername( 'WordPress' )->setPassword(
-			$token
-		)->setHost( Helpers::get_hosted_domain_url() );
-		$this->api_instance = new DefaultApi( new GuzzleClient(), $config );
+		$config             = Configuration::getDefaultConfiguration()
+		                                   ->setUsername( 'WordPress' )
+		                                   ->setPassword( $token )
+		                                   ->setHost( Helpers::get_hosted_domain_url() );
+		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => 10, 'connect_timeout' => 5 ] ), $config );
 	}
 
 	/**
@@ -239,7 +240,7 @@ class Client {
 
 	/**
 	 * @param Exception $e
-	 * @param string $error_message The human-readable part of the error message, requires a %s at the end!
+	 * @param string    $error_message The human-readable part of the error message, requires a %s at the end!
 	 *
 	 * @return void
 	 *
