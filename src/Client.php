@@ -40,7 +40,9 @@ class Client {
 		                                   ->setUsername( 'WordPress' )
 		                                   ->setPassword( $token )
 		                                   ->setHost( Helpers::get_hosted_domain_url() );
-		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => 10, 'connect_timeout' => 5 ] ), $config );
+		$timeout            = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
+		$connect_timeout    = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
+		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] ), $config );
 	}
 
 	/**

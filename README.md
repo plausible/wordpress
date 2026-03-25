@@ -60,6 +60,8 @@ use the following channels:
   option is enabled under
   Enhanced Measurements. For examples, read
   the [documentation on Pageview Properties](https://plausible.io/docs/custom-props/for-pageviews).
+- `plausible_analytics_api_timeout`: Allows you to modify the timeout for the total duration of Plausible API requests.
+- `plausible_analytics_api_connect_timeout`: Allows you to modify the connection timeout for Plausible API requests.
 
 ### Actions
 
