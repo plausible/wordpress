@@ -53,7 +53,7 @@ class API {
 		wp_nonce_field( 'plausible_analytics_toggle_option' );
 
 		$settings        = Helpers::get_settings();
-		$followed_wizard = get_option( 'plausible_analytics_wizard_done' ) || ! empty( $settings[ 'self_hosted_domain' ] );
+		$followed_wizard = get_option( 'plausible_analytics_wizard_done' ) || ! empty( $settings['self_hosted_domain'] );
 
 		/**
 		 * On-boarding wizard.
@@ -106,8 +106,8 @@ class API {
 				),
 			];
 
-			if ( empty( $settings[ 'enable_analytics_dashboard' ] ) ) {
-				$this->slides_description[ 'success' ] = sprintf(
+			if ( empty( $settings['enable_analytics_dashboard'] ) ) {
+				$this->slides_description['success'] = sprintf(
 					__(
 						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
 						'plausible-analytics'
@@ -126,7 +126,7 @@ class API {
 		/**
 		 * Settings screen
 		 */
-		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general';
+		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'general';
 		?>
 		<div class="h-full">
 			<!-- body -->
@@ -154,7 +154,7 @@ class API {
 									<div class="plausible-analytics-section shadow sm:rounded-md sm:overflow-hidden">
 										<?php
 										/** @var string $type checkbox|group|toggle_group|button|text */
-										$type = $field[ 'type' ] ?? '';
+										$type = $field['type'] ?? '';
 
 										if ( $type ) {
 											echo call_user_func( [ $this, "render_{$type}_field" ], $field );
@@ -221,7 +221,7 @@ class API {
 										$field = $this->get_wizard_option_properties( $id );
 
 										if ( ! empty( $field ) ) {
-											$hide_header = $field[ 'type' ] === 'group';
+											$hide_header = $field['type'] === 'group';
 
 											echo call_user_func(
 												[
@@ -424,13 +424,13 @@ class API {
 	 * @return array|mixed
 	 */
 	private function get_wizard_option_properties( $slug ) {
-		foreach ( $this->fields[ 'general' ] as $group ) {
-			if ( $group[ 'slug' ] === $slug ) {
+		foreach ( $this->fields['general'] as $group ) {
+			if ( $group['slug'] === $slug ) {
 				return $group;
 			}
 
-			foreach ( $group[ 'fields' ] as $field ) {
-				if ( $field[ 'slug' ] === $slug ) {
+			foreach ( $group['fields'] as $field ) {
+				if ( $field['slug'] === $slug ) {
 					return $field;
 				}
 			}
@@ -454,7 +454,7 @@ class API {
 			return;
 		}
 
-		$current_tab = ! empty( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : '';
+		$current_tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : '';
 		$tabs        = apply_filters(
 			'plausible_analytics_settings_navigation_tabs',
 			[
@@ -475,9 +475,9 @@ class API {
 		foreach ( $tabs as $tab ) {
 			printf(
 				'<a href="%1$s" class="no-underline text-sm leading-6 text-gray-900 %2$s">%3$s</a>',
-				esc_url( $tab[ 'url' ] ),
-				esc_attr( $tab[ 'class' ] ),
-				esc_html( $tab[ 'name' ] )
+				esc_url( $tab['url'] ),
+				esc_attr( $tab['class'] ),
+				esc_html( $tab['name'] )
 			);
 		}
 		?>
@@ -496,13 +496,13 @@ class API {
 		?>
 		<?php if ( ! empty( $quick_actions ) && count( $quick_actions ) > 0 ) : ?>
 			<?php foreach ( $quick_actions as $quick_action ) : ?>
-				<?php if ( ! empty( $quick_action[ 'disabled' ] ) && $quick_action[ 'disabled' ] === true ) : ?>
+				<?php if ( ! empty( $quick_action['disabled'] ) && $quick_action['disabled'] === true ) : ?>
 					<?php continue; ?>
 				<?php endif; ?>
-				<a id="<?php echo $quick_action[ 'id' ]; ?>" class="no-underline text-sm leading-6 text-gray-900"
-				   target="<?php echo $quick_action[ 'target' ]; ?>" href="<?php echo $quick_action[ 'url' ]; ?>"
-				   title="<?php echo $quick_action[ 'label' ]; ?>">
-					<?php echo $quick_action[ 'label' ]; ?>
+				<a id="<?php echo esc_attr( $quick_action['id'] ); ?>" class="no-underline text-sm leading-6 text-gray-900"
+				   target="<?php echo esc_attr( $quick_action['target'] ); ?>" href="<?php echo esc_url( $quick_action['url'] ); ?>"
+				   title="<?php echo esc_attr( $quick_action['label'] ); ?>">
+					<?php echo esc_html( $quick_action['label'] ); ?>
 				</a>
 			<?php endforeach; ?>
 		<?php endif; ?>
@@ -526,7 +526,7 @@ class API {
 				'url'      => admin_url( "admin-ajax.php?action=plausible_analytics_show_wizard&_nonce=$nonce&redirect=1" ),
 				'id'       => 'show_wizard',
 				'target'   => '_self',
-				'disabled' => ! empty( $settings[ 'self_hosted_domain' ] ),
+				'disabled' => ! empty( $settings['self_hosted_domain'] ),
 			],
 			'view-docs'       => [
 				'label'  => esc_html__( 'Documentation', 'plausible-analytics' ),
@@ -552,16 +552,19 @@ class API {
 	public function render_toggle_group_field( array $group, $hide_header = false ) {
 		ob_start();
 		?>
-		<div id="<?php echo $group[ 'slug' ]; ?>_toggle" onclick="plausibleToggleSection('<?php echo $group[ 'slug' ]; ?>')" class="flex items-center mt-4 space-x-3 hover:cursor-pointer">
+		<div id="<?php echo esc_attr( $group['slug'] ); ?>_toggle" onclick="plausibleToggleSection('<?php echo esc_js( $group['slug'] ); ?>')"
+			 class="flex items-center mt-4 space-x-3 hover:cursor-pointer">
 			<span class="dark:text-gray-100 text-lg">
-				<?php echo $group[ 'label' ]; ?>
+				<?php echo esc_html( $group['label'] ); ?>
 			</span>
 			<!-- Chevron -->
-			<svg xmlns="http://www.w3.org/2000/svg" id="<?php echo $group[ 'slug' ]; ?>_chevron" class="h-6 w-6 ml-2 text-gray-400 dark:text-gray-500 transition-transform duration-250" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+			<svg xmlns="http://www.w3.org/2000/svg" id="<?php echo esc_attr( $group['slug'] ); ?>_chevron" class="h-6 w-6 ml-2 text-gray-400 dark:text-gray-500 transition-transform duration-250"
+				 fill="none"
+				 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/>
 			</svg>
 		</div>
-		<div class="hidden" id="<?php echo $group[ 'slug' ]; ?>_content">
+		<div class="hidden" id="<?php echo esc_attr( $group['slug'] ); ?>_content">
 			<?php echo $this->render_group_field( $group, true ); ?>
 		</div>
 		<?php
@@ -576,15 +579,16 @@ class API {
 	 * @return string
 	 */
 	public function render_group_field( array $group, $hide_header = false ) {
-		$fields = $group[ 'fields' ];
+		$fields            = $group['fields'];
+		$divide_in_columns = $group['divide'] ?? false;
 		ob_start();
 		?>
 		<div class="bg-white dark:bg-gray-800<?php echo $hide_header ? '' : ' plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?>">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
-					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo $group[ 'slug' ]; ?>"><?php echo $group[ 'label' ]; ?></h3>
+					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo esc_attr( $group['slug'] ); ?>"><?php echo esc_html( $group['label'] ); ?></h3>
 					<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
-						<?php echo wp_kses_post( $group[ 'desc' ] ); ?>
+						<?php echo wp_kses_post( $group['desc'] ); ?>
 					</div>
 				</header>
 			<?php endif; ?>
@@ -596,14 +600,32 @@ class API {
 				$is_list = array_filter(
 					$fields,
 					function ( $field ) {
-						return $field[ 'type' ] === 'checkbox';
+						return $field['type'] === 'checkbox';
 					}
 				);
-
-				foreach ( $fields as $field ) {
-					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
-				}
+				$count   = count( $fields );
+				$half    = ceil( $count / 2 );
 				?>
+				<?php if ( $divide_in_columns && $count > 4 ) : ?>
+					<div class="grid grid-cols-1 md:grid-cols-2">
+						<div>
+							<?php foreach ( array_slice( $fields, 0, $half ) as $field ) {
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+							} ?>
+						</div>
+						<div>
+							<?php foreach ( array_slice( $fields, $half ) as $field ) {
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+							} ?>
+						</div>
+					</div>
+				<?php else : ?>
+					<div>
+						<?php foreach ( $fields as $field ) {
+							echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+						} ?>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -619,28 +641,30 @@ class API {
 	 */
 	public function render_clonable_text_field( array $group ) {
 		ob_start();
-		$values = $group[ 'value' ] ?: [ 0 => '' ];
-		$slug   = $group[ 'slug' ] ?? '';
+		$values = $group['value'] ?: [ 0 => '' ];
+		$slug   = $group['slug'] ?? '';
 		?>
-		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group[ 'hidden' ] ? 'hidden' : ''; ?> !mt-1 mx-14">
+		<div id="<?php echo esc_attr( $slug ); ?>_content" class="plausible-analytics-section <?php echo $group['hidden'] ? 'hidden' : ''; ?> !mt-1 mx-14">
 			<div class="flex justify-between items-center">
-				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group[ 'description' ], 'post' ); ?></div>
+				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group['description'], 'post' ); ?></div>
 			</div>
-			<ol id="<?php echo $slug; ?>_list" class="m-0 mt-4 list-none mb-6">
+			<ol id="<?php echo esc_attr( $slug ); ?>_list" class="m-0 mt-4 list-none mb-6">
 				<?php foreach ( $values as $key => $value ) : ?>
-					<li class="<?php echo str_replace( '_', '-', $slug ); ?>-field flex justify-between items-end">
-						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => "{$slug}[$key]", 'classes' => 'flex-1' ] ); ?>
-						<a onclick="plausibleRemoveField('<?php echo "{$slug}[$key]"; ?>')" class="<?php echo $key === 0 ? 'hidden' :
+					<li class="<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>-field flex justify-between items-end">
+						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => esc_attr( "{$slug}[$key]" ), 'classes' => 'flex-1' ] ); ?>
+						<a onclick="plausibleRemoveField('<?php echo esc_js( "{$slug}[$key]" ); ?>')" class="<?php echo $key === 0 ? 'hidden' :
 							''; ?> ml-2 cursor-pointer text-red-800 hover:text-red-500 dark:text-red-500 dark:hover:text-red-400">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" fill="none" stroke-width="1.5">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+								<path stroke-linecap="round" stroke-linejoin="round"
+									  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
 							</svg>
 						</a>
 					</li>
 				<?php endforeach; ?>
 			</ol>
 			<?php echo $this->render_button_field( [ 'slug' => 'save-' . $slug, 'label' => __( 'Save', 'plausible-analytics' ) ] ); ?>
-			<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')" class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-semibold px-3.5 py-2.5 text-sm bg-transparent text-indigo-600 hover:text-indigo-700">
+			<button type="button" onclick="plausibleAddField('<?php echo esc_js( $slug ); ?>')"
+					class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-semibold px-3.5 py-2.5 text-sm bg-transparent text-indigo-600 hover:text-indigo-700">
 				<?php echo __( 'Add More', 'plausible-analytics' ); ?>
 			</button>
 		</div>
@@ -657,23 +681,23 @@ class API {
 	 */
 	public function render_text_field( array $field ) {
 		ob_start();
-		$value       = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : '';
-		$placeholder = ! empty( $field[ 'placeholder' ] ) ? $field[ 'placeholder' ] : '';
-		$disabled    = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
-		$classes     = ! empty ( $field[ 'classes' ] ) ? $field[ 'classes' ] : '';
+		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
+		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$disabled    = ! empty( $field['disabled'] ) ? 'disabled' : '';
+		$classes     = ! empty ( $field['classes'] ) ? $field['classes'] : '';
 		?>
-		<div class="<?php echo $classes; ?>">
-			<?php if ( ! empty( $field[ 'label' ] ) ): ?>
+		<div class="mt-4 <?php echo esc_attr( $classes ); ?>">
+			<?php if ( ! empty( $field['label'] ) ): ?>
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300"
-					   for="<?php echo $field[ 'slug' ]; ?>"><?php echo $field[ 'label' ]; ?></label>
+					   for="<?php echo esc_attr( $field['slug'] ); ?>"><?php echo wp_kses_post( $field['label'] ); ?></label>
 			<?php endif; ?>
 			<div class="mt-1">
 				<input
 					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2 px-3"
-					id="<?php echo $field[ 'slug' ]; ?>" placeholder="<?php echo $placeholder; ?>" autocomplete="off"
+					id="<?php echo esc_attr( $field['slug'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" autocomplete="off"
 					type="text"
-					name="<?php echo $field[ 'slug' ]; ?>"
-					value="<?php echo $value; ?>" <?php echo $disabled; ?> />
+					name="<?php echo esc_attr( $field['slug'] ); ?>"
+					value="<?php echo esc_attr( $value ); ?>" <?php echo $disabled ? 'disabled' : ''; ?> />
 			</div>
 		</div>
 		<?php
@@ -689,11 +713,12 @@ class API {
 	 */
 	public function render_button_field( array $field ) {
 		ob_start();
-		$disabled = isset( $field[ 'disabled' ] ) && $field[ 'disabled' ] === true;
+		$disabled = isset( $field['disabled'] ) && $field['disabled'] === true;
 		?>
 		<button
-			class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
-			id="<?php esc_attr_e( $field[ 'slug' ], 'plausible-analytics' ); ?>"
+			class="plausible-analytics-button mt-4 border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
+			text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
+			id="<?php esc_attr_e( $field['slug'], 'plausible-analytics' ); ?>"
 			type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
 				 fill="none" viewBox="0 0 24 24">
@@ -701,7 +726,7 @@ class API {
 				<path class="opacity-75" fill="currentColor"
 					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 			</svg>
-			<?php esc_attr_e( $field[ 'label' ], 'plausible-analytics' ); ?>
+			<?php esc_html_e( $field['label'], 'plausible-analytics' ); ?>
 		</button>
 		<?php
 		return ob_get_clean();
@@ -716,35 +741,36 @@ class API {
 	 */
 	public function render_checkbox_field( array $field, $is_list = false ) {
 		ob_start();
-		$value      = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : 'on';
+		$value      = ! empty( $field['value'] ) ? $field['value'] : 'on';
 		$settings   = Helpers::get_settings();
-		$slug       = ! empty( $settings[ $field[ 'slug' ] ] ) ? $settings[ $field[ 'slug' ] ] : '';
-		$id         = $field[ 'slug' ] . '_' . str_replace( '-', '_', sanitize_title( $field[ 'label' ] ) );
-		$checked    = ! empty( $field[ 'checked' ] ) ? 'checked="checked"' :
+		$slug       = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
+		$id         = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
+		$checked    = ! empty( $field['checked'] ) ? 'checked="checked"' :
 			( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled   = ! empty( $field[ 'disabled' ] ) ? 'disabled' : '';
-		$caps       = ! empty( $field[ 'caps' ] ) ? $field[ 'caps' ] : [];
-		$addtl_opts = ! empty( $field[ 'addtl_opts' ] );
+		$disabled   = ! empty( $field['disabled'] ) ? 'disabled' : '';
+		$caps       = ! empty( $field['caps'] ) ? $field['caps'] : [];
+		$addtl_opts = ! empty( $field['addtl_opts'] );
 		?>
 		<div class="toggle-container flex items-center mt-4 space-x-3">
-			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' :
-				'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
+			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' : 'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2
+			border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
 					id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
 					echo $id; ?>" type="checkbox" data-status="<?php echo $checked ? 'on' : 'off'; ?>" data-list="<?php echo $is_list ? '1' :
 				''; ?>" <?php if ( ! empty( $caps ) ): ?>data-caps="<?php echo implode(
 				',',
 				$caps
-			); ?>"<?php endif; ?> data-addtl-opts="<?php echo $addtl_opts; ?>" name="<?php echo esc_attr( $field[ 'slug' ] ); ?>" value="<?php echo esc_html(
+			); ?>"<?php endif; ?> data-addtl-opts="<?php echo $addtl_opts; ?>" name="<?php echo esc_attr( $field['slug'] ); ?>" value="<?php echo esc_html(
 				$value
 			); ?>" <?php echo $disabled; ?>>
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
-			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo $field[ 'label' ]; ?></span>
-			<?php if ( isset( $field[ 'docs' ] ) ): ?>
-				<a class="leading-none" href="<?php echo esc_url( $field[ 'docs' ] ); ?>" rel="noreferrer" target="_blank">
+			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo esc_html( $field['label'] ); ?></span>
+			<?php if ( isset( $field['docs'] ) ): ?>
+				<a class="leading-none" href="<?php echo esc_url( $field['docs'] ); ?>" rel="noreferrer" target="_blank">
 					<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
+						<path stroke-linecap="round" stroke-linejoin="round"
+							  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
 					</svg>
 				</a>
 			<?php endif; ?>
@@ -765,20 +791,20 @@ class API {
 	 */
 	public function render_textarea_field( array $field ) {
 		ob_start();
-		$value       = ! empty( $field[ 'value' ] ) ? $field[ 'value' ] : '';
-		$placeholder = ! empty( $field[ 'placeholder' ] ) ? $field[ 'placeholder' ] : '';
+		$value       = ! empty( $field['value'] ) ? $field['value'] : '';
+		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		?>
 		<div class="mt-4">
 			<label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				   for="<?php echo esc_attr( $field[ 'slug' ] ); ?>">
-				<?php echo esc_attr( $field[ 'label' ] ); ?>
+				   for="<?php echo esc_attr( $field['slug'] ); ?>">
+				<?php echo esc_attr( $field['label'] ); ?>
 			</label>
 			<div class="relative mt-1">
 			<textarea
 				class="block w-full max-w-xl border-gray-300 dark:border-gray-700 resize-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-900 dark:text-gray-300"
-				rows="5" id="<?php echo esc_attr( $field[ 'slug' ] ); ?>"
+				rows="5" id="<?php echo esc_attr( $field['slug'] ); ?>"
 				placeholder="<?php echo esc_attr( $placeholder ); ?>"
-				name="<?php echo esc_attr( $field[ 'slug' ] ); ?>"><?php echo $value; ?></textarea>
+				name="<?php echo esc_attr( $field['slug'] ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
 			</div>
 		</div>
 		<?php
@@ -795,7 +821,7 @@ class API {
 	 * @return string|false
 	 */
 	public function render_hook_field( array $field ) {
-		$hook_type       = $field[ 'hook_type' ] ?? 'warning';
+		$hook_type       = $field['hook_type'] ?? 'warning';
 		$box_class       = 'bg-yellow-50 dark:bg-yellow-100';
 		$text_class      = 'text-yellow-700 dark:text-yellow-800';
 		$persist_message = '';
@@ -805,13 +831,13 @@ class API {
 			$text_class = 'text-green-700 dark:text-green-800';
 		}
 
-		if ( ! empty( $field[ 'slug' ] ) && ( $field[ 'slug' ] === 'option_not_available_in_ce' || $field[ 'slug' ] === 'option_disabled_by_missing_api_token' ) ) {
+		if ( ! empty( $field['slug'] ) && ( $field['slug'] === 'option_not_available_in_ce' || $field['slug'] === 'option_disabled_by_missing_api_token' ) ) {
 			$persist_message = 'plausible-analytics-persist';
 		}
 
 		ob_start();
 		?>
-		<div id="plausible-analytics-hook-<?php echo $field[ 'slug' ]; ?>"
+		<div id="plausible-analytics-hook-<?php echo esc_attr( $field['slug'] ); ?>"
 			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300">
 			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?> rounded-t-md rounded-b-none">
 				<div class="flex">
@@ -832,9 +858,9 @@ class API {
 							</svg>
 						<?php endif; ?>
 					</div>
-					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field[ 'slug' ] ) ); ?>">
+					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>">
 						<div class="text-sm <?php echo $text_class; ?>>">
-							<p><?php do_action( 'plausible_analytics_settings_' . $field[ 'slug' ], $field[ 'slug' ] ); ?></p>
+							<p><?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?></p>
 						</div>
 					</div>
 				</div>
