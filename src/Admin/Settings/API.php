@@ -611,7 +611,12 @@ class API {
 					<?php
 					$settings      = Helpers::get_settings();
 					$option_name   = $fields[ array_key_first( $fields ) ]['slug'];
-					$option_values = array_column( array_filter( $fields, fn( $f ) => $f['type'] === 'checkbox' ), 'value' );
+					$option_values = array_column(
+						array_filter( $fields, function ( $f ) {
+							return $f['type'] === 'checkbox';
+						} ),
+						'value'
+					);
 					$saved_values  = $settings[ $option_name ] ?? [];
 					$all_checked   = ! empty( $option_values ) && empty( array_diff( $option_values, (array) $saved_values ) );
 					?>
