@@ -499,10 +499,10 @@ class API {
 				<?php if ( ! empty( $quick_action['disabled'] ) && $quick_action['disabled'] === true ) : ?>
 					<?php continue; ?>
 				<?php endif; ?>
-				<a id="<?php echo $quick_action['id']; ?>" class="no-underline text-sm leading-6 text-gray-900"
-				   target="<?php echo $quick_action['target']; ?>" href="<?php echo $quick_action['url']; ?>"
-				   title="<?php echo $quick_action['label']; ?>">
-					<?php echo $quick_action['label']; ?>
+				<a id="<?php echo esc_attr( $quick_action['id'] ); ?>" class="no-underline text-sm leading-6 text-gray-900"
+				   target="<?php echo esc_attr( $quick_action['target'] ); ?>" href="<?php echo esc_url( $quick_action['url'] ); ?>"
+				   title="<?php echo esc_attr( $quick_action['label'] ); ?>">
+					<?php echo esc_html( $quick_action['label'] ); ?>
 				</a>
 			<?php endforeach; ?>
 		<?php endif; ?>
@@ -684,7 +684,7 @@ class API {
 		$disabled    = ! empty( $field['disabled'] ) ? 'disabled' : '';
 		$classes     = ! empty ( $field['classes'] ) ? $field['classes'] : '';
 		?>
-		<div class="<?php echo $classes; ?>">
+		<div class="mt-4 <?php echo $classes; ?>">
 			<?php if ( ! empty( $field['label'] ) ): ?>
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300"
 					   for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
@@ -714,7 +714,8 @@ class API {
 		$disabled = isset( $field['disabled'] ) && $field['disabled'] === true;
 		?>
 		<button
-			class="plausible-analytics-button border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
+			class="plausible-analytics-button mt-4 border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
+			text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
 			id="<?php esc_attr_e( $field['slug'], 'plausible-analytics' ); ?>"
 			type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
@@ -749,8 +750,8 @@ class API {
 		$addtl_opts = ! empty( $field['addtl_opts'] );
 		?>
 		<div class="toggle-container flex items-center mt-4 space-x-3">
-			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' :
-				'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
+			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' : 'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2
+			border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
 					id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
 					echo $id; ?>" type="checkbox" data-status="<?php echo $checked ? 'on' : 'off'; ?>" data-list="<?php echo $is_list ? '1' :
 				''; ?>" <?php if ( ! empty( $caps ) ): ?>data-caps="<?php echo implode(
