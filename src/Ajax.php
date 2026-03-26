@@ -284,7 +284,7 @@ class Ajax {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
-		$options = json_decode( wp_unslash( $post_data['options'] ), true );
+		$options = json_decode( $post_data['options'], true );
 
 		if ( empty( $options ) ) {
 			wp_send_json_error( __( 'No options found.', 'plausible-analytics' ), 400 );
@@ -294,6 +294,10 @@ class Ajax {
 			$name   = sanitize_text_field( $option['name'] );
 			$value  = sanitize_text_field( $option['value'] );
 			$status = sanitize_text_field( $option['status'] );
+
+			if ( ! isset( $settings[ $name ] ) || ! is_array( $settings[ $name ] ) ) {
+				continue;
+			}
 
 			if ( $status === 'on' ) {
 				if ( ! in_array( $value, $settings[ $name ] ) ) {
