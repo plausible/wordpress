@@ -673,7 +673,7 @@ class API {
 			<div class="flex justify-between items-center">
 				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group['description'], 'post' ); ?></div>
 			</div>
-			<ol id="<?php echo esc_attr( $slug ); ?>_list" class="m-0 mt-4 list-none mb-6">
+			<ol id="<?php echo esc_attr( $slug ); ?>_list" class="m-0 list-none">
 				<?php foreach ( $values as $key => $value ) : ?>
 					<li class="<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>-field flex justify-between items-end">
 						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => esc_attr( "{$slug}[$key]" ), 'classes' => 'flex-1' ] ); ?>
