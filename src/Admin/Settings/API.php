@@ -552,17 +552,19 @@ class API {
 	public function render_toggle_group_field( array $group, $hide_header = false ) {
 		ob_start();
 		?>
-		<div id="<?php echo $group['slug']; ?>_toggle" onclick="plausibleToggleSection('<?php echo $group['slug']; ?>')" class="flex items-center mt-4 space-x-3 hover:cursor-pointer">
+		<div id="<?php echo esc_attr( $group['slug'] ); ?>_toggle" onclick="plausibleToggleSection('<?php echo esc_js( $group['slug'] ); ?>')"
+			 class="flex items-center mt-4 space-x-3 hover:cursor-pointer">
 			<span class="dark:text-gray-100 text-lg">
-				<?php echo $group['label']; ?>
+				<?php echo esc_html( $group['label'] ); ?>
 			</span>
 			<!-- Chevron -->
-			<svg xmlns="http://www.w3.org/2000/svg" id="<?php echo $group['slug']; ?>_chevron" class="h-6 w-6 ml-2 text-gray-400 dark:text-gray-500 transition-transform duration-250" fill="none"
+			<svg xmlns="http://www.w3.org/2000/svg" id="<?php echo esc_attr( $group['slug'] ); ?>_chevron" class="h-6 w-6 ml-2 text-gray-400 dark:text-gray-500 transition-transform duration-250"
+				 fill="none"
 				 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/>
 			</svg>
 		</div>
-		<div class="hidden" id="<?php echo $group['slug']; ?>_content">
+		<div class="hidden" id="<?php echo esc_attr( $group['slug'] ); ?>_content">
 			<?php echo $this->render_group_field( $group, true ); ?>
 		</div>
 		<?php
@@ -584,7 +586,7 @@ class API {
 		<div class="bg-white dark:bg-gray-800<?php echo $hide_header ? '' : ' plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?>">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
-					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo $group['slug']; ?>"><?php echo $group['label']; ?></h3>
+					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo esc_attr( $group['slug'] ); ?>"><?php echo esc_html( $group['label'] ); ?></h3>
 					<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 						<?php echo wp_kses_post( $group['desc'] ); ?>
 					</div>
@@ -642,15 +644,15 @@ class API {
 		$values = $group['value'] ?: [ 0 => '' ];
 		$slug   = $group['slug'] ?? '';
 		?>
-		<div id="<?php echo $slug; ?>_content" class="plausible-analytics-section <?php echo $group['hidden'] ? 'hidden' : ''; ?> !mt-1 mx-14">
+		<div id="<?php echo esc_attr( $slug ); ?>_content" class="plausible-analytics-section <?php echo $group['hidden'] ? 'hidden' : ''; ?> !mt-1 mx-14">
 			<div class="flex justify-between items-center">
 				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group['description'], 'post' ); ?></div>
 			</div>
-			<ol id="<?php echo $slug; ?>_list" class="m-0 mt-4 list-none mb-6">
+			<ol id="<?php echo esc_attr( $slug ); ?>_list" class="m-0 mt-4 list-none mb-6">
 				<?php foreach ( $values as $key => $value ) : ?>
-					<li class="<?php echo str_replace( '_', '-', $slug ); ?>-field flex justify-between items-end">
-						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => "{$slug}[$key]", 'classes' => 'flex-1' ] ); ?>
-						<a onclick="plausibleRemoveField('<?php echo "{$slug}[$key]"; ?>')" class="<?php echo $key === 0 ? 'hidden' :
+					<li class="<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>-field flex justify-between items-end">
+						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => esc_attr( "{$slug}[$key]" ), 'classes' => 'flex-1' ] ); ?>
+						<a onclick="plausibleRemoveField('<?php echo esc_js( "{$slug}[$key]" ); ?>')" class="<?php echo $key === 0 ? 'hidden' :
 							''; ?> ml-2 cursor-pointer text-red-800 hover:text-red-500 dark:text-red-500 dark:hover:text-red-400">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" fill="none" stroke-width="1.5">
 								<path stroke-linecap="round" stroke-linejoin="round"
@@ -661,7 +663,7 @@ class API {
 				<?php endforeach; ?>
 			</ol>
 			<?php echo $this->render_button_field( [ 'slug' => 'save-' . $slug, 'label' => __( 'Save', 'plausible-analytics' ) ] ); ?>
-			<button type="button" onclick="plausibleAddField('<?php echo $slug; ?>')"
+			<button type="button" onclick="plausibleAddField('<?php echo esc_js( $slug ); ?>')"
 					class="border-0 cursor-pointer whitespace-nowrap truncate gap-x-2 font-semibold px-3.5 py-2.5 text-sm bg-transparent text-indigo-600 hover:text-indigo-700">
 				<?php echo __( 'Add More', 'plausible-analytics' ); ?>
 			</button>
@@ -684,18 +686,18 @@ class API {
 		$disabled    = ! empty( $field['disabled'] ) ? 'disabled' : '';
 		$classes     = ! empty ( $field['classes'] ) ? $field['classes'] : '';
 		?>
-		<div class="mt-4 <?php echo $classes; ?>">
+		<div class="mt-4 <?php echo esc_attr( $classes ); ?>">
 			<?php if ( ! empty( $field['label'] ) ): ?>
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300"
-					   for="<?php echo $field['slug']; ?>"><?php echo $field['label']; ?></label>
+					   for="<?php echo esc_attr( $field['slug'] ); ?>"><?php echo wp_kses_post( $field['label'] ); ?></label>
 			<?php endif; ?>
 			<div class="mt-1">
 				<input
 					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2 px-3"
-					id="<?php echo $field['slug']; ?>" placeholder="<?php echo $placeholder; ?>" autocomplete="off"
+					id="<?php echo esc_attr( $field['slug'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" autocomplete="off"
 					type="text"
-					name="<?php echo $field['slug']; ?>"
-					value="<?php echo $value; ?>" <?php echo $disabled; ?> />
+					name="<?php echo esc_attr( $field['slug'] ); ?>"
+					value="<?php echo esc_attr( $value ); ?>" <?php echo $disabled ? 'disabled' : ''; ?> />
 			</div>
 		</div>
 		<?php
@@ -724,7 +726,7 @@ class API {
 				<path class="opacity-75" fill="currentColor"
 					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 			</svg>
-			<?php esc_attr_e( $field['label'], 'plausible-analytics' ); ?>
+			<?php esc_html_e( $field['label'], 'plausible-analytics' ); ?>
 		</button>
 		<?php
 		return ob_get_clean();
@@ -763,7 +765,7 @@ class API {
 				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
-			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo $field['label']; ?></span>
+			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo esc_html( $field['label'] ); ?></span>
 			<?php if ( isset( $field['docs'] ) ): ?>
 				<a class="leading-none" href="<?php echo esc_url( $field['docs'] ); ?>" rel="noreferrer" target="_blank">
 					<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
@@ -802,7 +804,7 @@ class API {
 				class="block w-full max-w-xl border-gray-300 dark:border-gray-700 resize-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-900 dark:text-gray-300"
 				rows="5" id="<?php echo esc_attr( $field['slug'] ); ?>"
 				placeholder="<?php echo esc_attr( $placeholder ); ?>"
-				name="<?php echo esc_attr( $field['slug'] ); ?>"><?php echo $value; ?></textarea>
+				name="<?php echo esc_attr( $field['slug'] ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
 			</div>
 		</div>
 		<?php
@@ -835,7 +837,7 @@ class API {
 
 		ob_start();
 		?>
-		<div id="plausible-analytics-hook-<?php echo $field['slug']; ?>"
+		<div id="plausible-analytics-hook-<?php echo esc_attr( $field['slug'] ); ?>"
 			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300">
 			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?> rounded-t-md rounded-b-none">
 				<div class="flex">
