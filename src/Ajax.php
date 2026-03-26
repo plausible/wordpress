@@ -284,7 +284,7 @@ class Ajax {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
-		$options = json_decode( wp_unslash( $post_data['options'] ), true );
+		$options = json_decode( $post_data['options'], true );
 
 		if ( empty( $options ) ) {
 			wp_send_json_error( __( 'No options found.', 'plausible-analytics' ), 400 );
