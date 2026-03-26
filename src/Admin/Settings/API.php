@@ -597,32 +597,57 @@ class API {
 				/**
 				 * if $fields contains more than one checkbox field type, this is a list, which is treated different in @see Ajax::toggle_option()
 				 */
-				$is_list = array_filter(
+				$toggles = array_filter(
 					$fields,
 					function ( $field ) {
 						return $field['type'] === 'checkbox';
 					}
 				);
+				$is_list = count( $toggles ) > 1;
 				$count   = count( $fields );
 				$half    = ceil( $count / 2 );
 				?>
+				<?php if ( $is_list ): ?>
+					<?php
+					$settings      = Helpers::get_settings();
+					$option_name   = $fields[ array_key_first( $fields ) ]['slug'];
+					$option_values = array_column(
+						array_filter( $fields, function ( $f ) {
+							return $f['type'] === 'checkbox';
+						} ),
+						'value'
+					);
+					$saved_values  = $settings[ $option_name ] ?? [];
+					$all_checked   = ! empty( $option_values ) && empty( array_diff( $option_values, (array) $saved_values ) );
+					?>
+					<div class="toggle-container flex items-center mt-4 mb-2 space-x-3">
+						<button class="plausible-analytics-bulk-toggle <?php echo $all_checked ? 'bg-indigo-600' : 'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2
+            border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
+								type="checkbox" data-status="<?php echo $all_checked ? 'on' : 'off'; ?>">
+							<span
+								class="plausible-analytics-bulk-toggle <?php echo $all_checked ? 'translate-x-5' : 'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800
+								shadow transform transition-translate ease-in-out duration-200"></span>
+						</button>
+						<span class="ml-2 dark:text-gray-100 text-lg"><?php esc_html_e( 'Select all', 'plausible-analytics' ); ?></span>
+					</div>
+				<?php endif; ?>
 				<?php if ( $divide_in_columns && $count > 4 ) : ?>
-					<div class="grid grid-cols-1 md:grid-cols-2">
+					<div class="grid grid-cols-1 md:grid-cols-2 !mt-0">
 						<div>
 							<?php foreach ( array_slice( $fields, 0, $half ) as $field ) {
-								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 							} ?>
 						</div>
 						<div>
 							<?php foreach ( array_slice( $fields, $half ) as $field ) {
-								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 							} ?>
 						</div>
 					</div>
 				<?php else : ?>
-					<div>
+					<div class="!mt-0">
 						<?php foreach ( $fields as $field ) {
-							echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+							echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 						} ?>
 					</div>
 				<?php endif; ?>

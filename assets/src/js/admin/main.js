@@ -66,6 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			 * event.
 			 */
 			document.addEventListener('click', this.toggleOption);
+			/**
+			 * Select All/None toggles.
+			 */
+			document.addEventListener('click', this.bulkToggle);
 
 			if (this.stepElems.length > 0) {
 				for (let i = 0; i < this.stepElems.length; i++) {
@@ -86,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		toggleOption: async function (e) {
 			/**
-			 * Make sure event target is a toggle.
+			 * Make sure the event target is a toggle.
 			 */
 			if (e.target.classList === null || !e.target.classList.contains('plausible-analytics-toggle')) {
 				return;
@@ -123,6 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				plausible.toggleSection(button.value.replace('-', '_'));
 			}
 
+			const container = button.closest('.plausible-analytics-section');
+			plausible.syncBulkToggle(container);
+
 			const form = new FormData();
 			form.append('action', 'plausible_analytics_toggle_option');
 			form.append('option_name', button.name);
@@ -139,6 +146,120 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			plausible.maybeDisableOptions(data.capabilities);
+		},
+
+		/**
+		 * Toggles all underlying toggles when the Select All/None toggle is clicked.
+		 *
+		 * @param e
+		 * @returns {Promise<void>}
+		 */
+		bulkToggle: async function (e) {
+			/**
+			 * Make sure the event target is a bulk toggle.
+			 */
+			if (e.target.classList === null || !e.target.classList.contains('plausible-analytics-bulk-toggle')) {
+				return;
+			}
+
+			const button = e.target.closest('button');
+			const checked = button.dataset.status !== 'on';
+			const container = button.closest('.plausible-analytics-section');
+			const toggles = container.querySelectorAll('button.plausible-analytics-toggle');
+			const options = [];
+
+			/**
+			 * Trigger animations for each toggle.
+			 */
+			toggles.forEach(function (toggle) {
+				const span = toggle.querySelector('span');
+
+				if (checked) {
+					toggle.classList.replace('bg-gray-200', 'bg-indigo-600');
+					span.classList.replace('translate-x-0', 'translate-x-5');
+					toggle.dataset.status = 'on';
+				} else {
+					toggle.classList.replace('bg-indigo-600', 'bg-gray-200');
+					span.classList.replace('translate-x-5', 'translate-x-0');
+					toggle.dataset.status = 'off';
+				}
+
+				options.push({
+					name: toggle.name,
+					value: toggle.value,
+					status: checked ? 'on' : '',
+				});
+			});
+
+			/**
+			 * Toggle collapsable sections.
+			 */
+			toggles.forEach(function (toggle) {
+				if (toggle.dataset.addtlOpts !== '1') {
+					return;
+				}
+
+				const sectionName = toggle.value.replace('-', '_');
+				const section = document.getElementById(sectionName + '_content');
+
+				if (section === null) {
+					return;
+				}
+
+				const isHidden = section.classList.contains('hidden');
+
+				if (checked && isHidden) {
+					plausible.toggleSection(sectionName);
+				} else if (!checked && !isHidden) {
+					plausible.toggleSection(sectionName);
+				}
+			});
+
+			button.dataset.status = checked ? 'on' : 'off';
+
+			const bulkSpan = button.querySelector('span');
+
+			if (checked) {
+				button.classList.replace('bg-gray-200', 'bg-indigo-600');
+				bulkSpan.classList.replace('translate-x-0', 'translate-x-5');
+			} else {
+				button.classList.replace('bg-indigo-600', 'bg-gray-200');
+				bulkSpan.classList.replace('translate-x-5', 'translate-x-0');
+			}
+
+			const form = new FormData();
+			form.append('action', 'plausible_analytics_bulk_toggle');
+			form.append('options', JSON.stringify(options));
+			form.append('_nonce', plausible.nonce);
+
+			await plausible.ajax(form);
+		},
+
+		/**
+		 * Sets the initial state of the Select All toggle.
+		 *
+		 * @param container
+		 */
+		syncBulkToggle: function (container) {
+			const bulkToggle = container.querySelector('.plausible-analytics-bulk-toggle');
+
+			if (bulkToggle === null) {
+				return;
+			}
+
+			const toggles = container.querySelectorAll('button.plausible-analytics-toggle');
+			const allOn = Array.from(toggles).every(t => t.dataset.status === 'on');
+			const bulkSpan = bulkToggle.querySelector('span');
+
+			if (allOn) {
+				bulkToggle.classList.replace('bg-gray-200', 'bg-indigo-600');
+				bulkSpan.classList.replace('translate-x-0', 'translate-x-5');
+				bulkToggle.dataset.status = 'on';
+			} else {
+				bulkToggle.classList.replace('bg-indigo-600', 'bg-gray-200');
+				bulkSpan.classList.replace('translate-x-5', 'translate-x-0');
+				bulkToggle.dataset.status = 'off';
+			}
 		},
 
 		/**

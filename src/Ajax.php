@@ -36,6 +36,7 @@ class Ajax {
 		add_action( 'wp_ajax_plausible_analytics_show_wizard', [ $this, 'show_wizard' ] );
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
+		add_action( 'wp_ajax_plausible_analytics_bulk_toggle', [ $this, 'bulk_toggle_options' ] );
 	}
 
 	/**
@@ -93,12 +94,12 @@ class Ajax {
 	 * Clean variables using `sanitize_text_field`.
 	 * Arrays are cleaned recursively. Non-scalar values are ignored.
 	 *
-	 * @param string|array $var Sanitize the variable.
-	 *
-	 * @return string|array
 	 * @since  1.3.0
 	 * @access public
 	 *
+	 * @param string|array $var Sanitize the variable.
+	 *
+	 * @return string|array
 	 */
 	private function clean( $var, $key = '' ) {
 		// If the variable is an array, recursively apply the function to each element of the array.
@@ -188,8 +189,8 @@ class Ajax {
 	/**
 	 * Save Admin Settings
 	 *
-	 * @return void
 	 * @since 1.0.0
+	 * @return void
 	 */
 	public function toggle_option() {
 		// Sanitize all the post data before using.
@@ -273,6 +274,47 @@ class Ajax {
 		}
 
 		return $additional_message_html;
+	}
+
+	public function bulk_toggle_options() {
+		$post_data = $this->clean( $_POST );
+		$settings  = Helpers::get_settings();
+
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
+			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
+		}
+
+		$options = json_decode( $post_data['options'], true );
+
+		if ( empty( $options ) ) {
+			wp_send_json_error( __( 'No options found.', 'plausible-analytics' ), 400 );
+		}
+
+		foreach ( $options as $option ) {
+			$name   = sanitize_text_field( $option['name'] );
+			$value  = sanitize_text_field( $option['value'] );
+			$status = sanitize_text_field( $option['status'] );
+
+			if ( ! isset( $settings[ $name ] ) || ! is_array( $settings[ $name ] ) ) {
+				continue;
+			}
+
+			if ( $status === 'on' ) {
+				if ( ! in_array( $value, $settings[ $name ] ) ) {
+					$settings[ $name ][] = $value;
+				}
+			} else {
+				if ( ( $key = array_search( $value, $settings[ $name ] ) ) !== false ) {
+					unset( $settings[ $name ][ $key ] );
+				}
+			}
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
+
+		wp_send_json_success( null, 200 );
 	}
 
 	/**
