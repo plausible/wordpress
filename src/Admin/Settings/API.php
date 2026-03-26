@@ -577,8 +577,8 @@ class API {
 	 * @return string
 	 */
 	public function render_group_field( array $group, $hide_header = false ) {
-		$fields  = $group['fields'];
-		$columns = $group['slug'] === 'tracked_user_roles' || $group['slug'] === 'expand_dashboard_access' ? 'md:!mt-2 md:flex md:flex-wrap' : '';
+		$fields            = $group['fields'];
+		$divide_in_columns = $group['divide'] ?? false;
 		ob_start();
 		?>
 		<div class="bg-white dark:bg-gray-800<?php echo $hide_header ? '' : ' plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?>">
@@ -591,9 +591,6 @@ class API {
 				</header>
 			<?php endif; ?>
 			<?php if ( ! empty( $fields ) ): ?>
-				<?php if ( $columns ) : ?>
-					<div class="<?php echo esc_attr( $columns ); ?>">
-				<?php endif; ?>
 				<?php
 				/**
 				 * if $fields contains more than one checkbox field type, this is a list, which is treated different in @see Ajax::toggle_option()
@@ -604,12 +601,27 @@ class API {
 						return $field['type'] === 'checkbox';
 					}
 				);
-
-				foreach ( $fields as $field ) {
-					echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
-				}
+				$count   = count( $fields );
+				$half    = ceil( $count / 2 );
 				?>
-				<?php if ( $columns ) : ?>
+				<?php if ( $divide_in_columns && $count > 4 ) : ?>
+					<div class="grid grid-cols-1 md:grid-cols-2">
+						<div>
+							<?php foreach ( array_slice( $fields, 0, $half ) as $field ) {
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+							} ?>
+						</div>
+						<div>
+							<?php foreach ( array_slice( $fields, $half ) as $field ) {
+								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+							} ?>
+						</div>
+					</div>
+				<?php else : ?>
+					<div>
+						<?php foreach ( $fields as $field ) {
+							echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, count( $is_list ) > 1 );
+						} ?>
 					</div>
 				<?php endif; ?>
 			<?php endif; ?>
@@ -736,7 +748,7 @@ class API {
 		$caps       = ! empty( $field['caps'] ) ? $field['caps'] : [];
 		$addtl_opts = ! empty( $field['addtl_opts'] );
 		?>
-		<div class="toggle-container flex items-center mt-4 space-x-3 w-[50%]">
+		<div class="toggle-container flex items-center mt-4 space-x-3">
 			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' :
 				'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
 					id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
