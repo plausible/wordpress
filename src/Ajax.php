@@ -295,6 +295,10 @@ class Ajax {
 			$value  = sanitize_text_field( $option['value'] );
 			$status = sanitize_text_field( $option['status'] );
 
+			if ( ! isset( $settings[ $name ] ) || ! is_array( $settings[ $name ] ) ) {
+				continue;
+			}
+
 			if ( $status === 'on' ) {
 				if ( ! in_array( $value, $settings[ $name ] ) ) {
 					$settings[ $name ][] = $value;
