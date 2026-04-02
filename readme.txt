@@ -5,7 +5,7 @@ Tags: analytics, google analytics, web analytics, stats, privacy
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 2.5.6
+Stable tag: 2.5.7
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -155,6 +155,12 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.5.7 =
+* Improved: the JS tracking code now contains some widely used attributes to make sure its excluded from optimization by JS minification plugins, e.g. WP Rocket, LiteSpeed Cache, etc.
+* Fixed: a timed out call to the Plausible API would lock up the admin screen for 120 seconds. Timeouts are now lowered to 5-10 seconds.
+* Added: Select All toggles to toggle lists in the Settings screen.
+* Improved: toggle lists showing (custom) user roles, are now divided in 2 columns.
 
 = 2.5.6 =
 * Fixed: users with a valid API token would get a notice that the Plugin token should be entered.
