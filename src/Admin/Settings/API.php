@@ -71,7 +71,7 @@ class API {
 			$this->slides_description = [
 				'welcome'                    => sprintf(
 					__(
-						'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight (< 1 KB) and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Already have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
+						'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Already have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
 						'plausible-analytics'
 					),
 					'https://plausible.io/?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
