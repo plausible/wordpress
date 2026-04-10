@@ -276,7 +276,7 @@ class PlausibleProxySpeed {
 			return false;
 		}
 
-		if ( empty( $data['u'] ) || ! is_string( $data['u'] ) || ! $this->url_matches_home_host( $data['u'] ) ) {
+		if ( empty( $data['u'] ) || ! is_string( $data['u'] ) || strlen( $data['u'] ) > 2048 || ! $this->url_matches_home_host( $data['u'] ) ) {
 			return false;
 		}
 

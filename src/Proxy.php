@@ -428,6 +428,10 @@ class Proxy {
 			return true;
 		}
 
+		if ( ! $host ) {
+			return false;
+		}
+
 		return $this->normalize_domain( $host ) === $this->normalize_domain( $home_host );
 	}
 
