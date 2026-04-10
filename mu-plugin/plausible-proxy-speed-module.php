@@ -35,6 +35,13 @@ class PlausibleProxySpeed {
 	private $resources = [];
 
 	/**
+	 * Cached request body.
+	 *
+	 * @var string|null
+	 */
+	private $raw_body = null;
+
+	/**
 	 * Build properties.
 	 *
 	 * @return void
@@ -206,7 +213,15 @@ class PlausibleProxySpeed {
 		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
 		$host      = wp_parse_url( $url, PHP_URL_HOST );
 
-		if ( ! $home_host || ! $host ) {
+		if ( ! $home_host ) {
+			return false;
+		}
+
+		if ( ! $host && strpos( $url, '/' ) === 0 ) {
+			return true;
+		}
+
+		if ( ! $host ) {
 			return false;
 		}
 
@@ -232,17 +247,14 @@ class PlausibleProxySpeed {
 	 * @return bool
 	 */
 	private function request_body_too_large() {
-		$length = (int) ( $_SERVER[ 'CONTENT_LENGTH' ] ?? 0 );
-
-		return $length > self::MAX_REQUEST_BYTES;
+		return strlen( $this->get_request_body() ) > self::MAX_REQUEST_BYTES;
 	}
 
 	/**
 	 * @return bool
 	 */
 	private function has_valid_payload() {
-		$body = file_get_contents( 'php://input' );
-		$data = json_decode( $body, true );
+		$data = json_decode( $this->get_request_body(), true );
 
 		if ( ! is_array( $data ) ) {
 			return false;
@@ -273,6 +285,19 @@ class PlausibleProxySpeed {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Read and cache the request body once, capped slightly above the accepted limit.
+	 *
+	 * @return string
+	 */
+	private function get_request_body() {
+		if ( $this->raw_body === null ) {
+			$this->raw_body = (string) file_get_contents( 'php://input', false, null, 0, self::MAX_REQUEST_BYTES + 1 );
+		}
+
+		return $this->raw_body;
 	}
 
 	/**
