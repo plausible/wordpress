@@ -110,28 +110,37 @@ class PlausibleProxySpeed {
 		}
 
 		if ( $this->is_namespace_index_request() || ! $this->is_exact_proxy_endpoint_request() ) {
-			$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
+			$this->send_rest_no_route();
 		}
 
 		if ( $this->get_request_method() !== 'POST' ) {
-			$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
+			$this->send_rest_no_route();
 		}
 
 		if ( ! $this->has_json_content_type() ) {
-			$this->send_json_error( 400, 'plausible_proxy_invalid_content_type', 'Proxy request must be sent as JSON.' );
+			$this->send_rest_no_route();
 		}
 
 		if ( ! $this->has_valid_provenance() ) {
-			$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
+			$this->send_rest_no_route();
 		}
 
 		if ( $this->request_body_too_large() ) {
-			$this->send_json_error( 413, 'plausible_proxy_body_too_large', 'Proxy request body too large.' );
+			$this->send_rest_no_route();
 		}
 
 		if ( ! $this->has_valid_payload() ) {
-			$this->send_json_error( 400, 'plausible_proxy_invalid_payload', 'Proxy request payload is invalid.' );
+			$this->send_rest_no_route();
 		}
+	}
+
+	/**
+	 * Uniform rejection so probes can't tell which check failed.
+	 *
+	 * @return void
+	 */
+	private function send_rest_no_route() {
+		$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
 	}
 
 	/**
@@ -193,15 +202,40 @@ class PlausibleProxySpeed {
 		$origin  = $_SERVER[ 'HTTP_ORIGIN' ] ?? '';
 		$referer = $_SERVER[ 'HTTP_REFERER' ] ?? '';
 
-		if ( $origin && $this->url_matches_home_host( $origin ) ) {
+		if ( $origin && $this->host_matches_home( $origin ) ) {
 			return true;
 		}
 
-		if ( $referer && $this->url_matches_home_host( $referer ) ) {
+		if ( $referer && $this->host_matches_home( $referer ) ) {
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Strict same-host check for HTTP headers (Origin/Referer).
+	 *
+	 * Rejects relative paths — headers must carry a full origin.
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	private function host_matches_home( $url ) {
+		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		if ( ! $home_host ) {
+			return false;
+		}
+
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( ! $host ) {
+			return false;
+		}
+
+		return $this->normalize_domain( $home_host ) === $this->normalize_domain( $host );
 	}
 
 	/**
