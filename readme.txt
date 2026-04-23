@@ -1,7 +1,7 @@
 === Plausible Analytics ===
 Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
-Tags: analytics, google analytics, web analytics, stats, privacy
+Tags: analytics, google analytics, web analytics, stats, privacy, google analytics alternative, woocommerce analytics, website stats, analytics dashboard, simple analytics
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
@@ -13,11 +13,11 @@ Plausible Analytics is a privacy-friendly web analytics plugin for WordPress tha
 
 == Description ==
 
-Plausible Analytics is an easy-to-use, open source, lightweight and privacy-friendly web analytics alternative to Google Analytics.
+Plausible Analytics is a simple, lightweight and privacy-friendly WordPress analytics plugin and a Google Analytics alternative for WordPress.
 
-Understand your traffic, content, and conversions without slowing down your WordPress site and without the complexity of traditional analytics tools.
+Understand your website stats, traffic, content and conversions with a clean analytics dashboard that doesn’t slow down your WordPress site or require complex setup.
 
-No cookies. No consent banners. No clutter. Fully compliant with GDPR, CCPA and PECR. Made and hosted in the EU, powered by European-owned cloud infrastructure 🇪🇺.
+No cookies. No consent banners. No clutter. Fully compliant with GDPR, CCPA and PECR.
 
 [Live Demo](https://plausible.io/plausible.io).
 
