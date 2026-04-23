@@ -244,8 +244,15 @@ Contact us: https://plausible.io/contact
 
 == Screenshots ==
 
-1. Plausible.io Analytics Dashboard
-2. Plausible Analytics WordPress Plugin Settings Page
+1. Plausible Analytics Simple Dashboard
+2. View Your Stats in the WordPress Admin
+3. Enhanced Measurements Settings
+4. Plugin Settings Page
+5. Goals Tracking
+6. Revenue Tracking
+7. Site Search Tracking
+8. Form Submission Tracking
+9. WooCommerce One-Click setup for Purchase Funnel Tracking
 
 == Upgrade Notice ==
 
