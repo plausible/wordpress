@@ -9,7 +9,7 @@ Stable tag: 2.5.7
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
-Plausible Analytics is a privacy-friendly web analytics plugin for WordPress that is an easy-to-use, lightweight and more accurate  alternative to Google Analytics.
+Simple, privacy-friendly Google Analytics alternative for WordPress with a clean, lightweight dashboard.
 
 == Description ==
 
@@ -29,7 +29,7 @@ We're completely independent, self-funded, bootstrapped and debt-free. We're not
 
 ## Why WordPress users choose Plausible
 
-Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics, a simple but powerful, lightweight, open source and privacy-friendly alternative. 
+Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics.
 
 > “I use Plausible for traffic analytics. Privacy-friendly, no cookie banner needed, lightweight script that doesn’t slow down the page.” — [Joost de Valk, founder of Yoast SEO](https://joost.blog/astro-seo-complete-guide/#9-analytics-and-measurement)
 
@@ -37,19 +37,19 @@ Google Analytics is frustrating to use, difficult to understand, slow to load an
 
 ### Simple analytics dashboard for WordPress
 
-Plausible is simple analytics. It is easy to understand and cuts through the noise. Check your traffic within your WordPress dashboard and get all essential insights on one page in one minute.
+Plausible is [simple analytics](https://plausible.io/simple-web-analytics). It is easy to understand and cuts through the noise. Check your traffic within your WordPress dashboard and get all essential insights on one page in one minute.
 
 There are no layers of menus, no need to build custom reports, dashboards or presentations.
 
 ### Lightweight analytics that won’t slow your WordPress site
 
-Plausible is lightweight analytics. Our script is at least 54 times smaller than Google Analytics.
+Plausible is [lightweight analytics](https://plausible.io/lightweight-web-analytics). Our script is at least 54 times smaller than Google Analytics.
 
 Your site loads faster, your page weight is reduced and your visitors get a better experience.
 
 ### WordPress analytics without cookies or consent banners
 
-Plausible comes with in-built privacy and compliance with various laws around the world such as GDPR, CCPA, etc.
+Plausible comes with [in-built privacy and compliance](https://plausible.io/data-policy) with various laws around the world such as GDPR, CCPA, etc.
 
 - No cookies  
 - No personal data collection  
@@ -66,13 +66,13 @@ Segment your audience by any metric you click on.
 
 Track:
 
-- Scroll depth and engagement  
-- Outbound link clicks and file downloads, 404 error pages
-- Form submissions and site searches  
-- Campaigns using UTM parameters  
+- Scroll depth, bounce rate and other engagement metrics 
+- Outbound link clicks, file downloads, 404 error pages (codeless)
+- Form submissions and site searches (codeless)
+- Campaigns using UTM parameters 
 - Custom events without writing code  
-- Cloaked affiliate link clicks
-- Post authors, post categories and custom taxonomies without manually configuring anything or writing any code.
+- Cloaked affiliate link clicks (codeless)
+- Post authors, post categories and custom taxonomies (codeless)
 
 ### Built-in WooCommerce and Easy Digital Downloads analytics
 
@@ -86,7 +86,7 @@ Plausible provides automated WooCommerce and Easy Digital Downloads analytics so
 
 ### Shareable and client-friendly dashboards
 
-Your stats are private by default but can be shared:
+Your stats are private by default but can be shared.
 
 - Public dashboards via custom links  
 - Private links with optional password protection  
@@ -102,19 +102,15 @@ We’re an independent, bootstrapped company funded by our customers, not by adv
 
 Plausible features a realtime dashboard, entry pages report and integration with Search Console. You can track your paid campaigns and conversions. You can invite team members. You can even [import your historical stats from Google Analytics](https://plausible.io/docs/google-analytics-import). Learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience) and join thousands who have already migrated from Google Analytics.
 
-### Invite team members and share your dashboard
-
-Plausible is shareable. Your stats are private by default but you can choose to be transparent and make them public so anyone with your custom link can view them. You can also share your stats privately by generating a secure link. This link is impossible to guess but you can add password protection for extra security. You can invite team members and assign user roles too.
-
 ## Built for WordPress
 
 Plausible fits naturally into how WordPress sites are built and managed:
 
 - Works with any WordPress theme
 - Compatible with caching and performance plugins
-- No need to edit theme files or use tag managers  
+- No need to edit theme files or use tag managers
 - Simple setup with no coding required
-- View your stats directly in your WordPress dashboard  
+- View your stats directly in your WordPress dashboard
 
 ## Google Analytics alternative for WordPress
 
@@ -128,11 +124,13 @@ If you find Google Analytics too complex or invasive, Plausible is a simpler and
 
 ## Who is this for?
 
-- Bloggers and content creators who want simple traffic insights  
-- Businesses tracking conversions and growth  
-- WooCommerce store owners  
-- Agencies managing multiple WordPress sites  
-- Privacy-conscious site owners avoiding cookie banners
+- **Bloggers, publishers and content creators** who want to understand which posts perform best, where traffic comes from, and how readers engage  
+- **Businesses and marketers** tracking conversions, campaigns, and growth across SEO, ads, email and social channels  
+- **WooCommerce and digital store owners** who want simple revenue tracking, funnels and insights into customer journeys  
+- **Agencies and freelancers** managing multiple WordPress sites and sharing clean, client-friendly dashboards  
+- **Product teams and startups** measuring user behavior, key events and conversion funnels without complex setup  
+- **Privacy-conscious site owners** who want analytics without cookies, personal data collection or consent banners  
+- **Anyone switching from Google Analytics** who wants a simpler, faster and more intuitive analytics experience  
 
 ## Features
 
