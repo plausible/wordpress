@@ -9,7 +9,7 @@ Stable tag: 2.5.7
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
-Simple, privacy-friendly Google Analytics alternative for WordPress with a clean, lightweight dashboard.
+Simple, lightweight, privacy-friendly Google Analytics alternative for WordPress with a clean dashboard.
 
 == Description ==
 
@@ -17,7 +17,7 @@ Plausible Analytics is a simple, lightweight and privacy-friendly WordPress anal
 
 Understand your website stats, traffic, content and conversions with a clean analytics dashboard that doesn’t slow down your WordPress site or require complex setup.
 
-No cookies. No consent banners. No clutter. Fully compliant with GDPR, CCPA and PECR.
+No cookies. No consent banners. Fully compliant with GDPR, CCPA and PECR.
 
 [Live Demo](https://plausible.io/plausible.io).
 
@@ -29,23 +29,38 @@ We're completely independent, self-funded, bootstrapped and debt-free. We're not
 
 ## Why WordPress users choose Plausible
 
-Google Analytics is frustrating to use, difficult to understand, slow to load and privacy-invasive. That's why we built Plausible Analytics.
+Most analytics tools are complex, slow and difficult to use. Plausible is built to be simple, fast and easy to understand.
 
 > “I use Plausible for traffic analytics. Privacy-friendly, no cookie banner needed, lightweight script that doesn’t slow down the page.” — [Joost de Valk, founder of Yoast SEO](https://joost.blog/astro-seo-complete-guide/#9-analytics-and-measurement)
 
 > “I really like the simplicity of the dashboard, not bloated with countless options and tabs. I know exactly where to look.” — [Tomzur, co-founder of Kinsta](https://x.com/tomzur/status/2039317056839913824)
 
+Here are the main reasons that WordPress users love Plausible.
+
 ### Simple analytics dashboard for WordPress
 
-Plausible is [simple analytics](https://plausible.io/simple-web-analytics). It is easy to understand and cuts through the noise. Check your traffic within your WordPress dashboard and get all essential insights on one page in one minute.
+Get all your key metrics in a [single, clear dashboard](https://plausible.io/simple-web-analytics).
 
-There are no layers of menus, no need to build custom reports, dashboards or presentations.
+See traffic, top pages, referrers and conversions at a glance without digging through multiple reports or menus.
+
+Check your traffic within your WordPress dashboard and get all essential insights on one page in one minute.
 
 ### Lightweight analytics that won’t slow your WordPress site
 
-Plausible is [lightweight analytics](https://plausible.io/lightweight-web-analytics). Our script is at least 54 times smaller than Google Analytics.
+[Built for speed](https://plausible.io/lightweight-web-analytics), Plausible adds almost no weight to your pages. Our script is at least 54 times smaller than Google Analytics.
 
-Your site loads faster, your page weight is reduced and your visitors get a better experience.
+Your site stays fast, your visitors get a better experience, and your analytics won’t impact performance.
+
+### More accurate analytics you can trust
+
+Get a clearer picture of your traffic, even when visitors use ad blockers or privacy tools.
+
+- First-party tracking option helps bypass blockers
+- No data sampling or estimation
+- Count more real visitors compared to traditional analytics tools
+- Features a real time dashboard, that's actually real time
+
+Your stats reflect what’s actually happening on your site, not partial or distorted data. Read about our [accuracy practices](https://plausible.io/most-accurate-web-analytics).
 
 ### WordPress analytics without cookies or consent banners
 
@@ -62,23 +77,22 @@ You can track your traffic without showing cookie consent banners.
 
 ### Track events, content, marketing campaigns and revenue
 
-Segment your audience by any metric you click on.
+Understand how people use your site and what drives results.
 
 Track:
 
-- Scroll depth, bounce rate and other engagement metrics 
-- Outbound link clicks, file downloads, 404 error pages (codeless)
-- Form submissions and site searches (codeless)
-- Campaigns using UTM parameters 
-- Custom events without writing code  
-- Cloaked affiliate link clicks (codeless)
-- Post authors, post categories and custom taxonomies (codeless)
+- **Engagement and behavior** — scroll depth, bounce rate and time on page  
+- **Content performance** — top pages, entry pages, authors, categories and taxonomies  
+- **Events (no code needed)** — outbound links, file downloads, form submissions, site searches, 404 pages and affiliate link clicks  
+- **Marketing campaigns** — analyze traffic from UTM-tagged campaigns across ads, email and social  
+- **Custom events** — define your own goals and conversions without writing code  
+- **Revenue and funnels** — track purchases, conversion rates and customer journeys 
 
 ### Built-in WooCommerce and Easy Digital Downloads analytics
 
 Plausible provides automated WooCommerce and Easy Digital Downloads analytics solutions to track conversions, revenue and attribution.
 
-- Track activities like adding to cart, removing from cart, entering checkout and completing a purchase.
+- Track activities like adding to cart, removing from cart, entering checkout and completing a purchase
 - Track revenue and conversions automatically  
 - View the full purchase funnel from product view to checkout  
 - Measure cart abandonment and drop-off points  
@@ -100,7 +114,11 @@ We’re an independent, bootstrapped company funded by our customers, not by adv
 
 ### Smooth transition from Google Analytics
 
-Plausible features a realtime dashboard, entry pages report and integration with Search Console. You can track your paid campaigns and conversions. You can invite team members. You can even [import your historical stats from Google Analytics](https://plausible.io/docs/google-analytics-import). Learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience) and join thousands who have already migrated from Google Analytics.
+Switching from Google Analytics is simple and you won’t lose the insights that matter.
+
+Plausible gives you all the essential metrics in a clean, easy-to-use dashboard, including real-time traffic, top pages, referrers and campaign performance. No complicated configuration, no learning curve, just clear insights from day one.
+
+[Import your historical stats from Google Analytics](https://plausible.io/docs/google-analytics-import) and learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience).
 
 ## Built for WordPress
 
@@ -114,7 +132,7 @@ Plausible fits naturally into how WordPress sites are built and managed:
 
 ## Google Analytics alternative for WordPress
 
-If you find Google Analytics too complex or invasive, Plausible is a simpler and privacy-friendly alternative.
+If you're looking for a simpler and more privacy-friendly alternative, Plausible offers everything you need without the complexity.
 
 - No overwhelming reports or menus  
 - No data sampling  
@@ -146,10 +164,11 @@ Our product is updated several times per week and with our WordPress plugin you 
 
 ### WordPress-specific tracking
 
-- Enable automated tracking of post authors, categories and custom taxonomies  
-- Enable automated tracking of file downloads, external link clicks, cloaked affiliate link clicks, site search terms, form completions and 404 error pages tracking
-- Custom events using CSS classes (no JavaScript required)  
-- Disable tracking for admin or selected user roles  
+- Automatically track post authors, categories and custom taxonomies for deeper content insights  
+- Enable Enhanced Measurements to track file downloads, outbound links, affiliate clicks, form submissions, site searches and 404 error pages automatically  
+- Track events without coding using CSS classes directly in the WordPress editor  
+- No JavaScript knowledge required — everything can be configured from the plugin settings  
+- Disable tracking for admin users or selected user roles
 
 ### Ecommerce and conversions
 
