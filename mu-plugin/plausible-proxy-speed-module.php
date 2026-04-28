@@ -302,15 +302,15 @@ class PlausibleProxySpeed {
 			}
 		}
 
-		if ( empty( $data['n'] ) || ! is_string( $data['n'] ) || strlen( $data['n'] ) > 120 ) {
+		if ( ! isset( $data['n'] ) || ! is_string( $data['n'] ) || $data['n'] === '' || strlen( $data['n'] ) > 120 ) {
 			return false;
 		}
 
-		if ( empty( $data['d'] ) || $this->normalize_domain( $data['d'] ) !== $this->normalize_domain( $this->get_expected_domain() ) ) {
+		if ( ! isset( $data['d'] ) || ! is_string( $data['d'] ) || $this->normalize_domain( $data['d'] ) !== $this->normalize_domain( $this->get_expected_domain() ) ) {
 			return false;
 		}
 
-		if ( empty( $data['u'] ) || ! is_string( $data['u'] ) || strlen( $data['u'] ) > 2048 || ! $this->url_matches_home_host( $data['u'] ) ) {
+		if ( ! isset( $data['u'] ) || ! is_string( $data['u'] ) || $data['u'] === '' || strlen( $data['u'] ) > 2048 || ! $this->url_matches_home_host( $data['u'] ) ) {
 			return false;
 		}
 
@@ -344,7 +344,7 @@ class PlausibleProxySpeed {
 			return $settings['domain_name'];
 		}
 
-		return home_url();
+		return preg_replace( '/^http(s?):\/\/(www\.)?/i', '', home_url() );
 	}
 
 	/**
