@@ -16,6 +16,8 @@ class InitOptionsTest extends TestCase {
 	public function testAddPageviewProps() {
 		try {
 			global $post, $wp_query;
+			$old_post  = $post;
+			$old_query = $wp_query;
 
 			$post_id             = wp_insert_post(
 				[
@@ -42,8 +44,8 @@ class InitOptionsTest extends TestCase {
 			$this->assertArrayHasKey( 'category', $options['customProperties'] );
 			$this->assertEquals( 'Uncategorized', $options['customProperties']['category'] );
 		} finally {
-			$post     = null;
-			$wp_query = null;
+			$post     = $old_post;
+			$wp_query = $old_query;
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 		}
 	}
