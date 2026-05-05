@@ -26,9 +26,9 @@ class Upgrades {
 	/**
 	 * Constructor for Upgrades.
 	 *
-	 * @return void
 	 * @since  1.3.0
 	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'run' ] );
@@ -38,13 +38,13 @@ class Upgrades {
 	 * Register routines for upgrades.
 	 * This is intended for automatic upgrade routines having less resource intensive tasks.
 	 *
+	 * @since  1.3.0
+	 * @access public
 	 * @return void
 	 *
 	 * @throws Exception
 	 *
 	 * @codeCoverageIgnore
-	 * @since  1.3.0
-	 * @access public
 	 */
 	public function run() {
 		$plausible_analytics_version = get_option( 'plausible_analytics_version' );
@@ -98,6 +98,10 @@ class Upgrades {
 			$this->upgrade_to_254();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.5.8', '<' ) ) {
+			$this->upgrade_to_258();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -105,10 +109,10 @@ class Upgrades {
 	 * Upgrade routine for 1.2.5
 	 * Cleans Custom Domain related options from database, as it was removed in this version.
 	 *
-	 * @return void
-	 * @codeCoverageIgnore
 	 * @since  1.2.5
 	 * @access public
+	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade_to_125() {
 		$old_settings = Helpers::get_settings();
@@ -138,13 +142,12 @@ class Upgrades {
 	/**
 	 * Get rid of the previous "example.com" default for self_hosted_domain.
 	 *
+	 * @since 1.2.6
 	 * @return void
 	 * @codeCoverageIgnore
-	 * @since 1.2.6
 	 */
 	public function upgrade_to_126() {
 		$old_settings = Helpers::get_settings();
-		$new_settings = $old_settings;
 
 		if ( ! empty( $old_settings['self_hosted_domain'] ) && strpos( $old_settings['self_hosted_domain'], 'example.com' ) !== false ) {
 			Helpers::update_setting( 'self_hosted_domain', '' );
@@ -265,11 +268,11 @@ class Upgrades {
 	/**
 	 * If EDD is active and Ecommerce is enabled, create goals after updating the plugin.
 	 *
+	 * @since              v2.3.0
+	 *
 	 * @return void
 	 *
 	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
-	 * @since              v2.3.0
-	 *
 	 */
 	public function upgrade_to_230() {
 		$settings = Helpers::get_settings();
@@ -367,7 +370,7 @@ class Upgrades {
 			return;
 		}
 
-		// Show CE notice if self-hosted domain is set, otherwise show Cloud notice.
+		// Show CE notice if Self-hosted Domain is set, otherwise show Cloud notice.
 		if ( ! empty( $self_hosted_domain ) ) {
 			add_action( 'admin_notices', [ $this, 'show_ce_api_token_notice' ] );
 
@@ -375,6 +378,23 @@ class Upgrades {
 		}
 
 		add_action( 'admin_notices', [ $this, 'show_cloud_api_token_notice' ] );
+	}
+
+	/**
+	 * Updates the Proxy Module if Proxy is enabled.
+	 *
+	 * @return void
+	 */
+	public function upgrade_to_258() {
+		$proxy_enabled = Helpers::proxy_enabled();
+
+		if ( $proxy_enabled ) {
+			$installer = new Module();
+
+			$installer->install();
+		}
+
+		update_option( 'plausible_analytics_version', '2.5.8' );
 	}
 
 	/**
