@@ -216,7 +216,7 @@ class Helpers {
 		$filename = static::get_filename();
 
 		if ( empty( $filename ) ) {
-			return '';
+			return ''; // @codeCoverageIgnore
 		}
 
 		return static::get_proxy_resource( 'cache_dir' ) . $filename . '.js';
@@ -266,7 +266,7 @@ class Helpers {
 		$file_name = static::get_filename();
 
 		if ( empty( $file_name ) ) {
-			return '';
+			return ''; // @codeCoverageIgnore
 		}
 
 		/**
