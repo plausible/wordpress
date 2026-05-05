@@ -78,6 +78,29 @@ class WooCommerce {
 	}
 
 	/**
+	 * A bit of a hacky approach to ensure the _wp_http_referer header is available to us when hitting the Proxy in @see self::track_remove_cart_item().
+	 *
+	 * @see                self::track_add_to_cart()
+	 *
+	 * @param $add_to_cart_data
+	 *
+	 * @param $request
+	 *
+	 * @return mixed
+	 *
+	 * @codeCoverageIgnore Because there's nothing to test here.
+	 */
+	public function add_http_referer( $add_to_cart_data, $request ) {
+		$http_referer = $request->get_param( '_wp_http_referer' );
+
+		if ( ! empty( $http_referer ) ) {
+			$_REQUEST['_wp_http_referer'] = sanitize_url( $http_referer );
+		}
+
+		return $add_to_cart_data;
+	}
+
+	/**
 	 * Enqueue required JS in frontend.
 	 *
 	 * @return void
@@ -99,25 +122,22 @@ class WooCommerce {
 	}
 
 	/**
-	 * A bit of a hacky approach to ensure the _wp_http_referer header is available to us when hitting the Proxy in @param $add_to_cart_data
+	 * Track (non-Interactivity API i.e., AJAX) add to cart events.
 	 *
-	 * @param $request
+	 * @param string|int $product_id ID of the product added to the cart.
 	 *
-	 * @return mixed
+	 * @return void
 	 *
-	 * @codeCoverageIgnore Because there's nothing to test here.
-	 * @see self::track_remove_cart_item().
-	 *
-	 * @see self::track_add_to_cart()
-	 * and/
-	public function add_http_referer( $add_to_cart_data, $request ) {
-	$http_referer = $request->get_param( '_wp_http_referer' );
+	 * @codeCoverageIgnore Because we can't test XHR requests here.
+	 */
+	public function track_ajax_add_to_cart( $product_id ) {
+		$product          = wc_get_product( $product_id );
+		$add_to_cart_data = [
+			'id'       => $product_id,
+			'quantity' => $_POST['quantity'] ?? 1,
+		];
 
-	if ( ! empty( $http_referer ) ) {
-	$_REQUEST[ '_wp_http_referer' ] = sanitize_url( $http_referer );
-	}
-
-	return $add_to_cart_data;
+		$this->track_add_to_cart( $product, $add_to_cart_data );
 	}
 
 	/**
@@ -142,8 +162,8 @@ class WooCommerce {
 	/**
 	 * Track regular (i.e., interactivity API) add to cart events.
 	 *
-	 * @param WC_Product $product General information about the product added to cart.
-	 * @param array $add_to_cart_data Cart data for the product added to the cart, e.g. quantity, variation ID, etc.
+	 * @param WC_Product $product          General information about the product added to cart.
+	 * @param array      $add_to_cart_data Cart data for the product added to the cart, e.g. quantity, variation ID, etc.
 	 *
 	 * @return void
 	 *
@@ -205,64 +225,6 @@ class WooCommerce {
 	}
 
 	/**
-	 * Track (non-Interactivity API i.e., AJAX) add to cart events.
-	 *
-	 * @param string|int $product_id ID of the product added to the cart.
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore Because we can't test XHR requests here.
-	 */
-	public function track_ajax_add_to_cart( $product_id ) {
-		$product          = wc_get_product( $product_id );
-		$add_to_cart_data = [
-			'id'       => $product_id,
-			'quantity' => $_POST['quantity'] ?? 1,
-		];
-
-		$this->track_add_to_cart( $product, $add_to_cart_data );
-	}
-
-	/**
-	 * Track Remove from cart events.
-	 *
-	 * @param string $cart_item_key Key of item being removed from cart.
-	 * @param WC_Cart $cart Instance of the current cart.
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore because we can't test XHR requests here.
-	 */
-	public function track_remove_cart_item( $cart_item_key, $cart ) {
-		$cart_contents          = $cart->get_cart_contents();
-		$item_removed_from_cart = $this->clean_data( $cart_contents[ $cart_item_key ] ?? [] );
-		$product                = null;
-
-		if ( isset( $item_removed_from_cart['product_id'] ) ) {
-			$product = wc_get_product( $item_removed_from_cart['product_id'] );
-		}
-
-		if ( ! $product ) {
-			return;
-		}
-
-		$props = apply_filters(
-			'plausible_analytics_woocommerce_remove_cart_item_custom_properties',
-			[
-				'product_name'     => $product->get_name(),
-				'product_id'       => $item_removed_from_cart['product_id'],
-				'variation_id'     => $item_removed_from_cart['variation_id'],
-				'quantity'         => $item_removed_from_cart['quantity'],
-				'cart_total_items' => count( $cart_contents ),
-				'cart_total'       => $cart->get_total( null ),
-			]
-		);
-		$proxy = new Proxy( false );
-
-		$proxy->do_request( $this->event_goals['remove-from-cart'], null, null, $props );
-	}
-
-	/**
 	 * Tracks when a user enters the checkout process and sends event data to Plausible Analytics.
 	 *
 	 * This method checks if the current page is the checkout page. If it is, it collects relevant
@@ -313,7 +275,7 @@ class WooCommerce {
 			[
 				EnhancedMeasurements::ECOMMERCE_REVENUE => [
 					'amount'   => (string) $order->get_total(),
-					'currency' => $order->get_currency()
+					'currency' => $order->get_currency(),
 				],
 			]
 		);
@@ -323,5 +285,44 @@ class WooCommerce {
 
 		$order->add_meta_data( Integrations::PURCHASE_TRACKED_META_KEY, true );
 		$order->save();
+	}
+
+	/**
+	 * Track Remove from cart events.
+	 *
+	 * @param string  $cart_item_key Key of item being removed from cart.
+	 * @param WC_Cart $cart          Instance of the current cart.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore because we can't test XHR requests here.
+	 */
+	public function track_remove_cart_item( $cart_item_key, $cart ) {
+		$cart_contents          = $cart->get_cart_contents();
+		$item_removed_from_cart = $this->clean_data( $cart_contents[ $cart_item_key ] ?? [] );
+		$product                = null;
+
+		if ( isset( $item_removed_from_cart['product_id'] ) ) {
+			$product = wc_get_product( $item_removed_from_cart['product_id'] );
+		}
+
+		if ( ! $product ) {
+			return;
+		}
+
+		$props = apply_filters(
+			'plausible_analytics_woocommerce_remove_cart_item_custom_properties',
+			[
+				'product_name'     => $product->get_name(),
+				'product_id'       => $item_removed_from_cart['product_id'],
+				'variation_id'     => $item_removed_from_cart['variation_id'],
+				'quantity'         => $item_removed_from_cart['quantity'],
+				'cart_total_items' => count( $cart_contents ),
+				'cart_total'       => $cart->get_total( null ),
+			]
+		);
+		$proxy = new Proxy( false );
+
+		$proxy->do_request( $this->event_goals['remove-from-cart'], null, null, $props );
 	}
 }
