@@ -30,6 +30,8 @@ class PrivacyPolicy {
 	 * The content to add to WP's Privacy Policy page.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function add_suggested_content() {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
