@@ -9,6 +9,57 @@ namespace Plausible\Analytics\WP;
  */
 final class Plugin {
 	/**
+	 * Load @see Integrations()
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function load_integrations() {
+		new Integrations();
+	}
+
+	/**
+	 * Loads the plugin's translated strings.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function load_plugin_textdomain() {
+		load_plugin_textdomain(
+			'plausible-analytics',
+			false,
+			dirname( plugin_basename( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) ) . '/languages/'
+		);
+	}
+
+	/**
+	 * Load @see Admin\Provisioning()
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function load_provisioning() {
+		new Admin\Provisioning();
+		new Admin\Provisioning\Integrations();
+	}
+
+	/**
+	 * Load @see Admin\Settings\Page()
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function load_settings() {
+		new Admin\Settings\Page();
+	}
+
+	/**
 	 * Registers functionality with WordPress hooks.
 	 *
 	 * @since  1.0.0
@@ -51,6 +102,7 @@ final class Plugin {
 			new Admin\Filters();
 			new Admin\Actions();
 			new Admin\Module();
+			new Admin\PrivacyPolicy();
 		}
 
 		add_action( 'init', [ $this, 'load_integrations' ] );
@@ -62,56 +114,5 @@ final class Plugin {
 		new InitOptions();
 		new Proxy();
 		new Verification();
-	}
-
-	/**
-	 * Load @see Admin\Settings\Page()
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function load_settings() {
-		new Admin\Settings\Page();
-	}
-
-	/**
-	 * Load @see Admin\Provisioning()
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function load_provisioning() {
-		new Admin\Provisioning();
-		new Admin\Provisioning\Integrations();
-	}
-
-	/**
-	 * Load @see Integrations()
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function load_integrations() {
-		new Integrations();
-	}
-
-	/**
-	 * Loads the plugin's translated strings.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 * @return void
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function load_plugin_textdomain() {
-		load_plugin_textdomain(
-			'plausible-analytics',
-			false,
-			dirname( plugin_basename( PLAUSIBLE_ANALYTICS_PLUGIN_FILE ) ) . '/languages/'
-		);
 	}
 }
