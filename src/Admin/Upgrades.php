@@ -384,6 +384,8 @@ class Upgrades {
 	 * Updates the Proxy Module if Proxy is enabled.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade_to_258() {
 		$proxy_enabled = Helpers::proxy_enabled();
