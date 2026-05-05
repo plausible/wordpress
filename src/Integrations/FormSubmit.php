@@ -8,6 +8,7 @@
 
 namespace Plausible\Analytics\WP\Integrations;
 
+use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Proxy;
 
 class FormSubmit {
@@ -49,6 +50,10 @@ class FormSubmit {
 	 * @codeCoverageIgnore because there's nothing to test here.
 	 */
 	public function add_js() {
+		if ( ! Helpers::main_script_is_registered() ) {
+			return;
+		}
+
 		wp_register_script(
 			'plausible-form-submit-integration',
 			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-form-submit-integration.js',
@@ -71,7 +76,7 @@ class FormSubmit {
 	 * @filter             wpcf7_validate
 	 *
 	 * @param \WPCF7_Validation $result Form submission result object containing validation results.
-	 * @param array $tags Array of tags associated with the form fields.
+	 * @param array             $tags   Array of tags associated with the form fields.
 	 *
 	 * @return \WPCF7_Validation
 	 *

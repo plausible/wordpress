@@ -57,20 +57,26 @@ class Cron {
 		$remote = Helpers::get_js_url();
 		$local  = Helpers::get_js_path();
 
+		if ( ! $remote || ! $local ) {
+			return false;
+		}
+
 		return $this->download_file( $remote, $local );
 	}
 
 	/**
 	 * Downloads a remote file to this server.
 	 *
-	 * @param string $local_file Absolute path to where to store the $remote_file.
+	 * @since 1.3.0
+	 *
 	 * @param string $remote_file Full URL to file to download.
 	 *
+	 * @param string $local_file  Absolute path to where to store the $remote_file.
+	 *
 	 * @return bool True when successful. False if it fails.
-	 * @throws Exception
 	 * @throws InvalidArgument
 	 *
-	 * @since 1.3.0
+	 * @throws Exception
 	 */
 	private function download_file( $remote_file, $local_file ) {
 		$file_contents = wp_remote_get( $remote_file );
