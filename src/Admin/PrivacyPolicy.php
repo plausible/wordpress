@@ -23,7 +23,7 @@ class PrivacyPolicy {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'admin_init', [ $this, 'add_content' ] );
+		add_action( 'admin_init', [ $this, 'add_suggested_content' ] );
 	}
 
 	/**
@@ -31,7 +31,7 @@ class PrivacyPolicy {
 	 *
 	 * @return void
 	 */
-	public function add_content() {
+	public function add_suggested_content() {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
 			return;
 		}
