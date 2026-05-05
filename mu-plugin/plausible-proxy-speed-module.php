@@ -4,7 +4,7 @@
  * Description: Speeds up Plausible Analytics' proxy for avoiding ad blockers.
  * Plugin URI: https://plausible.io
  * Author: Plausible HQ
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author URI: https://plausible.io
  *
  * Text Domain: plausible-analytics
@@ -12,18 +12,18 @@
 
 class PlausibleProxySpeed {
 	/**
-	 * Is current request a request to our proxy?
+	 * Is the current request a request to our proxy?
 	 *
 	 * @var bool
 	 */
-	private $is_proxy_request = false;
+	private $is_proxy_request;
 
 	/**
 	 * Current request URI.
 	 *
 	 * @var string
 	 */
-	private $request_uri = '';
+	private $request_uri;
 
 	/**
 	 * Build properties.
@@ -38,27 +38,44 @@ class PlausibleProxySpeed {
 	}
 
 	/**
-	 * Helper method to retrieve Request URI. Checks several globals.
+	 * Helper method to retrieve Request URI.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	private function get_request_uri() {
-		return $_SERVER[ 'REQUEST_URI' ];
+		return $_SERVER['REQUEST_URI'] ?? '';
 	}
 
 	/**
-	 * Check if current request is a proxy request.
+	 * Check if the current request is a proxy request.
+	 *
+	 * The namespace must appear as a path segment under the REST prefix
+	 * (e.g. /wp-json/<namespace>[/...]). Substring matches in query
+	 * strings, fragments, or unrelated path segments are rejected.
 	 *
 	 * @return bool
 	 */
 	private function is_proxy_request() {
-		$namespace = get_option( 'plausible_analytics_proxy_resources' )[ 'namespace' ] ?? '';
+		$namespace = get_option( 'plausible_analytics_proxy_resources' )['namespace'] ?? '';
 
 		if ( ! $namespace ) {
 			return false;
 		}
 
-		return strpos( $this->request_uri, $namespace ) !== false;
+		$path = parse_url( $this->request_uri, PHP_URL_PATH );
+
+		if ( ! is_string( $path ) || $path === '' ) {
+			return false;
+		}
+
+		$rest_prefix = function_exists( 'rest_get_url_prefix' )
+			? trim( rest_get_url_prefix(), '/' )
+			: 'wp-json';
+
+		$expected = '/' . $rest_prefix . '/' . trim( $namespace, '/' );
+
+		return $path === $expected
+		       || str_starts_with( $path, $expected . '/' );
 	}
 
 	/**
@@ -73,6 +90,10 @@ class PlausibleProxySpeed {
 	/**
 	 * Filter the list of active plugins for custom endpoint requests.
 	 *
+	 * Uses basename() exact-match comparison instead of strpos(), so a
+	 * plugin file path can only match if its filename is exactly in the
+	 * allowlist.
+	 *
 	 * @param array $active_plugins The list of active plugins.
 	 *
 	 * @return array The filtered list of active plugins.
@@ -86,11 +107,8 @@ class PlausibleProxySpeed {
 		$filtered_plugins     = [];
 
 		foreach ( $active_plugins as $plugin ) {
-			foreach ( $allowed_plugin_files as $allowed_plugin_file ) {
-				if ( strpos( $plugin, $allowed_plugin_file ) !== false ) {
-					$filtered_plugins[] = $plugin;
-					break;
-				}
+			if ( in_array( basename( $plugin ), $allowed_plugin_files, true ) ) {
+				$filtered_plugins[] = $plugin;
 			}
 		}
 
