@@ -68,11 +68,9 @@ class PlausibleProxySpeed {
 			return false;
 		}
 
-		$rest_prefix = function_exists( 'rest_get_url_prefix' )
-			? trim( rest_get_url_prefix(), '/' )
-			: 'wp-json';
-
-		$expected = '/' . $rest_prefix . '/' . trim( $namespace, '/' );
+		$expected = function_exists( 'rest_url' )
+			? untrailingslashit( (string) wp_parse_url( rest_url( trim( $namespace, '/' ) ), PHP_URL_PATH ) )
+			: '/wp-json/' . trim( $namespace, '/' );
 
 		return $path === $expected
 		       || str_starts_with( $path, $expected . '/' );
