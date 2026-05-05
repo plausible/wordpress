@@ -10,14 +10,16 @@ use Plausible\Analytics\WP\InitOptions;
 
 class InitOptionsTest extends TestCase {
 	/**
-	 * @return void
 	 * @see InitOptions::maybe_add_pageview_props()
+	 * @return void
 	 */
 	public function testAddPageviewProps() {
 		try {
-			global $post;
+			global $post, $wp_query;
+			$old_post  = $post;
+			$old_query = $wp_query;
 
-			$post_id   = wp_insert_post(
+			$post_id             = wp_insert_post(
 				[
 					'id'           => 1,
 					'post_author'  => 1,
@@ -25,8 +27,10 @@ class InitOptionsTest extends TestCase {
 					'post_content' => 'Test',
 				]
 			);
-			$test_post = get_post( $post_id );
-			$post      = $test_post;
+			$test_post           = get_post( $post_id );
+			$post                = $test_post;
+			$wp_query            = new \WP_Query();
+			$wp_query->is_single = true;
 
 			add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 
@@ -40,15 +44,16 @@ class InitOptionsTest extends TestCase {
 			$this->assertArrayHasKey( 'category', $options['customProperties'] );
 			$this->assertEquals( 'Uncategorized', $options['customProperties']['category'] );
 		} finally {
-			$post = null;
+			$post     = $old_post;
+			$wp_query = $old_query;
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 		}
 	}
 
 	/**
+	 * @see InitOptions::maybe_add_proxy_options()
 	 * @return void
 	 * @throws \Exception
-	 * @see InitOptions::maybe_add_proxy_options()
 	 */
 	public function testAddProxyOptions() {
 		try {
@@ -65,8 +70,8 @@ class InitOptionsTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @see InitOptions::maybe_exclude_pageview()
+	 * @return void
 	 */
 	public function testExcludePageview() {
 		/**
@@ -76,7 +81,7 @@ class InitOptionsTest extends TestCase {
 			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageview' ] );
 
 			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
-				'get_current_request'
+				'get_current_request',
 			] )->getMock();
 
 			$class->method( 'get_current_request' )->willReturn( 'http://example.com/category/test' );
@@ -86,7 +91,7 @@ class InitOptionsTest extends TestCase {
 			$this->assertArrayNotHasKey( 'transformRequest', $options );
 
 			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
-				'get_current_request'
+				'get_current_request',
 			] )->getMock();
 
 			$class->method( 'get_current_request' )->willReturn( 'http://test.example.com/test' );
@@ -105,7 +110,7 @@ class InitOptionsTest extends TestCase {
 			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseAsterisk' ] );
 
 			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
-				'get_current_request'
+				'get_current_request',
 			] )->getMock();
 
 			$class->method( 'get_current_request' )->willReturn( 'http://example.com/test' );
@@ -124,7 +129,7 @@ class InitOptionsTest extends TestCase {
 			add_filter( 'plausible_analytics_settings', [ $this, 'setExcludePageviewEdgeCaseSpace' ] );
 
 			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [
-				'get_current_request'
+				'get_current_request',
 			] )->getMock();
 
 			$class->method( 'get_current_request' )->willReturn( 'http://example.com/test' );
@@ -138,8 +143,8 @@ class InitOptionsTest extends TestCase {
 	}
 
 	/**
-	 * @return void
 	 * @see InitOptions::maybe_track_logged_in_users()
+	 * @return void
 	 */
 	public function testTrackLoggedInUsers() {
 		try {

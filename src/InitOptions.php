@@ -16,9 +16,9 @@ class InitOptions {
 	/**
 	 * Constructor.
 	 *
-	 * @return void
 	 * @since  1.0.0
 	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		add_filter( 'plausible_analytics_init_options', [ $this, 'maybe_add_pageview_props' ] );
@@ -43,7 +43,7 @@ class InitOptions {
 
 		global $post;
 
-		if ( ! $post instanceof WP_Post ) {
+		if ( ! $post instanceof WP_Post || ! is_single() ) {
 			return $options; // @codeCoverageIgnore
 		}
 
@@ -164,11 +164,11 @@ class InitOptions {
 	/**
 	 * Adds a custom parameter User Logged In if Custom Properties is enabled.
 	 *
+	 * @since v2.4.0
+	 *
 	 * @param $options
 	 *
 	 * @return array
-	 * @since v2.4.0
-	 *
 	 */
 	public function maybe_track_logged_in_users( $options = [] ) {
 		$settings = Helpers::get_settings();
