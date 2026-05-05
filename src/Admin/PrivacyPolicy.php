@@ -36,19 +36,17 @@ class PrivacyPolicy {
 			return;
 		}
 
-		$content = sprintf(
-			__( "We use Plausible Analytics to collect usage statistics about our website.
+		$content = '<h2 class="wp-block-heading">' . __( 'Analytics', 'plausible-analytics' ) . '</h2>';
+		$content .= '<p>' . '<strong class="privacy-policy-tutorial">' . __( 'Suggested text:', 'plausible-analytics' ) . '</strong></p>';
+		$content .= sprintf(
+			__( "We use Plausible Analytics to collect usage statistics about our website. Plausible is a privacy-focused analytics provider that does not use cookies or other persistent identifiers.
 
-Plausible is a privacy-focused analytics provider that does not use cookies or other persistent identifiers.
-
-The data collected includes information such as page URLs, referrer, device type, browser and country.
-
-The data is processed by Plausible Analytics on servers located in the European Union.
+The data collected includes information such as page URLs, referrer, device type, browser and country. The data is processed by Plausible Analytics on servers located in the European Union.
 
 For more details, see Plausible’s data policy: %s", 'plausible-analytics' ),
 			'https://plausible.io/data-policy'
 		);
 
-		wp_add_privacy_policy_content( 'Example Plugin', wp_kses_post( wpautop( $content, false ) ) );
+		wp_add_privacy_policy_content( 'Plausible Analytics', wp_kses_post( wpautop( $content, false ) ) );
 	}
 }
