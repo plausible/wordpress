@@ -39,12 +39,13 @@ class PrivacyPolicy {
 		$content = '<h2 class="wp-block-heading">' . __( 'Analytics', 'plausible-analytics' ) . '</h2>';
 		$content .= '<p>' . '<strong class="privacy-policy-tutorial">' . __( 'Suggested text:', 'plausible-analytics' ) . '</strong></p>';
 		$content .= sprintf(
+		/* translators: %s: URL to Plausible's data policy page. */
 			__( "We use Plausible Analytics to collect usage statistics about our website. Plausible is a privacy-focused analytics provider that does not use cookies or other persistent identifiers.
 
 The data collected includes information such as page URLs, referrer, device type, browser and country. The data is processed by Plausible Analytics on servers located in the European Union.
 
-For more details, see Plausible’s data policy: %s", 'plausible-analytics' ),
-			'https://plausible.io/data-policy'
+For more details, see Plausible's data policy: %s", 'plausible-analytics' ),
+			'<a href="https://plausible.io/data-policy" target="_blank" rel="noopener noreferrer">https://plausible.io/data-policy</a>'
 		);
 
 		wp_add_privacy_policy_content( 'Plausible Analytics', wp_kses_post( wpautop( $content, false ) ) );
