@@ -42,7 +42,8 @@ class InitOptionsTest extends TestCase {
 			$this->assertArrayHasKey( 'category', $options['customProperties'] );
 			$this->assertEquals( 'Uncategorized', $options['customProperties']['category'] );
 		} finally {
-			$post = null;
+			$post     = null;
+			$wp_query = null;
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 		}
 	}
