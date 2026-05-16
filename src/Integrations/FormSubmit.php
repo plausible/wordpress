@@ -58,7 +58,8 @@ class FormSubmit {
 			'plausible-form-submit-integration',
 			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-form-submit-integration.js',
 			[ 'plausible-analytics' ],
-			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-form-submit-integration.js' )
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-form-submit-integration.js' ),
+			true
 		);
 
 		wp_localize_script(
