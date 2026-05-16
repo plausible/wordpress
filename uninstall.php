@@ -12,5 +12,5 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 require_once( dirname( __FILE__ ) . '/src/Uninstall.php' );
 
-$uninstaller = new \Plausible\Analytics\WP\Uninstall();
-$uninstaller->run();
+$plausible_uninstaller = new \Plausible\Analytics\WP\Uninstall();
+$plausible_uninstaller->run();
