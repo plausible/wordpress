@@ -34,6 +34,7 @@ class EDD {
 		}
 
 		$this->event_goals = [
+			// translators: %s: Product page URI pattern.
 			'view-product'     => sprintf( __( 'Visit %s*', 'plausible-analytics' ), $uri ),
 			'add-to-cart'      => __( 'EDD Add to Cart', 'plausible-analytics' ),
 			'remove-from-cart' => __( 'EDD Remove from Cart', 'plausible-analytics' ),

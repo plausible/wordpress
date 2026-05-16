@@ -409,7 +409,8 @@ class Upgrades {
 
 		?>
 		<div class="notice notice-warning">
-			<p><?php echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
+			<p><?php // translators: %s: URL to Plausible Analytics settings page.
+			echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}
@@ -424,7 +425,8 @@ class Upgrades {
 
 		?>
 		<div class="notice notice-warning">
-			<p><?php echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
+			<p><?php // translators: %s: URL to Plausible Analytics settings page.
+			echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}

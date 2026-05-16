@@ -97,6 +97,7 @@ class Module {
 	private function show_module_not_installed_error() {
 		$message = sprintf(
 			wp_kses(
+				// translators: %s: URL to manual proxy speed module installation instructions.
 				__(
 					'The proxy is enabled, but the proxy\'s speed module failed to install. Try <a href="%s" target="_blank">installing it manually</a>.',
 					'plausible-analytics'
@@ -211,6 +212,7 @@ class Module {
 		if ( ! $is_ssl ) {
 			Messages::set_notice(
 				sprintf(
+					// translators: %s: URL to list of potential proxy solutions.
 					__(
 						'Please check that your proxy is functioning correctly. If you encounter any issues with tracking, <a href="%s" target="_blank">click here</a> for a list of potential solutions',
 						'plausible-analytics'
@@ -227,6 +229,7 @@ class Module {
 			Messages::set_error(
 				sprintf(
 					wp_kses(
+						// translators: 1: Proxy endpoint URL, 2: URL to Plausible support.
 						__(
 							'Plausible\'s proxy couldn\'t be enabled, because the WordPress API is inaccessible. This might be due to a conflicting setting in a (security) plugin or server firewall. Make sure you whitelist requests to the Proxy\'s endpoint: <code>%1$s</code>. <a href="%2$s" target="_blank">Contact support</a> if you need help locating the issue.',
 							'plausible-analytics'

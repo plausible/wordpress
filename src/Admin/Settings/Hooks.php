@@ -74,6 +74,7 @@ class Hooks extends API {
 		} else {
 			echo sprintf(
 				wp_kses(
+					// translators: %s: URL to Plausible contact page.
 					__(
 						'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!',
 						'plausible-analytics'
@@ -110,6 +111,7 @@ class Hooks extends API {
 		if ( ! empty( Helpers::get_settings()[ 'enable_analytics_dashboard' ] ) ) {
 			echo sprintf(
 				wp_kses(
+					// translators: %s: URL to the analytics dashboard.
 					__(
 						'Your analytics dashboard is available <a href="%s">here</a>.',
 						'plausible-analytics'
