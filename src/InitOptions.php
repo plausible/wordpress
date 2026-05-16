@@ -177,7 +177,7 @@ class InitOptions {
 			return $options; // @codeCoverageIgnore
 		}
 
-		$logged_in = _x( 'no', __( 'Value when user is not logged in.', 'plausible-analytics' ), 'plausible-analytics' );
+		$logged_in = _x( 'no', 'Value when user is not logged in.', 'plausible-analytics' );
 
 		if ( is_user_logged_in() ) {
 			$user  = wp_get_current_user();
