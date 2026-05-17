@@ -40,7 +40,7 @@ class Assets {
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
 				[ 'plausible-analytics' ],
 				filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-affiliate-links.js' ),
-				true,
+				[ 'in_footer' => true ],
 			);
 
 			$affiliate_links = Helpers::get_settings()['affiliate_links'] ?? [];
