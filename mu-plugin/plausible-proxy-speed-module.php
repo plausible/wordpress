@@ -4,7 +4,7 @@
  * Description: Speeds up Plausible Analytics' proxy for avoiding ad blockers.
  * Plugin URI: https://plausible.io
  * Author: Plausible HQ
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author URI: https://plausible.io
  *
  * Text Domain: plausible-analytics
@@ -65,6 +65,17 @@ class PlausibleProxySpeed {
 		$path = parse_url( $this->request_uri, PHP_URL_PATH );
 
 		if ( ! is_string( $path ) || $path === '' ) {
+			return false;
+		}
+
+		/**
+		 * @see   rest_url() requires $wp_rewrite to be set. If it's not set yet, just assume this isn't a proxy request.
+		 *
+		 * @since v1.0.2
+		 */
+		global $wp_rewrite;
+
+		if ( $wp_rewrite === null ) {
 			return false;
 		}
 
