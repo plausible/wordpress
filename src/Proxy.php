@@ -19,6 +19,8 @@ use WP_REST_Request;
 use WP_REST_Server;
 
 class Proxy {
+	const MAX_REQUEST_BYTES = 8192;
+
 	/**
 	 * Proxy IP Headers used to detect the visitors IP prior to sending the data to Plausible's Measurement Protocol.
 	 *
@@ -90,6 +92,8 @@ class Proxy {
 		}
 
 		add_filter( 'rest_post_dispatch', [ $this, 'force_http_response_code' ], null, 3 );
+		add_filter( 'rest_pre_dispatch', [ $this, 'maybe_block_namespace_index' ], 10, 3 );
+		add_filter( 'rest_route_data', [ $this, 'hide_route_discovery' ], 10, 2 );
 	}
 
 	/**
@@ -222,12 +226,248 @@ class Proxy {
 				[
 					'methods'             => 'POST',
 					'callback'            => [ $this, 'send_event' ],
-					// There's no reason not to allow access to this API.
-					'permission_callback' => '__return_true',
+					'permission_callback' => [ $this, 'validate_proxy_request' ],
 				],
 				'schema' => null,
 			]
 		);
+	}
+
+	/**
+	 * Reject namespace index probing so the randomized route is not self-discoverable.
+	 *
+	 * @param mixed           $result
+	 * @param WP_REST_Server  $server
+	 * @param WP_REST_Request $request
+	 *
+	 * @return mixed
+	 */
+	public function maybe_block_namespace_index( $result, $server, $request ) {
+		if ( ! Helpers::proxy_enabled() || $request->get_route() !== '/' . $this->namespace ) {
+			return $result;
+		}
+
+		return new WP_Error(
+			'rest_no_route',
+			__( 'No route was found matching the URL and request method.', 'plausible-analytics' ),
+			[ 'status' => 404 ]
+		);
+	}
+
+	/**
+	 * Remove the proxy routes from REST discovery output.
+	 *
+	 * @param array $available
+	 * @param array $routes
+	 *
+	 * @return array
+	 */
+	public function hide_route_discovery( $available, $routes ) {
+		if ( ! Helpers::proxy_enabled() ) {
+			return $available;
+		}
+
+		unset( $available[ '/' . $this->namespace ] );
+		unset( $available[ '/' . $this->namespace . '/' . $this->base . '/' . $this->endpoint ] );
+
+		return $available;
+	}
+
+	/**
+	 * Validate the proxy request before we forward it to Plausible.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return true|WP_Error
+	 */
+	public function validate_proxy_request( $request ) {
+		$max_request_bytes = (int) apply_filters( 'plausible_analytics_proxy_max_body_bytes', self::MAX_REQUEST_BYTES );
+		$raw_body          = (string) $request->get_body();
+
+		if ( $max_request_bytes > 0 && strlen( $raw_body ) > $max_request_bytes ) {
+			return $this->rest_no_route();
+		}
+
+		if ( ! $this->has_json_content_type() ) {
+			return $this->rest_no_route();
+		}
+
+		$params = $request->get_json_params();
+
+		if ( ! is_array( $params ) ) {
+			return $this->rest_no_route();
+		}
+
+		if ( ! $this->has_valid_provenance() ) {
+			return $this->rest_no_route();
+		}
+
+		if ( ! $this->has_valid_payload( $params ) ) {
+			return $this->rest_no_route();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Uniform rejection so probes can't tell which check failed.
+	 *
+	 * @return WP_Error
+	 */
+	private function rest_no_route() {
+		return new WP_Error(
+			'rest_no_route',
+			__( 'No route was found matching the URL and request method.', 'plausible-analytics' ),
+			[ 'status' => 404 ]
+		);
+	}
+
+	/**
+	 * Check the request's Content-Type header.
+	 *
+	 * @return bool
+	 */
+	private function has_json_content_type() {
+		$content_type = $_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '';
+
+		if ( ! $content_type ) {
+			return false;
+		}
+
+		return strpos( strtolower( $content_type ), 'application/json' ) === 0;
+	}
+
+	/**
+	 * Require same-site Origin or Referer headers so blind scanners are rejected.
+	 *
+	 * @return bool
+	 */
+	private function has_valid_provenance() {
+		$require_provenance = apply_filters( 'plausible_analytics_proxy_require_same_origin', true );
+
+		if ( ! $require_provenance ) {
+			return true;
+		}
+
+		$origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
+		$referer = $_SERVER['HTTP_REFERER'] ?? '';
+
+		if ( $origin && $this->host_matches_home( $origin ) ) {
+			return true;
+		}
+
+		if ( $referer && $this->host_matches_home( $referer ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Strict same-host check for HTTP headers (Origin/Referer).
+	 *
+	 * Rejects relative paths — headers must carry a full origin.
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	private function host_matches_home( $url ) {
+		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		if ( ! $home_host ) {
+			return false;
+		}
+
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( ! $host ) {
+			return false;
+		}
+
+		return $this->normalize_domain( $host ) === $this->normalize_domain( $home_host );
+	}
+
+	/**
+	 * Validate the JSON payload sent by the tracker.
+	 *
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	private function has_valid_payload( $params ) {
+		$allowed_keys = [ 'n', 'd', 'u', 'p', 'revenue' ];
+		$event_name   = $params['n'] ?? '';
+		$domain       = $params['d'] ?? '';
+		$url          = $params['u'] ?? '';
+
+		foreach ( array_keys( $params ) as $key ) {
+			if ( ! in_array( $key, $allowed_keys, true ) ) {
+				return false;
+			}
+		}
+
+		if ( ! is_string( $event_name ) || $event_name === '' || strlen( $event_name ) > 120 ) {
+			return false;
+		}
+
+		if ( ! is_string( $domain ) || $this->normalize_domain( $domain ) !== $this->normalize_domain( Helpers::get_domain() ) ) {
+			return false;
+		}
+
+		if ( ! is_string( $url ) || strlen( $url ) > 2048 || ! $this->url_matches_home_host( $url ) ) {
+			return false;
+		}
+
+		if ( isset( $params['p'] ) && ! is_array( $params['p'] ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Compare a URL-like value to the current site's host.
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	private function url_matches_home_host( $url ) {
+		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		if ( ! $home_host ) {
+			return false;
+		}
+
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( ! $host && strpos( $url, '/' ) === 0 ) {
+			return true;
+		}
+
+		if ( ! $host ) {
+			return false;
+		}
+
+		return $this->normalize_domain( $host ) === $this->normalize_domain( $home_host );
+	}
+
+	/**
+	 * Normalize a host/domain string for comparison.
+	 *
+	 * @param string $domain
+	 *
+	 * @return string
+	 */
+	private function normalize_domain( $domain ) {
+		$domain = trim( strtolower( $domain ) );
+		$domain = preg_replace( '/^https?:\/\//', '', $domain );
+		$domain = preg_replace( '/^www\./', '', $domain );
+
+		$parts = explode( '/', $domain );
+
+		return rtrim( $parts[0], '.' );
 	}
 
 	/**
@@ -246,7 +486,13 @@ class Proxy {
 			return $response; // @codeCoverageIgnore
 		}
 
-		$response_code = wp_remote_retrieve_response_code( $response->get_data() );
+		$data = $response->get_data();
+
+		if ( ! is_array( $data ) || empty( $data['response']['code'] ) ) {
+			return $response;
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $data );
 		$response->set_status( $response_code );
 
 		return $response;
