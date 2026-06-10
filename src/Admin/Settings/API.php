@@ -207,7 +207,7 @@ class API {
 							$i         = 0;
 							?>
 							<?php foreach ( $this->slides as $id => $title ): ?>
-								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
+								<div id="<?php echo esc_attr( $id ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
 										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute md:min-w-full sm:max-w-full">
 									<header class="relative">
 										<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
@@ -246,7 +246,7 @@ class API {
 														$disabled = true;
 													}
 												} ?>
-												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>_slide"
+													<a href="#<?php echo esc_attr( $slide_ids[ $i ] ); ?>_slide"
 												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0
 												   rounded-md <?php echo $disabled ? 'bg-gray-200 pointer-events-none' : 'bg-indigo-600'; ?> px-3.5 py-2.5 text-sm
 												   font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline
@@ -290,7 +290,7 @@ class API {
 									?>
 									<?php foreach ( $this->slides as $id => $title ): ?>
 										<!-- Upcoming step -->
-										<li id="step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-step flex hidden items-start mb-6">
 											<div
 												class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
@@ -305,9 +305,9 @@ class API {
 											?>
 										</li>
 										<!-- Active Step -->
-										<li id="active-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="active-step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-active-step flex hidden items-start mb-6"
-											data-completed-steps="<?php esc_attr_e( implode( ',', $completed_steps ), 'plausible-analytics' ); ?>">
+											data-completed-steps="<?php echo esc_attr( implode( ',', $completed_steps ) ); ?>">
 											<!-- Hidden -->
 											<span
 												class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
@@ -325,7 +325,7 @@ class API {
 											?>
 										</li>
 										<!-- Completed Step -->
-										<li id="completed-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="completed-step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-completed-step flex hidden items-start mb-6">
 											<span
 												class="flex-shrink-0 relative h-5 w-5 flex items-center justify-center">
@@ -743,7 +743,7 @@ class API {
 		<button
 			class="plausible-analytics-button mt-4 border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
 			text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
-			id="<?php esc_attr_e( $field['slug'], 'plausible-analytics' ); ?>"
+			id="<?php echo esc_attr( $field['slug'] ); ?>"
 			type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
 				 fill="none" viewBox="0 0 24 24">
@@ -751,7 +751,7 @@ class API {
 				<path class="opacity-75" fill="currentColor"
 					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 			</svg>
-			<?php esc_html_e( $field['label'], 'plausible-analytics' ); ?>
+			<?php echo esc_html( $field['label'] ); ?>
 		</button>
 		<?php
 		return ob_get_clean();
