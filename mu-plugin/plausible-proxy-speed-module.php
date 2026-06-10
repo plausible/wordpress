@@ -47,20 +47,11 @@ class PlausibleProxySpeed {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->resources         = $this->get_proxy_resources();
+		$this->resources        = $this->get_proxy_resources();
 		$this->request_uri      = $this->get_request_uri();
 		$this->is_proxy_request = $this->is_proxy_request();
 
 		$this->init();
-	}
-
-	/**
-	 * Helper method to retrieve Request URI.
-	 *
-	 * @return string
-	 */
-	private function get_request_uri() {
-		return $_SERVER['REQUEST_URI'] ?? '';
 	}
 
 	/**
@@ -75,6 +66,15 @@ class PlausibleProxySpeed {
 	}
 
 	/**
+	 * Helper method to retrieve Request URI.
+	 *
+	 * @return string
+	 */
+	private function get_request_uri() {
+		return $_SERVER['REQUEST_URI'] ?? '';
+	}
+
+	/**
 	 * Check if the current request is a proxy request.
 	 *
 	 * The namespace must appear as a path segment under the REST prefix
@@ -84,13 +84,20 @@ class PlausibleProxySpeed {
 	 * @return bool
 	 */
 	private function is_proxy_request() {
-		$namespace = $this->resources[ 'namespace' ] ?? '';
+		$namespace = $this->resources['namespace'] ?? '';
 
 		if ( ! $namespace ) {
 			return false;
 		}
 
-		return strpos( $this->get_request_path(), '/wp-json/' . $namespace ) === 0;
+		return str_starts_with( $this->get_request_path(), '/wp-json/' . $namespace );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_request_path() {
+		return wp_parse_url( $this->request_uri, PHP_URL_PATH ) ?: '';
 	}
 
 	/**
@@ -139,37 +146,10 @@ class PlausibleProxySpeed {
 	}
 
 	/**
-	 * Uniform rejection so probes can't tell which check failed.
-	 *
-	 * @return void
-	 */
-	private function send_rest_no_route() {
-		$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
-	}
-
-	/**
-	 * @return string
-	 */
-	private function get_request_path() {
-		return wp_parse_url( $this->request_uri, PHP_URL_PATH ) ?: '';
-	}
-
-	/**
-	 * @return string
-	 */
-	private function get_exact_proxy_path() {
-		$namespace = $this->resources[ 'namespace' ] ?? '';
-		$base      = $this->resources[ 'base' ] ?? '';
-		$endpoint  = $this->resources[ 'endpoint' ] ?? '';
-
-		return '/wp-json/' . $namespace . '/v1/' . $base . '/' . $endpoint;
-	}
-
-	/**
 	 * @return bool
 	 */
 	private function is_namespace_index_request() {
-		return $this->get_request_path() === '/wp-json/' . ( $this->resources[ 'namespace' ] ?? '' ) . '/v1';
+		return $this->get_request_path() === '/wp-json/' . ( $this->resources['namespace'] ?? '' ) . '/v1';
 	}
 
 	/**
@@ -182,17 +162,57 @@ class PlausibleProxySpeed {
 	/**
 	 * @return string
 	 */
+	private function get_exact_proxy_path() {
+		$namespace = $this->resources['namespace'] ?? '';
+		$base      = $this->resources['base'] ?? '';
+		$endpoint  = $this->resources['endpoint'] ?? '';
+
+		return '/wp-json/' . $namespace . '/v1/' . $base . '/' . $endpoint;
+	}
+
+	/**
+	 * Uniform rejection so probes can't tell which check failed.
+	 *
+	 * @return void
+	 */
+	private function send_rest_no_route() {
+		$this->send_json_error( 404, 'rest_no_route', 'No route was found matching the URL and request method.' );
+	}
+
+	/**
+	 * @param int    $status
+	 * @param string $code
+	 * @param string $message
+	 *
+	 * @return void
+	 */
+	private function send_json_error( $status, $code, $message ) {
+		status_header( $status );
+		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
+		echo wp_json_encode(
+			[
+				'code'    => $code,
+				'message' => $message,
+				'data'    => [ 'status' => $status ],
+			]
+		);
+		exit;
+	}
+
+	/**
+	 * @return string
+	 */
 	private function get_request_method() {
-		return strtoupper( $_SERVER[ 'REQUEST_METHOD' ] ?? 'GET' );
+		return strtoupper( $_SERVER['REQUEST_METHOD'] ?? 'GET' );
 	}
 
 	/**
 	 * @return bool
 	 */
 	private function has_json_content_type() {
-		$content_type = $_SERVER[ 'CONTENT_TYPE' ] ?? $_SERVER[ 'HTTP_CONTENT_TYPE' ] ?? '';
+		$content_type = $_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '';
 
-		return strpos( strtolower( $content_type ), 'application/json' ) === 0;
+		return str_starts_with( strtolower( $content_type ), 'application/json' );
 	}
 
 	/**
@@ -203,8 +223,8 @@ class PlausibleProxySpeed {
 			return true;
 		}
 
-		$origin  = $_SERVER[ 'HTTP_ORIGIN' ] ?? '';
-		$referer = $_SERVER[ 'HTTP_REFERER' ] ?? '';
+		$origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
+		$referer = $_SERVER['HTTP_REFERER'] ?? '';
 
 		if ( $origin && $this->host_matches_home( $origin ) ) {
 			return true;
@@ -243,30 +263,6 @@ class PlausibleProxySpeed {
 	}
 
 	/**
-	 * @param string $url
-	 *
-	 * @return bool
-	 */
-	private function url_matches_home_host( $url ) {
-		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
-		$host      = wp_parse_url( $url, PHP_URL_HOST );
-
-		if ( ! $home_host ) {
-			return false;
-		}
-
-		if ( ! $host && strpos( $url, '/' ) === 0 ) {
-			return true;
-		}
-
-		if ( ! $host ) {
-			return false;
-		}
-
-		return $this->normalize_domain( $home_host ) === $this->normalize_domain( $host );
-	}
-
-	/**
 	 * @param string $domain
 	 *
 	 * @return string
@@ -286,6 +282,19 @@ class PlausibleProxySpeed {
 	 */
 	private function request_body_too_large() {
 		return strlen( $this->get_request_body() ) > self::MAX_REQUEST_BYTES;
+	}
+
+	/**
+	 * Read and cache the request body once, capped slightly above the accepted limit.
+	 *
+	 * @return string
+	 */
+	private function get_request_body() {
+		if ( $this->raw_body === null ) {
+			$this->raw_body = (string) file_get_contents( 'php://input', false, null, 0, self::MAX_REQUEST_BYTES + 1 );
+		}
+
+		return $this->raw_body;
 	}
 
 	/**
@@ -326,19 +335,6 @@ class PlausibleProxySpeed {
 	}
 
 	/**
-	 * Read and cache the request body once, capped slightly above the accepted limit.
-	 *
-	 * @return string
-	 */
-	private function get_request_body() {
-		if ( $this->raw_body === null ) {
-			$this->raw_body = (string) file_get_contents( 'php://input', false, null, 0, self::MAX_REQUEST_BYTES + 1 );
-		}
-
-		return $this->raw_body;
-	}
-
-	/**
 	 * @return string
 	 */
 	private function get_expected_domain() {
@@ -352,23 +348,27 @@ class PlausibleProxySpeed {
 	}
 
 	/**
-	 * @param int    $status
-	 * @param string $code
-	 * @param string $message
+	 * @param string $url
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	private function send_json_error( $status, $code, $message ) {
-		status_header( $status );
-		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
-		echo wp_json_encode(
-			[
-				'code'    => $code,
-				'message' => $message,
-				'data'    => [ 'status' => $status ],
-			]
-		);
-		exit;
+	private function url_matches_home_host( $url ) {
+		$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$host      = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( ! $home_host ) {
+			return false;
+		}
+
+		if ( ! $host && strpos( $url, '/' ) === 0 ) {
+			return true;
+		}
+
+		if ( ! $host ) {
+			return false;
+		}
+
+		return $this->normalize_domain( $home_host ) === $this->normalize_domain( $host );
 	}
 
 	/**
