@@ -104,7 +104,7 @@ class Module {
 				),
 				'post'
 			),
-			'https://plausible.io/wordpress-analytics-plugin#if-the-proxy-script-is-slow'
+			'https://plausible.io/docs/troubleshoot-integration#proxy-script-is-slow'
 		);
 
 		Messages::set_error( $message );
@@ -217,7 +217,7 @@ class Module {
 						'Please check that your proxy is functioning correctly. If you encounter any issues with tracking, <a href="%s" target="_blank">click here</a> for a list of potential solutions',
 						'plausible-analytics'
 					),
-					'https://plausible.io/wordpress-analytics-plugin#stats-not-being-recorded-after-enabling-the-proxy'
+					'https://plausible.io/docs/troubleshoot-integration#proxy-not-recording-stats-after-setup'
 				)
 			);
 		}
