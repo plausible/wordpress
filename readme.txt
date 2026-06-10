@@ -1,7 +1,7 @@
 === Plausible Analytics ===
 Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
-Tags: analytics, google analytics, web analytics, stats, privacy, google analytics alternative, woocommerce analytics, website stats, analytics dashboard, simple analytics
+Tags: analytics, privacy, google analytics alternative, woocommerce analytics, stats
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.2
