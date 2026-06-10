@@ -91,3 +91,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: plausible/wordpress
+        continue-on-error: true
