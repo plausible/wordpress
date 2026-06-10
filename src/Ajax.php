@@ -425,8 +425,9 @@ class Ajax {
 
 			Messages::set_error(
 				sprintf(
+					// translators: 1: URL to create a new plugin token, 2: URL to read more.
 					__(
-						'Oops! The Plugin Token you used is invalid. Please <a href="%s" target="_blank">create a new token</a>. <a target="_blank" href="%s">Read more</a>',
+						'Oops! The Plugin Token you used is invalid. Please <a href="%1$s" target="_blank">create a new token</a>. <a target="_blank" href="%2$s">Read more</a>',
 						'plausible-analytics'
 					),
 					"$hosted_domain/$domain/settings/integrations?new_token=WordPress",

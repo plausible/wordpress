@@ -232,6 +232,7 @@ class Client {
 		} catch ( Exception $e ) {
 			$this->send_json_error(
 				$e,
+				// translators: %s: Error message.
 				__(
 					'Something went wrong while updating tracker script configuration: %s',
 					'plausible-analytics'
@@ -303,6 +304,7 @@ class Client {
 			$result = $this->bulk_create_shared_links();
 			// @codeCoverageIgnoreStart
 		} catch ( Exception $e ) {
+			// translators: %s: Error message.
 			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
 			// @codeCoverageIgnoreEnd
 		}
@@ -341,6 +343,7 @@ class Client {
 		try {
 			return $this->api_instance->goalGetOrCreate( $goals );
 		} catch ( Exception $e ) {
+			// translators: %s: Error message.
 			$this->send_json_error( $e, __( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ) );
 		}
 	}
@@ -358,6 +361,7 @@ class Client {
 		try {
 			return $this->api_instance->funnelGetOrCreate( $funnel );
 		} catch ( Exception $e ) {
+			// translators: %s: Error message.
 			$this->send_json_error( $e, __( 'Something went wrong while creating Funnel: %s', 'plausible-analytics' ) );
 		}
 	}
@@ -375,6 +379,7 @@ class Client {
 		} catch ( Exception $e ) {
 			$this->send_json_error(
 				$e,
+				// translators: %s: Error message.
 				__(
 					'Something went wrong while deleting a Custom Event Goal: %s',
 					'plausible-analytics'
@@ -398,6 +403,7 @@ class Client {
 		} catch ( Exception $e ) {
 			$this->send_json_error(
 				$e,
+				// translators: %s: Error message.
 				__(
 					'Something went wrong while enabling Pageview Properties: %s',
 					'plausible-analytics'

@@ -37,6 +37,7 @@ class WooCommerce {
 		}
 
 		$this->event_goals = [
+			// translators: %s: Product page URI pattern.
 			'view-product'     => sprintf( __( 'Visit %s*', 'plausible-analytics' ), $uri ),
 			'add-to-cart'      => __( 'Woo Add to Cart', 'plausible-analytics' ),
 			'remove-from-cart' => __( 'Woo Remove from Cart', 'plausible-analytics' ),

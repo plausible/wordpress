@@ -93,6 +93,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
+							// translators: %s: URL to Plausible account settings.
 							__(
 								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a class="hover:cursor-pointer underline plausible-create-api-token">create a Plugin Token</a> (link opens in a new window) and paste it into the \'Plugin Token\' field.',
 								'plausible-analytics'
@@ -181,6 +182,7 @@ class Page extends API {
 						'affiliate-links-patterns'                    => [
 							'slug'        => 'affiliate_links',
 							'description' => sprintf(
+								// translators: %s: Example URL to affiliate product.
 								__(
 									'Enter the (partial) URLs you\'d like to track. E.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>.',
 									'plausible-analytics'
@@ -232,6 +234,7 @@ class Page extends API {
 						'query-params-patterns'                       => [
 							'slug'        => 'query_params',
 							'description' => sprintf(
+								// translators: %s: Example URL with query parameter.
 								__(
 									'Enter the query parameters you\'d like to track. E.g. enter <strong>lang</strong> if you want to track <code>%s</code>.',
 									'plausible-analytics'
@@ -266,6 +269,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
+							// translators: 1: Proxy endpoint prefix, 2: Proxy endpoint details, 3: URL to learn more about proxy.
 							__(
 								'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with <code>%1$s</code> and %2$s. <a href="%3$s" target="_blank">Learn more &raquo;</a>',
 								'plausible-analytics'
@@ -423,6 +427,7 @@ class Page extends API {
 					'slug'   => 'self_hosted_shared_link',
 					'type'   => 'group',
 					'desc'   => sprintf(
+						// translators: %s: URL to Plausible shared link documentation.
 						'<ol><li>' . __(
 							'<a href="%s" target="_blank">Create a secure and private shared link</a> in your Plausible account.',
 							'plausible-analytics'
@@ -439,7 +444,8 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $settings['self_hosted_shared_link'],
 							'placeholder' => sprintf(
-								wp_kses( __( 'E.g. %s/share/%s?auth=XXXXXXXXXXXX', 'plausible-analytics' ), 'post' ),
+								// translators: 1: Plausible hosted domain URL, 2: Site domain name.
+								wp_kses( __( 'E.g. %1$s/share/%2$s?auth=XXXXXXXXXXXX', 'plausible-analytics' ), 'post' ),
 								Helpers::get_hosted_domain_url(),
 								Helpers::get_domain()
 							),
@@ -734,6 +740,7 @@ class Page extends API {
 				<p>
 					<?php if ( $settings['self_hosted_domain'] ) : ?>
 						<?php echo sprintf(
+							// translators: %s: URL to self-hosted settings page.
 							__(
 								'Please enter your <em>Shared Link</em> under <a href="%s">Self-Hosted Settings</a>.',
 								'plausible-analytics'
@@ -742,6 +749,7 @@ class Page extends API {
 						); ?>
 					<?php else: ?>
 						<?php echo sprintf(
+							// translators: %s: URL to plugin settings page.
 							__(
 								'Please <a href="%s">click here</a> to enable <strong>View Stats in WordPress</strong>.',
 								'plausible-analytics'
