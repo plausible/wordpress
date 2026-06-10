@@ -117,7 +117,8 @@ class WooCommerce {
 			'plausible-woocommerce-integration',
 			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-woocommerce-integration.js',
 			[],
-			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-woocommerce-integration.js' )
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-woocommerce-integration.js' ),
+			[ 'in_footer' => true ],
 		);
 	}
 
