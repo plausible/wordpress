@@ -317,7 +317,7 @@ class Proxy {
 		}
 
 		if ( ! $this->has_json_content_type() ) {
-//			return $this->rest_no_route();
+			return $this->rest_no_route();
 		}
 
 		$params = $request->get_json_params();
