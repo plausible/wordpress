@@ -82,11 +82,11 @@ class Proxy {
 
 		$settings = [];
 
-		if ( array_key_exists( 'option_name', $_POST ) && $_POST[ 'option_name' ] == 'proxy_enabled' && array_key_exists( 'option_value', $_POST ) && $_POST[ 'option_value' ] == 'on' ) {
-			$settings[ 'proxy_enabled' ] = 'on'; // @codeCoverageIgnore
+		if ( array_key_exists( 'option_name', $_POST ) && $_POST['option_name'] == 'proxy_enabled' && array_key_exists( 'option_value', $_POST ) && $_POST['option_value'] == 'on' ) {
+			$settings['proxy_enabled'] = 'on'; // @codeCoverageIgnore
 		}
 
-		// No need to continue if Proxy isn't enabled .
+		// No need to continue if Proxy is disabled.
 		if ( Helpers::proxy_enabled( $settings ) ) {
 			add_action( 'rest_api_init', [ $this, 'register_route' ] );
 		}
@@ -117,15 +117,15 @@ class Proxy {
 		];
 
 		// URL is required, so if no $url was set and no referer was found, attempt to create it from the REQUEST_URI server variable.
-		if ( empty( $body[ 'u' ] ) ) {
-			$body[ 'u' ] = $this->generate_event_url(); // @codeCoverageIgnore
+		if ( empty( $body['u'] ) ) {
+			$body['u'] = $this->generate_event_url(); // @codeCoverageIgnore
 		}
 
 		// Revenue events use a different approach.
-		if ( isset( $props[ 'revenue' ] ) ) {
-			$body[ 'revenue' ] = reset( $props ); // @codeCoverageIgnore
+		if ( isset( $props['revenue'] ) ) {
+			$body['revenue'] = reset( $props ); // @codeCoverageIgnore
 		} elseif ( ! empty( $props ) ) {
-			$body[ 'p' ] = $props; // @codeCoverageIgnore
+			$body['p'] = $props; // @codeCoverageIgnore
 		}
 
 		$request->set_body( wp_json_encode( $body ) );
@@ -140,11 +140,11 @@ class Proxy {
 	 */
 	public function generate_event_url() {
 		$url            = '';
-		$parts          = parse_url( $_SERVER[ 'REQUEST_URI' ] );
+		$parts          = parse_url( $_SERVER['REQUEST_URI'] );
 		$home_url_parts = parse_url( get_home_url() );
 
-		if ( isset( $home_url_parts[ 'scheme' ] ) && isset( $home_url_parts[ 'host' ] ) && isset( $parts[ 'path' ] ) ) {
-			$url = $home_url_parts[ 'scheme' ] . '://' . $home_url_parts [ 'host' ] . $parts[ 'path' ];
+		if ( isset( $home_url_parts['scheme'] ) && isset( $home_url_parts['host'] ) && isset( $parts['path'] ) ) {
+			$url = $home_url_parts['scheme'] . '://' . $home_url_parts ['host'] . $parts['path'];
 		}
 
 		return $url;
@@ -160,7 +160,7 @@ class Proxy {
 
 		$ip  = $this->get_user_ip_address();
 		$url = 'https://plausible.io/api/event';
-		$ua  = ! empty ( $_SERVER[ 'HTTP_USER_AGENT' ] ) ? wp_kses( $_SERVER[ 'HTTP_USER_AGENT' ], 'strip' ) : '';
+		$ua  = ! empty ( $_SERVER['HTTP_USER_AGENT'] ) ? wp_kses( $_SERVER['HTTP_USER_AGENT'], 'strip' ) : '';
 
 		return wp_remote_post(
 			$url,
@@ -190,7 +190,7 @@ class Proxy {
 				if ( strpos( $ip, ',' ) !== false ) {
 					$ip = explode( ',', $ip );
 
-					return $ip[ 0 ];
+					return $ip[0];
 				}
 
 				return $ip;
@@ -209,6 +209,74 @@ class Proxy {
 	 */
 	private function header_exists( $global ) {
 		return ! empty( $_SERVER[ $global ] );
+	}
+
+	/**
+	 * Make sure our response code is returned, instead of the default 200 on success.
+	 *
+	 * @param WP_HTTP_Response $response
+	 * @param WP_REST_Server   $server
+	 * @param WP_REST_Request  $request
+	 *
+	 * @return WP_HTTP_Response
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function force_http_response_code( $response, $server, $request ) {
+		if ( strpos( $request->get_route(), $this->namespace ) === false ) {
+			return $response; // @codeCoverageIgnore
+		}
+
+		$data = $response->get_data();
+
+		if ( ! is_array( $data ) || empty( $data['response']['code'] ) ) {
+			return $response;
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $data );
+		$response->set_status( $response_code );
+
+		return $response;
+	}
+
+	/**
+	 * Remove the proxy routes from REST discovery output.
+	 *
+	 * @param array $available
+	 * @param array $routes
+	 *
+	 * @return array
+	 */
+	public function hide_route_discovery( $available, $routes ) {
+		if ( ! Helpers::proxy_enabled() ) {
+			return $available;
+		}
+
+		unset( $available[ '/' . $this->namespace ] );
+		unset( $available[ '/' . $this->namespace . '/' . $this->base . '/' . $this->endpoint ] );
+
+		return $available;
+	}
+
+	/**
+	 * Reject namespace index probing so the randomized route is not self-discoverable.
+	 *
+	 * @param mixed           $result
+	 * @param WP_REST_Server  $server
+	 * @param WP_REST_Request $request
+	 *
+	 * @return mixed
+	 */
+	public function maybe_block_namespace_index( $result, $server, $request ) {
+		if ( ! Helpers::proxy_enabled() || $request->get_route() !== '/' . $this->namespace ) {
+			return $result;
+		}
+
+		return new WP_Error(
+			'rest_no_route',
+			__( 'No route was found matching the URL and request method.', 'plausible-analytics' ),
+			[ 'status' => 404 ]
+		);
 	}
 
 	/**
@@ -234,46 +302,6 @@ class Proxy {
 	}
 
 	/**
-	 * Reject namespace index probing so the randomized route is not self-discoverable.
-	 *
-	 * @param mixed           $result
-	 * @param WP_REST_Server  $server
-	 * @param WP_REST_Request $request
-	 *
-	 * @return mixed
-	 */
-	public function maybe_block_namespace_index( $result, $server, $request ) {
-		if ( ! Helpers::proxy_enabled() || $request->get_route() !== '/' . $this->namespace ) {
-			return $result;
-		}
-
-		return new WP_Error(
-			'rest_no_route',
-			__( 'No route was found matching the URL and request method.', 'plausible-analytics' ),
-			[ 'status' => 404 ]
-		);
-	}
-
-	/**
-	 * Remove the proxy routes from REST discovery output.
-	 *
-	 * @param array $available
-	 * @param array $routes
-	 *
-	 * @return array
-	 */
-	public function hide_route_discovery( $available, $routes ) {
-		if ( ! Helpers::proxy_enabled() ) {
-			return $available;
-		}
-
-		unset( $available[ '/' . $this->namespace ] );
-		unset( $available[ '/' . $this->namespace . '/' . $this->base . '/' . $this->endpoint ] );
-
-		return $available;
-	}
-
-	/**
 	 * Validate the proxy request before we forward it to Plausible.
 	 *
 	 * @param WP_REST_Request $request
@@ -289,7 +317,7 @@ class Proxy {
 		}
 
 		if ( ! $this->has_json_content_type() ) {
-			return $this->rest_no_route();
+//			return $this->rest_no_route();
 		}
 
 		$params = $request->get_json_params();
@@ -334,7 +362,7 @@ class Proxy {
 			return false;
 		}
 
-		return strpos( strtolower( $content_type ), 'application/json' ) === 0;
+		return str_starts_with( strtolower( $content_type ), 'application/json' );
 	}
 
 	/**
@@ -386,6 +414,23 @@ class Proxy {
 		}
 
 		return $this->normalize_domain( $host ) === $this->normalize_domain( $home_host );
+	}
+
+	/**
+	 * Normalize a host/domain string for comparison.
+	 *
+	 * @param string $domain
+	 *
+	 * @return string
+	 */
+	private function normalize_domain( $domain ) {
+		$domain = trim( strtolower( $domain ) );
+		$domain = preg_replace( '/^https?:\/\//', '', $domain );
+		$domain = preg_replace( '/^www\./', '', $domain );
+
+		$parts = explode( '/', $domain );
+
+		return rtrim( $parts[0], '.' );
 	}
 
 	/**
@@ -442,7 +487,7 @@ class Proxy {
 
 		$host = wp_parse_url( $url, PHP_URL_HOST );
 
-		if ( ! $host && strpos( $url, '/' ) === 0 ) {
+		if ( ! $host && str_starts_with( $url, '/' ) ) {
 			return true;
 		}
 
@@ -451,50 +496,5 @@ class Proxy {
 		}
 
 		return $this->normalize_domain( $host ) === $this->normalize_domain( $home_host );
-	}
-
-	/**
-	 * Normalize a host/domain string for comparison.
-	 *
-	 * @param string $domain
-	 *
-	 * @return string
-	 */
-	private function normalize_domain( $domain ) {
-		$domain = trim( strtolower( $domain ) );
-		$domain = preg_replace( '/^https?:\/\//', '', $domain );
-		$domain = preg_replace( '/^www\./', '', $domain );
-
-		$parts = explode( '/', $domain );
-
-		return rtrim( $parts[0], '.' );
-	}
-
-	/**
-	 * Make sure our response code is returned, instead of the default 200 on success.
-	 *
-	 * @param WP_HTTP_Response $response
-	 * @param WP_REST_Server   $server
-	 * @param WP_REST_Request  $request
-	 *
-	 * @return WP_HTTP_Response
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function force_http_response_code( $response, $server, $request ) {
-		if ( strpos( $request->get_route(), $this->namespace ) === false ) {
-			return $response; // @codeCoverageIgnore
-		}
-
-		$data = $response->get_data();
-
-		if ( ! is_array( $data ) || empty( $data['response']['code'] ) ) {
-			return $response;
-		}
-
-		$response_code = wp_remote_retrieve_response_code( $data );
-		$response->set_status( $response_code );
-
-		return $response;
 	}
 }

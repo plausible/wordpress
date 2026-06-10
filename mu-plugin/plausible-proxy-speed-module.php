@@ -360,7 +360,7 @@ class PlausibleProxySpeed {
 			return false;
 		}
 
-		if ( ! $host && strpos( $url, '/' ) === 0 ) {
+		if ( ! $host && str_starts_with( $url, '/' ) ) {
 			return true;
 		}
 
