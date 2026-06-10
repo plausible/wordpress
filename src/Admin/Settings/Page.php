@@ -140,7 +140,7 @@ class Page extends API {
 					'fields' => [
 						EnhancedMeasurements::FOUR_O_FOUR             => [
 							'label' => esc_html__( '404 error pages', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-404-error-pages',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#404-error-pages',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::FOUR_O_FOUR,
@@ -148,7 +148,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::FILE_DOWNLOADS          => [
 							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-file-downloads',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#file-downloads',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::FILE_DOWNLOADS,
@@ -156,7 +156,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::OUTBOUND_LINKS          => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-external-link-clicks',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#outbound-links',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::OUTBOUND_LINKS,
@@ -164,7 +164,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::PAGEVIEW_PROPS          => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-send-custom-properties',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#authors-and-categories',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
@@ -172,7 +172,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => [
 							'label'      => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-cloaked-affiliate-link-clicks',
+							'docs'       => 'https://plausible.io/docs/wordpress-integration#cloaked-affiliate-links',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
 							'value'      => EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS,
@@ -195,7 +195,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::ECOMMERCE_REVENUE       => [
 							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-ecommerce-revenue',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::ECOMMERCE_REVENUE,
@@ -208,7 +208,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::FORM_COMPLETIONS        => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-form-completions',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#form-completions',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::FORM_COMPLETIONS,
@@ -216,7 +216,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::LOGGED_IN_USER_STATUS   => [
 							'label' => esc_html__( 'Logged-in user status', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-logged-in-user-status',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#logged-in-user-status',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::LOGGED_IN_USER_STATUS,
@@ -224,7 +224,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::QUERY_PARAMS            => [
 							'label'      => esc_html__( 'Query parameters', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/wordpress-analytics-plugin#how-to-track-custom-query-parameters',
+							'docs'       => 'https://plausible.io/docs/wordpress-integration#query-parameters',
 							'slug'       => 'enhanced_measurements',
 							'type'       => 'checkbox',
 							'value'      => EnhancedMeasurements::QUERY_PARAMS,
@@ -247,7 +247,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::SEARCH_QUERIES          => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-site-search-tracking',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#search-queries',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::SEARCH_QUERIES,
@@ -255,7 +255,7 @@ class Page extends API {
 						],
 						EnhancedMeasurements::HASH_BASED_ROUTING      => [
 							'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/wordpress-analytics-plugin#how-to-enable-hash-based-url-tracking',
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#hash-based-routing',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::HASH_BASED_ROUTING,
@@ -284,7 +284,7 @@ class Page extends API {
 								'',
 								Helpers::get_proxy_resource( 'cache_dir' ) . Helpers::get_filename() . '.js</code>'
 							),
-						'https://plausible.io/wordpress-analytics-plugin#how-to-enable-a-proxy-to-get-more-accurate-stats'
+						'https://plausible.io/docs/wordpress-integration#bypass-adblockers-with-the-proxy'
 					),
 					'fields' => [
 						[
@@ -325,7 +325,7 @@ class Page extends API {
 							'plausible-analytics'
 						),
 						esc_url(
-							'https://plausible.io/wordpress-analytics-plugin#how-to-exclude-specific-pages-from-being-tracked'
+							'https://plausible.io/docs/wordpress-integration#exclude-specific-pages-from-tracking'
 						),
 						esc_html__( 'See syntax &raquo;', 'plausible-analytics' )
 					),
