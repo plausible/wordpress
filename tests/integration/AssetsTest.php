@@ -10,9 +10,76 @@ use Plausible\Analytics\WP\Assets;
 
 class AssetsTest extends TestCase {
 	/**
+	 * @see Assets::maybe_enqueue_cloaked_affiliate_links_assets()
 	 * @return void
 	 * @throws \Exception
+	 */
+	public function testEnqueueCloakedAffiliateLinksScript() {
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
+
+			$class = $this->getMockBuilder( Assets::class )
+			              ->disableOriginalConstructor()
+			              ->onlyMethods( [ 'get_js_url' ] )
+			              ->getMock();
+
+			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue' );
+			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue', 11 );
+
+			$class->method( 'get_js_url' )
+			      ->willReturn( 'https://plausible.test/js/plausible.js' );
+
+			ob_start();
+
+			$class->maybe_enqueue_main_script();
+			$class->maybe_enqueue_cloaked_affiliate_links_assets();
+
+			do_action( 'wp_footer' );
+
+			$output = ob_get_clean();
+
+			$this->assertStringContainsString( 'plausible-affiliate-links.js', $output );
+			$this->assertStringContainsString( 'const plausibleAffiliateLinks', $output );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
+		}
+	}
+
+	/**
+	 * @see Assets::maybe_enqueue_four_o_four_script()
+	 * @return void
+	 * @throws \Exception
+	 */
+	public function testEnqueueFourOFourScript() {
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
+			add_filter( 'plausible_analytics_is_404', '__return_true' );
+
+			$class = $this->getMockBuilder( Assets::class )
+			              ->disableOriginalConstructor()
+			              ->onlyMethods( [ 'get_js_url' ] )
+			              ->getMock();
+
+			$class->method( 'get_js_url' )
+			      ->willReturn( 'https://plausible.test/js/plausible.js' );
+
+			$class->maybe_enqueue_main_script();
+			$class->maybe_enqueue_four_o_four_script();
+
+			global $wp_scripts;
+
+			$this->assertArrayHasKey( 'plausible-analytics', $wp_scripts->registered );
+			$this->assertTrue( $this->arrayHasString( '404', $wp_scripts->registered['plausible-analytics']->extra['after'] ) );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
+			remove_filter( 'plausible_analytics_is_404', '__return_true' );
+		}
+	}
+
+	/**
 	 * @see Assets::maybe_enqueue_main_script()
+	 * @return void
+	 * @throws \Exception
 	 */
 	public function testEnqueueMainScript() {
 		try {
@@ -47,76 +114,9 @@ class AssetsTest extends TestCase {
 	}
 
 	/**
-	 * @return void
-	 * @throws \Exception
-	 * @see Assets::maybe_enqueue_cloaked_affiliate_links_assets()
-	 */
-	public function testEnqueueCloakedAffiliateLinksScript() {
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
-
-			$class = $this->getMockBuilder( Assets::class )
-			              ->disableOriginalConstructor()
-			              ->onlyMethods( [ 'get_js_url' ] )
-			              ->getMock();
-
-			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue' );
-			$this->removeAction( 'wp_enqueue_scripts', 'maybe_enqueue', 11 );
-
-			$class->method( 'get_js_url' )
-			      ->willReturn( 'https://plausible.test/js/plausible.js' );
-
-			ob_start();
-
-			$class->maybe_enqueue_main_script();
-			$class->maybe_enqueue_cloaked_affiliate_links_assets();
-
-			do_action( 'wp_head' );
-
-			$output = ob_get_clean();
-
-			$this->assertStringContainsString( 'plausible-affiliate-links.js', $output );
-			$this->assertStringContainsString( 'const plausibleAffiliateLinks', $output );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
-		}
-	}
-
-	/**
-	 * @return void
-	 * @throws \Exception
-	 * @see Assets::maybe_enqueue_four_o_four_script()
-	 */
-	public function testEnqueueFourOFourScript() {
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
-			add_filter( 'plausible_analytics_is_404', '__return_true' );
-
-			$class = $this->getMockBuilder( Assets::class )
-			              ->disableOriginalConstructor()
-			              ->onlyMethods( [ 'get_js_url' ] )
-			              ->getMock();
-
-			$class->method( 'get_js_url' )
-			      ->willReturn( 'https://plausible.test/js/plausible.js' );
-
-			$class->maybe_enqueue_main_script();
-			$class->maybe_enqueue_four_o_four_script();
-
-			global $wp_scripts;
-
-			$this->assertArrayHasKey( 'plausible-analytics', $wp_scripts->registered );
-			$this->assertTrue( $this->arrayHasString( '404', $wp_scripts->registered['plausible-analytics']->extra['after'] ) );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFourOFour' ] );
-			remove_filter( 'plausible_analytics_is_404', '__return_true' );
-		}
-	}
-
-	/**
-	 * @return void
-	 * @throws \Exception
 	 * @see Assets::maybe_enqueue_query_params_script()
+	 * @return void
+	 * @throws \Exception
 	 */
 	public function testEnqueueQueryParamsScript() {
 		try {
@@ -146,9 +146,9 @@ class AssetsTest extends TestCase {
 	}
 
 	/**
+	 * @see Assets::maybe_enqueue_search_queries_script()
 	 * @return void
 	 * @throws \Exception
-	 * @see Assets::maybe_enqueue_search_queries_script()
 	 */
 	public function testEnqueueSearchQueriesScript() {
 		try {

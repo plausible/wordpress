@@ -70,8 +70,9 @@ class API {
 			];
 			$this->slides_description = [
 				'welcome'                    => sprintf(
+					// translators: 1: URL to Plausible website, 2: URL to Plausible registration page.
 					__(
-						'<p><a href="%s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Already have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
+						'<p><a href="%1$s" target="_blank">Plausible Analytics</a> is an easy to use, open source, lightweight and privacy-friendly alternative to Google Analytics. We\'re super excited to have you on board!</p><p>To use our plugin, you need to <a href="%2$s" target="_blank">register an account</a>. To explore the product, we offer you a free 30-day trial. No credit card is required to sign up for the trial.</p><p>Already have an account? Please do follow the following steps to get the most out of your Plausible experience.</p>',
 						'plausible-analytics'
 					),
 					'https://plausible.io/?utm_source=WordPress&utm_medium=Referral&utm_campaign=WordPress+plugin',
@@ -95,8 +96,9 @@ class API {
 					'plausible-analytics'
 				),
 				'success'                    => sprintf(
+					// translators: 1: URL to Plausible statistics dashboard, 2: URL to plugin settings, 3: URL to Plausible documentation, 4: URL to Plausible contact.
 					__(
-						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors. You can now check out <a href="%1$s" target="_blank">your intuitive, fast-loading and privacy-friendly dashboard</a>.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%2$s">plugin\'s settings</a>.</p><p>Need help? <a href="%3$s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%4$s" target="_blank">contact our support</a>.</p>',
 						'plausible-analytics'
 					),
 					admin_url( 'index.php?page=plausible_analytics_statistics' ),
@@ -108,8 +110,9 @@ class API {
 
 			if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 				$this->slides_description['success'] = sprintf(
+					// translators: 1: URL to plugin settings, 2: URL to Plausible documentation, 3: URL to Plausible contact.
 					__(
-						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%s">plugin\'s settings</a>.</p><p>Need help? <a href="%s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%s" target="_blank">contact our support</a>.</p>',
+						'<p>Congrats! Your traffic is now being counted without compromising the user experience and privacy of your visitors.</p><p>Note that visits from logged in users aren\'t tracked. If you want to track visits for certain user roles, then please specify them in the <a href="%1$s">plugin\'s settings</a>.</p><p>Need help? <a href="%2$s" target="_blank">Our documentation</a> is the best place to find most answers right away.</p><p>Still haven\'t found the answer you\'re looking for? We\'re here to help. Please <a href="%3$s" target="_blank">contact our support</a>.</p>',
 						'plausible-analytics'
 					),
 					admin_url( 'admin-ajax.php?action=plausible_analytics_quit_wizard&_nonce=' ) . wp_create_nonce( 'plausible_analytics_quit_wizard' ) . '&redirect=tracked_user_roles',
@@ -207,7 +210,7 @@ class API {
 							$i         = 0;
 							?>
 							<?php foreach ( $this->slides as $id => $title ): ?>
-								<div id="<?php esc_attr_e( $id, 'plausible-analytics' ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
+								<div id="<?php echo esc_attr( $id ); ?>_slide" class="plausible-analytics-group bg-white dark:bg-gray-800 shadow-md rounded px-8 py-6 sm:rounded-md sm:overflow-hidden bg-white dark:bg-gray-800
 										 space-y-6 invisible target:opacity-100 target:visible transition-opacity absolute md:min-w-full sm:max-w-full">
 									<header class="relative">
 										<label class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
@@ -246,7 +249,7 @@ class API {
 														$disabled = true;
 													}
 												} ?>
-												<a href="#<?php esc_attr_e( $slide_ids[ $i ], 'plausible-analytics' ); ?>_slide"
+													<a href="#<?php echo esc_attr( $slide_ids[ $i ] ); ?>_slide"
 												   class="plausible-analytics-wizard-next-step no-underline gap-x-2 inline-flex relative inset-0
 												   rounded-md <?php echo $disabled ? 'bg-gray-200 pointer-events-none' : 'bg-indigo-600'; ?> px-3.5 py-2.5 text-sm
 												   font-semibold text-white shadow-sm hover:bg-indigo-700 hover:text-white focus-visible:outline
@@ -290,7 +293,7 @@ class API {
 									?>
 									<?php foreach ( $this->slides as $id => $title ): ?>
 										<!-- Upcoming step -->
-										<li id="step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-step flex hidden items-start mb-6">
 											<div
 												class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
@@ -305,9 +308,9 @@ class API {
 											?>
 										</li>
 										<!-- Active Step -->
-										<li id="active-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="active-step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-active-step flex hidden items-start mb-6"
-											data-completed-steps="<?php esc_attr_e( implode( ',', $completed_steps ), 'plausible-analytics' ); ?>">
+											data-completed-steps="<?php echo esc_attr( implode( ',', $completed_steps ) ); ?>">
 											<!-- Hidden -->
 											<span
 												class="flex-shrink-0 h-5 w-5 relative flex items-center justify-center">
@@ -325,7 +328,7 @@ class API {
 											?>
 										</li>
 										<!-- Completed Step -->
-										<li id="completed-step-<?php esc_attr_e( $id, 'plausible-analytics' ); ?>"
+										<li id="completed-step-<?php echo esc_attr( $id ); ?>"
 											class="plausible-analytics-wizard-completed-step flex hidden items-start mb-6">
 											<span
 												class="flex-shrink-0 relative h-5 w-5 flex items-center justify-center">
@@ -743,7 +746,7 @@ class API {
 		<button
 			class="plausible-analytics-button mt-4 border-0 hover:cursor-pointer inline-flex items-center justify-center !gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
 			text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-400 dark:disabled:bg-gray-800 ease-in-out transition-all"
-			id="<?php esc_attr_e( $field['slug'], 'plausible-analytics' ); ?>"
+			id="<?php echo esc_attr( $field['slug'] ); ?>"
 			type="submit" <?php echo $disabled ? 'disabled' : ''; ?>>
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg"
 				 fill="none" viewBox="0 0 24 24">
@@ -751,7 +754,7 @@ class API {
 				<path class="opacity-75" fill="currentColor"
 					  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 			</svg>
-			<?php esc_html_e( $field['label'], 'plausible-analytics' ); ?>
+			<?php echo esc_html( $field['label'] ); ?>
 		</button>
 		<?php
 		return ob_get_clean();
