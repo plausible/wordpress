@@ -5,7 +5,7 @@ Tags: analytics, privacy, google analytics alternative, woocommerce analytics, s
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 2.5.7
+Stable tag: 2.5.8
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -276,6 +276,15 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.5.8 =
+* Fixed: only load author/category pageview props on posts.
+* Improved: hardened Proxy Speed Module, to make sure it doesn't disable plugins on non-proxy requests.
+* Improved: don't load JS tracking code if no API token is entered.
+* Added: suggested content for Privacy Policy
+* Fixed: must-use Speed Module would cause fatal errors in wp-admin on multisite networks when Proxy was enabled.
+* Tested with WP 7.0.
+* Several code improvements submitted by @masteradhoc. Thanks for your contributions!
 
 = 2.5.7 =
 * Improved: the JS tracking code now contains some widely used attributes to make sure its excluded from optimization by JS minification plugins, e.g. WP Rocket, LiteSpeed Cache, etc.
