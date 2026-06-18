@@ -431,7 +431,7 @@ class Ajax {
 						'plausible-analytics'
 					),
 					"$hosted_domain/$domain/settings/integrations?new_token=WordPress",
-					'https://plausible.io/wordpress-analytics-plugin#oops-the-token-you-used-is-invalid'
+					'https://plausible.io/docs/troubleshoot-integration#plugin-token-showing-as-invalid'
 				)
 			);
 
