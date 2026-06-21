@@ -26,12 +26,101 @@ class Helpers {
 		$settings = static::get_settings();
 
 		if ( ! empty( $settings['domain_name'] ) ) {
+			if ( is_array( $settings['domain_name'] ) ) {
+				$current_domain = static::get_current_multilang_domain();
+				$domain_name    = $settings['domain_name'][ $current_domain ] ?? '';
+
+				if ( ! empty( $domain_name ) ) {
+					return $domain_name;
+				}
+
+				return reset( $settings['domain_name'] );
+			}
+
 			return $settings['domain_name'];
 		}
 
 		$url = home_url();
 
 		return preg_replace( '/^http(s?):\/\/(www\.)?/i', '', $url );
+	}
+
+	/**
+	 * Returns the API token.
+	 *
+	 * @return string
+	 */
+	public static function get_api_token() {
+		$settings = static::get_settings();
+		$token    = $settings['api_token'] ?? '';
+
+		if ( is_array( $token ) ) {
+			return $token[ static::get_current_multilang_domain() ] ?? '';
+		}
+
+		return (string) $token;
+	}
+
+	/**
+	 * Returns true only when WPML is active, its negotiation type is "different domain per language", AND at least one domain is configured.
+	 *
+	 * @return bool
+	 */
+	public static function is_multilang_domain_mode() {
+		$is_wpml_active = defined( 'ICL_SITEPRESS_VERSION' );
+
+		if ( ! $is_wpml_active ) {
+			return (bool) apply_filters( 'plausible_analytics_is_multilang_domain_mode', false );
+		}
+
+		$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
+		$domains          = static::get_multilang_domains();
+		$value            = $negotiation_type === 2 && ! empty( $domains );
+
+		return (bool) apply_filters( 'plausible_analytics_is_multilang_domain_mode', $value );
+	}
+
+	/**
+	 * Returns a plain, numerically-indexed array of the configured domain strings.
+	 *
+	 * @return array
+	 */
+	public static function get_multilang_domains() {
+		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+
+		return (array) apply_filters( 'plausible_analytics_multilang_domains', $domains );
+	}
+
+	/**
+	 * Returns the domain string that corresponds to the current request.
+	 *
+	 * @return string
+	 */
+	public static function get_current_multilang_domain() {
+		if ( ! static::is_multilang_domain_mode() ) {
+			return '';
+		}
+
+		$domains          = static::get_multilang_domains();
+		$language_domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$current_language = apply_filters( 'wpml_current_language', null );
+
+		if ( $current_language && isset( $language_domains[ $current_language ] ) ) {
+			return (string) apply_filters( 'plausible_analytics_current_multilang_domain', $language_domains[ $current_language ] );
+		}
+
+		$http_host = $_SERVER['HTTP_HOST'] ?? '';
+		$host      = preg_replace( '/^https?:\/\/(www\.)?|(\/.*)|(:\d+)/i', '', $http_host );
+
+		foreach ( $domains as $domain ) {
+			$clean_domain = preg_replace( '/^https?:\/\/(www\.)?|(\/.*)|(:\d+)/i', '', $domain );
+
+			if ( $host === $clean_domain ) {
+				return (string) apply_filters( 'plausible_analytics_current_multilang_domain', $domain );
+			}
+		}
+
+		return (string) apply_filters( 'plausible_analytics_current_multilang_domain', reset( $domains ) );
 	}
 
 	/**
@@ -65,7 +154,7 @@ class Helpers {
 			'self_hosted_shared_link'    => '',
 		];
 
-		$settings = get_option( 'plausible_analytics_settings', [] );
+		$settings = function_exists( 'get_option' ) ? get_option( 'plausible_analytics_settings', [] ) : [];
 
 		return apply_filters( 'plausible_analytics_settings', wp_parse_args( $settings, $defaults ) );
 	}

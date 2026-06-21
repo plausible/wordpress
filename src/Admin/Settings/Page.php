@@ -489,6 +489,15 @@ class Page extends API {
 			$this->fields['self-hosted'][1]['fields'][] = self::OPTION_DISABLED_BY_PROXY_HOOK;
 		}
 
+		if ( Helpers::is_multilang_domain_mode() ) {
+			$this->fields['general'][0]['fields'] = [
+				[
+					'slug' => 'domain_map',
+					'type' => 'domain_map',
+				],
+			];
+		}
+
 		/**
 		 * No Plugin Token is entered.
 		 */

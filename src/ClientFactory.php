@@ -13,7 +13,7 @@ class ClientFactory {
 	/**
 	 * Setup basic authorization.
 	 *
-	 * @param string $token Allows to specify the token, e.g. when it's not stored in the DB yet.
+	 * @param string $token Allows specifying the token, e.g., when it's not stored in the DB yet.
 	 */
 	public function __construct( $token = '' ) {
 		$this->token = $token;
@@ -35,7 +35,7 @@ class ClientFactory {
 		}
 
 		if ( ! $this->token ) {
-			$this->token = Helpers::get_settings()['api_token'];
+			$this->token = Helpers::get_api_token();
 		}
 
 		if ( ! $this->token ) {

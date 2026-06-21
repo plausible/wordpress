@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
+		multilangPairInputs: document.querySelectorAll('.multilang-domain-pair input'),
+		multilangSelector: document.getElementById('multilang_domain_selector'),
+		multilangConnectButtons: document.querySelectorAll('.multilang-domain-pair .plausible-analytics-connect-button'),
 
 		/**
 		 * Bind events.
@@ -74,6 +77,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (this.stepElems.length > 0) {
 				for (let i = 0; i < this.stepElems.length; i++) {
 					this.stepElems[i].addEventListener('click', this.saveOptionOnNext);
+				}
+			}
+
+			if (this.multilangPairInputs.length > 0) {
+				for (let i = 0; i < this.multilangPairInputs.length; i++) {
+					this.multilangPairInputs[i].addEventListener('keyup', this.disableConnectButton);
+				}
+			}
+
+			if (this.multilangSelector !== null) {
+				this.multilangSelector.addEventListener('change', this.switchMultilangDomain);
+			}
+
+			if (this.multilangConnectButtons.length > 0) {
+				for (let i = 0; i < this.multilangConnectButtons.length; i++) {
+					this.multilangConnectButtons[i].addEventListener('click', this.saveMultilangOption);
 				}
 			}
 
@@ -379,6 +398,57 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
+		 * Switch visible multilang domain pair.
+		 *
+		 * @param e
+		 */
+		switchMultilangDomain: function (e) {
+			const selectedDomain = e.target.value;
+			const pairs = document.querySelectorAll('.multilang-domain-pair');
+
+			pairs.forEach(function (pair) {
+				if (pair.dataset.wpmlDomain === selectedDomain) {
+					pair.classList.remove('hidden');
+				} else {
+					pair.classList.add('hidden');
+				}
+			});
+		},
+
+		/**
+		 * Save multilang option (Domain Name + Plugin Token pair).
+		 *
+		 * @param e
+		 */
+		saveMultilangOption: function (e) {
+			e.preventDefault();
+
+			const button = e.target.closest('button');
+			const pair = button.closest('.multilang-domain-pair');
+			const inputs = pair.querySelectorAll('input');
+			const form = new FormData();
+			let options = [];
+
+			inputs.forEach(function (input) {
+				input = plausible.validateInput(input);
+
+				options.push({name: input.name, value: input.value});
+			});
+
+			form.append('action', 'plausible_analytics_save_options');
+			form.append('options', JSON.stringify(options));
+			form.append('_nonce', plausible.nonce);
+
+			if (button.children.length > 1) {
+				button.children[1].classList.remove('hidden');
+			}
+
+			button.setAttribute('disabled', 'disabled');
+
+			plausible.ajax(form, button);
+		},
+
+		/**
 		 * Disable options based on the capabilities retrieved from the API.
 		 *
 		 * @param capabilities
@@ -413,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		validateInput: function (input) {
 			// Strip http(s)://(www.) from domain_name before sending it.
-			if (input.name === 'domain_name' && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
+			if ((input.name === 'domain_name' || input.name.startsWith('domain_name[')) && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
 				input.value = input.value.replace(/^(https?:\/\/)?(www.)?/, '');
 			}
 
@@ -467,7 +537,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		disableConnectButton: function (e) {
 			let target = e.target;
-			let button = document.getElementById('connect_plausible_analytics');
+			let pair = target.closest('.multilang-domain-pair');
+			let button = pair ? pair.querySelector('.plausible-analytics-connect-button') : document.getElementById('connect_plausible_analytics');
 			let buttonIsHref = false;
 
 			if (button === null) {
@@ -508,7 +579,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPIToken: function (e) {
 			e.preventDefault();
 
-			let domain = document.getElementById('domain_name').value;
+			let domainElem = document.querySelector('.multilang-domain-pair:not(.hidden) [id^="domain_name"]');
+
+			if (domainElem === null) {
+				domainElem = document.getElementById('domain_name');
+			}
+
+			let domain = domainElem ? domainElem.value : '';
 			domain = domain.replaceAll('/', '%2F');
 
 			window.open(`${plausible_analytics_hosted_domain}/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
@@ -610,10 +687,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			).then(response => {
 				if (button) {
 					if (button.children.length > 0) {
-						button.children[0].classList += ' hidden';
+						let spinner = button.querySelector('svg');
+						if (spinner) {
+							spinner.classList.add('hidden');
+						}
 					}
 
-					if (button.id === 'connect_plausible_analytics' && response.status === 200) {
+					if ((button.id === 'connect_plausible_analytics' || button.classList.contains('plausible-analytics-connect-button')) && response.status === 200) {
 						button.innerText = plausible_analytics_i18n.connected;
 					} else {
 						button.removeAttribute('disabled');

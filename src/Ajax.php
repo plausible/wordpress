@@ -11,6 +11,7 @@ namespace Plausible\Analytics\WP;
 
 use Plausible\Analytics\WP\Admin\Messages;
 use Plausible\Analytics\WP\Admin\Settings\Hooks;
+use Plausible\Analytics\WP\Admin\Settings\OptionsParser;
 use Plausible\Analytics\WP\Admin\Settings\Page;
 use Plausible\Analytics\WP\Client\ApiException;
 
@@ -372,6 +373,18 @@ class Ajax {
 			}
 		}
 
+		$options_to_parse = [];
+		foreach ( $options as $option ) {
+			$options_to_parse[] = (array) $option;
+		}
+
+		$parsed_options = OptionsParser::parse_keyed_options( $options_to_parse, $settings );
+		$options        = [];
+		foreach ( $parsed_options['options'] as $option ) {
+			$options[] = (object) $option;
+		}
+		$posted_values = $parsed_options['posted_values'];
+
 		foreach ( $options as $option ) {
 			$name  = sanitize_text_field( $option->name );
 			$value = $this->clean( $option->value );
@@ -385,11 +398,30 @@ class Ajax {
 
 			// Validate Plugin Token if this is the Plugin Token field.
 			if ( $name === 'api_token' ) {
-				$this->validate_api_token( $value );
+				if ( isset( $posted_values['api_token'] ) ) {
+					// Multilang: validate ONLY the freshly posted token. During validation, force
+					// Helpers::get_domain() to return the Plausible domain entered for THIS pair, so
+					// Client::validate_api_token()'s data-domain comparison works. The per-domain
+					// domain_name isn't persisted yet at this point, and the admin request host is
+					// not necessarily the domain being connected.
+					$posted_domain = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
+					$force_domain  = function ( $s ) use ( $posted_domain ) {
+						$s['domain_name'] = $posted_domain; // string -> Helpers::get_domain() returns it directly
 
-				$additional = $this->maybe_render_additional_message( $name, $value );
+						return $s;
+					};
 
-				Messages::set_additional( $additional, $name );
+					add_filter( 'plausible_analytics_settings', $force_domain );
+					$this->validate_api_token( $this->clean( $posted_values['api_token'] ) );
+					remove_filter( 'plausible_analytics_settings', $force_domain );
+					// No additional (missing-token) message for the multilang case.
+				} else {
+					$this->validate_api_token( $value );
+
+					$additional = $this->maybe_render_additional_message( $name, $value );
+
+					Messages::set_additional( $additional, $name );
+				}
 			}
 
 			// Refresh Tracker ID if Domain Name has changed (e.g. after migration from staging to production)

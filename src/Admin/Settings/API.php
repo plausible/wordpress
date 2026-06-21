@@ -147,7 +147,7 @@ class API {
 								</a>
 								<?php $this->render_navigation(); ?>
 							</div>
-							<div class="hidden item-center gap-x-6 md:flex">
+							<div class="item-center gap-x-6 md:flex">
 								<?php echo $this->render_quick_actions(); ?>
 							</div>
 						</nav>
@@ -698,6 +698,66 @@ class API {
 		</div>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Render Domain Map field for WPML multilang domain mode.
+	 *
+	 * @param array $field
+	 *
+	 * @return void
+	 */
+	public function render_domain_map_field( array $field ) {
+		$settings = Helpers::get_settings();
+		$domains  = Helpers::get_multilang_domains();
+		$i        = 0;
+		?>
+		<select id="multilang_domain_selector" class="plausible-analytics-text w-full max-w-sm mt-4">';
+		<?php foreach ( $domains as $domain ): ?>
+			<option value="<?php echo esc_attr( $domain ); ?>"><?php echo esc_html( $domain ); ?></option>
+		<?php endforeach; ?>
+		</select>
+		<?php foreach ( $domains as $index => $domain ) {
+			$hidden          = $i === 0 ? '' : 'hidden';
+			$domain_name_val = ( is_array( $settings['domain_name'] ) && isset( $settings['domain_name'][ $index ] ) ) ? $settings['domain_name'][ $index ] : '';
+			$api_token_val   = ( is_array( $settings['api_token'] ) && isset( $settings['api_token'][ $index ] ) ) ? $settings['api_token'][ $index ] : '';
+			$is_connected    = ! empty( $api_token_val );
+			$i++;
+			?>
+			<div class="multilang-domain-pair <?php echo $hidden; ?>" data-wpml-domain="<?php echo esc_attr( $domain ); ?>">
+				<?php
+				echo $this->render_text_field(
+					[
+						'slug'  => "domain_name[$index]",
+						'label' => __( 'Domain Name', 'plausible-analytics' ),
+						'value' => $domain_name_val,
+					]
+				);
+
+				echo $this->render_text_field(
+					[
+						'slug'  => "api_token[$index]",
+						'label' => sprintf(
+							'%s <a href="#" class="plausible-create-api-token text-indigo-600 font-medium dark:text-indigo-400">%s</a>',
+							__( 'Plugin Token', 'plausible-analytics' ),
+							__( 'Create Token', 'plausible-analytics' )
+						),
+						'value' => $api_token_val,
+					]
+				);
+
+				$button_class   = 'plausible-analytics-connect-button inline-flex items-center justify-center mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 dark:disabled:bg-gray-800';
+				$button_label   = $is_connected ? __( 'Connected', 'plausible-analytics' ) : __( 'Connect', 'plausible-analytics' );
+				$button_id      = 'connect_plausible_analytics_' . md5( $domain );
+				$disabled_attr  = ( $is_connected || empty( $domain_name_val ) ) ? 'disabled' : '';
+				?>
+				<button id="<?php echo esc_attr( $button_id ); ?>" type="submit" class="<?php echo esc_attr( $button_class ); ?>" <?php echo $disabled_attr; ?>>
+					<span><?php echo esc_html( $button_label ); ?></span>
+					<svg class="animate-spin h-4 w-4 ml-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+				</button>
+			</div>
+			<?php
+		}
 	}
 
 	/**
