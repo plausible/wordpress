@@ -40,55 +40,45 @@ class Ajax {
 		add_action( 'wp_ajax_plausible_analytics_bulk_toggle', [ $this, 'bulk_toggle_options' ] );
 	}
 
-	/**
-	 * Returns an array of messages fetched from transients for display by JS.
-	 */
-	public function fetch_messages() {
-		$notice             = get_transient( Messages::NOTICE_TRANSIENT );
-		$error              = get_transient( Messages::ERROR_TRANSIENT );
-		$success            = get_transient( Messages::SUCCESS_TRANSIENT );
-		$additional         = get_transient( Messages::ADDITIONAL_TRANSIENT ) ?: [];
-		$additional_message = [];
+	public function bulk_toggle_options() {
+		$post_data = $this->clean( $_POST );
+		$settings  = Helpers::get_settings();
 
-		if ( ! empty( $additional ) ) {
-			$additional_message = [
-				'id'      => array_key_first( $additional ),
-				'message' => $additional[ array_key_first( $additional ) ],
-			];
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
+			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
-		$messages = apply_filters(
-			'plausible_analytics_messages',
-			[
-				'notice'     => $notice,
-				'error'      => $error,
-				'success'    => $success,
-				'additional' => $additional_message,
-			]
-		);
+		$options = json_decode( $post_data['options'], true );
 
-		wp_send_json_success( $messages, 200 );
-	}
-
-	/**
-	 * Mark the wizard as finished, so it won't appear again, and optionally redirect.
-	 *
-	 * @return void
-	 */
-	public function quit_wizard() {
-		$request_data = $this->clean( $_REQUEST );
-
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data['_nonce'], 'plausible_analytics_quit_wizard' ) < 1 ) {
-			Messages::set_error( __( 'Not allowed', 'plausible-analytics' ) );
-
-			wp_send_json_error( null, 403 );
+		if ( empty( $options ) ) {
+			wp_send_json_error( __( 'No options found.', 'plausible-analytics' ), 400 );
 		}
 
-		update_option( 'plausible_analytics_wizard_done', true );
+		foreach ( $options as $option ) {
+			$name   = sanitize_text_field( $option['name'] );
+			$value  = sanitize_text_field( $option['value'] );
+			$status = sanitize_text_field( $option['status'] );
 
-		$this->maybe_handle_redirect( $request_data['redirect'] );
+			if ( ! isset( $settings[ $name ] ) || ! is_array( $settings[ $name ] ) ) {
+				continue;
+			}
 
-		wp_send_json_success();
+			if ( $status === 'on' ) {
+				if ( ! in_array( $value, $settings[ $name ] ) ) {
+					$settings[ $name ][] = $value;
+				}
+			} else {
+				if ( ( $key = array_search( $value, $settings[ $name ] ) ) !== false ) {
+					unset( $settings[ $name ][ $key ] );
+				}
+			}
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
+
+		wp_send_json_success( null, 200 );
 	}
 
 	/**
@@ -141,6 +131,57 @@ class Ajax {
 	}
 
 	/**
+	 * Returns an array of messages fetched from transients for display by JS.
+	 */
+	public function fetch_messages() {
+		$notice             = get_transient( Messages::NOTICE_TRANSIENT );
+		$error              = get_transient( Messages::ERROR_TRANSIENT );
+		$success            = get_transient( Messages::SUCCESS_TRANSIENT );
+		$additional         = get_transient( Messages::ADDITIONAL_TRANSIENT ) ?: [];
+		$additional_message = [];
+
+		if ( ! empty( $additional ) ) {
+			$additional_message = [
+				'id'      => array_key_first( $additional ),
+				'message' => $additional[ array_key_first( $additional ) ],
+			];
+		}
+
+		$messages = apply_filters(
+			'plausible_analytics_messages',
+			[
+				'notice'     => $notice,
+				'error'      => $error,
+				'success'    => $success,
+				'additional' => $additional_message,
+			]
+		);
+
+		wp_send_json_success( $messages, 200 );
+	}
+
+	/**
+	 * Mark the wizard as finished, so it won't appear again, and optionally redirect.
+	 *
+	 * @return void
+	 */
+	public function quit_wizard() {
+		$request_data = $this->clean( $_REQUEST );
+
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $request_data['_nonce'], 'plausible_analytics_quit_wizard' ) < 1 ) {
+			Messages::set_error( __( 'Not allowed', 'plausible-analytics' ) );
+
+			wp_send_json_error( null, 403 );
+		}
+
+		update_option( 'plausible_analytics_wizard_done', true );
+
+		$this->maybe_handle_redirect( $request_data['redirect'] );
+
+		wp_send_json_success();
+	}
+
+	/**
 	 * Makes the AJAX request redirect instead of e.g. return JSON.
 	 *
 	 * @param $direction
@@ -164,6 +205,160 @@ class Ajax {
 
 			exit;
 		}
+	}
+
+	/**
+	 * Save Options
+	 *
+	 * @return void
+	 * @throws ApiException
+	 */
+	public function save_options() {
+		// Sanitize all the post-data before using.
+		$post_data = $this->clean( $_POST );
+		$settings  = Helpers::get_settings();
+
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
+			Messages::set_error( __( 'Not allowed.', 'plausible-analytics' ) );
+
+			wp_send_json_error( null, 403 );
+		}
+
+		$options = json_decode( $post_data['options'] );
+
+		if ( empty( $options ) ) {
+			Messages::set_error( __( 'No options found to save.', 'plausible-analytics' ) );
+
+			if ( defined( 'PLAUSIBLE_CI' ) ) {
+				return;
+			}
+
+			wp_send_json_error( null, 400 );
+		}
+
+		/**
+		 * Convert the object to array before parsing.
+		 */
+		$options_to_parse = [];
+
+		foreach ( $options as $option ) {
+			$options_to_parse[] = (array) $option;
+		}
+
+		$parsed_options = OptionsParser::parse_keyed_options( $options_to_parse, $settings );
+		$options        = $parsed_options['options'];
+		$posted_values  = $parsed_options['posted_values'];
+
+		foreach ( $options as $option ) {
+			$name  = sanitize_text_field( $option['name'] );
+			$value = $this->clean( $option['value'] );
+
+			// Clean spaces
+			if ( is_string( $value ) ) {
+				$settings[ $name ] = trim( $value );
+			} else {
+				$settings[ $name ] = $value;
+			}
+
+			// Validate Plugin Token if this is the Plugin Token field.
+			if ( $name === 'api_token' ) {
+				if ( isset( $posted_values['api_token'] ) ) {
+					/**
+					 * Multilingual plugin compatibility.
+					 */
+					$posted_domain = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
+					$force_domain  = function ( $s ) use ( $posted_domain ) {
+						$s['domain_name'] = $posted_domain; // string -> Helpers::get_domain() returns it directly
+
+						return $s;
+					};
+
+					add_filter( 'plausible_analytics_settings', $force_domain );
+
+					$this->validate_api_token( $this->clean( $posted_values['api_token'] ) );
+
+					remove_filter( 'plausible_analytics_settings', $force_domain );
+				} else {
+					$this->validate_api_token( $value );
+
+					$additional = $this->maybe_render_additional_message( $name, $value );
+
+					Messages::set_additional( $additional, $name );
+				}
+			}
+
+			// Refresh Tracker ID if Domain Name has changed (e.g., after migration from staging to production)
+			if ( $name === 'domain_name' ) {
+				delete_option( 'plausible_analytics_tracker_id' );
+			}
+		}
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
+
+		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
+			wp_send_json_success( null, 200 );
+		}
+	}
+
+	/**
+	 * Validate the entered Plugin Token, before storing it to the DB. wp_send_json_error() ensures that code execution stops.
+	 *
+	 * @param string $token
+	 *
+	 * @return void
+	 * @throws ApiException
+	 */
+	private function validate_api_token( $token = '' ) {
+		$client_factory = new ClientFactory( $token );
+		$client         = $client_factory->build();
+
+		if ( $client instanceof Client && ! $client->validate_api_token() ) {
+			$hosted_domain = Helpers::get_hosted_domain_url();
+			$domain        = Helpers::get_domain();
+
+			Messages::set_error(
+				sprintf(
+				// translators: 1: URL to create a new plugin token, 2: URL to read more.
+					__(
+						'Oops! The Plugin Token you used is invalid. Please <a href="%1$s" target="_blank">create a new token</a>. <a target="_blank" href="%2$s">Read more</a>',
+						'plausible-analytics'
+					),
+					"$hosted_domain/$domain/settings/integrations?new_token=WordPress",
+					'https://plausible.io/docs/troubleshoot-integration#plugin-token-showing-as-invalid'
+				)
+			);
+
+			wp_send_json_error( 'invalid_api_token', 400 );
+		}
+	}
+
+	/**
+	 * Adds the 'additional' array element to $message if applicable.
+	 *
+	 * @param $option_name
+	 * @param $option_value
+	 *
+	 * @return string
+	 */
+	private function maybe_render_additional_message( $option_name, $option_value ) {
+		$additional_message_html = '';
+		$hooks                   = new Hooks( false );
+
+		if ( $option_name === 'proxy_enabled' && $option_value !== '' ) {
+			$additional_message_html = $hooks->render_hook_field( Page::PROXY_WARNING_HOOK );
+		}
+
+		if ( $option_name === 'enable_analytics_dashboard' && $option_value !== '' ) {
+			$additional_message_html = $hooks->render_hook_field( Page::ENABLE_ANALYTICS_DASH_NOTICE );
+		}
+
+		if ( $option_name === 'api_token' && $option_value === '' ) {
+			$additional_message_html = $hooks->render_hook_field( Page::API_TOKEN_MISSING_HOOK );
+		}
+
+		return $additional_message_html;
 	}
 
 	/**
@@ -194,7 +389,7 @@ class Ajax {
 	 * @return void
 	 */
 	public function toggle_option() {
-		// Sanitize all the post data before using.
+		// Sanitize all the post-data before using.
 		$post_data = $this->clean( $_POST );
 		$settings  = Helpers::get_settings();
 
@@ -207,12 +402,12 @@ class Ajax {
 			 * Toggle lists.
 			 */
 			if ( $post_data['toggle_status'] === 'on' ) {
-				// If toggle is on, store the value under a new key.
+				// If the toggle is on, store the value under a new key.
 				if ( ! in_array( $post_data['option_value'], $settings[ $post_data['option_name'] ] ) ) {
 					$settings[ $post_data['option_name'] ][] = $post_data['option_value'];
 				}
 			} else {
-				// If toggle is off, find the key by its value and unset it.
+				// If the toggle is off, find the key by its value and unset it.
 				if ( ( $key = array_search( $post_data['option_value'], $settings[ $post_data['option_name'] ] ) ) !== false ) {
 					unset( $settings[ $post_data['option_name'] ][ $key ] );
 				}
@@ -248,226 +443,5 @@ class Ajax {
 		Messages::set_additional( $additional, $post_data['option_name'] );
 
 		wp_send_json_success( null, 200 );
-	}
-
-	/**
-	 * Adds the 'additional' array element to $message if applicable.
-	 *
-	 * @param $option_name
-	 * @param $option_value
-	 *
-	 * @return string
-	 */
-	private function maybe_render_additional_message( $option_name, $option_value ) {
-		$additional_message_html = '';
-		$hooks                   = new Hooks( false );
-
-		if ( $option_name === 'proxy_enabled' && $option_value !== '' ) {
-			$additional_message_html = $hooks->render_hook_field( Page::PROXY_WARNING_HOOK );
-		}
-
-		if ( $option_name === 'enable_analytics_dashboard' && $option_value !== '' ) {
-			$additional_message_html = $hooks->render_hook_field( Page::ENABLE_ANALYTICS_DASH_NOTICE );
-		}
-
-		if ( $option_name === 'api_token' && $option_value === '' ) {
-			$additional_message_html = $hooks->render_hook_field( Page::API_TOKEN_MISSING_HOOK );
-		}
-
-		return $additional_message_html;
-	}
-
-	public function bulk_toggle_options() {
-		$post_data = $this->clean( $_POST );
-		$settings  = Helpers::get_settings();
-
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
-			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
-		}
-
-		$options = json_decode( $post_data['options'], true );
-
-		if ( empty( $options ) ) {
-			wp_send_json_error( __( 'No options found.', 'plausible-analytics' ), 400 );
-		}
-
-		foreach ( $options as $option ) {
-			$name   = sanitize_text_field( $option['name'] );
-			$value  = sanitize_text_field( $option['value'] );
-			$status = sanitize_text_field( $option['status'] );
-
-			if ( ! isset( $settings[ $name ] ) || ! is_array( $settings[ $name ] ) ) {
-				continue;
-			}
-
-			if ( $status === 'on' ) {
-				if ( ! in_array( $value, $settings[ $name ] ) ) {
-					$settings[ $name ][] = $value;
-				}
-			} else {
-				if ( ( $key = array_search( $value, $settings[ $name ] ) ) !== false ) {
-					unset( $settings[ $name ][ $key ] );
-				}
-			}
-		}
-
-		update_option( 'plausible_analytics_settings', $settings );
-
-		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
-
-		wp_send_json_success( null, 200 );
-	}
-
-	/**
-	 * Save Options
-	 *
-	 * @return void
-	 * @throws ApiException
-	 */
-	public function save_options() {
-		// Sanitize all the post-data before using.
-		$post_data = $this->clean( $_POST );
-		$settings  = Helpers::get_settings();
-
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $post_data['_nonce'], 'plausible_analytics_toggle_option' ) < 1 ) {
-			Messages::set_error( __( 'Not allowed.', 'plausible-analytics' ) );
-
-			wp_send_json_error( null, 403 );
-		}
-
-		$options = json_decode( $post_data['options'] );
-
-		if ( empty( $options ) ) {
-			Messages::set_error( __( 'No options found to save.', 'plausible-analytics' ) );
-
-			if ( defined( 'PLAUSIBLE_CI' ) ) {
-				return;
-			}
-
-			wp_send_json_error( null, 400 );
-		}
-
-		/**
-		 * If we're dealing with an array of inputs (e.g. item[0], item[1], etc.), we need to convert $options , before storing it in the database.
-		 *
-		 * @since 2.4.0
-		 */
-		$input_array_elements = array_filter(
-			$options,
-			function ( $option ) {
-				return preg_match( '/\[[0-9]+]/', $option->name );
-			}
-		);
-
-		if ( count( $input_array_elements ) > 0 ) {
-			$options           = [];
-			$array_name        = preg_replace( '/\[[0-9]+]/', '', $input_array_elements[0]->name );
-			$options[0]        = (object) [];
-			$options[0]->name  = $array_name;
-			$options[0]->value = [];
-
-			foreach ( $input_array_elements as $input_array_element ) {
-				if ( $input_array_element->value ) {
-					$options[0]->value[] = $input_array_element->value;
-				}
-			}
-		}
-
-		$options_to_parse = [];
-		foreach ( $options as $option ) {
-			$options_to_parse[] = (array) $option;
-		}
-
-		$parsed_options = OptionsParser::parse_keyed_options( $options_to_parse, $settings );
-		$options        = [];
-		foreach ( $parsed_options['options'] as $option ) {
-			$options[] = (object) $option;
-		}
-		$posted_values = $parsed_options['posted_values'];
-
-		foreach ( $options as $option ) {
-			$name  = sanitize_text_field( $option->name );
-			$value = $this->clean( $option->value );
-
-			// Clean spaces
-			if ( is_string( $value ) ) {
-				$settings[ $name ] = trim( $value );
-			} else {
-				$settings[ $name ] = $value;
-			}
-
-			// Validate Plugin Token if this is the Plugin Token field.
-			if ( $name === 'api_token' ) {
-				if ( isset( $posted_values['api_token'] ) ) {
-					// Multilang: validate ONLY the freshly posted token. During validation, force
-					// Helpers::get_domain() to return the Plausible domain entered for THIS pair, so
-					// Client::validate_api_token()'s data-domain comparison works. The per-domain
-					// domain_name isn't persisted yet at this point, and the admin request host is
-					// not necessarily the domain being connected.
-					$posted_domain = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
-					$force_domain  = function ( $s ) use ( $posted_domain ) {
-						$s['domain_name'] = $posted_domain; // string -> Helpers::get_domain() returns it directly
-
-						return $s;
-					};
-
-					add_filter( 'plausible_analytics_settings', $force_domain );
-					$this->validate_api_token( $this->clean( $posted_values['api_token'] ) );
-					remove_filter( 'plausible_analytics_settings', $force_domain );
-					// No additional (missing-token) message for the multilang case.
-				} else {
-					$this->validate_api_token( $value );
-
-					$additional = $this->maybe_render_additional_message( $name, $value );
-
-					Messages::set_additional( $additional, $name );
-				}
-			}
-
-			// Refresh Tracker ID if Domain Name has changed (e.g. after migration from staging to production)
-			if ( $name === 'domain_name' ) {
-				delete_option( 'plausible_analytics_tracker_id' );
-			}
-		}
-
-		update_option( 'plausible_analytics_settings', $settings );
-
-		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
-
-		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
-			wp_send_json_success( null, 200 );
-		}
-	}
-
-	/**
-	 * Validate the entered Plugin Token, before storing it to the DB. wp_send_json_error() ensures that code execution stops.
-	 *
-	 * @param string $token
-	 *
-	 * @return void
-	 * @throws ApiException
-	 */
-	private function validate_api_token( $token = '' ) {
-		$client_factory = new ClientFactory( $token );
-		$client         = $client_factory->build();
-
-		if ( $client instanceof Client && ! $client->validate_api_token() ) {
-			$hosted_domain = Helpers::get_hosted_domain_url();
-			$domain        = Helpers::get_domain();
-
-			Messages::set_error(
-				sprintf(
-					// translators: 1: URL to create a new plugin token, 2: URL to read more.
-					__(
-						'Oops! The Plugin Token you used is invalid. Please <a href="%1$s" target="_blank">create a new token</a>. <a target="_blank" href="%2$s">Read more</a>',
-						'plausible-analytics'
-					),
-					"$hosted_domain/$domain/settings/integrations?new_token=WordPress",
-					'https://plausible.io/docs/troubleshoot-integration#plugin-token-showing-as-invalid'
-				)
-			);
-
-			wp_send_json_error( 'invalid_api_token', 400 );
-		}
 	}
 }

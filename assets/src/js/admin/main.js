@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		nonceElem: document.getElementById('_wpnonce'),
 		nonce: '',
 		showWizardElem: document.getElementById('show_wizard'),
-		domainNameElem: document.getElementById('domain_name'),
-		apiTokenElem: document.getElementById('api_token'),
 		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
@@ -42,14 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (this.showWizardElem !== null) {
 				this.showWizardElem.addEventListener('click', this.showWizard);
-			}
-
-			if (this.domainNameElem !== null) {
-				this.domainNameElem.addEventListener('keyup', this.disableConnectButton);
-			}
-
-			if (this.apiTokenElem !== null) {
-				this.apiTokenElem.addEventListener('keyup', this.disableConnectButton);
 			}
 
 			if (this.createAPITokenElems.length > 0) {
@@ -367,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Save value of input or text area to DB.
+		 * Save the value of the input or text area to DB.
 		 *
 		 * @param e
 		 */
@@ -403,11 +393,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param e
 		 */
 		switchMultilangDomain: function (e) {
-			const selectedDomain = e.target.value;
+			const selectedKey = e.target.value;
 			const pairs = document.querySelectorAll('.multilang-domain-pair');
 
 			pairs.forEach(function (pair) {
-				if (pair.dataset.wpmlDomain === selectedDomain) {
+				if (pair.dataset.multilangKey === selectedKey) {
 					pair.classList.remove('hidden');
 				} else {
 					pair.classList.add('hidden');
@@ -554,13 +544,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				return;
 			}
 
-			button = document.getElementById('connect_plausible_analytics');
-
-			if (button === null) {
-				let slide_id = document.location.hash;
-				button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
-				buttonIsHref = true;
-			}
+			let slide_id = document.location.hash;
+			button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
+			buttonIsHref = true;
 
 			if (button === null) {
 				return;
@@ -595,11 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.preventDefault();
 
 			let domainElem = document.querySelector('.multilang-domain-pair:not(.hidden) [id^="domain_name"]');
-
-			if (domainElem === null) {
-				domainElem = document.getElementById('domain_name');
-			}
-
 			let domain = domainElem ? domainElem.value : '';
 			domain = domain.replaceAll('/', '%2F');
 

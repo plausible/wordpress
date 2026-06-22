@@ -93,7 +93,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
-							// translators: %s: URL to Plausible account settings.
+						// translators: %s: URL to Plausible account settings.
 							__(
 								'Ensure your domain name matches the one in <a href="%s" target="_blank">your Plausible account</a>, then <a class="hover:cursor-pointer underline plausible-create-api-token">create a Plugin Token</a> (link opens in a new window) and paste it into the \'Plugin Token\' field.',
 								'plausible-analytics'
@@ -104,27 +104,8 @@ class Page extends API {
 					),
 					'fields' => [
 						[
-							'label' => esc_html__( 'Domain name', 'plausible-analytics' ),
-							'slug'  => 'domain_name',
-							'type'  => 'text',
-							'value' => Helpers::get_domain(),
-						],
-						[
-							'label' => esc_html__( 'Plugin Token', 'plausible-analytics' ) .
-									   ' - ' .
-									   '<a class="hover:cursor-pointer underline plausible-create-api-token">' .
-									   __( 'Create Token', 'plausible-analytics' ) .
-									   '</a>',
-							'slug'  => 'api_token',
-							'type'  => 'text',
-							'value' => $settings['api_token'],
-						],
-						[
-							'label'    => empty( $settings['domain_name'] ) || empty( $settings['api_token'] ) ? esc_html__( 'Connect', 'plausible-analytics' ) :
-								esc_html__( 'Connected', 'plausible-analytics' ),
-							'slug'     => 'connect_plausible_analytics',
-							'type'     => 'button',
-							'disabled' => empty( $settings['domain_name'] ) || empty( $settings['api_token'] ) || ! $this->client instanceof Client || $this->client->is_api_token_valid(),
+							'slug' => 'domain_map',
+							'type' => 'domain_map',
 						],
 					],
 				],
@@ -182,7 +163,7 @@ class Page extends API {
 						'affiliate-links-patterns'                    => [
 							'slug'        => 'affiliate_links',
 							'description' => sprintf(
-								// translators: %s: Example URL to affiliate product.
+							// translators: %s: Example URL to affiliate product.
 								__(
 									'Enter the (partial) URLs you\'d like to track. E.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>.',
 									'plausible-analytics'
@@ -234,7 +215,7 @@ class Page extends API {
 						'query-params-patterns'                       => [
 							'slug'        => 'query_params',
 							'description' => sprintf(
-								// translators: %s: Example URL with query parameter.
+							// translators: %s: Example URL with query parameter.
 								__(
 									'Enter the query parameters you\'d like to track. E.g. enter <strong>lang</strong> if you want to track <code>%s</code>.',
 									'plausible-analytics'
@@ -269,7 +250,7 @@ class Page extends API {
 					'type'   => 'group',
 					'desc'   => sprintf(
 						wp_kses(
-							// translators: 1: Proxy endpoint prefix, 2: Proxy endpoint details, 3: URL to learn more about proxy.
+						// translators: 1: Proxy endpoint prefix, 2: Proxy endpoint details, 3: URL to learn more about proxy.
 							__(
 								'Concerned about ad blockers? You can run the Plausible script as a first-party connection from your domain name to count visitors who use ad blockers. The proxy uses WordPress\' API with a randomly generated endpoint, starting with <code>%1$s</code> and %2$s. <a href="%3$s" target="_blank">Learn more &raquo;</a>',
 								'plausible-analytics'
@@ -427,7 +408,7 @@ class Page extends API {
 					'slug'   => 'self_hosted_shared_link',
 					'type'   => 'group',
 					'desc'   => sprintf(
-						// translators: %s: URL to Plausible shared link documentation.
+					// translators: %s: URL to Plausible shared link documentation.
 						'<ol><li>' . __(
 							'<a href="%s" target="_blank">Create a secure and private shared link</a> in your Plausible account.',
 							'plausible-analytics'
@@ -444,7 +425,7 @@ class Page extends API {
 							'type'        => 'text',
 							'value'       => $settings['self_hosted_shared_link'],
 							'placeholder' => sprintf(
-								// translators: 1: Plausible hosted domain URL, 2: Site domain name.
+							// translators: 1: Plausible hosted domain URL, 2: Site domain name.
 								wp_kses( __( 'E.g. %1$s/share/%2$s?auth=XXXXXXXXXXXX', 'plausible-analytics' ), 'post' ),
 								Helpers::get_hosted_domain_url(),
 								Helpers::get_domain()
@@ -489,19 +470,10 @@ class Page extends API {
 			$this->fields['self-hosted'][1]['fields'][] = self::OPTION_DISABLED_BY_PROXY_HOOK;
 		}
 
-		if ( Helpers::is_multilang_domain_mode() ) {
-			$this->fields['general'][0]['fields'] = [
-				[
-					'slug' => 'domain_map',
-					'type' => 'domain_map',
-				],
-			];
-		}
-
 		/**
 		 * No Plugin Token is entered.
 		 */
-		if ( empty( $settings['api_token'] ) ) {
+		if ( empty( Helpers::get_api_token() ) ) {
 			$this->fields['general'][0]['fields'][] = self::API_TOKEN_MISSING_HOOK;
 			$this->fields['general'][3]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
 		}
@@ -509,7 +481,7 @@ class Page extends API {
 		/**
 		 * If View Stats is enabled, display notice.
 		 */
-		if ( ! empty( $settings['api_token'] ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
+		if ( ! empty( Helpers::get_api_token() ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
 			$this->fields['general'][3]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
 		}
 	}
@@ -562,6 +534,16 @@ class Page extends API {
 		ksort( $roles_array, SORT_STRING );
 
 		return $roles_array;
+	}
+
+	/**
+	 * A little hack to add some classes to the core #wpcontent div.
+	 * @return void
+	 */
+	public function add_background_color() {
+		if ( array_key_exists( 'page', $_GET ) && $_GET['page'] == 'plausible_analytics' ) {
+			echo "<script>document.getElementById('wpcontent').classList += 'px-2.5 bg-gray-50 dark:bg-gray-85'; </script>";
+		}
 	}
 
 	/**
@@ -630,16 +612,6 @@ class Page extends API {
 				'settings_page',
 			]
 		);
-	}
-
-	/**
-	 * A little hack to add some classes to the core #wpcontent div.
-	 * @return void
-	 */
-	public function add_background_color() {
-		if ( array_key_exists( 'page', $_GET ) && $_GET['page'] == 'plausible_analytics' ) {
-			echo "<script>document.getElementById('wpcontent').classList += 'px-2.5 bg-gray-50 dark:bg-gray-85'; </script>";
-		}
 	}
 
 	/**
@@ -749,7 +721,7 @@ class Page extends API {
 				<p>
 					<?php if ( $settings['self_hosted_domain'] ) : ?>
 						<?php echo sprintf(
-							// translators: %s: URL to self-hosted settings page.
+						// translators: %s: URL to self-hosted settings page.
 							__(
 								'Please enter your <em>Shared Link</em> under <a href="%s">Self-Hosted Settings</a>.',
 								'plausible-analytics'
@@ -758,7 +730,7 @@ class Page extends API {
 						); ?>
 					<?php else: ?>
 						<?php echo sprintf(
-							// translators: %s: URL to plugin settings page.
+						// translators: %s: URL to plugin settings page.
 							__(
 								'Please <a href="%s">click here</a> to enable <strong>View Stats in WordPress</strong>.',
 								'plausible-analytics'
