@@ -379,12 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('options', JSON.stringify(options));
 			form.append('_nonce', plausible.nonce);
 
-			if (button.children.length > 0) {
-				const loader = isCredentials ? button.children[1] : button.children[0];
-
-				if (loader) {
-					loader.classList.remove('hidden');
-				}
+			let spinner = button.querySelector('svg');
+			
+			if (spinner) {
+				spinner.classList.remove('hidden');
 			}
 
 			button.setAttribute('disabled', 'disabled');
@@ -667,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						}
 					}
 
-					if ((button.id === 'connect_plausible_analytics' || button.classList.contains('plausible-analytics-connect-button')) && response.status === 200) {
+					if (button.classList.contains('plausible-analytics-connect-button') && response.status === 200) {
 						button.childNodes.forEach(function (node) {
 							if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
 								node.textContent = ' ' + plausible_analytics_i18n.connected;
@@ -678,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					}
 				}
 
-				// We still want the data, if it's a Payment Required error.
+				// We still want the data if it's a Payment Required error.
 				if (response.status === 200 || response.status === 402) {
 					return response.json();
 				}
