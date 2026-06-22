@@ -204,7 +204,7 @@ class API {
 		if ( count( $domains ) > 1 ): ?>
 			<div class="mt-4">
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="domain_name"><?php echo esc_html( $field['label'] ); ?></label>
-				<select id="language_domain" class="plausible-analytics-text w-full max-w-sm">
+				<select id="language_domain" class="plausible-analytics-text w-full max-w-sm mt-1">
 					<?php foreach ( $domains as $index => $domain ): ?>
 						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $domain ); ?></option>
 					<?php endforeach; ?>
@@ -241,12 +241,12 @@ class API {
 					]
 				);
 
-				$button_class  = 'plausible-analytics-connect-button inline-flex items-center justify-center mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 dark:disabled:bg-gray-800';
-				$button_label  = $is_connected ? __( 'Connected', 'plausible-analytics' ) : __( 'Connect', 'plausible-analytics' );
-				$button_id     = 'connect_plausible_analytics_' . md5( $domain );
-				$disabled_attr = ( $is_connected || empty( $domain_name_val ) ) ? 'disabled' : '';
+				$button_class = 'plausible-analytics-connect-button inline-flex items-center justify-center mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 dark:disabled:bg-gray-800';
+				$button_label = $is_connected ? __( 'Connected', 'plausible-analytics' ) : __( 'Connect', 'plausible-analytics' );
+				$button_id    = 'connect_plausible_analytics_' . md5( $domain );
+				$disabled     = ( $is_connected || empty( $domain_name_val ) || empty( $api_token_val ) ) ? 'disabled' : '';
 				?>
-				<button id="<?php echo esc_attr( $button_id ); ?>" type="button" class="<?php echo esc_attr( $button_class ); ?>" <?php echo $disabled_attr; ?>>
+				<button id="<?php echo esc_attr( $button_id ); ?>" type="button" class="<?php echo esc_attr( $button_class ); ?>" <?php echo $disabled; ?>>
 					<?php echo esc_html( $button_label ); ?>
 					<svg class="animate-spin h-4 w-4 ml-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
