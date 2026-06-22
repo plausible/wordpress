@@ -25,6 +25,34 @@ class Actions {
 	}
 
 	/**
+	 * Redirect to Configuration Wizard on first boot.
+	 *
+	 * @return void
+	 */
+	public function maybe_redirect_to_wizard() {
+		// Make sure it only runs when requested by (an admin in) a browser.
+		if ( wp_doing_ajax() || wp_doing_cron() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// If we're already on the Settings page, there's no need to redirect.
+		if ( array_key_exists( 'page', $_GET ) && $_GET['page'] === 'plausible_analytics' ) {
+			return;
+		}
+
+		// Self-hosters should never be redirected to the settings screen, because the wizard isn't shown to them.
+		$wizard_done = get_option( 'plausible_analytics_wizard_done', false ) || ! empty( Helpers::get_settings()['self_hosted_domain'] );
+
+		if ( ! $wizard_done ) {
+			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome_slide' );
+
+			wp_redirect( $url );
+
+			exit;
+		}
+	}
+
+	/**
 	 * Register Assets.
 	 *
 	 * @since  1.0.0
@@ -51,38 +79,10 @@ class Actions {
 			[ 'in_footer' => true ]
 		);
 
-		wp_localize_script( 'plausible-admin', 'plausible_analytics_i18n', [ 'connected' => __( 'Connected', 'plausible-analytics' ) ] );
+		wp_localize_script( 'plausible-admin', 'plausible_analytics_i18n', [ 'connected' => __( 'Connected', 'plausible-analytics' ), 'connect' => __( 'Connect', 'plausible-analytics' ) ] );
 
 		wp_enqueue_script( 'plausible-admin' );
 
 		wp_add_inline_script( 'plausible-admin', 'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";' );
-	}
-
-	/**
-	 * Redirect to Configuration Wizard on first boot.
-	 *
-	 * @return void
-	 */
-	public function maybe_redirect_to_wizard() {
-		// Make sure it only runs when requested by (an admin in) a browser.
-		if ( wp_doing_ajax() || wp_doing_cron() || ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// If we're already on the Settings page, there's no need to redirect.
-		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] === 'plausible_analytics' ) {
-			return;
-		}
-
-		// Self-hosters should never be redirected to the settings screen, because the wizard isn't shown to them.
-		$wizard_done = get_option( 'plausible_analytics_wizard_done', false ) || ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] );
-
-		if ( ! $wizard_done ) {
-			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome_slide' );
-
-			wp_redirect( $url );
-
-			exit;
-		}
 	}
 }

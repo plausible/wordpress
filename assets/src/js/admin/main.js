@@ -362,8 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param e
 		 */
 		saveOption: function (e) {
-			e.preventDefault();
-
 			const button = e.target.closest('button');
 			const isCredentials = button.closest('.plausible-analytics-credentials');
 			const section = isCredentials || button.closest('.plausible-analytics-section');
@@ -515,6 +513,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				button.disabled = !allFilled;
 
+				button.childNodes.forEach(function (node) {
+					if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === plausible_analytics_i18n.connected) {
+						node.textContent = ' ' + plausible_analytics_i18n.connect;
+					}
+				});
+
 				return;
 			}
 
@@ -539,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (!buttonIsHref) {
 				button.disabled = true;
-				button.innerHTML = button.innerHTML.replace('Connected', 'Connect');
+				button.textContent = button.textContent.replace('Connected', 'Connect');
 			} else {
 				button.classList += ' pointer-events-none';
 				button.classList.replace('bg-indigo-600', 'bg-gray-200');
@@ -664,7 +668,11 @@ document.addEventListener('DOMContentLoaded', () => {
 					}
 
 					if ((button.id === 'connect_plausible_analytics' || button.classList.contains('plausible-analytics-connect-button')) && response.status === 200) {
-						button.innerText = plausible_analytics_i18n.connected;
+						button.childNodes.forEach(function (node) {
+							if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+								node.textContent = ' ' + plausible_analytics_i18n.connected;
+							}
+						});
 					} else {
 						button.removeAttribute('disabled');
 					}
