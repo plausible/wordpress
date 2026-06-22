@@ -81,14 +81,20 @@ class Helpers {
 	}
 
 	/**
-	 * Returns a plain, numerically-indexed array of the configured domain strings.
+	 * Returns a plain, numerically indexed array of the configured domain strings.
 	 *
 	 * @return array
 	 */
 	public static function get_multilang_domains() {
-		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$domains    = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$main       = preg_replace( '/^https?:\/\/(www\.)?/i', '', home_url() );
 
-		return (array) apply_filters( 'plausible_analytics_multilang_domains', $domains );
+		// WPML's language_domains omits the default language; prepend the main WP domain.
+		if ( ! in_array( $main, $domains, true ) ) {
+			array_unshift( $domains, $main );
+		}
+
+		return apply_filters( 'plausible_analytics_multilang_domains', $domains );
 	}
 
 	/**
