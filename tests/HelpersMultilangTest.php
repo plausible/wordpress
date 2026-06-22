@@ -9,7 +9,7 @@ class HelpersMultilangTest extends TestCase {
 
 	public function test_get_current_multilang_key() {
 		// Mock multilang mode
-		add_filter( 'plausible_analytics_is_multilang_domain_mode', '__return_true' );
+		add_filter( 'plausible_analytics_is_multilang_mode', '__return_true' );
 		\Brain\Monkey\Functions\expect( 'home_url' )->andReturn( 'http://english.dev.local' );
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
 			->with( [], 'language_domains' )
@@ -17,14 +17,14 @@ class HelpersMultilangTest extends TestCase {
 
 		// 1. Resolution via HTTP_HOST
 		$_SERVER['HTTP_HOST'] = 'english.dev.local';
-		$this->assertEquals( 'en', Helpers::get_current_multilang_key() );
+		$this->assertEquals( 'en', Helpers::get_current_language_domain_key() );
 
 		$_SERVER['HTTP_HOST'] = 'www.english.dev.local:8080';
-		$this->assertEquals( 'en', Helpers::get_current_multilang_key() );
+		$this->assertEquals( 'en', Helpers::get_current_language_domain_key() );
 
 		// 2. Fallback to first domain
 		$_SERVER['HTTP_HOST'] = 'unknown.local';
-		$this->assertEquals( 'en', Helpers::get_current_multilang_key() );
+		$this->assertEquals( 'en', Helpers::get_current_language_domain_key() );
 	}
 
 	public function test_get_domain_and_api_token() {
@@ -51,17 +51,17 @@ class HelpersMultilangTest extends TestCase {
 		} );
 
 		// Mock current domain to 'en'
-		add_filter( 'plausible_analytics_current_multilang_key', function () {
+		add_filter( 'plausible_analytics_current_language_domain_key', function () {
 			return 'en';
 		} );
-		add_filter( 'plausible_analytics_is_multilang_domain_mode', '__return_true' );
+		add_filter( 'plausible_analytics_is_multilang_mode', '__return_true' );
 
 		$this->assertEquals( 'english.plausible.io', Helpers::get_domain() );
 		$this->assertEquals( 'token-en', Helpers::get_api_token() );
 
 		// Switch to 'nl'
-		remove_all_filters( 'plausible_analytics_current_multilang_key' );
-		add_filter( 'plausible_analytics_current_multilang_key', function () {
+		remove_all_filters( 'plausible_analytics_current_language_domain_key' );
+		add_filter( 'plausible_analytics_current_language_domain_key', function () {
 			return 'nl';
 		} );
 
@@ -69,8 +69,8 @@ class HelpersMultilangTest extends TestCase {
 		$this->assertEquals( 'token-nl', Helpers::get_api_token() );
 
 		// Fallback to 'default' if current key not found
-		remove_all_filters( 'plausible_analytics_current_multilang_key' );
-		add_filter( 'plausible_analytics_current_multilang_key', function () {
+		remove_all_filters( 'plausible_analytics_current_language_domain_key' );
+		add_filter( 'plausible_analytics_current_language_domain_key', function () {
 			return 'de';
 		} );
 		$this->assertEquals( 'main.plausible.io', Helpers::get_domain() );
@@ -97,7 +97,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Functions\expect( 'home_url' )->andReturn( 'http://example.org' );
 
 		// Mock WPML not active
-		$this->assertFalse( Helpers::is_multilang_domain_mode() );
+		$this->assertFalse( Helpers::is_multilang_mode() );
 
 		// Mock WPML active, but wrong negotiation type
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
@@ -111,7 +111,7 @@ class HelpersMultilangTest extends TestCase {
 			->with( [], 'language_domains' )
 			->andReturn( [ 'en' => 'english.dev.local' ] );
 
-		$this->assertFalse( Helpers::is_multilang_domain_mode() );
+		$this->assertFalse( Helpers::is_multilang_mode() );
 
 		// Mock WPML active, correct negotiation type, but no domains
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
@@ -120,7 +120,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
 			->with( [], 'language_domains' )
 			->andReturn( [] );
-		$this->assertFalse( Helpers::is_multilang_domain_mode() );
+		$this->assertFalse( Helpers::is_multilang_mode() );
 
 		// Mock WPML active, correct negotiation type, and domains
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
@@ -129,7 +129,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
 			->with( [], 'language_domains' )
 			->andReturn( [ 'en' => 'english.dev.local', 'nl' => 'dutch.dev.local' ] );
-		$this->assertTrue( Helpers::is_multilang_domain_mode() );
+		$this->assertTrue( Helpers::is_multilang_mode() );
 	}
 
 	protected function setUp(): void {

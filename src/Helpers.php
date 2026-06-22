@@ -22,7 +22,7 @@ class Helpers {
 	 */
 	public static function get_api_token() {
 		$settings = static::get_settings();
-		$current  = static::get_current_multilang_key();
+		$current  = static::get_current_language_domain_key();
 
 		return $settings['api_token'][ $current ] ?? $settings['api_token']['default'] ?? '';
 	}
@@ -76,43 +76,35 @@ class Helpers {
 	}
 
 	/**
-	 * Returns the WPML language code that corresponds to the current request.
+	 * Returns the key of the currently used Language Domain.
+	 *
+	 * @since v2.6.0
 	 *
 	 * @return string
 	 */
-	public static function get_current_multilang_key() {
-		if ( ! static::is_multilang_domain_mode() ) {
+	public static function get_current_language_domain_key() {
+		if ( ! static::is_multilang_mode() ) {
 			return 'default';
 		}
 
-		$domains          = static::get_multilang_domains();
 		$language_domains = apply_filters( 'wpml_setting', [], 'language_domains' );
 		$current_language = apply_filters( 'wpml_current_language', null );
 
 		if ( $current_language && isset( $language_domains[ $current_language ] ) ) {
-			return (string) apply_filters( 'plausible_analytics_current_multilang_key', $current_language );
+			return (string) apply_filters( 'plausible_analytics_current_language_domain_key', $current_language );
 		}
 
-		$http_host = $_SERVER['HTTP_HOST'] ?? '';
-		$host      = preg_replace( '/^https?:\/\/(www\.)?|(\/.*)|(:\d+)/i', '', $http_host );
-
-		foreach ( $domains as $key => $domain ) {
-			$clean_domain = preg_replace( '/^https?:\/\/(www\.)?|(\/.*)|(:\d+)/i', '', $domain );
-
-			if ( $host === $clean_domain ) {
-				return (string) apply_filters( 'plausible_analytics_current_multilang_key', $key );
-			}
-		}
-
-		return (string) apply_filters( 'plausible_analytics_current_multilang_key', array_key_first( $domains ) );
+		return (string) apply_filters( 'plausible_analytics_current_language_domain_key', 'default' );
 	}
 
 	/**
 	 * Returns true only when WPML is active, its negotiation type is "different domain per language", AND at least one domain is configured.
 	 *
+	 * @since v2.6.0
+	 *
 	 * @return bool
 	 */
-	public static function is_multilang_domain_mode() {
+	public static function is_multilang_mode() {
 		static $is_multilang;
 
 		if ( defined( 'PLAUSIBLE_CI' ) && PLAUSIBLE_CI ) {
@@ -123,32 +115,30 @@ class Helpers {
 			return $is_multilang;
 		}
 
+		/**
+		 * If WPML is not active, we can assume we're not in multilang mode.
+		 */
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
-			return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_domain_mode', false );
+			return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_mode', false );
 		}
 
 		$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
 		$domains          = apply_filters( 'wpml_setting', [], 'language_domains' );
 		$value            = $negotiation_type === 2 && ! empty( $domains );
 
-		return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_domain_mode', $value );
+		return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_mode', $value );
 	}
 
-	public static function get_multilang_domains() {
-		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
-		$main    = home_url();
-
-		// WPML's language_domains omits the default language; prepend the main WP domain.
-		if ( ! in_array( $main, $domains, true ) ) {
-			$domains = array_merge( [ 'default' => $main ], $domains );
-		}
-
-		return apply_filters( 'plausible_analytics_multilang_domains', $domains );
-	}
-
+	/**
+	 * Returns the name of the current Plausible domain.
+	 *
+	 * @since v2.6.0 This is now mapped to language domains to provide compatibility with multilang plugins, like WPML.
+	 *
+	 * @return string
+	 */
 	public static function get_domain() {
 		$settings    = static::get_settings();
-		$current_key = static::get_current_multilang_key();
+		$current_key = static::get_current_language_domain_key();
 		$domain_name = $settings['domain_name'][ $current_key ] ?? '';
 
 		if ( ! empty( $domain_name ) ) {
@@ -371,6 +361,23 @@ class Helpers {
 		}
 
 		return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
+	}
+
+	/**
+	 * @since v2.6.0 Provide compatibility with multilang plugins, like WPML.
+	 *
+	 * @return array
+	 */
+	public static function get_language_domains() {
+		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$main    = home_url();
+
+		// WPML's language_domains omits the default language; prepend the main WP domain.
+		if ( ! in_array( $main, $domains, true ) ) {
+			$domains = array_merge( [ 'default' => $main ], $domains );
+		}
+
+		return apply_filters( 'plausible_analytics_language_domains', $domains );
 	}
 
 	/**

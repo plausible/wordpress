@@ -198,7 +198,7 @@ class API {
 	 */
 	public function render_domain_map_field( array $field ) {
 		$settings = Helpers::get_settings();
-		$domains  = Helpers::get_multilang_domains();
+		$domains  = Helpers::get_language_domains();
 		$i        = 0;
 
 		if ( count( $domains ) > 1 ): ?>

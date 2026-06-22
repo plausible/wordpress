@@ -14,6 +14,7 @@ class OptionsParser {
 	public static function parse_keyed_options( array $options, array $settings ) {
 		$rebuilt       = [];
 		$posted_values = [];
+		$posted_keys   = [];
 		$has_keyed     = false;
 
 		foreach ( $options as $option ) {
@@ -32,6 +33,7 @@ class OptionsParser {
 
 				if ( ! isset( $posted_values[ $array_name ] ) ) {
 					$posted_values[ $array_name ] = $value;
+					$posted_keys[ $array_name ]   = $key;
 				}
 
 				// Seed from settings or existing rebuilt.
@@ -59,6 +61,7 @@ class OptionsParser {
 			return [
 				'options'       => $options,
 				'posted_values' => [],
+				'posted_keys'   => [],
 			];
 		}
 
@@ -74,6 +77,7 @@ class OptionsParser {
 		return [
 			'options'       => $rebuilt_options,
 			'posted_values' => $posted_values,
+			'posted_keys'   => $posted_keys,
 		];
 	}
 }

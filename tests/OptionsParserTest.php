@@ -16,6 +16,7 @@ class OptionsParserTest extends TestCase {
 
 		$this->assertEquals( $options, $result['options'] );
 		$this->assertEmpty( $result['posted_values'] );
+		$this->assertEmpty( $result['posted_keys'] );
 	}
 
 	public function test_parse_keyed_options() {
@@ -41,6 +42,7 @@ class OptionsParserTest extends TestCase {
 
 		$rebuilt       = $result['options'];
 		$posted_values = $result['posted_values'];
+		$posted_keys   = $result['posted_keys'];
 
 		$rebuilt_map = [];
 		foreach ( $rebuilt as $option ) {
@@ -69,5 +71,9 @@ class OptionsParserTest extends TestCase {
 		// Verify posted_values (holds the first encountered value for each keyed option)
 		$this->assertEquals( 'english.plausible.io', $posted_values['domain_name'] );
 		$this->assertEquals( 'token1', $posted_values['api_token'] );
+
+		// Verify posted_keys
+		$this->assertEquals( 'english.dev.local', $posted_keys['domain_name'] );
+		$this->assertEquals( 'english.dev.local', $posted_keys['api_token'] );
 	}
 }

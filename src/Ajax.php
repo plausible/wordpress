@@ -248,6 +248,7 @@ class Ajax {
 		$parsed_options = OptionsParser::parse_keyed_options( $options_to_parse, $settings );
 		$options        = $parsed_options['options'];
 		$posted_values  = $parsed_options['posted_values'];
+		$posted_keys    = $parsed_options['posted_keys'];
 
 		foreach ( $options as $option ) {
 			$name  = sanitize_text_field( $option['name'] );
@@ -266,17 +267,26 @@ class Ajax {
 					/**
 					 * Multilingual plugin compatibility.
 					 */
-					$posted_domain = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
-					$force_domain  = function ( $s ) use ( $posted_domain ) {
-						$s['domain_name'] = $posted_domain; // string -> Helpers::get_domain() returns it directly
+					$posted_domain       = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
+					$language_domain_key = $posted_keys['domain_name'] ?? 'default';
+					// 1. Force get_current_multilang_key() to return the key we're saving for.
+					$force_key = function () use ( $language_domain_key ) {
+						return $language_domain_key;
+					};
+
+					// 2. Force get_domain() to find the not-yet-persisted domain name under that key.
+					$force_domain = function ( $s ) use ( $posted_domain, $language_domain_key ) {
+						$s['domain_name'][ $language_domain_key ] = $posted_domain;
 
 						return $s;
 					};
 
+					add_filter( 'plausible_analytics_current_language_domain_key', $force_key );
 					add_filter( 'plausible_analytics_settings', $force_domain );
 
 					$this->validate_api_token( $this->clean( $posted_values['api_token'] ) );
 
+					remove_filter( 'plausible_analytics_current_language_domain_key', $force_key );
 					remove_filter( 'plausible_analytics_settings', $force_domain );
 				} else {
 					$this->validate_api_token( $value );
