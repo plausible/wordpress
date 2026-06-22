@@ -214,7 +214,7 @@ class API {
 
 		foreach ( $domains as $index => $domain ) {
 			$hidden          = $i === 0 ? '' : 'hidden';
-			$domain_name_val = $settings['domain_name'][ $index ] ?? '';
+			$domain_name_val = ! empty( $domain_names[ $index ] ) ? $domain_names[ $index ] : preg_replace( '/^https?:\/\/(www\.)?/i', '', $domain );
 			$api_token_val   = $settings['api_token'][ $index ] ?? '';
 			$is_connected    = ! empty( $api_token_val );
 			$i ++;
