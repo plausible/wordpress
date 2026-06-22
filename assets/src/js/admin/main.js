@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (this.connectButtons.length > 0) {
 				for (let i = 0; i < this.connectButtons.length; i++) {
-					this.connectButtons[i].addEventListener('click', this.saveCredentials);
+					this.connectButtons[i].addEventListener('click', this.saveOption);
 				}
 			}
 
@@ -362,9 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		 * @param e
 		 */
 		saveOption: function (e) {
-			const button = e.target;
-			const section = button.closest('.plausible-analytics-section');
-			const inputs = section.querySelectorAll('input, textarea');
+			e.preventDefault();
+
+			const button = e.target.closest('button');
+			const isCredentials = button.closest('.plausible-analytics-credentials');
+			const section = isCredentials || button.closest('.plausible-analytics-section');
+			const inputs = section.querySelectorAll(isCredentials ? 'input' : 'input, textarea');
 			const form = new FormData();
 			let options = [];
 
@@ -379,7 +382,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('_nonce', plausible.nonce);
 
 			if (button.children.length > 0) {
-				button.children[0].classList.remove('hidden');
+				const loader = isCredentials ? button.children[1] : button.children[0];
+
+				if (loader) {
+					loader.classList.remove('hidden');
+				}
 			}
 
 			button.setAttribute('disabled', 'disabled');
@@ -403,37 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
 					pair.classList.add('hidden');
 				}
 			});
-		},
-
-		/**
-		 * Save credentials (Domain Name and Plugin Token pair).
-		 *
-		 * @param e
-		 */
-		saveCredentials: function (e) {
-			const button = e.target.closest('button');
-			const pair = button.closest('.plausible-analytics-credentials');
-			const inputs = pair.querySelectorAll('input');
-			const form = new FormData();
-			let options = [];
-
-			inputs.forEach(function (input) {
-				input = plausible.validateInput(input);
-
-				options.push({name: input.name, value: input.value});
-			});
-
-			form.append('action', 'plausible_analytics_save_options');
-			form.append('options', JSON.stringify(options));
-			form.append('_nonce', plausible.nonce);
-
-			if (button.children.length > 1) {
-				button.children[1].classList.remove('hidden');
-			}
-
-			button.setAttribute('disabled', 'disabled');
-
-			plausible.ajax(form, button);
 		},
 
 		/**
