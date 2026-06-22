@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
-		multilangPairInputs: document.querySelectorAll('.multilang-domain-pair input'),
-		multilangSelector: document.getElementById('multilang_domain_selector'),
-		multilangConnectButtons: document.querySelectorAll('.multilang-domain-pair .plausible-analytics-connect-button'),
+		credentialsInputs: document.querySelectorAll('.plausible-analytics-credentials input'),
+		languageDomainPulldown: document.getElementById('language_domain'),
+		connectButtons: document.querySelectorAll('.plausible-analytics-credentials .plausible-analytics-connect-button'),
 
 		/**
 		 * Bind events.
@@ -70,19 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 
-			if (this.multilangPairInputs.length > 0) {
-				for (let i = 0; i < this.multilangPairInputs.length; i++) {
-					this.multilangPairInputs[i].addEventListener('keyup', this.disableConnectButton);
+			if (this.credentialsInputs.length > 0) {
+				for (let i = 0; i < this.credentialsInputs.length; i++) {
+					this.credentialsInputs[i].addEventListener('keyup', this.disableConnectButton);
 				}
 			}
 
-			if (this.multilangSelector !== null) {
-				this.multilangSelector.addEventListener('change', this.switchMultilangDomain);
+			if (this.languageDomainPulldown !== null) {
+				this.languageDomainPulldown.addEventListener('change', this.switchLanguageDomain);
 			}
 
-			if (this.multilangConnectButtons.length > 0) {
-				for (let i = 0; i < this.multilangConnectButtons.length; i++) {
-					this.multilangConnectButtons[i].addEventListener('click', this.saveMultilangOption);
+			if (this.connectButtons.length > 0) {
+				for (let i = 0; i < this.connectButtons.length; i++) {
+					this.connectButtons[i].addEventListener('click', this.saveCredentials);
 				}
 			}
 
@@ -388,16 +388,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Switch visible multilang domain pair.
+		 * Switch Language Domain.
 		 *
 		 * @param e
 		 */
-		switchMultilangDomain: function (e) {
+		switchLanguageDomain: function (e) {
 			const selectedKey = e.target.value;
-			const pairs = document.querySelectorAll('.multilang-domain-pair');
+			const pairs = document.querySelectorAll('.plausible-analytics-credentials');
 
 			pairs.forEach(function (pair) {
-				if (pair.dataset.multilangKey === selectedKey) {
+				if (pair.dataset.languageDomainKey === selectedKey) {
 					pair.classList.remove('hidden');
 				} else {
 					pair.classList.add('hidden');
@@ -406,13 +406,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Save multilang option (Domain Name and Plugin Token pair).
+		 * Save credentials (Domain Name and Plugin Token pair).
 		 *
 		 * @param e
 		 */
-		saveMultilangOption: function (e) {
+		saveCredentials: function (e) {
 			const button = e.target.closest('button');
-			const pair = button.closest('.multilang-domain-pair');
+			const pair = button.closest('.plausible-analytics-credentials');
 			const inputs = pair.querySelectorAll('input');
 			const form = new FormData();
 			let options = [];
@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		disableConnectButton: function (e) {
 			let target = e.target;
-			let pair = target.closest('.multilang-domain-pair');
+			let pair = target.closest('.plausible-analytics-credentials');
 			let button;
 			let buttonIsHref = false;
 
@@ -578,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPIToken: function (e) {
 			e.preventDefault();
 
-			let domainElem = document.querySelector('.multilang-domain-pair:not(.hidden) [id^="domain_name"]');
+			let domainElem = document.querySelector('.plausible-analytics-credentials:not(.hidden) [id^="domain_name"]');
 			let domain = domainElem ? domainElem.value : '';
 			domain = domain.replaceAll('/', '%2F');
 

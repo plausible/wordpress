@@ -204,7 +204,7 @@ class API {
 		if ( count( $domains ) > 1 ): ?>
 			<div class="mt-4">
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="domain_name"><?php echo esc_html( $field['label'] ); ?></label>
-				<select id="multilang_domain_selector" class="plausible-analytics-text w-full max-w-sm">
+				<select id="language_domain" class="plausible-analytics-text w-full max-w-sm">
 					<?php foreach ( $domains as $index => $domain ): ?>
 						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $domain ); ?></option>
 					<?php endforeach; ?>
@@ -219,7 +219,7 @@ class API {
 			$is_connected    = ! empty( $api_token_val );
 			$i ++;
 			?>
-			<div class="multilang-domain-pair <?php echo $hidden; ?>" data-multilang-key="<?php echo esc_attr( $index ); ?>">
+			<div class="plausible-analytics-credentials <?php echo $hidden; ?>" data-language-domain-key="<?php echo esc_attr( $index ); ?>">
 				<?php
 				echo $this->render_text_field(
 					[
