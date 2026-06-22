@@ -104,8 +104,9 @@ class Page extends API {
 					),
 					'fields' => [
 						[
-							'slug' => 'domain_map',
-							'type' => 'domain_map',
+							'label' => esc_html__( 'Language Domains', 'plausible-analytics' ),
+							'slug'  => 'domain_map',
+							'type'  => 'domain_map',
 						],
 					],
 				],

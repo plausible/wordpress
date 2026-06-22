@@ -202,11 +202,14 @@ class API {
 		$i        = 0;
 
 		if ( count( $domains ) > 1 ): ?>
-			<select id="multilang_domain_selector" class="plausible-analytics-text w-full max-w-sm mt-4">
-				<?php foreach ( $domains as $index => $domain ): ?>
-					<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $domain ); ?></option>
-				<?php endforeach; ?>
-			</select>
+			<div class="mt-4">
+				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="domain_name"><?php echo esc_html( $field['label'] ); ?></label>
+				<select id="multilang_domain_selector" class="plausible-analytics-text w-full max-w-sm">
+					<?php foreach ( $domains as $index => $domain ): ?>
+						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $domain ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
 		<?php endif;
 
 		foreach ( $domains as $index => $domain ) {
