@@ -406,13 +406,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Save multilang option (Domain Name + Plugin Token pair).
+		 * Save multilang option (Domain Name and Plugin Token pair).
 		 *
 		 * @param e
 		 */
 		saveMultilangOption: function (e) {
-			e.preventDefault();
-
 			const button = e.target.closest('button');
 			const pair = button.closest('.multilang-domain-pair');
 			const inputs = pair.querySelectorAll('input');

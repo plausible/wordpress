@@ -246,7 +246,7 @@ class API {
 				$button_id     = 'connect_plausible_analytics_' . md5( $domain );
 				$disabled_attr = ( $is_connected || empty( $domain_name_val ) ) ? 'disabled' : '';
 				?>
-				<button id="<?php echo esc_attr( $button_id ); ?>" type="submit" class="<?php echo esc_attr( $button_class ); ?>" <?php echo $disabled_attr; ?>>
+				<button id="<?php echo esc_attr( $button_id ); ?>" type="button" class="<?php echo esc_attr( $button_class ); ?>" <?php echo $disabled_attr; ?>>
 					<span><?php echo esc_html( $button_label ); ?></span>
 					<svg class="animate-spin h-4 w-4 ml-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
