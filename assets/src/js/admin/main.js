@@ -401,13 +401,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		switchLanguageDomain: function (e) {
 			const selectedKey = e.target.value;
-			const pairs = document.querySelectorAll('.plausible-analytics-credentials');
+			const credentials = document.querySelectorAll('.plausible-analytics-credentials');
 
-			pairs.forEach(function (pair) {
-				if (pair.dataset.languageDomainKey === selectedKey) {
-					pair.classList.remove('hidden');
+			credentials.forEach(function (credentialsSet) {
+				if (credentialsSet.dataset.languageDomainKey === selectedKey) {
+					credentialsSet.classList.remove('hidden');
 				} else {
-					pair.classList.add('hidden');
+					credentialsSet.classList.add('hidden');
 				}
 			});
 		},
@@ -501,13 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		disableConnectButton: function (e) {
 			let target = e.target;
-			let pair = target.closest('.plausible-analytics-credentials');
+			let credentials = target.closest('.plausible-analytics-credentials');
 			let button;
 			let buttonIsHref = false;
 
-			if (pair !== null) {
-				button = pair.querySelector('.plausible-analytics-connect-button');
-				let allFilled = Array.from(pair.querySelectorAll('input')).every(input => input.value.trim() !== '');
+			if (credentials !== null) {
+				button = credentials.querySelector('.plausible-analytics-connect-button');
+				let allFilled = Array.from(credentials.querySelectorAll('input')).every(input => input.value.trim() !== '');
 
 				if (button === null) {
 					return;
