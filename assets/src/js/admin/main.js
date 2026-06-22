@@ -531,15 +531,30 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Disable Connect button if Domain Name or API Token field is empty.
+		 * Disable the Connect button if the Domain Name or API Token field is empty.
 		 *
 		 * @param e
 		 */
 		disableConnectButton: function (e) {
 			let target = e.target;
 			let pair = target.closest('.multilang-domain-pair');
-			let button = pair ? pair.querySelector('.plausible-analytics-connect-button') : document.getElementById('connect_plausible_analytics');
+			let button;
 			let buttonIsHref = false;
+
+			if (pair !== null) {
+				button = pair.querySelector('.plausible-analytics-connect-button');
+				let allFilled = Array.from(pair.querySelectorAll('input')).every(input => input.value.trim() !== '');
+
+				if (button === null) {
+					return;
+				}
+
+				button.disabled = !allFilled;
+
+				return;
+			}
+
+			button = document.getElementById('connect_plausible_analytics');
 
 			if (button === null) {
 				let slide_id = document.location.hash;
@@ -556,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					button.disabled = false;
 				} else {
 					button.classList.remove('pointer-events-none');
-					button.classList.replace('bg-gray-200', 'bg-indigo-600')
+					button.classList.replace('bg-gray-200', 'bg-indigo-600');
 				}
 
 				return;
@@ -567,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				button.innerHTML = button.innerHTML.replace('Connected', 'Connect');
 			} else {
 				button.classList += ' pointer-events-none';
-				button.classList.replace('bg-indigo-600', 'bg-gray-200')
+				button.classList.replace('bg-indigo-600', 'bg-gray-200');
 			}
 		},
 
