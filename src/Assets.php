@@ -99,7 +99,7 @@ class Assets {
 		}
 
 		/**
-		 * This is a dummy script that will allow us to attach inline scripts further down the line.
+		 * Enqueue the JS container for this domain.
 		 */
 		wp_register_script( 'plausible-analytics', $url, [], null, apply_filters( 'plausible_load_js_in_footer', false ) );
 

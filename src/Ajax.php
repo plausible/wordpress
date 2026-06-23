@@ -307,6 +307,11 @@ class Ajax {
 
 		Messages::set_success( __( 'Settings saved.', 'plausible-analytics' ) );
 
+		/**
+		 * Allow devs to perform additional actions.
+		 */
+		do_action( 'plausible_analytics_settings_saved', $settings );
+
 		if ( ! defined( 'PLAUSIBLE_CI' ) ) {
 			wp_send_json_success( null, 200 );
 		}
@@ -435,7 +440,7 @@ class Ajax {
 		/**
 		 * Allow devs to perform additional actions.
 		 */
-		do_action( 'plausible_analytics_settings_saved', $settings, $post_data['option_name'], $post_data['toggle_status'] );
+		do_action( 'plausible_analytics_settings_saved', $settings );
 
 		$option_label  = $post_data['option_label'];
 		$toggle_status = $post_data['toggle_status'] === 'on' ? __( 'enabled', 'plausible-analytics' ) : __( 'disabled', 'plausible-analytics' );

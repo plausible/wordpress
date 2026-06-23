@@ -319,7 +319,7 @@ class Helpers {
 		$client = static::get_client();
 
 		if ( $client instanceof Client ) {
-			return $client->get_tracker_id();
+			return $client->get_tracker_id( static::get_current_language_domain_key() );
 		}
 
 		return '';
