@@ -391,7 +391,10 @@ class Client {
 		 * Don't cache invalid API tokens.
 		 */
 		if ( $is_valid ) {
-			set_transient( 'plausible_analytics_valid_token', [ $token => true ], 86400 ); // @codeCoverageIgnore
+			$valid_tokens           = get_transient( 'plausible_analytics_valid_token' ) ?: [];
+			$valid_tokens[ $token ] = true;
+
+			set_transient( 'plausible_analytics_valid_token', $valid_tokens, 86400 ); // @codeCoverageIgnore
 
 			$this->update_capabilities( $token ); // @codeCoverageIgnore
 		}
@@ -400,13 +403,17 @@ class Client {
 	}
 
 	/**
-	 * Is currently stored token valid?
+	 * Is the currently stored token valid?
 	 *
 	 * @return bool
 	 */
 	public function is_api_token_valid() {
 		$token        = $this->api_instance->getConfig()->getPassword();
 		$valid_tokens = get_transient( 'plausible_analytics_valid_token' );
+
+		if ( ! is_array( $valid_tokens ) ) {
+			return false;
+		}
 
 		return isset( $valid_tokens[ $token ] ) && $valid_tokens[ $token ] === true;
 	}
@@ -418,7 +425,7 @@ class Client {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	private function get_data_domain() {
+	public function get_data_domain() {
 		$capabilities = $this->get_capabilities();
 
 		if ( $capabilities instanceof Capabilities ) {
