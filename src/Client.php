@@ -146,13 +146,25 @@ class Client {
 			WPCapabilities::STATS   => $features->getStatsApi(),
 		];
 
-		update_option( 'plausible_analytics_api_token_caps', $caps );
+		$all_caps = get_option( 'plausible_analytics_api_token_caps', [] );
+		$key      = Helpers::get_current_language_domain_key();
+
+		/**
+		 * @since v2.6.0 Normalize @var $all_caps if the plugin has been configured prior to this version.
+		 */
+		if ( ! empty( $all_caps ) && ! is_array( reset( $all_caps ) ) ) {
+			$all_caps = [ 'default' => $all_caps ];
+		}
+
+		$all_caps[ $key ] = $caps;
+
+		update_option( 'plausible_analytics_api_token_caps', $all_caps );
 
 		return $caps;
 	}
 
 	/**
-	 * Retrieve Features from Capabilities object.
+	 * Retrieve Features from the Capabilities object.
 	 *
 	 * @return false|Client\Model\CapabilitiesFeatures
 	 */
@@ -359,7 +371,6 @@ class Client {
 	 * Validates the Plugin Token (password) set in the current instance and caches the state to a transient valid for 1 day.
 	 *
 	 * @return bool
-	 * @throws ApiException
 	 */
 	public function validate_api_token() {
 		if ( $this->is_api_token_valid() ) {
