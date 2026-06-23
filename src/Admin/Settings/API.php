@@ -203,10 +203,10 @@ class API {
 
 		if ( count( $domains ) > 1 ): ?>
 			<div class="mt-4">
-				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="domain_name"><?php echo esc_html( $field['label'] ); ?></label>
+				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="language_domain"><?php echo esc_html( $field['label'] ); ?></label>
 				<select id="language_domain" class="plausible-analytics-text w-full max-w-sm mt-1">
 					<?php foreach ( $domains as $index => $domain ): ?>
-						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $domain ); ?></option>
+						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( preg_replace( '/^https?:\/\//i', '', $domain ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
