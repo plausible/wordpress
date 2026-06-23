@@ -46,7 +46,7 @@ class WooCommerce {
 	 * and creates the funnel if the conditions are met.
 	 *
 	 * @param array $old_settings The previous settings before the update.
-	 * @param array $settings The updated settings to check for enhanced measurement and WooCommerce integration.
+	 * @param array $settings     The updated settings to check for enhanced measurement and WooCommerce integration.
 	 *
 	 * @return void
 	 *
@@ -63,8 +63,8 @@ class WooCommerce {
 	}
 
 	/**
-	 * Delete all custom WooCommerce event goals if Revenue setting is disabled. The funnel is deleted when the minimum
-	 * required no. of goals is no longer met.
+	 * Delete all custom WooCommerce event goals if the Revenue setting is disabled. The funnel is deleted when the minimum
+	 * required number of goals is no longer met.
 	 *
 	 * @param $old_settings
 	 * @param $settings
