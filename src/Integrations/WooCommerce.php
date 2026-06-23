@@ -28,12 +28,12 @@ class WooCommerce {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct( $init = true ) {
-		$uri = wc_get_permalink_structure()['product_base'];
+		$uri = trim( wc_get_permalink_structure()['product_base'], '/' );
 
 		if ( is_multisite() ) {
 			$uri = get_blog_details()->path . $uri;
 		} else {
-			$uri = '/' . trim( $uri, '/' );
+			$uri = '/' . $uri;
 		}
 
 		$this->event_goals = [
