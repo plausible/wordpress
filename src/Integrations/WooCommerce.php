@@ -28,7 +28,7 @@ class WooCommerce {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct( $init = true ) {
-		$uri = wc_get_permalink_structure()['product_base'];
+		$uri = trim( wc_get_permalink_structure()['product_base'], '/' );
 
 		if ( is_multisite() ) {
 			$uri = get_blog_details()->path . $uri;
@@ -143,25 +143,6 @@ class WooCommerce {
 	}
 
 	/**
-	 * Track add to cart actions by direct link, e.g. ?product_type=download&add-to-cart=1&quantity=1
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore Because we can't test XHR here.
-	 */
-	public function track_direct_add_to_cart() {
-		if ( ! isset( $_REQUEST['add-to-cart'] ) || ! is_numeric( wp_unslash( $_REQUEST['add-to-cart'] ) ) ) {
-			return;
-		}
-
-		$product_id = absint( wp_unslash( $_REQUEST['add-to-cart'] ) );
-		$product    = wc_get_product( $product_id );
-		$quantity   = isset( $_REQUEST['quantity'] ) ? absint( wp_unslash( $_REQUEST['quantity'] ) ) : 1;
-
-		$this->track_add_to_cart( $product, [ 'id' => $product_id, 'quantity' => $quantity ] );
-	}
-
-	/**
 	 * Track regular (i.e., interactivity API) add to cart events.
 	 *
 	 * @param WC_Product $product          General information about the product added to cart.
@@ -224,6 +205,25 @@ class WooCommerce {
 	 */
 	protected function get_wc_cart() {
 		return WC()->cart;
+	}
+
+	/**
+	 * Track add to cart actions by direct link, e.g. ?product_type=download&add-to-cart=1&quantity=1
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore Because we can't test XHR here.
+	 */
+	public function track_direct_add_to_cart() {
+		if ( ! isset( $_REQUEST['add-to-cart'] ) || ! is_numeric( wp_unslash( $_REQUEST['add-to-cart'] ) ) ) {
+			return;
+		}
+
+		$product_id = absint( wp_unslash( $_REQUEST['add-to-cart'] ) );
+		$product    = wc_get_product( $product_id );
+		$quantity   = isset( $_REQUEST['quantity'] ) ? absint( wp_unslash( $_REQUEST['quantity'] ) ) : 1;
+
+		$this->track_add_to_cart( $product, [ 'id' => $product_id, 'quantity' => $quantity ] );
 	}
 
 	/**
