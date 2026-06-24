@@ -357,12 +357,12 @@ class Provisioning {
 	/**
 	 * Wrapper for @see self::maybe_provision_on_connect() which fires exclusively on fresh installations.
 	 *
-	 * @param $_option_name
-	 * @param $settings
+	 * @param mixed $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 *
 	 * @return void
 	 */
-	public function maybe_provision_on_new_connect( $_option_name, $settings ) {
+	public function maybe_provision_on_new_connect( $_, $settings ) {
 		$this->maybe_provision_on_connect( [], $settings );
 	}
 
@@ -375,7 +375,7 @@ class Provisioning {
 	 * @return void
 	 */
 	public function maybe_provision_on_connect( $old_settings, $settings ) {
-		$old_tokens = is_array( $old_settings['api_token'] ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ];
+		$old_tokens = is_array( $old_settings['api_token'] ?? null ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ?? '' ];
 		$new_tokens = is_array( $settings['api_token'] ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ];
 
 		$changed_keys = [];
@@ -390,9 +390,7 @@ class Provisioning {
 			return;
 		}
 
-		// Refresh the client cache since a new token was just saved.
 		$this->get_clients( true );
-
 		$this->maybe_create_goals( $old_settings, $settings );
 		$this->maybe_create_custom_properties( $old_settings, $settings );
 		$this->update_tracker_script_config( $old_settings, $settings );
@@ -488,6 +486,7 @@ class Provisioning {
 
 		$create_request = new Client\Model\GoalCreateRequestBulkGetOrCreate();
 		$create_request->setGoals( $goals );
+
 		$response = $client->create_goals( $create_request );
 
 		if ( $response->valid() ) {
@@ -588,9 +587,12 @@ class Provisioning {
 	/**
 	 * Updates the tracker script config based on the enabled enhanced measurements.
 	 *
-	 * @return array The updated tracker script config.
+	 * @param mixed $_        Not used (old settings)
+	 * @param array $settings Current settings
+	 *
+	 * @return void
 	 */
-	public function update_tracker_script_config( $old_settings, $settings ) {
+	public function update_tracker_script_config( $_, $settings ) {
 		$config = [
 			'file_downloads'     => false,
 			'form_submissions'   => false,
@@ -615,13 +617,12 @@ class Provisioning {
 			$config['outbound_links'] = true;
 		}
 
-		$config  = [ 'tracker_script_configuration' => $config ];
-		$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+		$config = [ 'tracker_script_configuration' => $config ];
 
 		foreach ( $this->get_clients() as $client ) {
+			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+
 			$client->update_tracker_script_configuration( $request );
 		}
-
-		return $config;
 	}
 }
