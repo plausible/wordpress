@@ -396,10 +396,81 @@ class Provisioning {
 			return;
 		}
 
+		/** Make sure all API client objects are present. */
 		$this->get_clients( true );
+		$this->reset_tracker_script_config();
+		$this->update_tracker_script_config( $old_settings, $settings );
 		$this->maybe_create_goals( $old_settings, $settings );
 		$this->maybe_create_custom_properties( $old_settings, $settings );
-		$this->update_tracker_script_config( $old_settings, $settings );
+	}
+
+	/**
+	 * When dealing with a fresh install or Language Domain, we need to reset the tracker script config.
+	 * Otherwise, the required goals aren't created.
+	 *
+	 * @return void
+	 */
+	function reset_tracker_script_config() {
+		$reset_config = [
+			'tracker_script_configuration' => [
+				'file_downloads'     => false,
+				'form_submissions'   => false,
+				'hash_based_routing' => false,
+				'installation_type'  => 'wordpress',
+				'outbound_links'     => false,
+			],
+		];
+
+		foreach ( $this->get_clients() as $client ) {
+			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $reset_config );
+
+			$client->update_tracker_script_configuration( $request );
+		}
+	}
+
+	/**
+	 * Updates the tracker script config based on the enabled enhanced measurements.
+	 *
+	 * @param mixed $_        Not used (old settings)
+	 * @param array $settings Current settings
+	 *
+	 * @return array Updated tracker script config.
+	 */
+	public function update_tracker_script_config( $_, $settings ) {
+		$config = [
+			'file_downloads'     => false,
+			'form_submissions'   => false,
+			'hash_based_routing' => false,
+			'installation_type'  => 'wordpress',
+			'outbound_links'     => false,
+		];
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
+			$config['file_downloads'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
+			$config['form_submissions'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
+			$config['hash_based_routing'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
+			$config['outbound_links'] = true;
+		}
+
+		$config = [ 'tracker_script_configuration' => $config ];
+
+		foreach ( $this->get_clients() as $client ) {
+			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+
+			$client->update_tracker_script_configuration( $request );
+		}
+
+		/** Required for unit tests. */
+		return $config;
 	}
 
 	/**
@@ -588,50 +659,5 @@ class Provisioning {
 
 			$client->enable_custom_property( $create_request );
 		}
-	}
-
-	/**
-	 * Updates the tracker script config based on the enabled enhanced measurements.
-	 *
-	 * @param mixed $_        Not used (old settings)
-	 * @param array $settings Current settings
-	 *
-	 * @return array Updated tracker script config.
-	 */
-	public function update_tracker_script_config( $_, $settings ) {
-		$config = [
-			'file_downloads'     => false,
-			'form_submissions'   => false,
-			'hash_based_routing' => false,
-			'installation_type'  => 'wordpress',
-			'outbound_links'     => false,
-		];
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
-			$config['file_downloads'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
-			$config['form_submissions'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
-			$config['hash_based_routing'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
-			$config['outbound_links'] = true;
-		}
-
-		$config = [ 'tracker_script_configuration' => $config ];
-
-		foreach ( $this->get_clients() as $client ) {
-			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
-
-			$client->update_tracker_script_configuration( $request );
-		}
-
-		/** Required for unit tests. */
-		return $config;
 	}
 }
