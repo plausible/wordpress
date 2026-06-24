@@ -131,11 +131,14 @@ class Provisioning {
 				continue;
 			}
 
+			$filter_name = 'plausible_analytics_current_language_domain_key';
+			$priority    = 10 + count( $clients ); // Unique priority per iteration.
+
 			$filter = function () use ( $key ) {
 				return $key;
 			};
 
-			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
+			add_filter( $filter_name, $filter, $priority );
 
 			$client = ( new ClientFactory() )->build();
 
@@ -143,7 +146,7 @@ class Provisioning {
 				$clients[ $key ] = $client;
 			}
 
-			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
+			remove_filter( $filter_name, $filter, $priority );
 		}
 
 		return $clients;
@@ -184,7 +187,7 @@ class Provisioning {
 	 * @return void
 	 * @codeCoverageIgnore Because this method should be mocked in tests if needed.
 	 */
-	public function create_funnel( $name, $steps, $client = null, $key = 'default' ) {
+	public function create_funnel( $name, $steps, $client = null, $key = 'default', $all_ids = null ) {
 		$create_request = new Client\Model\FunnelCreateRequest(
 			[
 				'funnel' => [
@@ -198,15 +201,18 @@ class Provisioning {
 			$client = $this->client;
 		}
 
+		if ( $all_ids === null ) {
+			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+		}
+
 		$funnel = $client->create_funnel( $create_request );
 
 		if ( ! $funnel instanceof Client\Model\Funnel || ! $funnel->valid() ) {
-			return;
+			return $all_ids;
 		}
 
-		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
-		$ids     = $all_ids[ $key ] ?? [];
-		$steps   = $funnel->getFunnel()->getSteps();
+		$ids   = $all_ids[ $key ] ?? [];
+		$steps = $funnel->getFunnel()->getSteps();
 
 		foreach ( $steps as $step ) {
 			$goal = $step->getGoal();
@@ -220,6 +226,8 @@ class Provisioning {
 			$all_ids[ $key ] = $ids;
 			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 		}
+
+		return $all_ids;
 	}
 
 	/**
@@ -406,9 +414,13 @@ class Provisioning {
 			$goals[] = $this->create_goal_request( $this->custom_event_goals[ $measurement ] );
 		}
 
+		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+
 		foreach ( $this->get_clients() as $key => $client ) {
-			$this->create_goals( $goals, $client, $key );
+			$all_ids = $this->create_goals( $goals, $client, $key, $all_ids );
 		}
+
+		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 	}
 
 	/**
@@ -451,15 +463,19 @@ class Provisioning {
 	 *
 	 * @param array $goals
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function create_goals( $goals, $client = null, $key = 'default' ) {
+	public function create_goals( $goals, $client = null, $key = 'default', $all_ids = null ) {
 		if ( empty( $goals ) ) {
-			return; // @codeCoverageIgnore
+			return $all_ids ?? [];
 		}
 
 		if ( ! $client ) {
 			$client = $this->client;
+		}
+
+		if ( $all_ids === null ) {
+			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
 		}
 
 		$create_request = new Client\Model\GoalCreateRequestBulkGetOrCreate();
@@ -467,9 +483,8 @@ class Provisioning {
 		$response = $client->create_goals( $create_request );
 
 		if ( $response->valid() ) {
-			$goals   = $response->getGoals();
-			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
-			$ids     = $all_ids[ $key ] ?? [];
+			$goals = $response->getGoals();
+			$ids   = $all_ids[ $key ] ?? [];
 
 			foreach ( $goals as $goal ) {
 				$goal                  = $goal->getGoal();
@@ -478,9 +493,11 @@ class Provisioning {
 
 			if ( ! empty( $ids ) ) {
 				$all_ids[ $key ] = $ids;
-				update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+				/** IDs are stored in the DB after the loop. @see self::maybe_create_goals() */
 			}
 		}
+
+		return $all_ids;
 	}
 
 	/**

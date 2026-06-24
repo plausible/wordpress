@@ -31,15 +31,15 @@ class Client {
 	private $api_instance;
 
 	/**
-	 * Setup basic authorization, basic_auth.
+	 * Set up basic authorization, basic_auth.
 	 *
 	 * @param string $token Allows specifying the token, e.g., when it's not stored in the DB yet.
 	 */
 	public function __construct( $token = '' ) {
-		$config             = Configuration::getDefaultConfiguration()
-		                                   ->setUsername( 'WordPress' )
-		                                   ->setPassword( $token )
-		                                   ->setHost( Helpers::get_hosted_domain_url() );
+		$config = new Configuration();
+		$config->setUsername( 'WordPress' )
+		       ->setPassword( $token )
+		       ->setHost( Helpers::get_hosted_domain_url() );
 		$timeout            = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
 		$connect_timeout    = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
 		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] ), $config );

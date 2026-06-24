@@ -56,12 +56,20 @@ class Integrations {
 	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	public function create_integration_funnel( $event_goals, $funnel_name ) {
-		$goals = [];
+		$goals   = [];
+		$all_ids = $this->provisioning->normalize_option(
+			get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] )
+		);
 
 		foreach ( $event_goals as $event_key => $event_goal ) {
 			if ( $event_key === 'remove-from-cart' ) {
 				foreach ( $this->provisioning->get_clients() as $key => $client ) {
-					$this->provisioning->create_goals( [ $this->provisioning->create_goal_request( $event_goal ) ], $client, $key );
+					$all_ids = $this->provisioning->create_goals(
+						[ $this->provisioning->create_goal_request( $event_goal ) ],
+						$client,
+						$key,
+						$all_ids
+					);
 				}
 
 				continue;
@@ -85,7 +93,7 @@ class Integrations {
 		}
 
 		foreach ( $this->provisioning->get_clients() as $key => $client ) {
-			$this->provisioning->create_funnel( $funnel_name, $goals, $client, $key );
+			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
 		}
 	}
 
