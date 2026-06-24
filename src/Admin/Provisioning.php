@@ -71,7 +71,6 @@ class Provisioning {
 	 *
 	 * @param bool|Client $client Allows for mocking during CI.
 	 *
-	 * @throws ApiException
 	 * @codeCoverageIgnore
 	 */
 	public function __construct( $client = null ) {
@@ -96,6 +95,9 @@ class Provisioning {
 	 * @codeCoverageIgnore
 	 */
 	private function init() {
+		/** This hook should always be registered because it handles the case where no clients are yet registered. */
+		add_action( 'add_option_plausible_analytics_settings', [ $this, 'maybe_provision_on_new_connect' ], 10, 2 );
+
 		if ( empty( $this->get_clients() ) ) {
 			return; // @codeCoverageIgnore
 		}
@@ -341,6 +343,18 @@ class Provisioning {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Wrapper for @see self::maybe_provision_on_connect() which fires exclusively on fresh installations.
+	 *
+	 * @param $_option_name
+	 * @param $settings
+	 *
+	 * @return void
+	 */
+	public function maybe_provision_on_new_connect( $_option_name, $settings ) {
+		$this->maybe_provision_on_connect( [], $settings );
 	}
 
 	/**
