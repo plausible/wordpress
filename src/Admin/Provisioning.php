@@ -590,7 +590,7 @@ class Provisioning {
 	 * @param mixed $_        Not used (old settings)
 	 * @param array $settings Current settings
 	 *
-	 * @return void
+	 * @return array Updated tracker script config.
 	 */
 	public function update_tracker_script_config( $_, $settings ) {
 		$config = [
@@ -624,5 +624,8 @@ class Provisioning {
 
 			$client->update_tracker_script_configuration( $request );
 		}
+
+		/** Required for unit tests. */
+		return $config;
 	}
 }
