@@ -171,6 +171,7 @@ class Provisioning {
 	 * @param array  $haystack
 	 *
 	 * @return false|mixed
+	 *
 	 * @codeCoverageIgnore Because it can't be unit tested.
 	 */
 	public function array_search_contains( $string, $haystack ) {
@@ -272,10 +273,10 @@ class Provisioning {
 	/**
 	 * Create the shared link when the Enable Analytics Dashboard option is enabled.
 	 *
-	 * @param $old_settings
-	 * @param $settings
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 */
-	public function maybe_create_shared_link( $old_settings, $settings ) {
+	public function maybe_create_shared_link( $_, $settings ) {
 		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 			return; // @codeCoverageIgnore
 		}
@@ -399,10 +400,10 @@ class Provisioning {
 	/**
 	 * Create Custom Event Goals for enabled Enhanced Measurements.
 	 *
-	 * @param $old_settings
-	 * @param $settings
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 */
-	public function maybe_create_goals( $old_settings, $settings ) {
+	public function maybe_create_goals( $_, $settings ) {
 		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
 
 		if ( empty( $enhanced_measurements ) ) {
@@ -508,13 +509,13 @@ class Provisioning {
 	}
 
 	/**
-	 * @param array $old_settings
-	 * @param array $settings
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 *
 	 * @return void
 	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
 	 */
-	public function maybe_create_custom_properties( $old_settings, $settings ) {
+	public function maybe_create_custom_properties( $_, $settings ) {
 		$enhanced_measurements = $settings['enhanced_measurements'];
 
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
