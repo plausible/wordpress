@@ -10,7 +10,6 @@ namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Capabilities;
 use Plausible\Analytics\WP\Client;
-use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageview;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestRevenue;
@@ -39,20 +38,21 @@ class Provisioning {
 	];
 
 	/**
+	 * @var bool
+	 */
+	private static $is_fresh_install = false;
+	/**
 	 * @var Client $client
 	 */
 	public $client;
-
 	/**
 	 * @var Client[]|null $clients_cache
 	 */
 	private $clients_cache = null;
-
 	/**
 	 * @var string[] $custom_event_goals
 	 */
 	private $custom_event_goals = [];
-
 	/**
 	 * @var string[] $custom_pageview_properties
 	 */
@@ -61,7 +61,6 @@ class Provisioning {
 		'category',
 		'user_logged_in',
 	];
-
 	/**
 	 * @var string[] $custom_search_properties
 	 */
@@ -100,8 +99,8 @@ class Provisioning {
 	 * @codeCoverageIgnore
 	 */
 	private function init() {
-		/** This hook should always be registered because it handles the case where no clients are yet registered. */
-		add_action( 'add_option_plausible_analytics_settings', [ $this, 'maybe_provision_on_new_connect' ], 10, 2 );
+		/** This hook should always be registered because it handles fresh installs. */
+		add_action( 'add_option_plausible_analytics_settings', [ $this, 'provision_on_connect' ], 10, 2 );
 
 		if ( empty( $this->get_clients() ) ) {
 			return; // @codeCoverageIgnore
@@ -363,8 +362,10 @@ class Provisioning {
 	 *
 	 * @return void
 	 */
-	public function maybe_provision_on_new_connect( $_, $settings ) {
+	public function provision_on_connect( $_, $settings ) {
 		$this->maybe_provision_on_connect( [], $settings );
+
+		self::$is_fresh_install = true;
 	}
 
 	/**
@@ -376,6 +377,10 @@ class Provisioning {
 	 * @return void
 	 */
 	public function maybe_provision_on_connect( $old_settings, $settings ) {
+		if ( self::$is_fresh_install ) {
+			return;
+		}
+
 		$old_tokens = is_array( $old_settings['api_token'] ?? null ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ?? '' ];
 		$new_tokens = is_array( $settings['api_token'] ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ];
 
