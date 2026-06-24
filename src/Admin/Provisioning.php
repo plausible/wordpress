@@ -44,6 +44,11 @@ class Provisioning {
 	public $client;
 
 	/**
+	 * @var Client[]|null $clients_cache
+	 */
+	private $clients_cache = null;
+
+	/**
 	 * @var string[] $custom_event_goals
 	 */
 	private $custom_event_goals = [];
@@ -113,17 +118,24 @@ class Provisioning {
 
 	/**
 	 * Get an array of [ $key => Client ] for every configured domain with a non-empty API token.
+	 *
+	 * @param bool $force_refresh
+	 *
 	 * @return Client[]
 	 */
-	public function get_clients() {
+	public function get_clients( $force_refresh = false ) {
+		if ( $this->clients_cache !== null && ! $force_refresh ) {
+			return $this->clients_cache;
+		}
+
 		if ( $this->client instanceof Client ) {
-			return [ 'default' => $this->client ];
+			return $this->clients_cache = [ 'default' => $this->client ];
 		}
 
 		$settings = Helpers::get_settings();
 
 		if ( empty( $settings['api_token'] ) || ! is_array( $settings['api_token'] ) ) {
-			return [];
+			return $this->clients_cache = [];
 		}
 
 		$clients = [];
@@ -133,14 +145,11 @@ class Provisioning {
 				continue;
 			}
 
-			$filter_name = 'plausible_analytics_current_language_domain_key';
-			$priority    = 10 + count( $clients ); // Unique priority per iteration.
-
 			$filter = function () use ( $key ) {
 				return $key;
 			};
 
-			add_filter( $filter_name, $filter, $priority );
+			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
 
 			$client = ( new ClientFactory() )->build();
 
@@ -148,10 +157,10 @@ class Provisioning {
 				$clients[ $key ] = $client;
 			}
 
-			remove_filter( $filter_name, $filter, $priority );
+			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
 		}
 
-		return $clients;
+		return $this->clients_cache = $clients;
 	}
 
 	/**
@@ -369,7 +378,6 @@ class Provisioning {
 		$old_tokens = is_array( $old_settings['api_token'] ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ];
 		$new_tokens = is_array( $settings['api_token'] ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ];
 
-		// Find keys where a token was newly added or changed.
 		$changed_keys = [];
 
 		foreach ( $new_tokens as $key => $token ) {
@@ -382,26 +390,12 @@ class Provisioning {
 			return;
 		}
 
-		// Run full provisioning for the newly connected domains only.
-		foreach ( $changed_keys as $key ) {
-			$filter = function () use ( $key ) {
-				return $key;
-			};
+		// Refresh the client cache since a new token was just saved.
+		$this->get_clients( true );
 
-			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
-
-			$client = ( new ClientFactory() )->build();
-
-			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
-
-			if ( ! $client instanceof Client || ! $client->validate_api_token() ) {
-				continue;
-			}
-
-			$this->maybe_create_goals( $old_settings, $settings );
-			$this->maybe_create_custom_properties( $old_settings, $settings );
-			$this->update_tracker_script_config( $old_settings, $settings );
-		}
+		$this->maybe_create_goals( $old_settings, $settings );
+		$this->maybe_create_custom_properties( $old_settings, $settings );
+		$this->update_tracker_script_config( $old_settings, $settings );
 	}
 
 	/**
