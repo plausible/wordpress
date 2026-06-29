@@ -38,6 +38,7 @@ class Ajax {
 		add_action( 'wp_ajax_plausible_analytics_toggle_option', [ $this, 'toggle_option' ] );
 		add_action( 'wp_ajax_plausible_analytics_save_options', [ $this, 'save_options' ] );
 		add_action( 'wp_ajax_plausible_analytics_bulk_toggle', [ $this, 'bulk_toggle_options' ] );
+		add_action( 'wp_ajax_plausible_analytics_dismiss_multilang_notice', [ $this, 'dismiss_multilang_notice' ] );
 	}
 
 	public function bulk_toggle_options() {
@@ -128,6 +129,21 @@ class Ajax {
 
 		// If the variable is not an array or a scalar value, return the variable unchanged.
 		return $var;
+	}
+
+	/**
+	 * Dismiss Multilang Notice
+	 *
+	 * @return void
+	 */
+	public function dismiss_multilang_notice() {
+		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $_REQUEST['_nonce'], 'plausible_analytics_dismiss_multilang_notice' ) < 1 ) {
+			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
+		}
+
+		update_user_meta( get_current_user_id(), 'plausible_analytics_multilang_notice_dismissed', true );
+
+		wp_send_json_success();
 	}
 
 	/**

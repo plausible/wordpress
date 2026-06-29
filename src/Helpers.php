@@ -381,6 +381,21 @@ class Helpers {
 	}
 
 	/**
+	 * Get the name of the active multilang plugin.
+	 *
+	 * @return string
+	 */
+	public static function get_multilang_plugin_name() {
+		$name = '';
+
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$name = 'WPML';
+		}
+
+		return apply_filters( 'plausible_analytics_multilang_plugin_name', $name );
+	}
+
+	/**
 	 * Get user role for the logged-in user.
 	 *
 	 * @since  1.3.0

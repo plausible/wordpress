@@ -22,6 +22,7 @@ class Actions {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'admin_init', [ $this, 'maybe_redirect_to_wizard' ] );
+		add_action( 'admin_notices', [ $this, 'show_unconfigured_multilang_domains_notice' ] );
 	}
 
 	/**
@@ -79,10 +80,66 @@ class Actions {
 			[ 'in_footer' => true ]
 		);
 
-		wp_localize_script( 'plausible-admin', 'plausible_analytics_i18n', [ 'connected' => __( 'Connected', 'plausible-analytics' ), 'connect' => __( 'Connect', 'plausible-analytics' ) ] );
+		wp_localize_script(
+			'plausible-admin',
+			'plausible_analytics_i18n',
+			[
+				'connected' => __( 'Connected', 'plausible-analytics' ),
+				'connect'   => __( 'Connect', 'plausible-analytics' ),
+				'nonce'     => wp_create_nonce( 'plausible_analytics_dismiss_multilang_notice' ),
+			]
+		);
 
 		wp_enqueue_script( 'plausible-admin' );
 
-		wp_add_inline_script( 'plausible-admin', 'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";' );
+		wp_add_inline_script(
+			'plausible-admin',
+			'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";
+			jQuery(document).on("click", ".plausible-analytics-multilang-notice .notice-dismiss", function() {
+				jQuery.post(ajaxurl, {
+					action: "plausible_analytics_dismiss_multilang_notice",
+					_nonce: plausible_analytics_i18n.nonce
+				});
+			});'
+		);
+	}
+
+	/**
+	 * Show a notice when multilang domain-per-language mode is active.
+	 *
+	 * @return void
+	 */
+	public function show_unconfigured_multilang_domains_notice() {
+		if ( ! Helpers::is_multilang_mode() ) {
+			return;
+		}
+
+		$multilang_plugin = Helpers::get_multilang_plugin_name();
+
+		if ( empty( $multilang_plugin ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( get_user_meta( get_current_user_id(), 'plausible_analytics_multilang_notice_dismissed', true ) ) {
+			return;
+		}
+
+		$settings_url = admin_url( 'options-general.php?page=plausible_analytics' );
+		?>
+		<div class="notice notice-info is-dismissible plausible-analytics-multilang-notice">
+			<p>
+				<?php printf(
+				/* translators: 1: Multilang plugin name (e.g. WPML), 2: URL to settings page. */
+					__( 'Plausible Analytics now supports %1$s\'s different domains per language! You can connect each language domain to its own Plausible site in the <a href="%2$s">plugin settings</a>. Note: tracking multiple domains may require upgrading your Plausible subscription.', 'plausible-analytics' ),
+					$multilang_plugin,
+					$settings_url
+				); ?>
+			</p>
+		</div>
+		<?php
 	}
 }
