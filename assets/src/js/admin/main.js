@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			let domainElem = document.querySelector('.plausible-analytics-credentials:not(.hidden) [id^="domain_name"]');
 
 			if (domainElem === null) {
-				domainElem = document.querySelector('[id^="domain_name"]');
+				domainElem = document.querySelector('input[id^="domain_name"]');
 			}
 
 			let domain = domainElem ? domainElem.value : '';
