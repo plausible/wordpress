@@ -57,13 +57,27 @@ class Actions {
 	 * Register Assets.
 	 *
 	 * @since  v1.0.0
-	 * @since  v2.6.0 Only load assets on Plausible Analytics related pages.
+	 * @since  v2.6.0 Notice.js is loaded on all Admin-pages. All other assets are only loaded on Plausible Analytics related pages.
 	 *
-	 *
-	 * @access public
 	 * @return void
 	 */
 	public function register_assets( $current_page ) {
+		wp_enqueue_script(
+			'plausible-admin-notice',
+			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin-notice.js',
+			[],
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin-notice.js' ),
+			[ 'in_footer' => true ]
+		);
+
+		wp_localize_script(
+			'plausible-admin-notice',
+			'plausible_analytics_notice',
+			[
+				'nonce' => wp_create_nonce( 'plausible_analytics_dismiss_multilang_notice' ),
+			]
+		);
+
 		if ( $current_page !== 'settings_page_plausible_analytics' && $current_page !== 'dashboard_page_plausible_analytics_statistics' ) {
 			return;
 		}
@@ -73,7 +87,6 @@ class Actions {
 			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css',
 			'',
 			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ),
-			'all'
 		);
 
 		wp_register_script(
@@ -90,7 +103,6 @@ class Actions {
 			[
 				'connected' => __( 'Connected', 'plausible-analytics' ),
 				'connect'   => __( 'Connect', 'plausible-analytics' ),
-				'nonce'     => wp_create_nonce( 'plausible_analytics_dismiss_multilang_notice' ),
 			]
 		);
 
