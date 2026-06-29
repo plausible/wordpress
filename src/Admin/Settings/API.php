@@ -640,6 +640,18 @@ class API {
 									</header>
 									<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 										<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
+										<?php if ( $id === 'domain_name' && Helpers::is_multilang_mode() ) : ?>
+											<?php $multilang_plugin_name = apply_filters( 'plausible_analytics_multilang_plugin_name', 'WPML' ); ?>
+											<div class="plausible-analytics-hook success persist mt-4">
+												<?php printf(
+													esc_html__(
+														"You're using %s with different domains per language. You can map your other language domains to Plausible after completing this wizard in the plugin settings.",
+														'plausible-analytics'
+													),
+													$multilang_plugin_name
+												); ?>
+											</div>
+										<?php endif; ?>
 									</div>
 									<div class="plausible-analytics-wizard-step-section">
 										<?php
@@ -849,6 +861,10 @@ class API {
 	 * @return array|mixed
 	 */
 	private function get_wizard_option_properties( $slug ) {
+		if ( ! empty( $this->wizard_fields ) && array_key_exists( $slug, $this->wizard_fields ) ) {
+			return $this->wizard_fields[ $slug ];
+		}
+
 		foreach ( $this->fields['general'] as $group ) {
 			if ( $group['slug'] === $slug ) {
 				return $group;

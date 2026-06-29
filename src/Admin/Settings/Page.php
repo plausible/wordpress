@@ -62,6 +62,11 @@ class Page extends API {
 	public $fields = [];
 
 	/**
+	 * @var array $wizard_fields
+	 */
+	public $wizard_fields = [];
+
+	/**
 	 * @var ClientFactory $client_factory
 	 */
 	private $client_factory;
@@ -485,6 +490,33 @@ class Page extends API {
 		if ( ! empty( Helpers::get_api_token() ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
 			$this->fields['general'][3]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
 		}
+
+		$this->wizard_fields = [
+			'domain_name'                 => [
+				'label' => esc_html__( 'Domain name', 'plausible-analytics' ),
+				'slug'  => 'domain_name[default]',
+				'type'  => 'text',
+				'value' => Helpers::get_domain(),
+			],
+			'api_token'                   => [
+				'label' => sprintf(
+					'%s - <a class="hover:cursor-pointer underline plausible-create-api-token">%s</a>',
+					esc_html__( 'Plugin Token', 'plausible-analytics' ),
+					__( 'Create Token', 'plausible-analytics' )
+				),
+				'slug'  => 'api_token[default]',
+				'type'  => 'text',
+				'value' => Helpers::get_api_token(),
+			],
+			'connect_plausible_analytics' => [
+				'label'    => empty( Helpers::get_domain() ) || empty( Helpers::get_api_token() )
+					? esc_html__( 'Connect', 'plausible-analytics' )
+					: esc_html__( 'Connected', 'plausible-analytics' ),
+				'slug'     => 'connect_plausible_analytics',
+				'type'     => 'button',
+				'disabled' => empty( Helpers::get_domain() ) || empty( Helpers::get_api_token() ),
+			],
+		];
 	}
 
 	/**

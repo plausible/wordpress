@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('_nonce', plausible.nonce);
 
 			let spinner = button.querySelector('svg');
-			
+
 			if (spinner) {
 				spinner.classList.remove('hidden');
 			}
@@ -557,6 +557,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.preventDefault();
 
 			let domainElem = document.querySelector('.plausible-analytics-credentials:not(.hidden) [id^="domain_name"]');
+
+			if (domainElem === null) {
+				domainElem = document.querySelector('[id^="domain_name"]');
+			}
+
 			let domain = domainElem ? domainElem.value : '';
 			domain = domain.replaceAll('/', '%2F');
 
