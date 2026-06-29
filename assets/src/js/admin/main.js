@@ -4,10 +4,6 @@
  * Admin JS
  */
 document.addEventListener('DOMContentLoaded', () => {
-	if (!document.location.href.includes('plausible_analytics')) {
-		return;
-	}
-
 	let plausible = {
 		/**
 		 * Properties
@@ -21,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		credentialsInputs: document.querySelectorAll('.plausible-analytics-credentials input'),
 		languageDomainPulldown: document.getElementById('language_domain'),
 		connectButtons: document.querySelectorAll('.plausible-analytics-credentials .plausible-analytics-connect-button'),
+		multilangNotice: document.querySelector('.plausible-analytics-multilang-notice .notice-dismiss'),
 
 		/**
 		 * Bind events.
@@ -86,10 +83,28 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 
+			if (this.multilangNotice !== null) {
+				this.multilangNotice.addEventListener('click', this.dissmissNotice);
+			}
+
 			/**
 			 * Run once on pageload.
 			 */
 			this.showMessages();
+		},
+
+		/**
+		 * Dismiss a WordPress core notice.
+		 *
+		 * @returns {Promise<void>}
+		 */
+		dissmissNotice: async function () {
+			let form = new FormData();
+
+			form.append('action', 'plausible_analytics_dismiss_multilang_notice');
+			form.append('_nonce', plausible_analytics_i18n.nonce);
+
+			await plausible.ajax(form);
 		},
 
 		/**

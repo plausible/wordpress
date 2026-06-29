@@ -56,21 +56,25 @@ class Actions {
 	/**
 	 * Register Assets.
 	 *
-	 * @since  1.0.0
-	 * @since  1.3.0 Don't load CSS admin-wide. JS needs to load admin-wide, since we're throwing admin-wide, dismissable notices.
+	 * @since  v1.0.0
+	 * @since  v2.6.0 Only load assets on Plausible Analytics related pages.
+	 *
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function register_assets( $current_page ) {
-		if ( $current_page === 'settings_page_plausible_analytics' || $current_page === 'dashboard_page_plausible_analytics_statistics' ) {
-			wp_enqueue_style(
-				'plausible-admin',
-				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css',
-				'',
-				filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ),
-				'all'
-			);
+		if ( $current_page !== 'settings_page_plausible_analytics' && $current_page !== 'dashboard_page_plausible_analytics_statistics' ) {
+			return;
 		}
+
+		wp_enqueue_style(
+			'plausible-admin',
+			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css',
+			'',
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ),
+			'all'
+		);
 
 		wp_register_script(
 			'plausible-admin',
@@ -91,17 +95,6 @@ class Actions {
 		);
 
 		wp_enqueue_script( 'plausible-admin' );
-
-		wp_add_inline_script(
-			'plausible-admin',
-			'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";
-			jQuery(document).on("click", ".plausible-analytics-multilang-notice .notice-dismiss", function() {
-				jQuery.post(ajaxurl, {
-					action: "plausible_analytics_dismiss_multilang_notice",
-					_nonce: plausible_analytics_i18n.nonce
-				});
-			});'
-		);
 	}
 
 	/**
