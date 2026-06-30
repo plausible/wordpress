@@ -678,9 +678,7 @@ class API {
 												<?php $disabled = false;
 
 												if ( $id === 'api_token' ) {
-													$settings = Helpers::get_settings();
-
-													if ( empty( $settings[ $id ] ) ) {
+													if ( empty( Helpers::get_api_token() ) ) {
 														$disabled = true;
 													}
 												} ?>
