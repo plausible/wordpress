@@ -370,7 +370,7 @@ class Helpers {
 	 */
 	public static function get_language_domains() {
 		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
-		$main    = home_url();
+		$main    = wp_parse_url( home_url(), PHP_URL_HOST ) ?: home_url();
 
 		// WPML's language_domains omits the default language; prepend the main WP domain.
 		if ( ! in_array( $main, $domains, true ) ) {
