@@ -461,7 +461,8 @@ class Page extends API {
 		}
 
 		/**
-		 * If proxy is enabled, or self-hosted domain has a value, display warning box.
+		 * If the proxy is enabled, or the self-hosted domain option has a value, display a warning box.
+		 *
 		 * @see self::proxy_warning()
 		 */
 		if ( Helpers::proxy_enabled() || ! empty( $settings['self_hosted_domain'] ) ) {
@@ -485,7 +486,7 @@ class Page extends API {
 		}
 
 		/**
-		 * If View Stats is enabled, display notice.
+		 * If View Stats is enabled, display a notice.
 		 */
 		if ( ! empty( Helpers::get_api_token() ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
 			$this->fields['general'][3]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
