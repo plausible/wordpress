@@ -73,10 +73,10 @@ class Cron {
 			$remote = Helpers::get_js_url();
 			$local  = Helpers::get_js_path();
 
-			if ( $remote && $local ) {
-				if ( ! $this->download_file( $remote, $local ) ) {
-					$success = false;
-				}
+			if ( ! $remote || ! $local ) {
+				$success = false;
+			} elseif ( ! $this->download_file( $remote, $local ) ) {
+				$success = false;
 			}
 
 			remove_filter( 'plausible_analytics_current_language_domain_key', $force_key );
