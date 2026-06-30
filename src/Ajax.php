@@ -283,8 +283,13 @@ class Ajax {
 					/**
 					 * Multilingual plugin compatibility.
 					 */
-					$posted_domain       = isset( $posted_values['domain_name'] ) ? $this->clean( $posted_values['domain_name'] ) : '';
-					$language_domain_key = $posted_keys['domain_name'] ?? 'default';
+					$language_domain_key = $posted_keys['api_token'] ?? 'default';
+					$posted_domain       = $settings['domain_name'][ $language_domain_key ] ?? '';
+
+					if ( isset( $posted_keys['domain_name'], $posted_values['domain_name'] ) && $posted_keys['domain_name'] === $language_domain_key ) {
+						$posted_domain = $this->clean( $posted_values['domain_name'] );
+					}
+
 					// 1. Force get_current_multilang_key() to return the key we're saving for.
 					$force_key = function () use ( $language_domain_key ) {
 						return $language_domain_key;
