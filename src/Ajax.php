@@ -177,7 +177,7 @@ class Ajax {
 	}
 
 	/**
-	 * Mark the wizard as finished, so it won't appear again, and optionally redirect.
+	 * Mark the wizard as finished, so it won't appear again and optionally redirect.
 	 *
 	 * @return void
 	 */
