@@ -227,16 +227,16 @@ class ProvisioningTest extends TestCase {
 
 		// Flat format (legacy)
 		$legacy_goals = [ 123 => 'Goal Name' ];
-		$normalized   = $this->callMethod( $provisioning, 'normalize_per_domain_option', [ $legacy_goals ] );
+		$normalized   = $this->callMethod( $provisioning, 'normalize_option', [ $legacy_goals ] );
 		$this->assertEquals( [ 'default' => $legacy_goals ], $normalized );
 
 		$legacy_caps = [ 'goals' => true, 'stats' => false ];
-		$normalized  = $this->callMethod( $provisioning, 'normalize_per_domain_option', [ $legacy_caps ] );
+		$normalized  = $this->callMethod( $provisioning, 'normalize_option', [ $legacy_caps ] );
 		$this->assertEquals( [ 'default' => $legacy_caps ], $normalized );
 
 		// New format
 		$new_format = [ 'default' => [ 123 => 'Goal Name' ], 'fr' => [ 456 => 'Goal FR' ] ];
-		$normalized = $this->callMethod( $provisioning, 'normalize_per_domain_option', [ $new_format ] );
+		$normalized = $this->callMethod( $provisioning, 'normalize_option', [ $new_format ] );
 		$this->assertEquals( $new_format, $normalized );
 	}
 
