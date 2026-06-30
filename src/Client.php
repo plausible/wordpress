@@ -391,7 +391,12 @@ class Client {
 		 * Don't cache invalid API tokens.
 		 */
 		if ( $is_valid ) {
-			$valid_tokens           = get_transient( 'plausible_analytics_valid_token' ) ?: [];
+			$valid_tokens = get_transient( 'plausible_analytics_valid_token' );
+
+			if ( ! is_array( $valid_tokens ) ) {
+				$valid_tokens = [];
+			}
+
 			$valid_tokens[ $token ] = true;
 
 			set_transient( 'plausible_analytics_valid_token', $valid_tokens, 86400 ); // @codeCoverageIgnore
