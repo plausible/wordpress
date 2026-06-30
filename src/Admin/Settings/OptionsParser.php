@@ -36,16 +36,18 @@ class OptionsParser {
 					$posted_keys[ $array_name ]   = $key;
 				}
 
-				// Seed from settings or existing rebuilt.
+				$is_numeric_key = ctype_digit( $key );
+
+				// Merge associative keys but rebuild numeric lists from the submitted payload.
 				if ( ! isset( $rebuilt[ $array_name ] ) ) {
 					$current_array = $settings[ $array_name ] ?? [];
 					if ( ! is_array( $current_array ) ) {
 						$current_array = [];
 					}
-					$rebuilt[ $array_name ] = $current_array;
+					$rebuilt[ $array_name ] = $is_numeric_key ? [] : $current_array;
 				}
 
-				if ( ctype_digit( $key ) ) {
+				if ( $is_numeric_key ) {
 					$rebuilt[ $array_name ][] = $value;
 				} else {
 					$rebuilt[ $array_name ][ $key ] = $value;
