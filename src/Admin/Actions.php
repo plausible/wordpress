@@ -139,7 +139,7 @@ class Actions {
 			<p>
 				<?php printf(
 				/* translators: 1: Multilang plugin name (e.g. WPML), 2: URL to settings page. */
-					__( 'Plausible Analytics now supports %1$s\'s different domains per language! You can connect each language domain to its own Plausible site in the <a href="%2$s">plugin settings</a>. Note: tracking multiple domains may require upgrading your Plausible subscription.', 'plausible-analytics' ),
+					__( 'Plausible Analytics now supports %1$s! You can now connect each domain in WPML to its own Plausible Analytics dashboard in the <a href="%2$s">plugin settings</a>.', 'plausible-analytics' ),
 					$multilang_plugin,
 					$settings_url
 				); ?>
