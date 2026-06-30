@@ -17,7 +17,7 @@ class TestableHelpers extends Helpers {
 	 */
 	protected static function get_client() {
 		return new class extends Client {
-			public function get_tracker_id() {
+			public function get_tracker_id( $key = 'default' ) {
 				return 'pa-test-tracker-id';
 			}
 		};

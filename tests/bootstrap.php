@@ -34,5 +34,17 @@ function _manually_load_plugin() {
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
+/**
+ * The function the_block_template_skip_link() is deprecated since WP 6.4.0.
+ * It is still hooked to wp_footer in wp-includes/default-filters.php, which causes a deprecation warning.
+ * We unhook it here to prevent the warning.
+ */
+tests_add_filter(
+	'init',
+	function () {
+		remove_action( 'wp_footer', 'the_block_template_skip_link' );
+	}
+);
+
 // Start up the WP testing environment.
 require "{$_tests_dir}/includes/bootstrap.php";
