@@ -141,7 +141,7 @@ class Ajax {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
-		update_user_meta( get_current_user_id(), 'plausible_analytics_multilang_notice_dismissed', true );
+		update_option( 'plausible_analytics_multilang_notice_dismissed', true, false );
 
 		wp_send_json_success();
 	}

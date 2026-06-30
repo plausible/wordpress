@@ -107,6 +107,8 @@ class Actions {
 		);
 
 		wp_enqueue_script( 'plausible-admin' );
+
+		wp_add_inline_script( 'plausible-admin', 'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";' );
 	}
 
 	/**
@@ -129,7 +131,7 @@ class Actions {
 			return;
 		}
 
-		if ( get_user_meta( get_current_user_id(), 'plausible_analytics_multilang_notice_dismissed', true ) ) {
+		if ( get_option( 'plausible_analytics_multilang_notice_dismissed' ) ) {
 			return;
 		}
 
