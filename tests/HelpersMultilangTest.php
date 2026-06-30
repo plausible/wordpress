@@ -97,7 +97,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Functions\expect( 'home_url' )->andReturn( 'http://example.org' );
 
 		// Mock WPML not active
-		$this->assertFalse( Helpers::is_multilang_mode() );
+		$this->assertFalse( Helpers::is_language_per_domain_mode() );
 
 		// Mock WPML active, but wrong negotiation type
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
@@ -111,7 +111,7 @@ class HelpersMultilangTest extends TestCase {
 			->with( [], 'language_domains' )
 			->andReturn( [ 'en' => 'english.dev.local' ] );
 
-		$this->assertFalse( Helpers::is_multilang_mode() );
+		$this->assertFalse( Helpers::is_language_per_domain_mode() );
 
 		// Mock WPML active, correct negotiation type, but no domains
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
@@ -120,7 +120,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
 			->with( [], 'language_domains' )
 			->andReturn( [] );
-		$this->assertFalse( Helpers::is_multilang_mode() );
+		$this->assertFalse( Helpers::is_language_per_domain_mode() );
 
 		// Mock WPML active, correct negotiation type, and domains
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
@@ -129,7 +129,7 @@ class HelpersMultilangTest extends TestCase {
 		\Brain\Monkey\Filters\expectApplied( 'wpml_setting' )
 			->with( [], 'language_domains' )
 			->andReturn( [ 'en' => 'english.dev.local', 'nl' => 'dutch.dev.local' ] );
-		$this->assertTrue( Helpers::is_multilang_mode() );
+		$this->assertTrue( Helpers::is_language_per_domain_mode() );
 	}
 
 	protected function setUp(): void {

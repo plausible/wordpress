@@ -640,7 +640,7 @@ class API {
 									</header>
 									<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 										<?php echo wp_kses_post( $this->slides_description[ $id ] ); ?>
-										<?php if ( $id === 'domain_name' && Helpers::is_multilang_mode() ) : ?>
+										<?php if ( $id === 'domain_name' && Helpers::is_language_per_domain_mode() ) : ?>
 											<?php $multilang_plugin_name = Helpers::get_multilang_plugin_name(); ?>
 											<div class="plausible-analytics-hook success persist mt-4">
 												<?php printf(

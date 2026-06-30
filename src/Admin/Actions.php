@@ -115,7 +115,7 @@ class Actions {
 	 * @return void
 	 */
 	public function show_unconfigured_multilang_domains_notice() {
-		if ( ! Helpers::is_multilang_mode() ) {
+		if ( ! Helpers::is_language_per_domain_mode() ) {
 			return;
 		}
 

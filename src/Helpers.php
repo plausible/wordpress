@@ -83,7 +83,7 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_current_language_domain_key() {
-		if ( ! static::is_multilang_mode() ) {
+		if ( ! static::is_language_per_domain_mode() ) {
 			return 'default';
 		}
 
@@ -104,29 +104,29 @@ class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_multilang_mode() {
-		static $is_multilang;
+	public static function is_language_per_domain_mode() {
+		static $is_language_per_domain;
 
 		if ( defined( 'PLAUSIBLE_CI' ) && PLAUSIBLE_CI ) {
-			$is_multilang = null;
+			$is_language_per_domain = null;
 		}
 
-		if ( $is_multilang !== null ) {
-			return $is_multilang;
+		if ( $is_language_per_domain !== null ) {
+			return $is_language_per_domain;
 		}
 
 		/**
-		 * If WPML is not active, we can assume we're not in multilang mode.
+		 * If WPML is not active, we can assume we're not in language per domain mode.
 		 */
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
-			return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_mode', false );
+			return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', false );
 		}
 
 		$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
 		$domains          = apply_filters( 'wpml_setting', [], 'language_domains' );
 		$value            = $negotiation_type === 2 && ! empty( $domains );
 
-		return $is_multilang = (bool) apply_filters( 'plausible_analytics_is_multilang_mode', $value );
+		return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', $value );
 	}
 
 	/**
