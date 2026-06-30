@@ -197,22 +197,23 @@ class API {
 	 * @return void
 	 */
 	public function render_domain_map_field( array $field ) {
-		$settings = Helpers::get_settings();
-		$domains  = Helpers::get_language_domains();
-		$i        = 0;
+		$settings         = Helpers::get_settings();
+		$language_domains = Helpers::get_language_domains();
+		$domain_names     = $settings['domain_name'] ?? [];
+		$i                = 0;
 
-		if ( count( $domains ) > 1 ): ?>
+		if ( count( $language_domains ) > 1 ): ?>
 			<div class="mt-4">
 				<label class="block text-sm font-medium leading-5 !text-gray-700 !dark:text-gray-300" for="language_domain"><?php echo esc_html( $field['label'] ); ?></label>
 				<select id="language_domain" class="plausible-analytics-text w-full max-w-sm mt-1">
-					<?php foreach ( $domains as $index => $domain ): ?>
+					<?php foreach ( $language_domains as $index => $domain ): ?>
 						<option value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( preg_replace( '/^https?:\/\//i', '', $domain ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
 		<?php endif;
 
-		foreach ( $domains as $index => $domain ) {
+		foreach ( $language_domains as $index => $domain ) {
 			$hidden          = $i === 0 ? '' : 'hidden';
 			$domain_name_val = ! empty( $domain_names[ $index ] ) ? $domain_names[ $index ] : preg_replace( '/^https?:\/\/(www\.)?/i', '', $domain );
 			$api_token_val   = $settings['api_token'][ $index ] ?? '';
