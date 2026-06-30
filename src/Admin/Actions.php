@@ -135,11 +135,11 @@ class Actions {
 
 		$settings_url = admin_url( 'options-general.php?page=plausible_analytics' );
 		?>
-		<div class="notice notice-info is-dismissible plausible-analytics-multilang-notice">
+		<div id="message" class="notice notice-info is-dismissible plausible-analytics-multilang-notice">
 			<p>
 				<?php printf(
 				/* translators: 1: Multilang plugin name (e.g. WPML), 2: URL to settings page. */
-					__( 'Plausible Analytics now supports %1$s! You can now connect each domain in WPML to its own Plausible Analytics dashboard in the <a href="%2$s">plugin settings</a>.', 'plausible-analytics' ),
+					__( 'Plausible Analytics now supports %1$s! Connect each domain in %1$s to its own Plausible Analytics dashboard on the <a href="%2$s">settings screen</a>.', 'plausible-analytics' ),
 					$multilang_plugin,
 					$settings_url
 				); ?>
