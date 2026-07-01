@@ -49,7 +49,7 @@ class Helpers {
 			'query_params'               => [],
 			'proxy_enabled'              => '',
 			'enable_analytics_dashboard' => '',
-			'shared_link'                => '',
+			'shared_link'                => [ 'default' => '' ],
 			'excluded_pages'             => '',
 			'tracked_user_roles'         => [],
 			'expand_dashboard_access'    => [],
@@ -70,6 +70,10 @@ class Helpers {
 
 		if ( ! is_array( $settings['api_token'] ) ) {
 			$settings['api_token'] = [ 'default' => $settings['api_token'] ];
+		}
+
+		if ( ! is_array( $settings['shared_link'] ) ) {
+			$settings['shared_link'] = [ 'default' => $settings['shared_link'] ];
 		}
 
 		return apply_filters( 'plausible_analytics_settings', $settings );
@@ -425,9 +429,14 @@ class Helpers {
 	 *
 	 * @return void
 	 */
-	public static function update_setting( $option_name, $option_value ) {
-		$settings                 = static::get_settings();
-		$settings[ $option_name ] = $option_value;
+	public static function update_setting( $option_name, $option_value, $key = '' ) {
+		$settings = static::get_settings();
+
+		if ( ! empty( $key ) && is_array( $settings[ $option_name ] ) ) {
+			$settings[ $option_name ][ $key ] = $option_value;
+		} else {
+			$settings[ $option_name ] = $option_value;
+		}
 
 		update_option( 'plausible_analytics_settings', $settings );
 	}

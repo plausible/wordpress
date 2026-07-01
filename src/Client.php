@@ -216,7 +216,7 @@ class Client {
 	 *
 	 * @return void
 	 */
-	public function create_shared_link() {
+	public function create_shared_link( $key = 'default' ) {
 		$shared_link = (object) [];
 		$result      = (object) [];
 
@@ -234,7 +234,7 @@ class Client {
 		}
 
 		if ( ! empty( $shared_link->getHref() ) ) {
-			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
+			Helpers::update_setting( 'shared_link', $shared_link->getHref(), $key );
 		}
 	}
 

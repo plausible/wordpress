@@ -280,8 +280,8 @@ class Provisioning {
 			return; // @codeCoverageIgnore
 		}
 
-		foreach ( $this->get_clients() as $client ) {
-			$client->create_shared_link();
+		foreach ( $this->get_clients() as $key => $client ) {
+			$client->create_shared_link( $key );
 		}
 	}
 
