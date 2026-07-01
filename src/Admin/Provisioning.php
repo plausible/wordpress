@@ -412,7 +412,6 @@ class Provisioning {
 
 		/** Make sure all API client objects are present. */
 		$this->get_clients( true );
-//		$this->reset_tracker_script_config();
 		$this->update_tracker_script_config( $old_settings, $settings );
 		$this->maybe_create_goals( $old_settings, $settings );
 		$this->maybe_create_custom_properties( $old_settings, $settings );
@@ -654,30 +653,6 @@ class Provisioning {
 			$create_request->setCustomProps( $domain_properties );
 
 			$client->enable_custom_property( $create_request );
-		}
-	}
-
-	/**
-	 * When dealing with a fresh install or Language Domain, we need to reset the tracker script config.
-	 * Otherwise, the required goals aren't created.
-	 *
-	 * @return void
-	 */
-	function reset_tracker_script_config() {
-		$reset_config = [
-			'tracker_script_configuration' => [
-				'file_downloads'     => false,
-				'form_submissions'   => false,
-				'hash_based_routing' => false,
-				'installation_type'  => 'wordpress',
-				'outbound_links'     => false,
-			],
-		];
-
-		foreach ( $this->get_clients() as $client ) {
-			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $reset_config );
-
-			$client->update_tracker_script_configuration( $request );
 		}
 	}
 }
