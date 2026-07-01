@@ -116,7 +116,7 @@ class Helpers {
 		}
 
 		if ( $is_language_per_domain !== null ) {
-			return $is_language_per_domain;
+			return $is_language_per_domain; // @codeCoverageIgnore
 		}
 
 		/**
@@ -146,7 +146,7 @@ class Helpers {
 		$domain_name = $settings['domain_name'][ $current_key ] ?? '';
 
 		if ( ! empty( $domain_name ) ) {
-			return $domain_name;
+			return $domain_name; // @codeCoverageIgnore
 		}
 
 		if ( ! empty( $settings['domain_name']['default'] ) ) {

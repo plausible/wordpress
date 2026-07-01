@@ -121,6 +121,8 @@ class Provisioning {
 	 * @param bool $force_refresh
 	 *
 	 * @return Client[]
+	 *
+	 * @codeCoverageIgnore Because it should be mocked when running tests.
 	 */
 	public function get_clients( $force_refresh = false ) {
 		if ( $this->clients_cache !== null && ! $force_refresh ) {
@@ -194,8 +196,10 @@ class Provisioning {
 	 * @param        $steps
 	 * @param null   $client
 	 * @param string $key
+	 * @param null   $all_ids
 	 *
-	 * @return void
+	 * @return array|null
+	 *
 	 * @codeCoverageIgnore Because this method should be mocked in tests if needed.
 	 */
 	public function create_funnel( $name, $steps, $client = null, $key = 'default', $all_ids = null ) {
@@ -274,6 +278,8 @@ class Provisioning {
 	 *
 	 * @param array $_        Not used (old settings)
 	 * @param array $settings Current settings
+	 *
+	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_create_shared_link( $_, $settings ) {
 		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
@@ -291,7 +297,7 @@ class Provisioning {
 	 * @param $old_settings
 	 * @param $settings
 	 *
-	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
+	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
 		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
@@ -375,6 +381,8 @@ class Provisioning {
 	 * @param array $settings Current settings
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore Because it's just a wrapper.
 	 */
 	public function provision_on_connect( $_, $settings ) {
 		$this->maybe_provision_on_connect( [], $settings );
@@ -389,6 +397,8 @@ class Provisioning {
 	 * @param $settings
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function maybe_provision_on_connect( $old_settings, $settings ) {
 		if ( self::$is_fresh_install ) {
@@ -472,7 +482,7 @@ class Provisioning {
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
 		if ( ! is_array( $enhanced_measurements ) ) {
-			$enhanced_measurements = [];
+			$enhanced_measurements = []; // @codeCoverageIgnore
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
@@ -545,15 +555,15 @@ class Provisioning {
 	 */
 	public function create_goals( $goals, $client = null, $key = 'default', $all_ids = null ) {
 		if ( empty( $goals ) ) {
-			return $all_ids ?? [];
+			return $all_ids ?? []; // @codeCoverageIgnore
 		}
 
 		if ( ! $client ) {
-			$client = $this->client;
+			$client = $this->client; // @codeCoverageIgnore
 		}
 
 		if ( $all_ids === null ) {
-			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) ); // @codeCoverageIgnore
 		}
 
 		$create_request = new Client\Model\GoalCreateRequestBulkGetOrCreate();

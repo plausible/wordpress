@@ -103,6 +103,8 @@ class Integrations {
 	 * @param object $integration The integration object containing event goals to be deleted.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	public function delete_integration_goals( $integration ) {
 		$all_ids = $this->provisioning->normalize_option(
