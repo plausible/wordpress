@@ -80,7 +80,7 @@ class Actions {
 		if ( ! $wizard_done ) {
 			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome_slide' );
 
-			wp_redirect( $url );
+			wp_safe_redirect( $url );
 
 			exit;
 		}
