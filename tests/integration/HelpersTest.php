@@ -12,48 +12,6 @@ use Plausible\Analytics\WP\Helpers;
 
 class HelpersTest extends TestCase {
 	/**
-	 * @see Helpers::get_js_url()
-	 */
-	public function testGetJsUrl() {
-		$url = TestableHelpers::get_js_url();
-
-		$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', $url );
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-
-			$url = TestableHelpers::get_js_url( true );
-
-			$this->assertMatchesRegularExpression( '~http://example.org/wp-content/uploads/.*?/.*?.js~', $url );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
-		}
-
-		try {
-			add_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
-
-			$url = TestableHelpers::get_js_url();
-
-			$this->assertEquals( 'https://self-hosted-test.org/js/pa-test-tracker-id.js', $url );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
-		}
-	}
-
-	/**
-	 * Enable Self Hosted domain.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableSelfHostedDomain( $settings ) {
-		$settings['self_hosted_domain'] = 'self-hosted-test.org';
-
-		return $settings;
-	}
-
-	/**
 	 * Enable excluded pages option.
 	 *
 	 * @param $settings
@@ -93,95 +51,34 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
-	 * @return void
-	 * @see Helpers::get_settings()
+	 * Enable Self Hosted domain.
 	 *
+	 * @param $settings
+	 *
+	 * @return mixed
 	 */
-	public function testGetPostSettings() {
-		$_POST['action']  = 'plausible_analytics_save_options';
-		$_POST['options'] = wp_json_encode( [ [ 'name' => 'post_test', 'value' => 'post_test' ] ] );
+	public function enableSelfHostedDomain( $settings ) {
+		$settings['self_hosted_domain'] = 'self-hosted-test.org';
 
-		$settings = Helpers::get_settings();
-
-		$this->assertArrayNotHasKey( 'post_test', $settings );
+		return $settings;
 	}
 
 	/**
-	 * @return void
-	 * @throws Exception
-	 * @see Helpers::get_proxy_resource()
+	 * Set domain.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
 	 */
-	public function testGetProxyResource() {
-		$namespace = Helpers::get_proxy_resource( 'namespace' );
+	public function setDomain( $settings ) {
+		$settings['domain_name'] = [ 'default' => 'test.dev' ];
 
-		$this->assertMatchesRegularExpression( '/[a-z0-9]{6}/', $namespace );
-
-		$base = Helpers::get_proxy_resource( 'base' );
-
-		$this->assertMatchesRegularExpression( '/[a-z0-9]{4}/', $base );
-
-		$endpoint = Helpers::get_proxy_resource( 'endpoint' );
-
-		$this->assertMatchesRegularExpression( '/[a-z0-9]{8}/', $endpoint );
-
-		$cache_dir  = Helpers::get_proxy_resource( 'cache_dir' );
-		$upload_dir = wp_get_upload_dir()['basedir'];
-
-		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/~", $cache_dir );
-		$this->assertTrue( is_dir( $cache_dir ) );
-
-		$cache_url  = Helpers::get_proxy_resource( 'cache_url' );
-		$upload_url = wp_get_upload_dir()['baseurl'];
-
-		$this->assertMatchesRegularExpression( "~$upload_url/[a-z0-9]{10}/~", $cache_url );
+		return $settings;
 	}
 
 	/**
-	 * @return void
-	 * @see Helpers::update_setting()
-	 */
-	public function testUpdateSetting() {
-		Helpers::update_setting( 'test', true );
-
-		$this->assertTrue( Helpers::get_settings()['test'] );
-	}
-
-	/**
-	 * @return void
-	 * @throws Exception
-	 * @see Helpers::get_js_path()
-	 */
-	public function testGetJsPath() {
-		$path       = TestableHelpers::get_js_path();
-		$upload_dir = wp_get_upload_dir()['basedir'];
-
-		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/pa-test-tracker-id.js~", $path );
-	}
-
-	/**
-	 * @return void
-	 * @see Helpers::get_domain()
-	 */
-	public function testGetDomain() {
-		try {
-			delete_option( 'plausible_analytics_settings' );
-			$domain = Helpers::get_domain();
-
-			$this->assertEquals( 'example.org', $domain );
-
-			add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
-
-			$domain = Helpers::get_domain();
-
-			$this->assertEquals( 'test.dev', $domain );
-		} finally {
-			remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
-		}
-	}
-
-	/**
-	 * @return void
 	 * @see Helpers::get_endpoint_url()
+	 * @return void
 	 */
 	public function testGetDataApiUrl() {
 		delete_option( 'plausible_analytics_settings' );
@@ -210,9 +107,115 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
+	 * @see Helpers::get_domain()
+	 * @return void
+	 */
+	public function testGetDomain() {
+		try {
+			update_option( 'plausible_analytics_settings', [ 'domain_name' => [ 'default' => 'example.org' ] ] );
+			$domain = Helpers::get_domain();
+
+			$this->assertEquals( 'example.org', $domain );
+
+			add_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
+
+			$domain = Helpers::get_domain();
+
+			$this->assertEquals( 'test.dev', $domain );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'setDomain' ] );
+		}
+	}
+
+	/**
+	 * @see Helpers::get_js_path()
 	 * @return void
 	 * @throws Exception
+	 */
+	public function testGetJsPath() {
+		$path       = TestableHelpers::get_js_path();
+		$upload_dir = wp_get_upload_dir()['basedir'];
+
+		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/pa-test-tracker-id.js~", $path );
+	}
+
+	/**
+	 * @see Helpers::get_js_url()
+	 */
+	public function testGetJsUrl() {
+		$url = TestableHelpers::get_js_url();
+
+		$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', $url );
+
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+
+			$url = TestableHelpers::get_js_url( true );
+
+			$this->assertMatchesRegularExpression( '~http://example.org/wp-content/uploads/.*?/.*?.js~', $url );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+		}
+
+		try {
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
+
+			$url = TestableHelpers::get_js_url();
+
+			$this->assertEquals( 'https://self-hosted-test.org/js/pa-test-tracker-id.js', $url );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSelfHostedDomain' ] );
+		}
+	}
+
+	/**
+	 * @see Helpers::get_settings()
+	 *
+	 * @return void
+	 */
+	public function testGetPostSettings() {
+		$_POST['action']  = 'plausible_analytics_save_options';
+		$_POST['options'] = wp_json_encode( [ [ 'name' => 'post_test', 'value' => 'post_test' ] ] );
+
+		$settings = Helpers::get_settings();
+
+		$this->assertArrayNotHasKey( 'post_test', $settings );
+	}
+
+	/**
+	 * @see Helpers::get_proxy_resource()
+	 * @return void
+	 * @throws Exception
+	 */
+	public function testGetProxyResource() {
+		$namespace = Helpers::get_proxy_resource( 'namespace' );
+
+		$this->assertMatchesRegularExpression( '/[a-z0-9]{6}/', $namespace );
+
+		$base = Helpers::get_proxy_resource( 'base' );
+
+		$this->assertMatchesRegularExpression( '/[a-z0-9]{4}/', $base );
+
+		$endpoint = Helpers::get_proxy_resource( 'endpoint' );
+
+		$this->assertMatchesRegularExpression( '/[a-z0-9]{8}/', $endpoint );
+
+		$cache_dir  = Helpers::get_proxy_resource( 'cache_dir' );
+		$upload_dir = wp_get_upload_dir()['basedir'];
+
+		$this->assertMatchesRegularExpression( "~$upload_dir/[a-z0-9]{10}/~", $cache_dir );
+		$this->assertTrue( is_dir( $cache_dir ) );
+
+		$cache_url  = Helpers::get_proxy_resource( 'cache_url' );
+		$upload_url = wp_get_upload_dir()['baseurl'];
+
+		$this->assertMatchesRegularExpression( "~$upload_url/[a-z0-9]{10}/~", $cache_url );
+	}
+
+	/**
 	 * @see Helpers::get_rest_endpoint()
+	 * @return void
+	 * @throws Exception
 	 */
 	public function testGetRestEndpoint() {
 		$endpoint = Helpers::get_rest_endpoint( false );
@@ -222,5 +225,15 @@ class HelpersTest extends TestCase {
 		$endpoint = Helpers::get_rest_endpoint();
 
 		$this->assertMatchesRegularExpression( '~http://example.org/index.php\?rest_route=/[0-9a-z]{6}/v1/[0-9a-z]{4}/[0-9a-z]{8}~', $endpoint );
+	}
+
+	/**
+	 * @see Helpers::update_setting()
+	 * @return void
+	 */
+	public function testUpdateSetting() {
+		Helpers::update_setting( 'test', true );
+
+		$this->assertTrue( Helpers::get_settings()['test'] );
 	}
 }

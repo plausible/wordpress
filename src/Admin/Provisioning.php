@@ -294,9 +294,23 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
-		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
-		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
-		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements_old ) ) {
+			$enhanced_measurements_old = [];
+		}
+
+		$enhanced_measurements_old = array_filter( $enhanced_measurements_old );
+
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
+		}
+
+		$enhanced_measurements = array_filter( $enhanced_measurements );
+
+		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
 			return;
@@ -456,7 +470,13 @@ class Provisioning {
 	 * @param array $settings Current settings
 	 */
 	public function maybe_create_goals( $_, $settings ) {
-		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
+		}
+
+		$enhanced_measurements = array_filter( $enhanced_measurements );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -542,7 +562,7 @@ class Provisioning {
 
 		$response = $client->create_goals( $create_request );
 
-		if ( $response->valid() ) {
+		if ( $response && $response->valid() ) {
 			$goals = $response->getGoals();
 			$ids   = $all_ids[ $key ] ?? [];
 

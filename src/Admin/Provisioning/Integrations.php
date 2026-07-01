@@ -121,7 +121,11 @@ class Integrations {
 				}
 			}
 
-			$all_ids[ $domain_key ] = $goals;
+			if ( empty( $goals ) ) {
+				unset( $all_ids[ $domain_key ] );
+			} else {
+				$all_ids[ $domain_key ] = $goals;
+			}
 		}
 
 		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
