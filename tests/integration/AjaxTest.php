@@ -43,6 +43,25 @@ class AjaxTest extends TestCase {
 	}
 
 	/**
+	 * Test save_options with invalid JSON.
+	 */
+	public function testSaveOptionsInvalidJson() {
+		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
+		$_POST['options'] = 'invalid-json';
+
+		// wp_send_json_error will be called, which we expect.
+		// In a real WP environment it would exit.
+		try {
+			$this->ajax->save_options();
+		} catch ( \Exception $e ) {
+		}
+
+		// Verify that settings were NOT updated to something weird.
+		$settings = Helpers::get_settings();
+		$this->assertNotEquals( 'invalid-json', $settings['domain_name']['default'] );
+	}
+
+	/**
 	 * Test save_options with normal JSON data.
 	 */
 	public function testSaveOptionsSuccess() {
@@ -62,7 +81,7 @@ class AjaxTest extends TestCase {
 		}
 
 		$settings = Helpers::get_settings();
-		$this->assertEquals( 'example.com', $settings['domain_name'] );
+		$this->assertEquals( 'example.com', $settings['domain_name']['default'] );
 		$this->assertEquals( 'on', $settings['proxy_enabled'] );
 	}
 
@@ -87,25 +106,6 @@ class AjaxTest extends TestCase {
 		}
 
 		$settings = Helpers::get_settings();
-		$this->assertEquals( 'escaped.com', $settings['domain_name'] );
-	}
-
-	/**
-	 * Test save_options with invalid JSON.
-	 */
-	public function testSaveOptionsInvalidJson() {
-		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
-		$_POST['options'] = 'invalid-json';
-
-		// wp_send_json_error will be called, which we expect.
-		// In a real WP environment it would exit.
-		try {
-			$this->ajax->save_options();
-		} catch ( \Exception $e ) {
-		}
-
-		// Verify that settings were NOT updated to something weird.
-		$settings = Helpers::get_settings();
-		$this->assertNotEquals( 'invalid-json', $settings['domain_name'] );
+		$this->assertEquals( 'escaped.com', $settings['domain_name']['default'] );
 	}
 }

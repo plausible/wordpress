@@ -349,7 +349,7 @@ class Provisioning {
 	 * @return array
 	 */
 	public function maybe_enable_customer_user_roles( $settings ) {
-		$enhanced_measurements = $settings['enhanced_measurements'];
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
 			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings['tracked_user_roles'] ) ) {
