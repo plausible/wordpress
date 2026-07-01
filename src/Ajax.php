@@ -137,7 +137,9 @@ class Ajax {
 	 * @return void
 	 */
 	public function dismiss_multilang_notice() {
-		if ( ! current_user_can( 'manage_options' ) || wp_verify_nonce( $_REQUEST['_nonce'], 'plausible_analytics_dismiss_multilang_notice' ) < 1 ) {
+		$request_data = $this->clean( $_REQUEST );
+
+		if ( ! current_user_can( 'manage_options' ) || empty( $request_data['_nonce'] ) || wp_verify_nonce( $request_data['_nonce'], 'plausible_analytics_dismiss_multilang_notice' ) < 1 ) {
 			wp_send_json_error( __( 'Not allowed.', 'plausible-analytics' ), 403 );
 		}
 
