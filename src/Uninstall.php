@@ -62,7 +62,7 @@ class Uninstall {
 		$file_path = WP_CONTENT_DIR . '/mu-plugins/plausible-proxy-speed-module.php';
 
 		if ( file_exists( $file_path ) ) {
-			unlink( $file_path );
+			wp_delete_file( $file_path );
 		}
 	}
 }

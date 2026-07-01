@@ -128,7 +128,7 @@ class Module {
 		$file_path = WP_CONTENT_DIR . '/mu-plugins/plausible-proxy-speed-module.php';
 
 		if ( file_exists( $file_path ) ) {
-			unlink( $file_path );
+			wp_delete_file( $file_path );
 		}
 
 		if ( get_option( 'plausible_analytics_created_mu_plugins_dir' ) && $this->dir_is_empty( WPMU_PLUGIN_DIR ) ) {
@@ -142,7 +142,7 @@ class Module {
 		$js_file   = $this->get_filename();
 
 		if ( file_exists( $cache_dir . $js_file . '.js' ) ) {
-			unlink( $cache_dir . $js_file . '.js' ); // @codeCoverageIgnore
+			wp_delete_file( $cache_dir . $js_file . '.js' ); // @codeCoverageIgnore
 		}
 
 		if ( $this->dir_is_empty( $cache_dir ) ) {

@@ -90,7 +90,7 @@ class Cron {
 		 * Some servers don't do a full overwrite if file already exists, so we delete it first.
 		 */
 		if ( file_exists( $local_file ) ) {
-			unlink( $local_file );
+			wp_delete_file( $local_file );
 		}
 
 		$write = file_put_contents( $local_file, wp_remote_retrieve_body( $file_contents ) );

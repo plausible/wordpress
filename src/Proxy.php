@@ -136,8 +136,8 @@ class Proxy {
 	 */
 	public function generate_event_url() {
 		$url            = '';
-		$parts          = parse_url( $_SERVER[ 'REQUEST_URI' ] );
-		$home_url_parts = parse_url( get_home_url() );
+		$parts          = wp_parse_url( $_SERVER[ 'REQUEST_URI' ] );
+		$home_url_parts = wp_parse_url( get_home_url() );
 
 		if ( isset( $home_url_parts[ 'scheme' ] ) && isset( $home_url_parts[ 'host' ] ) && isset( $parts[ 'path' ] ) ) {
 			$url = $home_url_parts[ 'scheme' ] . '://' . $home_url_parts [ 'host' ] . $parts[ 'path' ];
