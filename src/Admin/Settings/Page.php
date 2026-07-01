@@ -480,7 +480,7 @@ class Page extends API {
 		/**
 		 * No Plugin Token is entered.
 		 */
-		if ( empty( Helpers::get_api_token() ) ) {
+		if ( empty( Helpers::get_settings()['api_token'][ Helpers::get_current_language_domain_key() ] ) ) {
 			$this->fields['general'][0]['fields'][] = self::API_TOKEN_MISSING_HOOK;
 			$this->fields['general'][3]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
 		}
@@ -488,7 +488,7 @@ class Page extends API {
 		/**
 		 * If View Stats is enabled, display a notice.
 		 */
-		if ( ! empty( Helpers::get_api_token() ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
+		if ( ! empty( Helpers::get_settings()['api_token'][ Helpers::get_current_language_domain_key() ] ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
 			$this->fields['general'][3]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
 		}
 
@@ -658,8 +658,9 @@ class Page extends API {
 		global $current_user;
 
 		$settings          = Helpers::get_settings();
+		$current_key       = Helpers::get_current_language_domain_key();
 		$analytics_enabled = $settings['enable_analytics_dashboard'];
-		$shared_link       = $settings['shared_link'] ?: '';
+		$shared_link       = $settings['shared_link'][ $current_key ] ?? $settings['shared_link']['default'] ?? '';
 		$self_hosted       = ! empty( $settings ['self_hosted_domain'] );
 
 		if ( $self_hosted ) {
