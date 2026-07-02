@@ -406,7 +406,7 @@ class Provisioning {
 		}
 
 		$old_tokens = is_array( $old_settings['api_token'] ?? null ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ?? '' ];
-		$new_tokens = is_array( $settings['api_token'] ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ];
+		$new_tokens = is_array( $settings['api_token'] ?? null ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ?? '' ];
 
 		$changed_keys = [];
 
@@ -603,7 +603,11 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
 	 */
 	public function maybe_create_custom_properties( $_, $settings ) {
-		$enhanced_measurements = $settings['enhanced_measurements'];
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
+		}
 
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
