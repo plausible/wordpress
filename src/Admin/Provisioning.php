@@ -436,6 +436,12 @@ class Provisioning {
 	 * @return array Updated tracker script config.
 	 */
 	public function update_tracker_script_config( $_, $settings ) {
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
+		}
+
 		$config = [
 			'file_downloads'     => false,
 			'form_submissions'   => false,
@@ -444,19 +450,19 @@ class Provisioning {
 			'outbound_links'     => false,
 		];
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $enhanced_measurements ) ) {
 			$config['file_downloads'] = true;
 		}
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $enhanced_measurements ) ) {
 			$config['form_submissions'] = true;
 		}
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $enhanced_measurements ) ) {
 			$config['hash_based_routing'] = true;
 		}
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $enhanced_measurements ) ) {
 			$config['outbound_links'] = true;
 		}
 
