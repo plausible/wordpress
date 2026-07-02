@@ -126,7 +126,7 @@ class AdminBar {
 			}
 		}
 
-		return $args;
+		return apply_filters( '', $args );
 	}
 
 	/**
