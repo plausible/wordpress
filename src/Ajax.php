@@ -307,7 +307,7 @@ class Ajax {
 					add_filter( 'plausible_analytics_current_language_domain_key', $force_key );
 					add_filter( 'plausible_analytics_settings', $force_domain );
 
-					$this->validate_api_token( $this->clean( $posted_values['api_token'] ) );
+					$this->validate_api_token( $this->clean( $posted_values['api_token'] ), $language_domain_key );
 
 					remove_filter( 'plausible_analytics_current_language_domain_key', $force_key );
 					remove_filter( 'plausible_analytics_settings', $force_domain );
@@ -344,12 +344,13 @@ class Ajax {
 	 * Validate the entered Plugin Token, before storing it to the DB. wp_send_json_error() ensures that code execution stops.
 	 *
 	 * @param string $token
+	 * @param string $domain_key
 	 *
 	 * @return void
 	 * @throws ApiException
 	 */
-	private function validate_api_token( $token = '' ) {
-		$client_factory = new ClientFactory( $token );
+	private function validate_api_token( $token = '', $domain_key = '' ) {
+		$client_factory = new ClientFactory( $token, $domain_key );
 		$client         = $client_factory->build();
 
 		if ( $client instanceof Client && ! $client->validate_api_token() ) {

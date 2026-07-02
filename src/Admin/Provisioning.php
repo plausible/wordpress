@@ -152,7 +152,7 @@ class Provisioning {
 
 			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
 
-			$client = ( new ClientFactory() )->build();
+			$client = ( new ClientFactory( '', $key ) )->build();
 
 			if ( $client instanceof Client && $client->validate_api_token() ) {
 				$clients[ $key ] = $client;

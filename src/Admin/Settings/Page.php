@@ -88,7 +88,7 @@ class Page extends API {
 
 		$settings = Helpers::get_settings();
 
-		$this->client_factory = new ClientFactory();
+		$this->client_factory = new ClientFactory( '', Helpers::get_current_language_domain_key() );
 		$this->client         = $this->client_factory->build();
 		$this->fields         = [
 			'general'     => [

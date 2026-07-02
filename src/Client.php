@@ -31,14 +31,21 @@ class Client {
 	private $api_instance;
 
 	/**
+	 * @var string $domain_key
+	 */
+	private $domain_key;
+
+	/**
 	 * Set up basic authorization, basic_auth.
 	 *
-	 * @param string $token Allows specifying the token, e.g., when it's not stored in the DB yet.
+	 * @param string $token      Allows specifying the token, e.g., when it's not stored in the DB yet.
+	 * @param string $domain_key The domain key to use for this client.
 	 */
-	public function __construct( $token = '' ) {
-		$timeout         = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
-		$connect_timeout = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
-		$config          = new Configuration();
+	public function __construct( $token = '', $domain_key = 'default' ) {
+		$this->domain_key = $domain_key;
+		$timeout          = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
+		$connect_timeout  = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
+		$config           = new Configuration();
 		$config->setUsername( 'WordPress' )
 		       ->setPassword( $token )
 		       ->setHost( Helpers::get_hosted_domain_url() );
@@ -108,7 +115,7 @@ class Client {
 
 		Messages::set_error( sprintf( $error_message, $message ) );
 
-		$caps = $this->update_capabilities();
+		$caps = $this->update_capabilities( '', $this->domain_key );
 
 		wp_send_json_error( [ 'capabilities' => $caps ], $code );
 	}
@@ -116,14 +123,19 @@ class Client {
 	/**
 	 * Stores the capabilities for the currently entered API token in the DB for later use.
 	 *
-	 * @param $token
+	 * @param string $token
+	 * @param string $domain_key
 	 *
 	 * @return false|array
 	 *
 	 * @codeCoverageIgnore
 	 */
-	private function update_capabilities( $token = '' ) {
-		$client_factory = new ClientFactory( $token );
+	private function update_capabilities( $token = '', $domain_key = '' ) {
+		if ( empty( $domain_key ) ) {
+			$domain_key = $this->domain_key;
+		}
+
+		$client_factory = new ClientFactory( $token, $domain_key );
 		/** @var Client $client */
 		$client = $client_factory->build();
 
@@ -147,7 +159,6 @@ class Client {
 		];
 
 		$all_caps = get_option( 'plausible_analytics_api_token_caps', [] );
-		$key      = Helpers::get_current_language_domain_key();
 
 		/**
 		 * @since v2.6.0 Normalize @var $all_caps if the plugin has been configured prior to this version.
@@ -156,7 +167,7 @@ class Client {
 			$all_caps = [ 'default' => $all_caps ];
 		}
 
-		$all_caps[ $key ] = $caps;
+		$all_caps[ $domain_key ] = $caps;
 
 		update_option( 'plausible_analytics_api_token_caps', $all_caps );
 

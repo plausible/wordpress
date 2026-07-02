@@ -336,12 +336,14 @@ class Helpers {
 	/**
 	 * Build the API client.
 	 *
+	 * @param string $domain_key
+	 *
 	 * @return false|Client
 	 *
 	 * @codeCoverageIgnore This seam's only function is to keep our code testable.
 	 */
-	protected static function get_client() {
-		$client = new ClientFactory();
+	protected static function get_client( $domain_key = '' ) {
+		$client = new ClientFactory( '', $domain_key );
 
 		return $client->build();
 	}
