@@ -126,7 +126,7 @@ class AdminBar {
 			}
 		}
 
-		return apply_filters( '', $args );
+		return apply_filters( 'plausible_analytics_admin_bar_view_analytics', $args );
 	}
 
 	/**
