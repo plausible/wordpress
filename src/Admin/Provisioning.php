@@ -101,11 +101,6 @@ class Provisioning {
 	private function init() {
 		/** This hook should always be registered because it handles fresh installs. */
 		add_action( 'add_option_plausible_analytics_settings', [ $this, 'provision_on_connect' ], 10, 2 );
-
-		if ( empty( $this->get_clients() ) ) {
-			return; // @codeCoverageIgnore
-		}
-
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_provision_on_connect' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_goals' ], 10, 2 );
@@ -113,55 +108,6 @@ class Provisioning {
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_custom_properties' ], 11, 2 );
 		add_filter( 'pre_update_option_plausible_analytics_settings', [ $this, 'maybe_enable_customer_user_roles' ] );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'update_tracker_script_config' ], 10, 2 );
-	}
-
-	/**
-	 * Get an array of [ $key => Client ] for every configured domain with a non-empty API token.
-	 *
-	 * @param bool $force_refresh
-	 *
-	 * @return Client[]
-	 *
-	 * @codeCoverageIgnore Because it should be mocked when running tests.
-	 */
-	public function get_clients( $force_refresh = false ) {
-		if ( $this->clients_cache !== null && ! $force_refresh ) {
-			return $this->clients_cache;
-		}
-
-		if ( $this->client instanceof Client ) {
-			return $this->clients_cache = [ 'default' => $this->client ];
-		}
-
-		$settings = Helpers::get_settings();
-
-		if ( empty( $settings['api_token'] ) || ! is_array( $settings['api_token'] ) ) {
-			return $this->clients_cache = [];
-		}
-
-		$clients = [];
-
-		foreach ( $settings['api_token'] as $key => $token ) {
-			if ( empty( $token ) ) {
-				continue;
-			}
-
-			$filter = function () use ( $key ) {
-				return $key;
-			};
-
-			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
-
-			$client = ( new ClientFactory( '', $key ) )->build();
-
-			if ( $client instanceof Client && $client->validate_api_token() ) {
-				$clients[ $key ] = $client;
-			}
-
-			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
-		}
-
-		return $this->clients_cache = $clients;
 	}
 
 	/**
@@ -282,13 +228,68 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_create_shared_link( $_, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
 		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		foreach ( $this->get_clients() as $key => $client ) {
+		foreach ( $clients as $key => $client ) {
 			$client->create_shared_link( $key );
 		}
+	}
+
+	/**
+	 * Get an array of [ $key => Client ] for every configured domain with a non-empty API token.
+	 *
+	 * @param bool $force_refresh
+	 *
+	 * @return Client[]
+	 *
+	 * @codeCoverageIgnore Because it should be mocked when running tests.
+	 */
+	public function get_clients( $force_refresh = false ) {
+		if ( $this->clients_cache !== null && ! $force_refresh ) {
+			return $this->clients_cache;
+		}
+
+		if ( $this->client instanceof Client ) {
+			return $this->clients_cache = [ 'default' => $this->client ];
+		}
+
+		$settings = Helpers::get_settings();
+
+		if ( empty( $settings['api_token'] ) || ! is_array( $settings['api_token'] ) ) {
+			return $this->clients_cache = [];
+		}
+
+		$clients = [];
+
+		foreach ( $settings['api_token'] as $key => $token ) {
+			if ( empty( $token ) ) {
+				continue;
+			}
+
+			$filter = function () use ( $key ) {
+				return $key;
+			};
+
+			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
+
+			$client = ( new ClientFactory( '', $key ) )->build();
+
+			if ( $client instanceof Client && $client->validate_api_token() ) {
+				$clients[ $key ] = $client;
+			}
+
+			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
+		}
+
+		return $this->clients_cache = $clients;
 	}
 
 	/**
@@ -300,6 +301,12 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test if the API is working.
 	 */
 	public function maybe_delete_goals( $old_settings, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
 		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
 
 		if ( ! is_array( $enhanced_measurements_old ) ) {
@@ -324,7 +331,7 @@ class Provisioning {
 
 		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
 
-		foreach ( $this->get_clients() as $domain_key => $client ) {
+		foreach ( $clients as $domain_key => $client ) {
 			$goals = $all_ids[ $domain_key ] ?? [];
 
 			foreach ( $goals as $id => $name ) {
@@ -485,6 +492,12 @@ class Provisioning {
 	 * @param array $settings Current settings
 	 */
 	public function maybe_create_goals( $_, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
 		if ( ! is_array( $enhanced_measurements ) ) {
@@ -510,7 +523,7 @@ class Provisioning {
 
 		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
 
-		foreach ( $this->get_clients() as $key => $client ) {
+		foreach ( $clients as $key => $client ) {
 			$all_ids = $this->create_goals( $goals, $client, $key, $all_ids );
 		}
 
@@ -603,6 +616,12 @@ class Provisioning {
 	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
 	 */
 	public function maybe_create_custom_properties( $_, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
 		if ( ! is_array( $enhanced_measurements ) ) {
@@ -648,7 +667,7 @@ class Provisioning {
 
 		$all_caps = $this->normalize_option( get_option( 'plausible_analytics_api_token_caps', [] ) );
 
-		foreach ( $this->get_clients() as $key => $client ) {
+		foreach ( $clients as $key => $client ) {
 			$domain_properties = $properties;
 
 			/**
