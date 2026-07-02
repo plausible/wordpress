@@ -90,7 +90,7 @@ class AdminBar {
 				$domain_key = $key !== 'default' ? $key : '';
 
 				if ( $domain_key && empty( $settings['shared_link'][ $domain_key ] ) ) {
-					continue;
+					continue; // @codeCoverageIgnore
 				}
 
 				$href = add_query_arg( 'page', 'plausible_analytics_statistics', admin_url( 'index.php' ) );

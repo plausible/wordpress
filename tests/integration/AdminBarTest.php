@@ -72,4 +72,33 @@ class AdminBarTest extends TestCase {
 		$class->admin_bar_node( $admin_bar );
 		$this->assertEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
 	}
+
+	public function testMaybeAddAnalyticsWithMultipleDomains() {
+		$class = new AdminBar();
+
+		$language_domains = [
+			'default' => 'example.com',
+			'nl'      => 'nl.example.com',
+		];
+		$callback         = function () use ( $language_domains ) {
+			return $language_domains;
+		};
+		add_filter( 'plausible_analytics_language_domains', $callback );
+
+		$settings = [
+			'enable_analytics_dashboard' => 'on',
+			'shared_link'                => [
+				'nl' => 'https://plausible.io/share/nl.example.com?auth=token',
+			],
+		];
+
+		$args = $class->maybe_add_analytics( [], $settings );
+
+		remove_filter( 'plausible_analytics_language_domains', $callback );
+
+		$this->assertCount( 2, $args );
+		$this->assertEquals( 'view-analytics-default', $args[0]['id'] );
+		$this->assertEquals( 'view-analytics-nl', $args[1]['id'] );
+		$this->assertStringContainsString( 'domain=nl', $args[1]['href'] );
+	}
 }
