@@ -28,10 +28,11 @@ class AdminBar {
 	/**
 	 * Create admin bar nodes.
 	 *
+	 * @since  1.3.0
+	 *
 	 * @param \WP_Admin_Bar $admin_bar Admin bar object.
 	 *
 	 * @return void
-	 * @since  1.3.0
 	 */
 	public function admin_bar_node( $admin_bar ) {
 		$disable = ! empty( Helpers::get_settings()['disable_toolbar_menu'] );
@@ -65,7 +66,7 @@ class AdminBar {
 			[
 				'id'    => 'plausible-analytics',
 				'title' => 'Plausible Analytics',
-			]
+			],
 		], $settings );
 
 		foreach ( $args as $arg ) {
@@ -77,17 +78,34 @@ class AdminBar {
 	 * Adds the View Analytics link to the Admin Bar Menu if any of the related settings are enabled.
 	 *
 	 * @param $args
+	 * @param $settings
 	 *
 	 * @return mixed
 	 */
 	public function maybe_add_analytics( $args, $settings ) {
 		if ( ! empty( $settings['enable_analytics_dashboard'] ) || ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['self_hosted_shared_link'] ) ) ) {
-			$args[] = [
-				'id'     => 'view-analytics',
-				'title'  => esc_html__( 'View Analytics', 'plausible-analytics' ),
-				'href'   => admin_url( 'index.php?page=plausible_analytics_statistics' ),
-				'parent' => 'plausible-analytics',
-			];
+			$language_domains = Helpers::get_language_domains();
+
+			foreach ( $language_domains as $key => $language_domain ) {
+				$domain_key = $key !== 'default' ? $key : '';
+
+				if ( $domain_key && empty( $settings['shared_link'][ $domain_key ] ) ) {
+					continue;
+				}
+
+				$href = add_query_arg( 'page', 'plausible_analytics_statistics', admin_url( 'index.php' ) );
+
+				if ( $domain_key ) {
+					$href = add_query_arg( 'domain', $domain_key, $href );
+				}
+
+				$args[] = [
+					'id'     => "view-analytics-$key",
+					'title'  => sprintf( esc_html__( 'View analytics for %s', 'plausible-analytics' ), $language_domain ),
+					'href'   => $href,
+					'parent' => 'plausible-analytics',
+				];
+			}
 
 			// Add a link to individual page stats.
 			if ( $this->is_singular() ) {

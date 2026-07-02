@@ -657,21 +657,18 @@ class Page extends API {
 	public function render_analytics_dashboard() {
 		global $current_user;
 
-		$settings          = Helpers::get_settings();
-		$current_key       = Helpers::get_current_language_domain_key();
-		$analytics_enabled = $settings['enable_analytics_dashboard'];
-		$shared_link       = $settings['shared_link'][ $current_key ] ?? $settings['shared_link']['default'] ?? '';
-		$self_hosted       = ! empty( $settings ['self_hosted_domain'] );
+		$settings            = Helpers::get_settings();
+		$language_domain_key = $_GET['domain'] ?? 'default';
+		$analytics_enabled   = $settings['enable_analytics_dashboard'];
+		$shared_link         = $settings['shared_link'][ $language_domain_key ] ?? $settings['shared_link']['default'] ?? '';
+		$self_hosted         = ! empty( $settings ['self_hosted_domain'] );
 
 		if ( $self_hosted ) {
 			$shared_link = $settings['self_hosted_shared_link'];
 		}
 
 		$has_access             = false;
-		$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? array_merge(
-			[ 'administrator' ],
-			$settings['expand_dashboard_access']
-		) : [ 'administrator' ];
+		$user_roles_have_access = ! empty( $settings['expand_dashboard_access'] ) ? array_merge( [ 'administrator' ], $settings['expand_dashboard_access'] ) : [ 'administrator' ];
 
 		foreach ( $current_user->roles as $role ) {
 			if ( in_array( $role, $user_roles_have_access, true ) ) {
@@ -699,19 +696,18 @@ class Page extends API {
 		endif;
 
 		/**
-		 * Prior to this version, the default value would contain an example "auth" key, i.e. XXXXXXXXX.
-		 * When this option was saved to the database, underlying code would fail, throwing a CORS related error in browsers.
-		 * Now, we explicitly check for the existence of this example "auth" key, and display a human-readable error message to
+		 * @since v1.2.5 Prior to this version, the default value would contain an example "auth" key, i.e., XXXXXXXXX.
+		 * When this option was saved to the database, underlying code would fail, throwing a CORS-related error in browsers.
+		 * Now, we explicitly check for the existence of this example "auth" key and display a human-readable error message to
 		 * those who haven't properly set it up.
-		 * @since v1.2.5
-		 * For self-hosters the View Stats option doesn't need to be enabled, if a Shared Link is entered, we can assume they want to View Stats.
-		 * For regular users, the shared link is provisioned by the API, so it shouldn't be empty.
-		 * @since v2.0.3
+		 *
+		 * @since v2.0.3 For self-hosters the View Stats option doesn't need to be enabled, if a Shared Link is entered, we can assume they want to View Stats.
+		 * For regular users, the API provisions the shared link, so it shouldn't be empty.
 		 */
 		if ( ( ! $self_hosted && ! empty( $analytics_enabled ) && ! empty( $shared_link ) ) || ( $self_hosted && ! empty( $shared_link ) ) || strpos( $shared_link, 'XXXXXX' ) !== false ) {
 			$page_url = isset( $_GET['page-url'] ) ? esc_url( $_GET['page-url'] ) : '';
 
-			// Append individual page URL if it exists.
+			// Append an individual page URL if it exists.
 			if ( $shared_link && $page_url ) {
 				$shared_link .= "&page={$page_url}";
 			}

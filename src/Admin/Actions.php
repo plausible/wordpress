@@ -26,7 +26,7 @@ class Actions {
 	}
 
 	/**
-	 * Redirect to Configuration Wizard on first boot.
+	 * Redirect to the Configuration Wizard on the first boot.
 	 *
 	 * @return void
 	 */

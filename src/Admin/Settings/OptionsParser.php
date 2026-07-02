@@ -4,7 +4,7 @@ namespace Plausible\Analytics\WP\Admin\Settings;
 
 class OptionsParser {
 	/**
-	 * Detect elements whose name matches name[key] where the key is NOT purely numeric.
+	 * Detect array elements whose name matches name[key] where the key is NOT purely numeric.
 	 *
 	 * @param array $options
 	 * @param array $settings
