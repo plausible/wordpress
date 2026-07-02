@@ -137,7 +137,7 @@ class ProvisioningTest extends TestCase {
 
 		$class->maybe_create_shared_link( [], $settings );
 
-		$sharedLink = Helpers::get_settings()['shared_link'];
+		$sharedLink = Helpers::get_settings()['shared_link']['default'];
 
 		$this->assertEquals( 'http://example.org/test', $sharedLink );
 	}
