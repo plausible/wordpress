@@ -128,6 +128,92 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
+	 * @see Helpers::get_domain()
+	 * @return void
+	 */
+	public function testGetDomainWithDefaultOnly() {
+		$settings = [
+			'domain_name' => [
+				'default' => 'example.com',
+				'fr'      => '',
+			],
+		];
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		$filter_mode    = function () {
+			return true;
+		};
+		$filter_domains = function () {
+			return [ 'fr' => 'example.fr' ];
+		};
+		$filter_lang    = function () {
+			return 'fr';
+		};
+		$filter_key     = function () {
+			return 'fr';
+		};
+
+		add_filter( 'plausible_analytics_language_per_domain_mode', $filter_mode );
+		add_filter( 'wpml_setting', $filter_domains, 10, 2 );
+		add_filter( 'wpml_current_language', $filter_lang );
+		add_filter( 'plausible_analytics_current_language_domain_key', $filter_key );
+
+		try {
+			$domain = Helpers::get_domain();
+			$this->assertEquals( 'example.com', $domain );
+		} finally {
+			remove_filter( 'plausible_analytics_language_per_domain_mode', $filter_mode );
+			remove_filter( 'wpml_setting', $filter_domains );
+			remove_filter( 'wpml_current_language', $filter_lang );
+			remove_filter( 'plausible_analytics_current_language_domain_key', $filter_key );
+		}
+	}
+
+	/**
+	 * @see Helpers::get_domain()
+	 * @return void
+	 */
+	public function testGetDomainWithLanguageKey() {
+		$settings = [
+			'domain_name' => [
+				'default' => 'example.com',
+				'fr'      => 'example.fr',
+			],
+		];
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		$filter_mode    = function () {
+			return true;
+		};
+		$filter_domains = function () {
+			return [ 'fr' => 'example.fr' ];
+		};
+		$filter_lang    = function () {
+			return 'fr';
+		};
+		$filter_key     = function () {
+			return 'fr';
+		};
+
+		add_filter( 'plausible_analytics_language_per_domain_mode', $filter_mode );
+		add_filter( 'wpml_setting', $filter_domains, 10, 2 );
+		add_filter( 'wpml_current_language', $filter_lang );
+		add_filter( 'plausible_analytics_current_language_domain_key', $filter_key );
+
+		try {
+			$domain = Helpers::get_domain();
+			$this->assertEquals( 'example.fr', $domain );
+		} finally {
+			remove_filter( 'plausible_analytics_language_per_domain_mode', $filter_mode );
+			remove_filter( 'wpml_setting', $filter_domains );
+			remove_filter( 'wpml_current_language', $filter_lang );
+			remove_filter( 'plausible_analytics_current_language_domain_key', $filter_key );
+		}
+	}
+
+	/**
 	 * @see Helpers::get_js_path()
 	 * @return void
 	 * @throws Exception
@@ -225,6 +311,28 @@ class HelpersTest extends TestCase {
 		$endpoint = Helpers::get_rest_endpoint();
 
 		$this->assertMatchesRegularExpression( '~http://example.org/index.php\?rest_route=/[0-9a-z]{6}/v1/[0-9a-z]{4}/[0-9a-z]{8}~', $endpoint );
+	}
+
+	/**
+	 * @see Helpers::get_settings()
+	 * @return void
+	 */
+	public function testGetSettingsNormalization() {
+		$settings = [
+			'domain_name' => 'example.com',
+			'api_token'   => 'test-token',
+			'shared_link' => 'https://plausible.io/share/example.com',
+		];
+
+		update_option( 'plausible_analytics_settings', $settings );
+
+		$normalized_settings = Helpers::get_settings();
+
+		$this->assertIsArray( $normalized_settings['api_token'] );
+		$this->assertEquals( [ 'default' => 'test-token' ], $normalized_settings['api_token'] );
+
+		$this->assertIsArray( $normalized_settings['shared_link'] );
+		$this->assertEquals( [ 'default' => 'https://plausible.io/share/example.com' ], $normalized_settings['shared_link'] );
 	}
 
 	/**
