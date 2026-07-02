@@ -150,7 +150,7 @@ class Helpers {
 		$domain_name = $settings['domain_name'][ $current_key ] ?? '';
 
 		if ( ! empty( $domain_name ) ) {
-			return $domain_name; // @codeCoverageIgnore
+			return $domain_name;
 		}
 
 		if ( ! empty( $settings['domain_name']['default'] ) ) {
