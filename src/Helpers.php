@@ -82,9 +82,11 @@ class Helpers {
 	/**
 	 * Returns the key of the currently used Language Domain.
 	 *
-	 * @since v2.6.0
+	 * @since              v2.6.0
 	 *
 	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function get_current_language_domain_key() {
 		if ( ! static::is_language_per_domain_mode() ) {
@@ -104,9 +106,11 @@ class Helpers {
 	/**
 	 * Returns true only when WPML is active, its negotiation type is "different domain per language", AND at least one domain is configured.
 	 *
-	 * @since v2.6.0
+	 * @since              v2.6.0
 	 *
 	 * @return bool
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function is_language_per_domain_mode() {
 		static $is_language_per_domain;
@@ -368,9 +372,11 @@ class Helpers {
 	}
 
 	/**
-	 * @since v2.6.0 Provide compatibility with multilang plugins, like WPML.
+	 * @since              v2.6.0 Provide compatibility with multilang plugins, like WPML.
 	 *
 	 * @return array
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function get_language_domains() {
 		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
@@ -388,6 +394,8 @@ class Helpers {
 	 * Get the name of the active multilang plugin.
 	 *
 	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function get_multilang_plugin_name() {
 		$name = '';
@@ -400,7 +408,7 @@ class Helpers {
 	}
 
 	/**
-	 * Get user role for the logged-in user.
+	 * Get the user role for the logged-in user.
 	 *
 	 * @since  1.3.0
 	 * @access public
