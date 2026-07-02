@@ -22,44 +22,11 @@ class Actions {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
 		add_action( 'admin_init', [ $this, 'maybe_redirect_to_wizard' ] );
+		add_action( 'admin_notices', [ $this, 'show_unconfigured_multilang_domains_notice' ] );
 	}
 
 	/**
-	 * Register Assets.
-	 *
-	 * @since  1.0.0
-	 * @since  1.3.0 Don't load CSS admin-wide. JS needs to load admin-wide, since we're throwing admin-wide, dismissable notices.
-	 * @access public
-	 * @return void
-	 */
-	public function register_assets( $current_page ) {
-		if ( $current_page === 'settings_page_plausible_analytics' || $current_page === 'dashboard_page_plausible_analytics_statistics' ) {
-			wp_enqueue_style(
-				'plausible-admin',
-				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css',
-				'',
-				filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ),
-				'all'
-			);
-		}
-
-		wp_register_script(
-			'plausible-admin',
-			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js',
-			'',
-			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ),
-			[ 'in_footer' => true ]
-		);
-
-		wp_localize_script( 'plausible-admin', 'plausible_analytics_i18n', [ 'connected' => __( 'Connected', 'plausible-analytics' ) ] );
-
-		wp_enqueue_script( 'plausible-admin' );
-
-		wp_add_inline_script( 'plausible-admin', 'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";' );
-	}
-
-	/**
-	 * Redirect to Configuration Wizard on first boot.
+	 * Redirect to the Configuration Wizard on the first boot.
 	 *
 	 * @return void
 	 */
@@ -70,12 +37,12 @@ class Actions {
 		}
 
 		// If we're already on the Settings page, there's no need to redirect.
-		if ( array_key_exists( 'page', $_GET ) && $_GET[ 'page' ] === 'plausible_analytics' ) {
+		if ( array_key_exists( 'page', $_GET ) && $_GET['page'] === 'plausible_analytics' ) {
 			return;
 		}
 
 		// Self-hosters should never be redirected to the settings screen, because the wizard isn't shown to them.
-		$wizard_done = get_option( 'plausible_analytics_wizard_done', false ) || ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] );
+		$wizard_done = get_option( 'plausible_analytics_wizard_done', false ) || ! empty( Helpers::get_settings()['self_hosted_domain'] );
 
 		if ( ! $wizard_done ) {
 			$url = admin_url( 'options-general.php?page=plausible_analytics#welcome_slide' );
@@ -84,5 +51,102 @@ class Actions {
 
 			exit;
 		}
+	}
+
+	/**
+	 * Register Assets.
+	 *
+	 * @since  v1.0.0
+	 * @since  v2.6.0 Notice.js is loaded on all Admin-pages. All other assets are only loaded on Plausible Analytics related pages.
+	 *
+	 * @return void
+	 */
+	public function register_assets( $current_page ) {
+		wp_enqueue_script(
+			'plausible-admin-notice',
+			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin-notice.js',
+			[],
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin-notice.js' ),
+			[ 'in_footer' => true ]
+		);
+
+		wp_localize_script(
+			'plausible-admin-notice',
+			'plausible_analytics_notice',
+			[
+				'nonce' => wp_create_nonce( 'plausible_analytics_dismiss_multilang_notice' ),
+			]
+		);
+
+		if ( $current_page !== 'settings_page_plausible_analytics' && $current_page !== 'dashboard_page_plausible_analytics_statistics' ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'plausible-admin',
+			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/css/plausible-admin.css',
+			'',
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/css/plausible-admin.css' ),
+		);
+
+		wp_register_script(
+			'plausible-admin',
+			PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-admin.js',
+			'',
+			filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-admin.js' ),
+			[ 'in_footer' => true ]
+		);
+
+		wp_localize_script(
+			'plausible-admin',
+			'plausible_analytics_i18n',
+			[
+				'connected' => __( 'Connected', 'plausible-analytics' ),
+				'connect'   => __( 'Connect', 'plausible-analytics' ),
+			]
+		);
+
+		wp_enqueue_script( 'plausible-admin' );
+
+		wp_add_inline_script( 'plausible-admin', 'var plausible_analytics_hosted_domain = "' . Helpers::get_hosted_domain_url() . '";' );
+	}
+
+	/**
+	 * Show a notice when multilang domain-per-language mode is active.
+	 *
+	 * @return void
+	 */
+	public function show_unconfigured_multilang_domains_notice() {
+		if ( ! Helpers::is_language_per_domain_mode() ) {
+			return;
+		}
+
+		$multilang_plugin = Helpers::get_multilang_plugin_name();
+
+		if ( empty( $multilang_plugin ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( get_option( 'plausible_analytics_multilang_notice_dismissed' ) ) {
+			return;
+		}
+
+		$settings_url = admin_url( 'options-general.php?page=plausible_analytics' );
+		?>
+		<div id="message" class="notice notice-info is-dismissible plausible-analytics-multilang-notice">
+			<p>
+				<?php printf(
+				/* translators: 1: Multilang plugin name (e.g. WPML), 2: URL to settings page. */
+					__( 'Plausible Analytics now supports %1$s! Connect each domain in %1$s to its own Plausible Analytics dashboard on the <a href="%2$s">settings screen</a>.', 'plausible-analytics' ),
+					$multilang_plugin,
+					$settings_url
+				); ?>
+			</p>
+		</div>
+		<?php
 	}
 }

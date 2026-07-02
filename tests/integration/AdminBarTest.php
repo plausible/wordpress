@@ -10,29 +10,6 @@ use Plausible\Analytics\WP\AdminBar;
 use WP_Admin_Bar;
 
 class AdminBarTest extends TestCase {
-	/**
-	 * @see AdminBar::admin_bar_node()
-	 */
-	public function testAdminBarNode() {
-		$class = new AdminBar();
-
-		if ( ! class_exists( 'WP_Admin_Bar' ) ) {
-			require_once( ABSPATH . 'wp-includes/class-wp-admin-bar.php' );
-		}
-
-		wp_set_current_user( 1 );
-		$user = wp_get_current_user();
-		$user->add_role( 'administrator' );
-		$admin_bar = new WP_Admin_Bar();
-		$class->admin_bar_node( $admin_bar );
-		$this->assertNotEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
-
-		wp_set_current_user( null );
-		$admin_bar = new WP_Admin_Bar();
-		$class->admin_bar_node( $admin_bar );
-		$this->assertEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
-	}
-
 	public function testAddAnalyticsNode() {
 		try {
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableAnalyticsDashboard' ] );
@@ -64,12 +41,64 @@ class AdminBarTest extends TestCase {
 			$args = $class->maybe_add_analytics( [], [ 'enable_analytics_dashboard' => 'on' ] );
 			$this->assertNotEmpty( $args );
 			$this->assertCount( 2, $args );
-			$this->assertTrue( in_array( 'view-analytics', $args[0] ) );
-			$this->assertTrue( in_array( 'view-page-analytics', $args[1] ) );
+			$this->assertEquals( 'view-analytics-default', $args[0]['id'] );
+			$this->assertEquals( 'view-page-analytics', $args[1]['id'] );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableAnalyticsDashboard' ] );
 			wp_set_current_user( null );
 			unset( $post );
 		}
+	}
+
+	/**
+	 * @see AdminBar::admin_bar_node()
+	 */
+	public function testAdminBarNode() {
+		$class = new AdminBar();
+
+		if ( ! class_exists( 'WP_Admin_Bar' ) ) {
+			require_once( ABSPATH . 'wp-includes/class-wp-admin-bar.php' );
+		}
+
+		wp_set_current_user( 1 );
+		$user = wp_get_current_user();
+		$user->add_role( 'administrator' );
+		$admin_bar = new WP_Admin_Bar();
+		$class->admin_bar_node( $admin_bar );
+		$this->assertNotEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
+
+		wp_set_current_user( null );
+		$admin_bar = new WP_Admin_Bar();
+		$class->admin_bar_node( $admin_bar );
+		$this->assertEmpty( $admin_bar->get_node( 'plausible-analytics' ) );
+	}
+
+	public function testMaybeAddAnalyticsWithMultipleDomains() {
+		$class = new AdminBar();
+
+		$language_domains = [
+			'default' => 'example.com',
+			'nl'      => 'nl.example.com',
+		];
+		$callback         = function () use ( $language_domains ) {
+			return $language_domains;
+		};
+		add_filter( 'plausible_analytics_language_domains', $callback );
+
+		$settings = [
+			'enable_analytics_dashboard' => 'on',
+			'shared_link'                => [
+				'nl' => 'https://plausible.io/share/nl.example.com?auth=token',
+			],
+		];
+
+		$args = $class->maybe_add_analytics( [], $settings );
+
+		remove_filter( 'plausible_analytics_language_domains', $callback );
+
+		$this->assertCount( 2, $args );
+		$this->assertEquals( 'view-analytics-default', $args[0]['id'] );
+		$this->assertEquals( 'view-analytics-nl', $args[1]['id'] );
+		$this->assertStringContainsString( 'domain=nl', $args[1]['href'] );
 	}
 }

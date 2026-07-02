@@ -31,213 +31,42 @@ class Client {
 	private $api_instance;
 
 	/**
-	 * Setup basic authorization, basic_auth.
-	 *
-	 * @param string $token Allows specifying the token, e.g., when it's not stored in the DB yet.
+	 * @var string $domain_key
 	 */
-	public function __construct( $token = '' ) {
-		$config             = Configuration::getDefaultConfiguration()
-		                                   ->setUsername( 'WordPress' )
-		                                   ->setPassword( $token )
-		                                   ->setHost( Helpers::get_hosted_domain_url() );
-		$timeout            = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
-		$connect_timeout    = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
+	private $domain_key;
+
+	/**
+	 * Set up basic authorization, basic_auth.
+	 *
+	 * @param string $token      Allows specifying the token, e.g., when it's not stored in the DB yet.
+	 * @param string $domain_key The domain key to use for this client.
+	 */
+	public function __construct( $token = '', $domain_key = 'default' ) {
+		$this->domain_key = $domain_key;
+		$timeout          = (float) apply_filters( 'plausible_analytics_api_timeout', 10.0 );
+		$connect_timeout  = (float) apply_filters( 'plausible_analytics_api_connect_timeout', 5.0 );
+		$config           = new Configuration();
+		$config->setUsername( 'WordPress' )
+		       ->setPassword( $token )
+		       ->setHost( Helpers::get_hosted_domain_url() );
 		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] ), $config );
 	}
 
 	/**
-	 * Validates the Plugin Token (password) set in the current instance and caches the state to a transient valid for 1 day.
+	 * Allows creating Funnels in bulk.
 	 *
-	 * @return bool
-	 * @throws ApiException
-	 */
-	public function validate_api_token() {
-		if ( $this->is_api_token_valid() ) {
-			return true; // @codeCoverageIgnore
-		}
-
-		$features = $this->get_features();
-
-		if ( ! $features instanceof CapabilitiesFeatures ) {
-			return false; // @codeCoverageIgnore
-		}
-
-		$data_domain = $this->get_data_domain();
-		$token       = $this->api_instance->getConfig()->getPassword();
-		$is_valid    = str_contains( $token, 'plausible-plugin' ) && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
-
-		/**
-		 * Don't cache invalid API tokens.
-		 */
-		if ( $is_valid ) {
-			set_transient( 'plausible_analytics_valid_token', [ $token => true ], 86400 ); // @codeCoverageIgnore
-
-			$this->update_capabilities( $token ); // @codeCoverageIgnore
-		}
-
-		return $is_valid;
-	}
-
-	/**
-	 * Is currently stored token valid?
+	 * @param FunnelCreateRequest $funnel
 	 *
-	 * @return bool
-	 */
-	public function is_api_token_valid() {
-		$token        = $this->api_instance->getConfig()->getPassword();
-		$valid_tokens = get_transient( 'plausible_analytics_valid_token' );
-
-		return isset( $valid_tokens[ $token ] ) && $valid_tokens[ $token ] === true;
-	}
-
-	/**
-	 * Retrieve Features from Capabilities object.
-	 *
-	 * @return false|Client\Model\CapabilitiesFeatures
-	 */
-	public function get_features() {
-		$capabilities = $this->get_capabilities();
-
-		if ( $capabilities instanceof Capabilities ) {
-			return $capabilities->getFeatures();
-		}
-
-		return false; // @codeCoverageIgnore
-	}
-
-	/**
-	 * Retrieve all capabilities assigned to configured Plugin Token.
-	 *
-	 * @return bool|Client\Model\Capabilities
+	 * @return Client\Model\Funnel|PaymentRequiredError|UnauthorizedError|UnprocessableEntityError|void
 	 *
 	 * @codeCoverageIgnore
 	 */
-	private function get_capabilities() {
+	public function create_funnel( $funnel ) {
 		try {
-			return $this->api_instance->plausibleWebPluginsAPIControllersCapabilitiesIndex();
-		} catch ( \Exception $e ) {
-			return false;
-		}
-	}
-
-	/**
-	 * Retrieve Data Domain property from Capabilities object.
-	 *
-	 * @return false|string
-	 *
-	 * @codeCoverageIgnore
-	 */
-	private function get_data_domain() {
-		$capabilities = $this->get_capabilities();
-
-		if ( $capabilities instanceof Capabilities ) {
-			return $capabilities->getDataDomain();
-		}
-
-		return false;
-	}
-
-	/**
-	 * Stores the capabilities for the currently entered API token in the DB for later use.
-	 *
-	 * @param $token
-	 *
-	 * @return false|array
-	 *
-	 * @codeCoverageIgnore
-	 */
-	private function update_capabilities( $token = '' ) {
-		$client_factory = new ClientFactory( $token );
-		/** @var Client $client */
-		$client = $client_factory->build();
-
-		if ( ! $client instanceof Client ) {
-			return false;
-		}
-
-		/** @var Client\Model\CapabilitiesFeatures $features */
-		$features = $client->get_features();
-
-		if ( ! $features ) {
-			return false;
-		}
-
-		$caps = [
-			WPCapabilities::FUNNELS => $features->getFunnels(),
-			WPCapabilities::GOALS   => $features->getGoals(),
-			WPCapabilities::PROPS   => $features->getProps(),
-			WPCapabilities::REVENUE => $features->getRevenueGoals(),
-			WPCapabilities::STATS   => $features->getStatsApi(),
-		];
-
-		update_option( 'plausible_analytics_api_token_caps', $caps );
-
-		return $caps;
-	}
-
-	/**
-	 * Retrieve the configured Tracker ID and stores it in the options table.
-	 *
-	 * @return string
-	 *
-	 * @codeCoverageIgnore Because we don't want to test WordPress core functionality.
-	 */
-	public function get_tracker_id() {
-		$id = get_option( 'plausible_analytics_tracker_id' );
-
-		if ( ! $id ) {
-			$tracker_configuration = $this->get_configuration();
-
-			if ( ! $tracker_configuration instanceof Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration ) {
-				return '';
-			}
-
-			$id = $tracker_configuration->getId();
-
-			update_option( 'plausible_analytics_tracker_id', $id );
-		}
-
-		return $id;
-	}
-
-	/**
-	 * Retrieve the configured Tracker Script Configuration.
-	 *
-	 * @return false|Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
-	 *
-	 * @codeCoverageIgnore Because we don't want to test the API's response.
-	 */
-	private function get_configuration() {
-		try {
-			$configuration = $this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet();
-
-			return $configuration->getTrackerScriptConfiguration();
-		} catch ( \Exception $e ) {
-			return false;
-		}
-	}
-
-	/**
-	 * Update the configured Tracker Script Configuration.
-	 *
-	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_config_update_request
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function update_tracker_script_configuration( $tracker_script_config_update_request ) {
-		try {
-			$this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
-				$tracker_script_config_update_request
-			);
+			return $this->api_instance->funnelGetOrCreate( $funnel );
 		} catch ( Exception $e ) {
-			$this->send_json_error(
-				$e,
-				// translators: %s: Error message.
-				__(
-					'Something went wrong while updating tracker script configuration: %s',
-					'plausible-analytics'
-				)
-			);
+			// translators: %s: Error message.
+			$this->send_json_error( $e, __( 'Something went wrong while creating Funnel: %s', 'plausible-analytics' ) );
 		}
 	}
 
@@ -286,48 +115,93 @@ class Client {
 
 		Messages::set_error( sprintf( $error_message, $message ) );
 
-		$caps = $this->update_capabilities();
+		$caps = $this->update_capabilities( '', $this->domain_key );
 
 		wp_send_json_error( [ 'capabilities' => $caps ], $code );
 	}
 
 	/**
-	 * Create Shared Link in Plausible Dashboard.
+	 * Stores the capabilities for the currently entered API token in the DB for later use.
 	 *
-	 * @return void
-	 */
-	public function create_shared_link() {
-		$shared_link = (object) [];
-		$result      = (object) [];
-
-		try {
-			$result = $this->bulk_create_shared_links();
-			// @codeCoverageIgnoreStart
-		} catch ( Exception $e ) {
-			// translators: %s: Error message.
-			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
-			// @codeCoverageIgnoreEnd
-		}
-
-		if ( $result instanceof SharedLink ) {
-			$shared_link = $result->getSharedLink();
-		}
-
-		if ( ! empty( $shared_link->getHref() ) ) {
-			Helpers::update_setting( 'shared_link', $shared_link->getHref() );
-		}
-	}
-
-	/**
-	 * @return SharedLink|UnauthorizedError|UnprocessableEntityError
-	 * @throws ApiException
+	 * @param string $token
+	 * @param string $domain_key
+	 *
+	 * @return false|array
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function bulk_create_shared_links() {
-		return $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
-			[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
-		);
+	private function update_capabilities( $token = '', $domain_key = '' ) {
+		if ( empty( $domain_key ) ) {
+			$domain_key = $this->domain_key;
+		}
+
+		$client_factory = new ClientFactory( $token, $domain_key );
+		/** @var Client $client */
+		$client = $client_factory->build();
+
+		if ( ! $client instanceof Client ) {
+			return false;
+		}
+
+		/** @var Client\Model\CapabilitiesFeatures $features */
+		$features = $client->get_features();
+
+		if ( ! $features ) {
+			return false;
+		}
+
+		$caps = [
+			WPCapabilities::FUNNELS => $features->getFunnels(),
+			WPCapabilities::GOALS   => $features->getGoals(),
+			WPCapabilities::PROPS   => $features->getProps(),
+			WPCapabilities::REVENUE => $features->getRevenueGoals(),
+			WPCapabilities::STATS   => $features->getStatsApi(),
+		];
+
+		$all_caps = get_option( 'plausible_analytics_api_token_caps', [] );
+
+		/**
+		 * @since v2.6.0 Normalize @var $all_caps if the plugin has been configured prior to this version.
+		 */
+		if ( ! empty( $all_caps ) && ! is_array( reset( $all_caps ) ) ) {
+			$all_caps = [ 'default' => $all_caps ];
+		}
+
+		$all_caps[ $domain_key ] = $caps;
+
+		update_option( 'plausible_analytics_api_token_caps', $all_caps );
+
+		return $caps;
+	}
+
+	/**
+	 * Retrieve Features from the Capabilities object.
+	 *
+	 * @return false|Client\Model\CapabilitiesFeatures
+	 */
+	public function get_features() {
+		$capabilities = $this->get_capabilities();
+
+		if ( $capabilities instanceof Capabilities ) {
+			return $capabilities->getFeatures();
+		}
+
+		return false; // @codeCoverageIgnore
+	}
+
+	/**
+	 * Retrieve all capabilities assigned to configured Plugin Token.
+	 *
+	 * @return bool|Client\Model\Capabilities
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private function get_capabilities() {
+		try {
+			return $this->api_instance->plausibleWebPluginsAPIControllersCapabilitiesIndex();
+		} catch ( \Exception $e ) {
+			return false;
+		}
 	}
 
 	/**
@@ -349,21 +223,42 @@ class Client {
 	}
 
 	/**
-	 * Allows creating Funnels in bulk.
+	 * Create Shared Link in Plausible Dashboard.
 	 *
-	 * @param FunnelCreateRequest $funnel
-	 *
-	 * @return Client\Model\Funnel|PaymentRequiredError|UnauthorizedError|UnprocessableEntityError|void
+	 * @return void
+	 */
+	public function create_shared_link( $key = 'default' ) {
+		$shared_link = (object) [];
+		$result      = (object) [];
+
+		try {
+			$result = $this->bulk_create_shared_links();
+			// @codeCoverageIgnoreStart
+		} catch ( Exception $e ) {
+			// translators: %s: Error message.
+			$this->send_json_error( $e, __( 'Something went wrong while creating Shared Link: %s', 'plausible-analytics' ) );
+			// @codeCoverageIgnoreEnd
+		}
+
+		if ( $result instanceof SharedLink ) {
+			$shared_link = $result->getSharedLink();
+		}
+
+		if ( ! empty( $shared_link->getHref() ) ) {
+			Helpers::update_setting( 'shared_link', $shared_link->getHref(), $key );
+		}
+	}
+
+	/**
+	 * @return SharedLink|UnauthorizedError|UnprocessableEntityError
+	 * @throws ApiException
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function create_funnel( $funnel ) {
-		try {
-			return $this->api_instance->funnelGetOrCreate( $funnel );
-		} catch ( Exception $e ) {
-			// translators: %s: Error message.
-			$this->send_json_error( $e, __( 'Something went wrong while creating Funnel: %s', 'plausible-analytics' ) );
-		}
+	public function bulk_create_shared_links() {
+		return $this->api_instance->plausibleWebPluginsAPIControllersSharedLinksCreate(
+			[ 'shared_link' => [ 'name' => 'WordPress - Shared Dashboard', 'password_protected' => false ] ]
+		);
 	}
 
 	/**
@@ -410,5 +305,149 @@ class Client {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Retrieve the configured Tracker ID and stores it in WP's options table.
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because we don't want to test WordPress core functionality.
+	 */
+	public function get_tracker_id( $key = 'default' ) {
+		$ids = get_option( 'plausible_analytics_tracker_id', [] );
+
+		if ( ! is_array( $ids ) ) {
+			/** @since v2.6.0 normalization for earlier versions. */
+			$ids = [ 'default' => $ids ];
+		}
+
+		if ( empty( $ids[ $key ] ) ) {
+			$tracker_configuration = $this->get_configuration();
+
+			if ( ! $tracker_configuration instanceof Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration ) {
+				return '';
+			}
+
+			$ids[ $key ] = $tracker_configuration->getId();
+
+			update_option( 'plausible_analytics_tracker_id', $ids );
+		}
+
+		return $ids[ $key ];
+	}
+
+	/**
+	 * Retrieve the configured Tracker Script Configuration.
+	 *
+	 * @return false|Client\Model\TrackerScriptConfigurationTrackerScriptConfiguration
+	 *
+	 * @codeCoverageIgnore Because we don't want to test the API's response.
+	 */
+	private function get_configuration() {
+		try {
+			$configuration = $this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationGet();
+
+			return $configuration->getTrackerScriptConfiguration();
+		} catch ( \Exception $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Update the configured Tracker Script Configuration.
+	 *
+	 * @param \Plausible\Analytics\WP\Client\Model\TrackerScriptConfigurationUpdateRequest $tracker_script_config_update_request
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function update_tracker_script_configuration( $tracker_script_config_update_request ) {
+		try {
+			$this->api_instance->plausibleWebPluginsAPIControllersTrackerScriptConfigurationUpdate(
+				$tracker_script_config_update_request
+			);
+		} catch ( Exception $e ) {
+			$this->send_json_error(
+				$e,
+				// translators: %s: Error message.
+				__(
+					'Something went wrong while updating tracker script configuration: %s',
+					'plausible-analytics'
+				)
+			);
+		}
+	}
+
+	/**
+	 * Validates the Plugin Token (password) set in the current instance and caches the state to a transient valid for 1 day.
+	 *
+	 * @return bool
+	 */
+	public function validate_api_token() {
+		if ( $this->is_api_token_valid() ) {
+			return true; // @codeCoverageIgnore
+		}
+
+		$features = $this->get_features();
+
+		if ( ! $features instanceof CapabilitiesFeatures ) {
+			return false; // @codeCoverageIgnore
+		}
+
+		$data_domain = $this->get_data_domain();
+		$token       = $this->api_instance->getConfig()->getPassword();
+		$is_valid    = str_contains( $token, 'plausible-plugin' ) && ! empty( $features->getGoals() ) && $data_domain === Helpers::get_domain();
+
+		/**
+		 * Don't cache invalid API tokens.
+		 */
+		if ( $is_valid ) {
+			$valid_tokens = get_transient( 'plausible_analytics_valid_token' );
+
+			if ( ! is_array( $valid_tokens ) ) {
+				$valid_tokens = [];
+			}
+
+			$valid_tokens[ $token ] = true;
+
+			set_transient( 'plausible_analytics_valid_token', $valid_tokens, 86400 ); // @codeCoverageIgnore
+
+			$this->update_capabilities( $token ); // @codeCoverageIgnore
+		}
+
+		return $is_valid;
+	}
+
+	/**
+	 * Is the currently stored token valid?
+	 *
+	 * @return bool
+	 */
+	public function is_api_token_valid() {
+		$token        = $this->api_instance->getConfig()->getPassword();
+		$valid_tokens = get_transient( 'plausible_analytics_valid_token' );
+
+		if ( ! is_array( $valid_tokens ) ) {
+			return false;
+		}
+
+		return isset( $valid_tokens[ $token ] ) && $valid_tokens[ $token ] === true;
+	}
+
+	/**
+	 * Retrieve Data Domain property from Capabilities object.
+	 *
+	 * @return false|string
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function get_data_domain() {
+		$capabilities = $this->get_capabilities();
+
+		if ( $capabilities instanceof Capabilities ) {
+			return $capabilities->getDataDomain();
+		}
+
+		return false;
 	}
 }

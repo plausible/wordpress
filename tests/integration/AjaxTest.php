@@ -43,6 +43,54 @@ class AjaxTest extends TestCase {
 	}
 
 	/**
+	 * Test save_options with keyed/multilang data.
+	 */
+	public function testSaveKeyedOptionsSuccess() {
+		$language_domain = 'german.dev.local';
+		$options         = [
+			[ 'name' => "domain_name[$language_domain]", 'value' => 'german.example.com' ],
+			[ 'name' => "api_token[$language_domain]", 'value' => 'plausible-plugin-german-token' ],
+		];
+
+		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
+		$_POST['options'] = wp_json_encode( $options );
+
+		// Mock the API response to avoid real API calls and handle the validation in Ajax::save_options
+		set_transient( 'plausible_analytics_valid_token', [ 'plausible-plugin-german-token' => true ] );
+
+		try {
+			$this->ajax->save_options();
+		} catch ( \Exception $e ) {
+		}
+
+		$settings = Helpers::get_settings();
+
+		$this->assertArrayHasKey( $language_domain, $settings['domain_name'] );
+		$this->assertEquals( 'german.example.com', $settings['domain_name'][ $language_domain ] );
+		$this->assertArrayHasKey( $language_domain, $settings['api_token'] );
+		$this->assertEquals( 'plausible-plugin-german-token', $settings['api_token'][ $language_domain ] );
+	}
+
+	/**
+	 * Test save_options with invalid JSON.
+	 */
+	public function testSaveOptionsInvalidJson() {
+		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
+		$_POST['options'] = 'invalid-json';
+
+		// wp_send_json_error will be called, which we expect.
+		// In a real WP environment it would exit.
+		try {
+			$this->ajax->save_options();
+		} catch ( \Exception $e ) {
+		}
+
+		// Verify that settings were NOT updated to something weird.
+		$settings = Helpers::get_settings();
+		$this->assertNotEquals( 'invalid-json', $settings['domain_name']['default'] );
+	}
+
+	/**
 	 * Test save_options with normal JSON data.
 	 */
 	public function testSaveOptionsSuccess() {
@@ -62,7 +110,7 @@ class AjaxTest extends TestCase {
 		}
 
 		$settings = Helpers::get_settings();
-		$this->assertEquals( 'example.com', $settings['domain_name'] );
+		$this->assertEquals( 'example.com', $settings['domain_name']['default'] );
 		$this->assertEquals( 'on', $settings['proxy_enabled'] );
 	}
 
@@ -87,25 +135,6 @@ class AjaxTest extends TestCase {
 		}
 
 		$settings = Helpers::get_settings();
-		$this->assertEquals( 'escaped.com', $settings['domain_name'] );
-	}
-
-	/**
-	 * Test save_options with invalid JSON.
-	 */
-	public function testSaveOptionsInvalidJson() {
-		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
-		$_POST['options'] = 'invalid-json';
-
-		// wp_send_json_error will be called, which we expect.
-		// In a real WP environment it would exit.
-		try {
-			$this->ajax->save_options();
-		} catch ( \Exception $e ) {
-		}
-
-		// Verify that settings were NOT updated to something weird.
-		$settings = Helpers::get_settings();
-		$this->assertNotEquals( 'invalid-json', $settings['domain_name'] );
+		$this->assertEquals( 'escaped.com', $settings['domain_name']['default'] );
 	}
 }

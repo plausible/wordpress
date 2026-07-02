@@ -14,6 +14,8 @@ class ClientFactoryTest extends TestCase {
 	 * @see ClientFactory::build()
 	 */
 	public function testBuild() {
+		delete_option( 'plausible_analytics_settings' );
+
 		$clientFactory = new ClientFactory();
 		$client        = $clientFactory->build();
 

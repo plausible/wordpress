@@ -52,8 +52,8 @@ final class EnhancedMeasurements {
 	 *
 	 * @TODO: Refactor $name to enum (introduced in PHP 8.1) when WordPress drops support for PHP 8.0 and lower.
 	 *
-	 * @param string $name Name of the option to check, valid values are defined in @var self::AVAILABLE_OPTIONS
-	 * @param array $enhanced_measurements Allows checking against a different set of options.
+	 * @param string $name                  Name of the option to check, valid values are defined in @var self::AVAILABLE_OPTIONS
+	 * @param array  $enhanced_measurements Allows checking against a different set of options.
 	 *
 	 * @return bool
 	 */
@@ -61,7 +61,9 @@ final class EnhancedMeasurements {
 		self::is_valid( $name );
 
 		if ( empty( $enhanced_measurements ) ) {
-			$enhanced_measurements = Helpers::get_settings()['enhanced_measurements'];
+			$settings = Helpers::get_settings();
+
+			$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 		}
 
 		if ( ! is_array( $enhanced_measurements ) ) {

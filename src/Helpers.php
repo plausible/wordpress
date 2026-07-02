@@ -16,22 +16,15 @@ use Exception;
  */
 class Helpers {
 	/**
-	 * Get entered Domain Name or provide an alternative if not entered.
+	 * Returns the API token.
 	 *
-	 * @since  1.0.0
-	 * @access public
 	 * @return string
 	 */
-	public static function get_domain() {
+	public static function get_api_token() {
 		$settings = static::get_settings();
+		$current  = static::get_current_language_domain_key();
 
-		if ( ! empty( $settings['domain_name'] ) ) {
-			return $settings['domain_name'];
-		}
-
-		$url = home_url();
-
-		return preg_replace( '/^http(s?):\/\/(www\.)?/i', '', $url );
+		return $settings['api_token'][ $current ] ?? $settings['api_token']['default'] ?? '';
 	}
 
 	/**
@@ -43,8 +36,8 @@ class Helpers {
 	 */
 	public static function get_settings() {
 		$defaults = [
-			'domain_name'                => '',
-			'api_token'                  => '',
+			'domain_name'                => [ 'default' => '' ],
+			'api_token'                  => [ 'default' => '' ],
 			'enhanced_measurements'      => [
 				EnhancedMeasurements::FOUR_O_FOUR,
 				EnhancedMeasurements::FILE_DOWNLOADS,
@@ -56,7 +49,7 @@ class Helpers {
 			'query_params'               => [],
 			'proxy_enabled'              => '',
 			'enable_analytics_dashboard' => '',
-			'shared_link'                => '',
+			'shared_link'                => [ 'default' => '' ],
 			'excluded_pages'             => '',
 			'tracked_user_roles'         => [],
 			'expand_dashboard_access'    => [],
@@ -65,9 +58,108 @@ class Helpers {
 			'self_hosted_shared_link'    => '',
 		];
 
-		$settings = get_option( 'plausible_analytics_settings', [] );
+		$settings = function_exists( 'get_option' ) ? get_option( 'plausible_analytics_settings', [] ) : [];
+		$settings = wp_parse_args( $settings, $defaults );
 
-		return apply_filters( 'plausible_analytics_settings', wp_parse_args( $settings, $defaults ) );
+		/**
+		 * Normalization: Ensure domain_name and api_token are always arrays.
+		 */
+		if ( ! is_array( $settings['domain_name'] ) ) {
+			$settings['domain_name'] = [ 'default' => $settings['domain_name'] ];
+		}
+
+		if ( ! is_array( $settings['api_token'] ) ) {
+			$settings['api_token'] = [ 'default' => $settings['api_token'] ];
+		}
+
+		if ( ! is_array( $settings['shared_link'] ) ) {
+			$settings['shared_link'] = [ 'default' => $settings['shared_link'] ];
+		}
+
+		return apply_filters( 'plausible_analytics_settings', $settings );
+	}
+
+	/**
+	 * Returns the key of the currently used Language Domain.
+	 *
+	 * @since              v2.6.0
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_current_language_domain_key() {
+		if ( ! static::is_language_per_domain_mode() ) {
+			return 'default';
+		}
+
+		$language_domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$current_language = apply_filters( 'wpml_current_language', null );
+
+		if ( $current_language && isset( $language_domains[ $current_language ] ) ) {
+			return (string) apply_filters( 'plausible_analytics_current_language_domain_key', $current_language );
+		}
+
+		return (string) apply_filters( 'plausible_analytics_current_language_domain_key', 'default' );
+	}
+
+	/**
+	 * Returns true only when WPML is active, its negotiation type is "different domain per language", AND at least one domain is configured.
+	 *
+	 * @since              v2.6.0
+	 *
+	 * @return bool
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function is_language_per_domain_mode() {
+		static $is_language_per_domain;
+
+		if ( defined( 'PLAUSIBLE_CI' ) && PLAUSIBLE_CI ) {
+			$is_language_per_domain = null;
+		}
+
+		if ( $is_language_per_domain !== null ) {
+			return $is_language_per_domain; // @codeCoverageIgnore
+		}
+
+		/**
+		 * If WPML is not active, we can assume we're not in language per domain mode.
+		 */
+		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', false );
+		}
+
+		$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
+		$domains          = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$value            = $negotiation_type === 2 && ! empty( $domains );
+
+		return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', $value );
+	}
+
+	/**
+	 * Returns the name of the current Plausible domain.
+	 *
+	 * @since v2.6.0 This is now mapped to language domains to provide compatibility with multilang plugins, like WPML.
+	 *
+	 * @return string
+	 */
+	public static function get_domain() {
+		$settings    = static::get_settings();
+		$current_key = static::get_current_language_domain_key();
+		$domain_name = $settings['domain_name'][ $current_key ] ?? '';
+
+		if ( ! empty( $domain_name ) ) {
+			return $domain_name;
+		}
+
+		if ( ! empty( $settings['domain_name']['default'] ) ) {
+			return $settings['domain_name']['default'];
+		}
+
+		$url = home_url();
+
+		return preg_replace( '/^http(s?):\/\/(www\.)?/i', '', $url );
 	}
 
 	/**
@@ -235,7 +327,7 @@ class Helpers {
 		$client = static::get_client();
 
 		if ( $client instanceof Client ) {
-			return $client->get_tracker_id();
+			return $client->get_tracker_id( static::get_current_language_domain_key() );
 		}
 
 		return '';
@@ -244,12 +336,14 @@ class Helpers {
 	/**
 	 * Build the API client.
 	 *
+	 * @param string $domain_key
+	 *
 	 * @return false|Client
 	 *
 	 * @codeCoverageIgnore This seam's only function is to keep our code testable.
 	 */
-	protected static function get_client() {
-		$client = new ClientFactory();
+	protected static function get_client( $domain_key = '' ) {
+		$client = new ClientFactory( '', $domain_key );
 
 		return $client->build();
 	}
@@ -280,7 +374,43 @@ class Helpers {
 	}
 
 	/**
-	 * Get user role for the logged-in user.
+	 * @since              v2.6.0 Provide compatibility with multilang plugins, like WPML.
+	 *
+	 * @return array
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_language_domains() {
+		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+		$main    = wp_parse_url( home_url(), PHP_URL_HOST ) ?: home_url();
+
+		// WPML's language_domains omits the default language; prepend the main WP domain.
+		if ( ! in_array( $main, $domains, true ) ) {
+			$domains = array_merge( [ 'default' => $main ], $domains );
+		}
+
+		return apply_filters( 'plausible_analytics_language_domains', $domains );
+	}
+
+	/**
+	 * Get the name of the active multilang plugin.
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_multilang_plugin_name() {
+		$name = '';
+
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$name = 'WPML';
+		}
+
+		return apply_filters( 'plausible_analytics_multilang_plugin_name', $name );
+	}
+
+	/**
+	 * Get the user role for the logged-in user.
 	 *
 	 * @since  1.3.0
 	 * @access public
@@ -309,9 +439,14 @@ class Helpers {
 	 *
 	 * @return void
 	 */
-	public static function update_setting( $option_name, $option_value ) {
-		$settings                 = static::get_settings();
-		$settings[ $option_name ] = $option_value;
+	public static function update_setting( $option_name, $option_value, $key = '' ) {
+		$settings = static::get_settings();
+
+		if ( ! empty( $key ) && is_array( $settings[ $option_name ] ) ) {
+			$settings[ $option_name ][ $key ] = $option_value;
+		} else {
+			$settings[ $option_name ] = $option_value;
+		}
 
 		update_option( 'plausible_analytics_settings', $settings );
 	}

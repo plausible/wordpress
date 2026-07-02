@@ -10,7 +10,6 @@ namespace Plausible\Analytics\WP\Admin;
 
 use Plausible\Analytics\WP\Capabilities;
 use Plausible\Analytics\WP\Client;
-use Plausible\Analytics\WP\Client\ApiException;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestCustomEvent;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestPageview;
 use Plausible\Analytics\WP\Client\Model\GoalCreateRequestRevenue;
@@ -39,20 +38,21 @@ class Provisioning {
 	];
 
 	/**
+	 * @var bool
+	 */
+	private static $is_fresh_install = false;
+	/**
 	 * @var Client $client
 	 */
 	public $client;
-
 	/**
-	 * @var ClientFactory
+	 * @var Client[]|null $clients_cache
 	 */
-	private $client_factory;
-
+	private $clients_cache = null;
 	/**
 	 * @var string[] $custom_event_goals
 	 */
 	private $custom_event_goals = [];
-
 	/**
 	 * @var string[] $custom_pageview_properties
 	 */
@@ -61,7 +61,6 @@ class Provisioning {
 		'category',
 		'user_logged_in',
 	];
-
 	/**
 	 * @var string[] $custom_search_properties
 	 */
@@ -76,16 +75,10 @@ class Provisioning {
 	 *
 	 * @param bool|Client $client Allows for mocking during CI.
 	 *
-	 * @throws ApiException
 	 * @codeCoverageIgnore
 	 */
 	public function __construct( $client = null ) {
 		$this->client = $client;
-
-		if ( ! $this->client ) {
-			$this->client_factory = new ClientFactory();
-			$this->client         = $this->client_factory->build();
-		}
 
 		$this->custom_event_goals = [
 			EnhancedMeasurements::FOUR_O_FOUR             => __( '404', 'plausible-analytics' ),
@@ -100,15 +93,15 @@ class Provisioning {
 
 	/**
 	 * Action & filter hooks.
+	 *
 	 * @return void
-	 * @throws ApiException
+	 *
 	 * @codeCoverageIgnore
 	 */
 	private function init() {
-		if ( ! $this->client instanceof Client || ! $this->client->validate_api_token() ) {
-			return; // @codeCoverageIgnore
-		}
-
+		/** This hook should always be registered because it handles fresh installs. */
+		add_action( 'add_option_plausible_analytics_settings', [ $this, 'provision_on_connect' ], 10, 2 );
+		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_provision_on_connect' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_shared_link' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_create_goals' ], 10, 2 );
 		add_action( 'update_option_plausible_analytics_settings', [ $this, 'maybe_delete_goals' ], 11, 2 );
@@ -118,27 +111,406 @@ class Provisioning {
 	}
 
 	/**
-	 * Create shared link when Enable Analytics Dashboard option is enabled.
+	 * Searches an array for the presence of $string within each element's value. Strips currencies using a regex, e.g.
+	 * (USD), because these are added to revenue goals by Plausible.
 	 *
-	 * @param $old_settings
-	 * @param $settings
+	 * @param string $string
+	 * @param array  $haystack
+	 *
+	 * @return false|mixed
+	 *
+	 * @codeCoverageIgnore Because it can't be unit tested.
 	 */
-	public function maybe_create_shared_link( $old_settings, $settings ) {
+	public function array_search_contains( $string, $haystack ) {
+		if ( preg_match( '/\([A-Z]*?\)/', $string ) ) {
+			$string = preg_replace( '/ \([A-Z]*?\)/', '', $string );
+		}
+
+		foreach ( $haystack as $key => $value ) {
+			if ( str_contains( $value, $string ) ) {
+				return $key;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Creates a funnel and creates goals if they don't exist.
+	 *
+	 * @param        $name
+	 * @param        $steps
+	 * @param null   $client
+	 * @param string $key
+	 * @param null   $all_ids
+	 *
+	 * @return array|null
+	 *
+	 * @codeCoverageIgnore Because this method should be mocked in tests if needed.
+	 */
+	public function create_funnel( $name, $steps, $client = null, $key = 'default', $all_ids = null ) {
+		$create_request = new Client\Model\FunnelCreateRequest(
+			[
+				'funnel' => [
+					'name'  => $name,
+					'steps' => $steps,
+				],
+			]
+		);
+
+		if ( ! $client ) {
+			$client = $this->client;
+		}
+
+		if ( $all_ids === null ) {
+			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+		}
+
+		$funnel = $client->create_funnel( $create_request );
+
+		if ( ! $funnel instanceof Client\Model\Funnel || ! $funnel->valid() ) {
+			return $all_ids;
+		}
+
+		$ids   = $all_ids[ $key ] ?? [];
+		$steps = $funnel->getFunnel()->getSteps();
+
+		foreach ( $steps as $step ) {
+			$goal = $step->getGoal();
+
+			if ( ! empty( $goal ) ) {
+				$ids[ $goal->getId() ] = $goal->getDisplayName();
+			}
+		}
+
+		if ( ! empty( $ids ) ) {
+			$all_ids[ $key ] = $ids;
+			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+		}
+
+		return $all_ids;
+	}
+
+	/**
+	 * Normalizes a per-domain option value.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return array
+	 */
+	public function normalize_option( $value ) {
+		if ( empty( $value ) || ! is_array( $value ) ) {
+			return [];
+		}
+
+		$is_legacy = false;
+
+		foreach ( $value as $item ) {
+			if ( ! is_array( $item ) ) {
+				$is_legacy = true;
+				break;
+			}
+		}
+
+		if ( $is_legacy ) {
+			return [ 'default' => $value ];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Create the shared link when the Enable Analytics Dashboard option is enabled.
+	 *
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
+	 *
+	 * @codeCoverageIgnore Because we don't want to test if the API is working.
+	 */
+	public function maybe_create_shared_link( $_, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
 		if ( empty( $settings['enable_analytics_dashboard'] ) ) {
 			return; // @codeCoverageIgnore
 		}
 
-		$this->client->create_shared_link();
+		foreach ( $clients as $key => $client ) {
+			$client->create_shared_link( $key );
+		}
+	}
+
+	/**
+	 * Get an array of [ $key => Client ] for every configured domain with a non-empty API token.
+	 *
+	 * @param bool $force_refresh
+	 *
+	 * @return Client[]
+	 *
+	 * @codeCoverageIgnore Because it should be mocked when running tests.
+	 */
+	public function get_clients( $force_refresh = false ) {
+		if ( $this->clients_cache !== null && ! $force_refresh ) {
+			return $this->clients_cache;
+		}
+
+		if ( $this->client instanceof Client ) {
+			return $this->clients_cache = [ 'default' => $this->client ];
+		}
+
+		$settings = Helpers::get_settings();
+
+		if ( empty( $settings['api_token'] ) || ! is_array( $settings['api_token'] ) ) {
+			return $this->clients_cache = [];
+		}
+
+		$clients = [];
+
+		foreach ( $settings['api_token'] as $key => $token ) {
+			if ( empty( $token ) ) {
+				continue;
+			}
+
+			$filter = function () use ( $key ) {
+				return $key;
+			};
+
+			add_filter( 'plausible_analytics_current_language_domain_key', $filter );
+
+			$client = ( new ClientFactory( '', $key ) )->build();
+
+			if ( $client instanceof Client && $client->validate_api_token() ) {
+				$clients[ $key ] = $client;
+			}
+
+			remove_filter( 'plausible_analytics_current_language_domain_key', $filter );
+		}
+
+		return $this->clients_cache = $clients;
+	}
+
+	/**
+	 * Delete Custom Event Goals when an Enhanced Measurement is disabled.
+	 *
+	 * @param $old_settings
+	 * @param $settings
+	 *
+	 * @codeCoverageIgnore Because we don't want to test if the API is working.
+	 */
+	public function maybe_delete_goals( $old_settings, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
+		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements_old ) ) {
+			$enhanced_measurements_old = [];
+		}
+
+		$enhanced_measurements_old = array_filter( $enhanced_measurements_old );
+
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
+		}
+
+		$enhanced_measurements = array_filter( $enhanced_measurements );
+
+		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+
+		if ( empty( $disabled_settings ) ) {
+			return;
+		}
+
+		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+
+		foreach ( $clients as $domain_key => $client ) {
+			$goals = $all_ids[ $domain_key ] ?? [];
+
+			foreach ( $goals as $id => $name ) {
+				$key = array_search( $name, $this->custom_event_goals );
+
+				if ( ! in_array( $key, $disabled_settings ) ) {
+					continue; // @codeCoverageIgnore
+				}
+
+				$client->delete_goal( $id );
+
+				unset( $goals[ $id ] );
+			}
+
+			$all_ids[ $domain_key ] = $goals;
+		}
+
+		// Refresh the stored IDs in the DB.
+		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+	}
+
+	/**
+	 * Auto-enables tracking of the 'Customer' user role for WC, 'Subscriber' user role for EDD and 'EDD_Subscriber' user role for EDD Recurring
+	 * if Revenue tracking and one of these plugins is enabled.
+	 *
+	 * @param $settings
+	 *
+	 * @return array
+	 */
+	public function maybe_enable_customer_user_roles( $settings ) {
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
+			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'customer';
+			}
+
+			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'subscriber';
+			}
+
+			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings['tracked_user_roles'] ) ) {
+				$settings['tracked_user_roles'][] = 'edd_subscriber';
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Wrapper for @see self::maybe_provision_on_connect() which fires exclusively on fresh installations.
+	 *
+	 * @param mixed $_        Not used (old settings)
+	 * @param array $settings Current settings
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore Because it's just a wrapper.
+	 */
+	public function provision_on_connect( $_, $settings ) {
+		$this->maybe_provision_on_connect( [], $settings );
+
+		self::$is_fresh_install = true;
+	}
+
+	/**
+	 * Run provisioning for all enabled Enhanced Measurements if a new Language Domain is configured.
+	 *
+	 * @param $old_settings
+	 * @param $settings
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function maybe_provision_on_connect( $old_settings, $settings ) {
+		if ( self::$is_fresh_install ) {
+			return;
+		}
+
+		$old_tokens = is_array( $old_settings['api_token'] ?? null ) ? $old_settings['api_token'] : [ 'default' => $old_settings['api_token'] ?? '' ];
+		$new_tokens = is_array( $settings['api_token'] ?? null ) ? $settings['api_token'] : [ 'default' => $settings['api_token'] ?? '' ];
+
+		$changed_keys = [];
+
+		foreach ( $new_tokens as $key => $token ) {
+			if ( ! empty( $token ) && ( ! isset( $old_tokens[ $key ] ) || $old_tokens[ $key ] !== $token ) ) {
+				$changed_keys[] = $key;
+			}
+		}
+
+		if ( empty( $changed_keys ) ) {
+			return;
+		}
+
+		/** Make sure all API client objects are present. */
+		$this->get_clients( true );
+		$this->update_tracker_script_config( $old_settings, $settings );
+		$this->maybe_create_goals( $old_settings, $settings );
+		$this->maybe_create_custom_properties( $old_settings, $settings );
+	}
+
+	/**
+	 * Updates the tracker script config based on the enabled enhanced measurements.
+	 *
+	 * @param mixed $_        Not used (old settings)
+	 * @param array $settings Current settings
+	 *
+	 * @return array Updated tracker script config.
+	 */
+	public function update_tracker_script_config( $_, $settings ) {
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = []; // @codeCoverageIgnore
+		}
+
+		$config = [
+			'file_downloads'     => false,
+			'form_submissions'   => false,
+			'hash_based_routing' => false,
+			'installation_type'  => 'wordpress',
+			'outbound_links'     => false,
+		];
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $enhanced_measurements ) ) {
+			$config['file_downloads'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $enhanced_measurements ) ) {
+			$config['form_submissions'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $enhanced_measurements ) ) {
+			$config['hash_based_routing'] = true;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $enhanced_measurements ) ) {
+			$config['outbound_links'] = true;
+		}
+
+		$config = [ 'tracker_script_configuration' => $config ];
+
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return $config;
+		}
+
+		foreach ( $clients as $client ) {
+			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
+
+			$client->update_tracker_script_configuration( $request );
+		}
+
+		/** Required for unit tests. */
+		return $config;
 	}
 
 	/**
 	 * Create Custom Event Goals for enabled Enhanced Measurements.
 	 *
-	 * @param $old_settings
-	 * @param $settings
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 */
-	public function maybe_create_goals( $old_settings, $settings ) {
-		$enhanced_measurements = array_filter( $settings['enhanced_measurements'] );
+	public function maybe_create_goals( $_, $settings ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
+
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = []; // @codeCoverageIgnore
+		}
+
+		$enhanced_measurements = array_filter( $enhanced_measurements );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -155,12 +527,18 @@ class Provisioning {
 			$goals[] = $this->create_goal_request( $this->custom_event_goals[ $measurement ] );
 		}
 
-		$this->create_goals( $goals );
+		$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) );
+
+		foreach ( $clients as $key => $client ) {
+			$all_ids = $this->create_goals( $goals, $client, $key, $all_ids );
+		}
+
+		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 	}
 
 	/**
-	 * @param string $name Event Name
-	 * @param string $type CustomEvent|Revenue|Pageview
+	 * @param string $name     Event Name
+	 * @param string $type     CustomEvent|Revenue|Pageview
 	 * @param string $currency Required if $type is Revenue
 	 *
 	 * @return GoalCreateRequestCustomEvent|GoalCreateRequestPageview|GoalCreateRequestRevenue
@@ -198,20 +576,29 @@ class Provisioning {
 	 *
 	 * @param array $goals
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function create_goals( $goals ) {
+	public function create_goals( $goals, $client = null, $key = 'default', $all_ids = null ) {
 		if ( empty( $goals ) ) {
-			return; // @codeCoverageIgnore
+			return $all_ids ?? []; // @codeCoverageIgnore
+		}
+
+		if ( ! $client ) {
+			$client = $this->client; // @codeCoverageIgnore
+		}
+
+		if ( $all_ids === null ) {
+			$all_ids = $this->normalize_option( get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] ) ); // @codeCoverageIgnore
 		}
 
 		$create_request = new Client\Model\GoalCreateRequestBulkGetOrCreate();
 		$create_request->setGoals( $goals );
-		$response = $this->client->create_goals( $create_request );
 
-		if ( $response->valid() ) {
+		$response = $client->create_goals( $create_request );
+
+		if ( $response && $response->valid() ) {
 			$goals = $response->getGoals();
-			$ids   = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
+			$ids   = $all_ids[ $key ] ?? [];
 
 			foreach ( $goals as $goal ) {
 				$goal                  = $goal->getGoal();
@@ -219,120 +606,33 @@ class Provisioning {
 			}
 
 			if ( ! empty( $ids ) ) {
-				update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $ids );
+				$all_ids[ $key ] = $ids;
+				/** IDs are stored in the DB after the loop. @see self::maybe_create_goals() */
 			}
 		}
+
+		return $all_ids;
 	}
 
 	/**
-	 * Creates a funnel and creates goals if they don't exist.
-	 *
-	 * @param $name
-	 * @param $steps
+	 * @param array $_        Not used (old settings)
+	 * @param array $settings Current settings
 	 *
 	 * @return void
-	 * @codeCoverageIgnore Because this method should be mocked in tests if needed.
+	 * @codeCoverageIgnore Because we don't want to test it if the API is working.
 	 */
-	public function create_funnel( $name, $steps ) {
-		$create_request = new Client\Model\FunnelCreateRequest(
-			[
-				'funnel' => [
-					'name'  => $name,
-					'steps' => $steps,
-				],
-			]
-		);
+	public function maybe_create_custom_properties( $_, $settings ) {
+		$clients = $this->get_clients();
 
-		$funnel = $this->client->create_funnel( $create_request );
-
-		if ( ! $funnel instanceof Client\Model\Funnel || ! $funnel->valid() ) {
+		if ( empty( $clients ) ) {
 			return;
 		}
 
-		$ids   = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
-		$steps = $funnel->getFunnel()->getSteps();
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
-		foreach ( $steps as $step ) {
-			$goal = $step->getGoal();
-
-			if ( ! empty( $goal ) ) {
-				$ids[ $goal->getId() ] = $goal->getDisplayName();
-			}
+		if ( ! is_array( $enhanced_measurements ) ) {
+			$enhanced_measurements = [];
 		}
-
-		if ( ! empty( $ids ) ) {
-			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $ids );
-		}
-	}
-
-	/**
-	 * Delete Custom Event Goals when an Enhanced Measurement is disabled.
-	 *
-	 * @param $old_settings
-	 * @param $settings
-	 *
-	 * @codeCoverageIgnore Because we don't want to test if the API is working.
-	 */
-	public function maybe_delete_goals( $old_settings, $settings ) {
-		$enhanced_measurements_old = array_filter( $old_settings['enhanced_measurements'] );
-		$enhanced_measurements     = array_filter( $settings['enhanced_measurements'] );
-		$disabled_settings         = array_diff( $enhanced_measurements_old, $enhanced_measurements );
-
-		if ( empty( $disabled_settings ) ) {
-			return;
-		}
-
-		$goals = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
-
-		foreach ( $goals as $id => $name ) {
-			$key = array_search( $name, $this->custom_event_goals );
-
-			if ( ! in_array( $key, $disabled_settings ) ) {
-				continue; // @codeCoverageIgnore
-			}
-
-			$this->client->delete_goal( $id );
-
-			unset( $goals[ $id ] );
-		}
-
-		// Refresh the stored IDs in the DB.
-		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $goals );
-	}
-
-	/**
-	 * Searches an array for the presence of $string within each element's value. Strips currencies using a regex, e.g.
-	 * (USD), because these are added to revenue goals by Plausible.
-	 *
-	 * @param string $string
-	 * @param array $haystack
-	 *
-	 * @return false|mixed
-	 * @codeCoverageIgnore Because it can't be unit tested.
-	 */
-	public function array_search_contains( $string, $haystack ) {
-		if ( preg_match( '/\([A-Z]*?\)/', $string ) ) {
-			$string = preg_replace( '/ \([A-Z]*?\)/', '', $string );
-		}
-
-		foreach ( $haystack as $key => $value ) {
-			if ( str_contains( $value, $string ) ) {
-				return $key;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param array $old_settings
-	 * @param array $settings
-	 *
-	 * @return void
-	 * @codeCoverageIgnore Because we don't want to test if the API is working.
-	 */
-	public function maybe_create_custom_properties( $old_settings, $settings ) {
-		$enhanced_measurements = $settings['enhanced_measurements'];
 
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
@@ -345,7 +645,7 @@ class Provisioning {
 		$properties     = [];
 
 		/**
-		 * Enable Custom Properties for Authors & Categories option.
+		 * Enable Custom Properties for the Authors & Categories option.
 		 */
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) ) {
 			foreach ( $this->custom_pageview_properties as $property ) {
@@ -371,93 +671,37 @@ class Provisioning {
 			}
 		}
 
-		/**
-		 * Create Custom Properties for Search Queries option.
-		 */
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) ) {
-			$caps = get_option( 'plausible_analytics_api_token_caps', [] );
+		$clients = $this->get_clients();
 
-			foreach ( $this->custom_search_properties as $property ) {
-				if ( empty( $caps[ Capabilities::PROPS ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
-					continue;
+		if ( empty( $clients ) ) {
+			return;
+		}
+
+		foreach ( $clients as $key => $client ) {
+			$domain_properties = $properties;
+
+			/**
+			 * Create the Custom Properties for the Search Queries option.
+			 */
+			if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) ) {
+				$caps = $all_caps[ $key ] ?? [];
+
+				foreach ( $this->custom_search_properties as $property ) {
+					if ( empty( $caps[ Capabilities::PROPS ] ) && ( $property === 'result_count' || $property == 'search_source' ) ) {
+						continue;
+					}
+
+					$domain_properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 				}
-
-				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
-			}
-		}
-
-		if ( empty( $properties ) ) {
-			return; // @codeCoverageIgnore
-		}
-
-		$create_request->setCustomProps( $properties );
-
-		$this->client->enable_custom_property( $create_request );
-	}
-
-	/**
-	 * Auto-enables tracking of the 'Customer' user role for WC, 'Subscriber' user role for EDD and 'EDD_Subscriber' user role for EDD Recurring
-	 * if Revenue tracking and one of these plugins is enabled.
-	 *
-	 * @param $settings
-	 *
-	 * @return array
-	 */
-	public function maybe_enable_customer_user_roles( $settings ) {
-		$enhanced_measurements = $settings['enhanced_measurements'];
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) ) {
-			if ( Integrations::is_wc_active() && ! in_array( 'customer', $settings['tracked_user_roles'] ) ) {
-				$settings['tracked_user_roles'][] = 'customer';
 			}
 
-			if ( Integrations::is_edd_active() && ! in_array( 'subscriber', $settings['tracked_user_roles'] ) ) {
-				$settings['tracked_user_roles'][] = 'subscriber';
+			if ( empty( $domain_properties ) ) {
+				continue; // @codeCoverageIgnore
 			}
 
-			if ( Integrations::is_edd_recurring_active() && ! in_array( 'edd_subscriber', $settings['tracked_user_roles'] ) ) {
-				$settings['tracked_user_roles'][] = 'edd_subscriber';
-			}
+			$create_request->setCustomProps( $domain_properties );
+
+			$client->enable_custom_property( $create_request );
 		}
-
-		return $settings;
-	}
-
-	/**
-	 * Updates the tracker script config based on the enabled enhanced measurements.
-	 *
-	 * @return array The updated tracker script config.
-	 */
-	public function update_tracker_script_config( $old_settings, $settings ) {
-		$config = [
-			'file_downloads'     => false,
-			'form_submissions'   => false,
-			'hash_based_routing' => false,
-			'installation_type'  => 'wordpress',
-			'outbound_links'     => false,
-		];
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FILE_DOWNLOADS, $settings['enhanced_measurements'] ) ) {
-			$config['file_downloads'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FORM_COMPLETIONS, $settings['enhanced_measurements'] ) ) {
-			$config['form_submissions'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::HASH_BASED_ROUTING, $settings['enhanced_measurements'] ) ) {
-			$config['hash_based_routing'] = true;
-		}
-
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::OUTBOUND_LINKS, $settings['enhanced_measurements'] ) ) {
-			$config['outbound_links'] = true;
-		}
-
-		$config  = [ 'tracker_script_configuration' => $config ];
-		$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
-
-		$this->client->update_tracker_script_configuration( $request );
-
-		return $config;
 	}
 }

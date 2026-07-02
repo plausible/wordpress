@@ -49,31 +49,35 @@ class Integrations {
 	}
 
 	/**
-	 * @param array $event_goals
+	 * @param array  $event_goals
 	 * @param string $funnel_name
 	 *
 	 * @return void
 	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	public function create_integration_funnel( $event_goals, $funnel_name ) {
-		$goals = [];
+		$goals   = [];
+		$all_ids = $this->provisioning->normalize_option(
+			get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] )
+		);
 
 		foreach ( $event_goals as $event_key => $event_goal ) {
-			// Don't add this goal to the funnel. Create it separately instead.
 			if ( $event_key === 'remove-from-cart' ) {
-				$this->provisioning->create_goals( [ $this->provisioning->create_goal_request( $event_goal ) ] );
+				foreach ( $this->provisioning->get_clients() as $key => $client ) {
+					$all_ids = $this->provisioning->create_goals(
+						[ $this->provisioning->create_goal_request( $event_goal ) ],
+						$client,
+						$key,
+						$all_ids
+					);
+				}
 
 				continue;
 			}
 
 			if ( $event_key === 'purchase' ) {
-				if ( \Plausible\Analytics\WP\Integrations::is_edd_active() ) {
-					$currency = edd_get_currency();
-				} else {
-					$currency = get_woocommerce_currency();
-				}
-
-				$goals[] = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
+				$currency = \Plausible\Analytics\WP\Integrations::is_edd_active() ? edd_get_currency() : get_woocommerce_currency();
+				$goals[]  = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
 
 				continue;
 			}
@@ -88,7 +92,9 @@ class Integrations {
 			$goals[] = $this->provisioning->create_goal_request( $event_goal );
 		}
 
-		$this->provisioning->create_funnel( $funnel_name, $goals );
+		foreach ( $this->provisioning->get_clients() as $key => $client ) {
+			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
+		}
 	}
 
 	/**
@@ -97,21 +103,33 @@ class Integrations {
 	 * @param object $integration The integration object containing event goals to be deleted.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	public function delete_integration_goals( $integration ) {
-		$goals = get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] );
+		$all_ids = $this->provisioning->normalize_option(
+			get_option( 'plausible_analytics_enhanced_measurements_goal_ids', [] )
+		);
 
-		foreach ( $goals as $id => $name ) {
-			$key = $this->provisioning->array_search_contains( $name, $integration->event_goals );
+		foreach ( $this->provisioning->get_clients() as $domain_key => $client ) {
+			$goals = $all_ids[ $domain_key ] ?? [];
 
-			if ( $key ) {
-				$this->provisioning->client->delete_goal( $id );
+			foreach ( $goals as $id => $name ) {
+				$key = $this->provisioning->array_search_contains( $name, $integration->event_goals );
 
-				unset( $goals[ $id ] );
+				if ( $key ) {
+					$client->delete_goal( $id );
+					unset( $goals[ $id ] );
+				}
+			}
+
+			if ( empty( $goals ) ) {
+				unset( $all_ids[ $domain_key ] );
+			} else {
+				$all_ids[ $domain_key ] = $goals;
 			}
 		}
 
-		// Refresh the stored IDs in the DB.
-		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $goals );
+		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 	}
 }

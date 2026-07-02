@@ -13,6 +13,7 @@ const config = {
 	mode,
 	entry: {
 		'plausible-admin': ['./assets/src/css/admin/main.css', './assets/src/js/admin/main.js'],
+		'plausible-admin-notice': ['./assets/src/js/admin/notice.js'],
 		'plausible-affiliate-links': ['./assets/src/js/affiliate-links.js'],
 		'plausible-woocommerce-integration': ['./assets/src/js/integrations/woocommerce.js'],
 		'plausible-form-submit-integration': ['./assets/src/js/integrations/form-submit.js']

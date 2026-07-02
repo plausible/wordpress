@@ -4,10 +4,6 @@
  * Admin JS
  */
 document.addEventListener('DOMContentLoaded', () => {
-	if (!document.location.href.includes('plausible_analytics')) {
-		return;
-	}
-
 	let plausible = {
 		/**
 		 * Properties
@@ -15,11 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		nonceElem: document.getElementById('_wpnonce'),
 		nonce: '',
 		showWizardElem: document.getElementById('show_wizard'),
-		domainNameElem: document.getElementById('domain_name'),
-		apiTokenElem: document.getElementById('api_token'),
 		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
+		credentialsInputs: document.querySelectorAll('.plausible-analytics-credentials input'),
+		languageDomainPulldown: document.getElementById('language_domain'),
+		connectButtons: document.querySelectorAll('.plausible-analytics-credentials .plausible-analytics-connect-button'),
 
 		/**
 		 * Bind events.
@@ -39,14 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (this.showWizardElem !== null) {
 				this.showWizardElem.addEventListener('click', this.showWizard);
-			}
-
-			if (this.domainNameElem !== null) {
-				this.domainNameElem.addEventListener('keyup', this.disableConnectButton);
-			}
-
-			if (this.apiTokenElem !== null) {
-				this.apiTokenElem.addEventListener('keyup', this.disableConnectButton);
 			}
 
 			if (this.createAPITokenElems.length > 0) {
@@ -74,6 +63,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (this.stepElems.length > 0) {
 				for (let i = 0; i < this.stepElems.length; i++) {
 					this.stepElems[i].addEventListener('click', this.saveOptionOnNext);
+				}
+			}
+
+			if (this.credentialsInputs.length > 0) {
+				for (let i = 0; i < this.credentialsInputs.length; i++) {
+					this.credentialsInputs[i].addEventListener('keyup', this.disableConnectButton);
+				}
+			}
+
+			if (this.languageDomainPulldown !== null) {
+				this.languageDomainPulldown.addEventListener('change', this.switchLanguageDomain);
+			}
+
+			if (this.connectButtons.length > 0) {
+				for (let i = 0; i < this.connectButtons.length; i++) {
+					this.connectButtons[i].addEventListener('click', this.saveOption);
 				}
 			}
 
@@ -348,14 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Save value of input or text area to DB.
+		 * Save the value of the input or text area to DB.
 		 *
 		 * @param e
 		 */
 		saveOption: function (e) {
-			const button = e.target;
-			const section = button.closest('.plausible-analytics-section');
-			const inputs = section.querySelectorAll('input, textarea');
+			const button = e.target.closest('button');
+			const isCredentials = button.closest('.plausible-analytics-credentials');
+			const section = isCredentials || button.closest('.plausible-analytics-section');
+			const inputs = section.querySelectorAll(isCredentials ? 'input' : 'input, textarea');
 			const form = new FormData();
 			let options = [];
 
@@ -369,13 +375,33 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.append('options', JSON.stringify(options));
 			form.append('_nonce', plausible.nonce);
 
-			if (button.children.length > 0) {
-				button.children[0].classList.remove('hidden');
+			let spinner = button.querySelector('svg');
+
+			if (spinner) {
+				spinner.classList.remove('hidden');
 			}
 
 			button.setAttribute('disabled', 'disabled');
 
 			plausible.ajax(form, button);
+		},
+
+		/**
+		 * Switch Language Domain.
+		 *
+		 * @param e
+		 */
+		switchLanguageDomain: function (e) {
+			const selectedKey = e.target.value;
+			const credentials = document.querySelectorAll('.plausible-analytics-credentials');
+
+			credentials.forEach(function (credentialsSet) {
+				if (credentialsSet.dataset.languageDomainKey === selectedKey) {
+					credentialsSet.classList.remove('hidden');
+				} else {
+					credentialsSet.classList.add('hidden');
+				}
+			});
 		},
 
 		/**
@@ -413,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		 */
 		validateInput: function (input) {
 			// Strip http(s)://(www.) from domain_name before sending it.
-			if (input.name === 'domain_name' && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
+			if ((input.name === 'domain_name' || input.name.startsWith('domain_name[')) && input.value.match(/^(https?:\/\/)?(www.)?/).length > 0) {
 				input.value = input.value.replace(/^(https?:\/\/)?(www.)?/, '');
 			}
 
@@ -461,20 +487,38 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Disable Connect button if Domain Name or API Token field is empty.
+		 * Disable the Connect button if the Domain Name or API Token field is empty.
 		 *
 		 * @param e
 		 */
 		disableConnectButton: function (e) {
 			let target = e.target;
-			let button = document.getElementById('connect_plausible_analytics');
+			let credentials = target.closest('.plausible-analytics-credentials');
+			let button;
 			let buttonIsHref = false;
 
-			if (button === null) {
-				let slide_id = document.location.hash;
-				button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
-				buttonIsHref = true;
+			if (credentials !== null) {
+				button = credentials.querySelector('.plausible-analytics-connect-button');
+				let allFilled = Array.from(credentials.querySelectorAll('input')).every(input => input.value.trim() !== '');
+
+				if (button === null) {
+					return;
+				}
+
+				button.disabled = !allFilled;
+
+				button.childNodes.forEach(function (node) {
+					if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === plausible_analytics_i18n.connected) {
+						node.textContent = ' ' + plausible_analytics_i18n.connect;
+					}
+				});
+
+				return;
 			}
+
+			let slide_id = document.location.hash;
+			button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
+			buttonIsHref = true;
 
 			if (button === null) {
 				return;
@@ -485,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					button.disabled = false;
 				} else {
 					button.classList.remove('pointer-events-none');
-					button.classList.replace('bg-gray-200', 'bg-indigo-600')
+					button.classList.replace('bg-gray-200', 'bg-indigo-600');
 				}
 
 				return;
@@ -493,10 +537,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (!buttonIsHref) {
 				button.disabled = true;
-				button.innerHTML = button.innerHTML.replace('Connected', 'Connect');
+				button.textContent = button.textContent.replace('Connected', 'Connect');
 			} else {
 				button.classList += ' pointer-events-none';
-				button.classList.replace('bg-indigo-600', 'bg-gray-200')
+				button.classList.replace('bg-indigo-600', 'bg-gray-200');
 			}
 		},
 
@@ -508,7 +552,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPIToken: function (e) {
 			e.preventDefault();
 
-			let domain = document.getElementById('domain_name').value;
+			let domainElem = document.querySelector('.plausible-analytics-credentials:not(.hidden) [id^="domain_name"]');
+
+			if (domainElem === null) {
+				domainElem = document.querySelector('input[id^="domain_name"]');
+			}
+
+			let domain = domainElem ? domainElem.value : '';
 			domain = domain.replaceAll('/', '%2F');
 
 			window.open(`${plausible_analytics_hosted_domain}/${domain}/settings/integrations?new_token=WordPress`, '_blank', 'location=yes,height=768,width=1024,scrollbars=yes,status=no');
@@ -610,17 +660,24 @@ document.addEventListener('DOMContentLoaded', () => {
 			).then(response => {
 				if (button) {
 					if (button.children.length > 0) {
-						button.children[0].classList += ' hidden';
+						let spinner = button.querySelector('svg');
+						if (spinner) {
+							spinner.classList.add('hidden');
+						}
 					}
 
-					if (button.id === 'connect_plausible_analytics' && response.status === 200) {
-						button.innerText = plausible_analytics_i18n.connected;
+					if (button.classList.contains('plausible-analytics-connect-button') && response.status === 200) {
+						button.childNodes.forEach(function (node) {
+							if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+								node.textContent = ' ' + plausible_analytics_i18n.connected;
+							}
+						});
 					} else {
 						button.removeAttribute('disabled');
 					}
 				}
 
-				// We still want the data, if it's a Payment Required error.
+				// We still want the data if it's a Payment Required error.
 				if (response.status === 200 || response.status === 402) {
 					return response.json();
 				}
