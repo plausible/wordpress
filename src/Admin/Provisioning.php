@@ -475,7 +475,13 @@ class Provisioning {
 
 		$config = [ 'tracker_script_configuration' => $config ];
 
-		foreach ( $this->get_clients() as $client ) {
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return $config;
+		}
+
+		foreach ( $clients as $client ) {
 			$request = new Client\Model\TrackerScriptConfigurationUpdateRequest( $config );
 
 			$client->update_tracker_script_configuration( $request );
@@ -665,7 +671,11 @@ class Provisioning {
 			}
 		}
 
-		$all_caps = $this->normalize_option( get_option( 'plausible_analytics_api_token_caps', [] ) );
+		$clients = $this->get_clients();
+
+		if ( empty( $clients ) ) {
+			return;
+		}
 
 		foreach ( $clients as $key => $client ) {
 			$domain_properties = $properties;
