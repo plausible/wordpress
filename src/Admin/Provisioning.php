@@ -446,7 +446,7 @@ class Provisioning {
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
 		if ( ! is_array( $enhanced_measurements ) ) {
-			$enhanced_measurements = [];
+			$enhanced_measurements = []; // @codeCoverageIgnore
 		}
 
 		$config = [
