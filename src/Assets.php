@@ -34,7 +34,9 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_cloaked_affiliate_links_assets() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ) && Helpers::main_script_is_registered() ) {
+		$affiliate_links = Helpers::get_settings()['affiliate_links'] ?? [];
+
+		if ( $affiliate_links && Helpers::main_script_is_registered() ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
@@ -42,8 +44,6 @@ class Assets {
 				filemtime( PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'assets/dist/js/plausible-affiliate-links.js' ),
 				[ 'in_footer' => true ],
 			);
-
-			$affiliate_links = Helpers::get_settings()['affiliate_links'] ?? [];
 
 			wp_add_inline_script( 'plausible-affiliate-links', 'const plausibleAffiliateLinks = ' . wp_json_encode( $affiliate_links ) . ';', 'before' );
 		}
@@ -148,8 +148,9 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_query_params_script() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ) && Helpers::main_script_is_registered() ) {
-			$query_params = Helpers::get_settings()['query_params'] ?? [];
+		$query_params = Helpers::get_settings()['query_params'] ?? [];
+
+		if ($query_params && Helpers::main_script_is_registered() ) {
 			$props        = [];
 
 			foreach ( $query_params as $query_param ) {

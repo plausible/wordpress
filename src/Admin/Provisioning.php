@@ -634,10 +634,12 @@ class Provisioning {
 			$enhanced_measurements = [];
 		}
 
+		$query_params = $settings['query_params'] ?? [];
+
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
-		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
+		     empty($query_params) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -663,9 +665,9 @@ class Provisioning {
 		}
 
 		/**
-		 * Create Custom Properties for Query Parameters option.
+		 * Create the Custom Properties for the Query Parameters option.
 		 */
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
+		if ( $query_params ) {
 			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
