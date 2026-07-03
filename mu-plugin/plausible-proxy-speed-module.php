@@ -62,7 +62,7 @@ class PlausibleProxySpeed {
 			return false;
 		}
 
-		$path = parse_url( $this->request_uri, PHP_URL_PATH );
+		$path = wp_parse_url( $this->request_uri, PHP_URL_PATH );
 
 		if ( ! is_string( $path ) || $path === '' ) {
 			return false;
