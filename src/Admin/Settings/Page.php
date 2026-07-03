@@ -119,6 +119,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Enhanced measurements', 'plausible-analytics' ),
 					'slug'   => 'enhanced_measurements',
 					'type'   => 'group',
+					'divide' => true,
 					// translators: %1$s replaced with <code>outbound-links</code>.
 					'desc'   => esc_html__(
 						'Enable enhanced measurements that you\'d like to track.',
