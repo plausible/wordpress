@@ -117,7 +117,7 @@ class Provisioning {
 	 * @param string $string
 	 * @param array  $haystack
 	 *
-	 * @return false|mixed
+	 * @return false|string|int
 	 *
 	 * @codeCoverageIgnore Because it can't be unit tested.
 	 */
@@ -307,14 +307,17 @@ class Provisioning {
 			return;
 		}
 
-		$enhanced_measurements_old = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $old_settings, $old_settings['enhanced_measurements'] ?? [] );
+		$enhanced_measurements_old = $this->maybe_add( [
+			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS,
+			EnhancedMeasurements::QUERY_PARAMS,
+		], $old_settings, $old_settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements_old ) ) {
 			$enhanced_measurements_old = [];
 		}
 
 		$enhanced_measurements_old = array_filter( $enhanced_measurements_old );
-		$enhanced_measurements     = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $settings, $settings['enhanced_measurements'] ?? [] );
+		$enhanced_measurements     = $this->maybe_add( [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, EnhancedMeasurements::QUERY_PARAMS ], $settings, $settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements ) ) {
 			$enhanced_measurements = [];
@@ -530,7 +533,7 @@ class Provisioning {
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
-		$enhanced_measurements = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $settings, $enhanced_measurements );
+		$enhanced_measurements = $this->maybe_add( [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, EnhancedMeasurements::QUERY_PARAMS ], $settings, $enhanced_measurements );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
