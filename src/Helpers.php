@@ -434,8 +434,9 @@ class Helpers {
 	}
 
 	/**
-	 * @param $option_name
-	 * @param $option_value
+	 * @param string           $option_name
+	 * @param array|string|int $option_value
+	 * @param string           $key
 	 *
 	 * @return void
 	 */
