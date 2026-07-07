@@ -51,15 +51,16 @@ class API {
 	 */
 	public function render_checkbox_field( array $field, $is_list = false ) {
 		ob_start();
-		$value      = ! empty( $field['value'] ) ? $field['value'] : 'on';
-		$settings   = Helpers::get_settings();
-		$slug       = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
-		$id         = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
-		$checked    = ! empty( $field['checked'] ) ? 'checked="checked"' :
+		$value               = ! empty( $field['value'] ) ? $field['value'] : 'on';
+		$settings            = Helpers::get_settings();
+		$slug                = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
+		$id                  = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
+		$checked             = ! empty( $field['checked'] ) ? 'checked="checked"' :
 			( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled   = ! empty( $field['disabled'] ) ? 'disabled' : '';
-		$caps       = ! empty( $field['caps'] ) ? $field['caps'] : [];
-		$addtl_opts = ! empty( $field['addtl_opts'] );
+		$disabled            = ! empty( $field['disabled'] ) ? 'disabled' : '';
+		$check_when_disabled = $id === 'expand_dashboard_access_administrator';
+		$caps                = ! empty( $field['caps'] ) ? $field['caps'] : [];
+		$addtl_opts          = ! empty( $field['addtl_opts'] );
 		?>
 		<div class="toggle-container flex items-center mt-4 space-x-3">
 			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' : 'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2
@@ -72,7 +73,7 @@ class API {
 			); ?>"<?php endif; ?> data-addtl-opts="<?php echo $addtl_opts; ?>" name="<?php echo esc_attr( $field['slug'] ); ?>" value="<?php echo esc_html(
 				$value
 			); ?>" <?php echo $disabled; ?>>
-				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
+				<span class="plausible-analytics-toggle <?php echo $checked && ! $disabled || ( $disabled && $check_when_disabled ) ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
 			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo esc_html( $field['label'] ); ?></span>

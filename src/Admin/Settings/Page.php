@@ -67,16 +67,6 @@ class Page extends API {
 	public $wizard_fields = [];
 
 	/**
-	 * @var ClientFactory $client_factory
-	 */
-	private $client_factory;
-
-	/**
-	 * @var Client $client
-	 */
-	private $client;
-
-	/**
 	 * Constructor.
 	 * @since  1.3.0
 	 * @access public
@@ -86,11 +76,8 @@ class Page extends API {
 	public function __construct() {
 		$this->init();
 
-		$settings = Helpers::get_settings();
-
-		$this->client_factory = new ClientFactory( '', Helpers::get_current_language_domain_key() );
-		$this->client         = $this->client_factory->build();
-		$this->fields         = [
+		$settings     = Helpers::get_settings();
+		$this->fields = [
 			'general'     => [
 				[
 					'label'  => esc_html__( 'Connect your website with Plausible Analytics', 'plausible-analytics' ),
@@ -151,17 +138,18 @@ class Page extends API {
 							'caps'  => [ Capabilities::GOALS ],
 						],
 						EnhancedMeasurements::ECOMMERCE_REVENUE     => [
-							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => EnhancedMeasurements::ECOMMERCE_REVENUE,
-							'caps'  => [
+							'label'    => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
+							'docs'     => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
+							'slug'     => 'enhanced_measurements',
+							'type'     => 'checkbox',
+							'value'    => EnhancedMeasurements::ECOMMERCE_REVENUE,
+							'caps'     => [
 								Capabilities::GOALS,
 								Capabilities::FUNNELS,
 								Capabilities::PROPS,
 								Capabilities::REVENUE,
 							],
+							'disabled' => ! empty( $settings['self_hosted_domain'] ),
 						],
 						EnhancedMeasurements::PAGEVIEW_PROPS        => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
