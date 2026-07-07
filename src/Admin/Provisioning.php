@@ -365,17 +365,17 @@ class Provisioning {
 	 */
 	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
 		foreach ( $keys as $key ) {
-			$option_name          = str_replace( '-', '_', $key );
-			$current_option_value = $settings[ $option_name ] ?? [];
+			$option_name  = str_replace( '-', '_', $key );
+			$option_value = $settings[ $option_name ] ?? [];
 
 			// Assume it's an empty string.
-			if ( ! is_array( $current_option_value ) ) {
-				$current_option_value = [];
+			if ( ! is_array( $option_value ) ) {
+				$option_value = [];
 			}
 
-			$current_option_value = array_filter( $current_option_value );
+			$option_value = array_filter( $option_value );
 
-			if ( ! empty( $current_option_value ) ) {
+			if ( ! empty( $option_value ) ) {
 				$enhanced_measurements[] = $key;
 			}
 		}
