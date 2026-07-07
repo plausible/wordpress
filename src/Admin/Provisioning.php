@@ -307,23 +307,21 @@ class Provisioning {
 			return;
 		}
 
-		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
+		$enhanced_measurements_old = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $old_settings, $old_settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements_old ) ) {
 			$enhanced_measurements_old = [];
 		}
 
 		$enhanced_measurements_old = array_filter( $enhanced_measurements_old );
-
-		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+		$enhanced_measurements     = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $settings, $settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements ) ) {
 			$enhanced_measurements = [];
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
-
-		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+		$disabled_settings     = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
 			return;
@@ -351,6 +349,27 @@ class Provisioning {
 
 		// Refresh the stored IDs in the DB.
 		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+	}
+
+	/**
+	 * Make sure the key is added to enhanced_measurements if it's settings is not empty.
+	 *
+	 * @param array $keys
+	 * @param array $settings
+	 * @param array $enhanced_measurements
+	 *
+	 * @return array
+	 */
+	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
+		foreach ( $keys as $key ) {
+			$current_option_value = array_filter( $settings[ $key ] ?? [] );
+
+			if ( ! empty( $current_option_value ) ) {
+				$enhanced_measurements[] = str_replace( '_', '-', $key );
+			}
+		}
+
+		return $enhanced_measurements;
 	}
 
 	/**
@@ -511,6 +530,7 @@ class Provisioning {
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
+		$enhanced_measurements = $this->maybe_add( [ 'affiliate_links', 'query_params' ], $settings, $enhanced_measurements );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -639,7 +659,7 @@ class Provisioning {
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
-		     empty($query_params) ) {
+		     empty( $query_params ) ) {
 			return; // @codeCoverageIgnore
 		}
 
