@@ -150,14 +150,6 @@ class Page extends API {
 							'value' => EnhancedMeasurements::OUTBOUND_LINKS,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::PAGEVIEW_PROPS        => [
-							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/docs/wordpress-integration#authors-and-categories',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
-							'caps'  => [ Capabilities::PROPS ],
-						],
 						EnhancedMeasurements::ECOMMERCE_REVENUE     => [
 							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
@@ -170,6 +162,14 @@ class Page extends API {
 								Capabilities::PROPS,
 								Capabilities::REVENUE,
 							],
+						],
+						EnhancedMeasurements::PAGEVIEW_PROPS        => [
+							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
+							'docs'  => 'https://plausible.io/docs/wordpress-integration#authors-and-categories',
+							'slug'  => 'enhanced_measurements',
+							'type'  => 'checkbox',
+							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
+							'caps'  => [ Capabilities::PROPS ],
 						],
 						EnhancedMeasurements::FORM_COMPLETIONS      => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
@@ -445,12 +445,12 @@ class Page extends API {
 		];
 
 		/**
-		 * If self-hosted domain setting has a value, add option disabled notice to Ecommerce revenue toggle.
+		 * If the self-hosted domain setting has a value, add an "option disabled" notice to the Ecommerce Revenue toggle.
 		 */
 		if ( ! empty( $settings['self_hosted_domain'] ) ) {
 			$fields = $this->fields['general'][1]['fields'];
 
-			array_splice( $fields, 7, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
+			array_splice( $fields, 4, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
 
 			$this->fields['general'][1]['fields'] = $fields;
 		}
@@ -477,7 +477,7 @@ class Page extends API {
 		 */
 		if ( empty( Helpers::get_settings()['api_token'][ Helpers::get_current_language_domain_key() ] ) ) {
 			$this->fields['general'][0]['fields'][] = self::API_TOKEN_MISSING_HOOK;
-			$this->fields['general'][3]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
+			$this->fields['general'][5]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
 		}
 
 		/**
