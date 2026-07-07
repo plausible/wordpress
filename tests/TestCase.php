@@ -29,6 +29,174 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Add user capability for testing.
+	 *
+	 * @return void
+	 */
+	public function addUserCap( $cap ) {
+		add_filter(
+			'user_has_cap',
+			function ( $caps ) use ( $cap ) {
+				return array_merge( $caps, [ $cap => true ] );
+			}
+		);
+	}
+
+	/**
+	 * Checks an array for a (partial) match with $string.
+	 *
+	 * @param $string string Needle.
+	 * @param $array  array Haystack.
+	 *
+	 * @return bool
+	 */
+	public function arrayHasString( $string, $array ) {
+		foreach ( $array as $element ) {
+			if ( str_contains( $element, $string ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Dynamically disable the proxy.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function disableProxy( $settings ) {
+		$settings['proxy_enabled'] = '';
+
+		return $settings;
+	}
+
+	public function enableAdministratorTracking( $settings ) {
+		$settings['tracked_user_roles'][] = 'administrator';
+
+		return $settings;
+	}
+
+	/**
+	 * Enable View Stats in WordPress.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableAnalyticsDashboard( $settings ) {
+		$settings['enable_analytics_dashboard'] = 'on';
+
+		return $settings;
+	}
+
+	/**
+	 * Enable Cloaked Affiliate Links by modifying the settings array.
+	 *
+	 * @param $settings
+	 *
+	 * @return void
+	 */
+	public function enableCloakedAffiliateLinks( $settings ) {
+		$settings['affiliate_links'] = [ '/recommends/' ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable form completions by modifying the settings array.
+	 *
+	 * @param array $settings The settings array to be modified.
+	 *
+	 * @return array The modified settings array including form completions.
+	 */
+	public function enableFormCompletions( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::FORM_COMPLETIONS ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable the 404 option by modifying the settings array.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableFourOFour( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::FOUR_O_FOUR ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable Enhanced Measurements > Categories & Authors.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enablePageviewProps( $settings ) {
+		$settings['enhanced_measurements'] = [ 'pageview-props' ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable the proxy.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableProxy( $settings ) {
+		$settings['proxy_enabled'] = 'on';
+
+		return $settings;
+	}
+
+	/**
+	 * Enable the Query Params option by modifying the settings array.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableQueryParams( $settings ) {
+		$settings['query_params'] = [ 'lang' ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableRevenue( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::ECOMMERCE_REVENUE ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable the Search Queries option by modifying the settings array.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableSearchQueries( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::SEARCH_QUERIES ];
+
+		return $settings;
+	}
+
+	/**
 	 * Removes any action that (partially) matches the given $callback.
 	 *
 	 * @param $hook
@@ -52,123 +220,6 @@ class TestCase extends YoastTestCase {
 				unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $callback_key ] );
 			}
 		}
-	}
-
-	/**
-	 * Enable View Stats in WordPress.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableAnalyticsDashboard( $settings ) {
-		$settings['enable_analytics_dashboard'] = 'on';
-
-		return $settings;
-	}
-
-	/**
-	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableRevenue( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::ECOMMERCE_REVENUE ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable form completions by modifying the settings array.
-	 *
-	 * @param array $settings The settings array to be modified.
-	 *
-	 * @return array The modified settings array including form completions.
-	 */
-	public function enableFormCompletions( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::FORM_COMPLETIONS ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable Cloaked Affiliate Links by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return void
-	 */
-	public function enableCloakedAffiliateLinks( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable the 404 option by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableFourOFour( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::FOUR_O_FOUR ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable the Query Params option by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableQueryParams( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::QUERY_PARAMS ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable the Search Queries option by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableSearchQueries( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::SEARCH_QUERIES ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable the proxy.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableProxy( $settings ) {
-		$settings['proxy_enabled'] = 'on';
-
-		return $settings;
-	}
-
-	/**
-	 * Dynamically disable the proxy.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function disableProxy( $settings ) {
-		$settings['proxy_enabled'] = '';
-
-		return $settings;
 	}
 
 	/**
@@ -218,19 +269,6 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enable Enhanced Measurements > Categories & Authors.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enablePageviewProps( $settings ) {
-		$settings['enhanced_measurements'] = [ 'pageview-props' ];
-
-		return $settings;
-	}
-
-	/**
 	 * Set some test query params.
 	 *
 	 * @param $settings
@@ -243,43 +281,5 @@ class TestCase extends YoastTestCase {
 		$_REQUEST['test'] = 1;
 
 		return $settings;
-	}
-
-	public function enableAdministratorTracking( $settings ) {
-		$settings['tracked_user_roles'][] = 'administrator';
-
-		return $settings;
-	}
-
-	/**
-	 * Checks an array for a (partial) match with $string.
-	 *
-	 * @param $string string Needle.
-	 * @param $array array Haystack.
-	 *
-	 * @return bool
-	 */
-	public function arrayHasString( $string, $array ) {
-		foreach ( $array as $element ) {
-			if ( str_contains( $element, $string ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Add user capability for testing.
-	 *
-	 * @return void
-	 */
-	public function addUserCap( $cap ) {
-		add_filter(
-			'user_has_cap',
-			function ( $caps ) use ( $cap ) {
-				return array_merge( $caps, [ $cap => true ] );
-			}
-		);
 	}
 }
