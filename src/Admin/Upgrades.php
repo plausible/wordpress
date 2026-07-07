@@ -102,6 +102,10 @@ class Upgrades {
 			$this->upgrade_to_258();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.6.0', '<' ) ) {
+			$this->upgrade_to_260();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -399,6 +403,23 @@ class Upgrades {
 		update_option( 'plausible_analytics_version', '2.5.8' );
 	}
 
+	private function upgrade_to_260() {
+		$settings              = Helpers::get_settings();
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( $key = array_search( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
+			unset( $enhanced_measurements[ $key ] );
+		}
+
+		if ( $key = array_search( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $enhanced_measurements ) ) {
+			unset( $enhanced_measurements[ $key ] );
+		}
+
+		Helpers::update_setting( 'enhanced_measurements', $enhanced_measurements );
+
+		update_option( 'plausible_analytics_version', '2.6.0' );
+	}
+
 	/**
 	 * Display a notice to CE users that haven't entered an API token yet.
 	 *
@@ -410,7 +431,7 @@ class Upgrades {
 		?>
 		<div class="notice notice-warning">
 			<p><?php // translators: %s: URL to Plausible Analytics settings page.
-			echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
+				echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}
@@ -426,7 +447,7 @@ class Upgrades {
 		?>
 		<div class="notice notice-warning">
 			<p><?php // translators: %s: URL to Plausible Analytics settings page.
-			echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
+				echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}
