@@ -698,8 +698,8 @@ class Provisioning {
 		/**
 		 * Create the Custom Properties for the Query Parameters option.
 		 */
-		if ( $query_params ) {
-			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
+		if ( is_array( $settings['query_params'] ) && ! empty( $settings['query_params'] ) ) {
+			foreach ( $query_params as $query_param ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
 		}
