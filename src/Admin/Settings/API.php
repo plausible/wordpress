@@ -283,7 +283,7 @@ class API {
 		ob_start();
 		?>
 		<div id="plausible-analytics-hook-<?php echo esc_attr( $field['slug'] ); ?>"
-			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300">
+			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300 mr-4">
 			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?> rounded-t-md rounded-b-none">
 				<div class="flex">
 					<div class="flex-shrink-0">
