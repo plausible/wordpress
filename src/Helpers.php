@@ -441,7 +441,7 @@ class Helpers {
 	 *
 	 * @return bool
 	 */
-	private static function is_array_setting_enabled( $key, $settings = [] ) {
+	public static function is_array_setting_enabled( $key, $settings = [] ) {
 		if ( empty( $settings ) ) {
 			$settings = static::get_settings();
 		}
@@ -450,7 +450,7 @@ class Helpers {
 
 		// Assume it's an empty string.
 		if ( ! is_array( $value ) ) {
-			$value = [];
+			$value = []; // @codeCoverageIgnore
 		}
 
 		return ! empty( array_filter( $value ) );

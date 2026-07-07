@@ -365,17 +365,9 @@ class Provisioning {
 	 */
 	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
 		foreach ( $keys as $key ) {
-			$option_name  = str_replace( '-', '_', $key );
-			$option_value = $settings[ $option_name ] ?? [];
+			$option_name = str_replace( '-', '_', $key );
 
-			// Assume it's an empty string.
-			if ( ! is_array( $option_value ) ) {
-				$option_value = [];
-			}
-
-			$option_value = array_filter( $option_value );
-
-			if ( ! empty( $option_value ) ) {
+			if ( Helpers::is_array_setting_enabled( $option_name, $settings ) ) {
 				$enhanced_measurements[] = $key;
 			}
 		}
