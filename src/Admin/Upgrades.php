@@ -222,8 +222,7 @@ class Upgrades {
 		 * Migrate the shared link option for self-hosters who use it.
 		 */
 		if ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['shared_link'] ) ) {
-			Helpers::update_setting( 'self_hosted_shared_link', $settings['shared_link'] );
-			Helpers::update_setting( 'shared_link', '' );
+			$settings['shared_link'] = '';
 		}
 
 		update_option( 'plausible_analytics_settings', $settings );
@@ -411,7 +410,7 @@ class Upgrades {
 		if ( ( $key = array_search( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements, true ) ) !== false ) {
 			unset( $enhanced_measurements[ $key ] );
 		}
-		
+
 		if ( ( $key = array_search( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $enhanced_measurements, true ) ) !== false ) {
 			unset( $enhanced_measurements[ $key ] );
 		}
