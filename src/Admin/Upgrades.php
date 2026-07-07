@@ -179,7 +179,7 @@ class Upgrades {
 	}
 
 	/**
-	 * Cleans the settings of the old, unneeded sub-arrays for settings.
+	 * Cleans the settings of the old, unneeded subarrays for settings.
 	 *
 	 * @return void
 	 * @codeCoverageIgnore
@@ -197,7 +197,7 @@ class Upgrades {
 				continue;
 			}
 
-			// For toggle lists, we only need to clean out the no longer needed zero values.
+			// For toggle lists, we only need to clean the no longer necessary zero-values.
 			if ( in_array( $option_name, $toggle_lists ) ) {
 				$settings[ $option_name ] = array_filter( $option_value );
 
@@ -219,13 +219,14 @@ class Upgrades {
 		}
 
 		/**
-		 * Migrate the shared link option for self hosters who use it.
+		 * Migrate the shared link option for self-hosters who use it.
 		 */
 		if ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['shared_link'] ) ) {
 			Helpers::update_setting( 'self_hosted_shared_link', $settings['shared_link'] );
 			Helpers::update_setting( 'shared_link', '' );
 		}
 
+		update_option( 'plausible_analytics_settings', $settings );
 		update_option( 'plausible_analytics_version', '2.0.0' );
 
 		// No longer need this db entry.
