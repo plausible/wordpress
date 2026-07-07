@@ -408,11 +408,11 @@ class Upgrades {
 		$settings              = Helpers::get_settings();
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
 
-		if ( $key = array_search( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
+		if ( ( $key = array_search( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements, true ) ) !== false ) {
 			unset( $enhanced_measurements[ $key ] );
 		}
-
-		if ( $key = array_search( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $enhanced_measurements ) ) {
+		
+		if ( ( $key = array_search( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $enhanced_measurements, true ) ) !== false ) {
 			unset( $enhanced_measurements[ $key ] );
 		}
 
