@@ -403,6 +403,13 @@ class Upgrades {
 		update_option( 'plausible_analytics_version', '2.5.8' );
 	}
 
+	/**
+	 * Removes the Query Params and Cloaked Affiliate Links from the Enhanced Measurements list.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
 	private function upgrade_to_260() {
 		$settings              = Helpers::get_settings();
 		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
