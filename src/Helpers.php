@@ -425,6 +425,40 @@ class Helpers {
 	}
 
 	/**
+	 * Wrapper to check if the Cloaked Affiliate Links option contains any values.
+	 *
+	 * @return bool
+	 */
+	public static function is_cloaked_affiliate_links_enabled() {
+		$settings        = static::get_settings();
+		$affiliate_links = $settings['affiliate_links'] ?? [];
+
+		// Assume it's an empty string.
+		if ( ! is_array( $affiliate_links ) ) {
+			$affiliate_links = [];
+		}
+
+		return ! empty( array_filter( $affiliate_links ) );
+	}
+
+	/**
+	 * Wrapper to check if the Query Params option contains any values.
+	 *
+	 * @return bool
+	 */
+	public static function is_query_params_enabled() {
+		$settings     = static::get_settings();
+		$query_params = $settings['query_params'] ?? [];
+
+		// Assume it's an empty string.
+		if ( ! is_array( $query_params ) ) {
+			$query_params = [];
+		}
+
+		return ! empty( array_filter( $query_params ) );
+	}
+
+	/**
 	 * Checks if the main Plausible Analytics script is registered.
 	 *
 	 * @return bool

@@ -29,14 +29,12 @@ class Assets {
 	}
 
 	/**
-	 * Enqueue cloaked affiliate links assets if the option is enabled.
+	 * Enqueue the cloaked affiliate links assets if the option is enabled.
 	 *
 	 * @return void
 	 */
 	public function maybe_enqueue_cloaked_affiliate_links_assets() {
-		$affiliate_links = Helpers::get_settings()['affiliate_links'] ?? [];
-
-		if ( $affiliate_links && Helpers::main_script_is_registered() ) {
+		if ( Helpers::is_cloaked_affiliate_links_enabled() && Helpers::main_script_is_registered() ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
@@ -45,12 +43,14 @@ class Assets {
 				[ 'in_footer' => true ],
 			);
 
+			$affiliate_links = Helpers::get_settings()['affiliate_links'] ?? [];
+
 			wp_add_inline_script( 'plausible-affiliate-links', 'const plausibleAffiliateLinks = ' . wp_json_encode( $affiliate_links ) . ';', 'before' );
 		}
 	}
 
 	/**
-	 * Enqueue 404 script if the option is enabled.
+	 * Enqueue the 404 script if the option is enabled.
 	 *
 	 * @return void
 	 */
@@ -143,15 +143,14 @@ class Assets {
 	}
 
 	/**
-	 * Enqueue Query Params script if the option is enabled.
+	 * Enqueue the Query Params script if the option is enabled.
 	 *
 	 * @return void
 	 */
 	public function maybe_enqueue_query_params_script() {
-		$query_params = Helpers::get_settings()['query_params'] ?? [];
-
-		if ($query_params && Helpers::main_script_is_registered() ) {
+		if ( Helpers::is_query_params_enabled() && Helpers::main_script_is_registered() ) {
 			$props        = [];
+			$query_params = Helpers::get_settings()['query_params'] ?? [];
 
 			foreach ( $query_params as $query_param ) {
 				if ( isset( $_REQUEST[ $query_param ] ) ) {
