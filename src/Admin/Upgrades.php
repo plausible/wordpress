@@ -431,6 +431,8 @@ class Upgrades {
 	 * Display a notice to CE users that haven't entered an API token yet.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function show_ce_api_token_notice() {
 		$url = admin_url( 'options-general.php?page=plausible_analytics' );
@@ -447,6 +449,8 @@ class Upgrades {
 	 * Display a notice to Cloud users that haven't entered an API token yet.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function show_cloud_api_token_notice() {
 		$url = admin_url( 'options-general.php?page=plausible_analytics' );
