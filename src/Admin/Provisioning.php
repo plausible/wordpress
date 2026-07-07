@@ -355,7 +355,7 @@ class Provisioning {
 	}
 
 	/**
-	 * Make sure the key is added to enhanced_measurements if it's settings is not empty.
+	 * Make sure the key is added to enhanced_measurements if settings are not empty.
 	 *
 	 * @param array $keys
 	 * @param array $settings
@@ -365,7 +365,14 @@ class Provisioning {
 	 */
 	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
 		foreach ( $keys as $key ) {
-			$current_option_value = array_filter( $settings[ $key ] ?? [] );
+			$current_option_value = $settings[ $key ] ?? [];
+
+			// Assume it's an empty string.
+			if ( ! is_array( $current_option_value ) ) {
+				$current_option_value = [];
+			}
+
+			$current_option_value = array_filter( $current_option_value );
 
 			if ( ! empty( $current_option_value ) ) {
 				$enhanced_measurements[] = str_replace( '_', '-', $key );
