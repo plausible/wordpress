@@ -429,16 +429,31 @@ class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_cloaked_affiliate_links_enabled() {
-		$settings        = static::get_settings();
-		$affiliate_links = $settings['affiliate_links'] ?? [];
+	public static function is_cloaked_affiliate_links_enabled( $settings = [] ) {
+		return static::is_array_setting_enabled( 'affiliate_links', $settings );
+	}
 
-		// Assume it's an empty string.
-		if ( ! is_array( $affiliate_links ) ) {
-			$affiliate_links = [];
+	/**
+	 * Checks if a given array-type setting contains any non-empty values.
+	 *
+	 * @param string $key      The settings key to check.
+	 * @param array  $settings Allows passing a current settings object.
+	 *
+	 * @return bool
+	 */
+	private static function is_array_setting_enabled( $key, $settings = [] ) {
+		if ( empty( $settings ) ) {
+			$settings = static::get_settings();
 		}
 
-		return ! empty( array_filter( $affiliate_links ) );
+		$value = $settings[ $key ] ?? [];
+
+		// Assume it's an empty string.
+		if ( ! is_array( $value ) ) {
+			$value = [];
+		}
+
+		return ! empty( array_filter( $value ) );
 	}
 
 	/**
@@ -446,16 +461,8 @@ class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_query_params_enabled() {
-		$settings     = static::get_settings();
-		$query_params = $settings['query_params'] ?? [];
-
-		// Assume it's an empty string.
-		if ( ! is_array( $query_params ) ) {
-			$query_params = [];
-		}
-
-		return ! empty( array_filter( $query_params ) );
+	public static function is_query_params_enabled( $settings = [] ) {
+		return static::is_array_setting_enabled( 'query_params', $settings );
 	}
 
 	/**
