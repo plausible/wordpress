@@ -430,22 +430,24 @@ class Helpers {
 	 * @return bool
 	 */
 	public static function is_cloaked_affiliate_links_enabled( $settings = [] ) {
-		return static::is_array_setting_enabled( 'affiliate_links', $settings );
-	}
-
-	/**
-	 * Checks if a given array-type setting contains any non-empty values.
-	 *
-	 * @param string $key      The settings key to check.
-	 * @param array  $settings Allows passing a current settings object.
-	 *
-	 * @return bool
-	 */
-	public static function is_array_setting_enabled( $key, $settings = [] ) {
 		if ( empty( $settings ) ) {
 			$settings = static::get_settings();
 		}
 
+		return static::setting_has_values( $settings, 'affiliate_links' );
+	}
+
+	/**
+	 * Checks if a given array-type setting, within the given settings array, contains any non-empty values.
+	 * Unlike a "get or default" helper, this never falls back to fetching live settings, so it's safe to
+	 * reuse with partial or intentionally empty settings arrays (e.g., old vs. new option values).
+	 *
+	 * @param array  $settings The settings array to check against.
+	 * @param string $key      The settings key to check.
+	 *
+	 * @return bool
+	 */
+	public static function setting_has_values( array $settings, $key ) {
 		$value = $settings[ $key ] ?? [];
 
 		// Assume it's an empty string.
@@ -462,7 +464,11 @@ class Helpers {
 	 * @return bool
 	 */
 	public static function is_query_params_enabled( $settings = [] ) {
-		return static::is_array_setting_enabled( 'query_params', $settings );
+		if ( empty( $settings ) ) {
+			$settings = static::get_settings();
+		}
+
+		return static::setting_has_values( $settings, 'query_params' );
 	}
 
 	/**

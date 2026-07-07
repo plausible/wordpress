@@ -367,7 +367,7 @@ class Provisioning {
 		foreach ( $keys as $key ) {
 			$option_name = str_replace( '-', '_', $key );
 
-			if ( Helpers::is_array_setting_enabled( $option_name, $settings ) ) {
+			if ( Helpers::setting_has_values( $settings, $option_name ) ) {
 				$enhanced_measurements[] = $key;
 			}
 		}
