@@ -42,6 +42,28 @@ class Hooks extends API {
 	}
 
 	/**
+	 * Renders the analytics dashboard link if the option is enabled.
+	 *
+	 * @since  2.0.0
+	 * @output HTML
+	 */
+	public function enable_analytics_dashboard_notice() {
+		if ( ! empty( Helpers::get_settings()['enable_analytics_dashboard'] ) ) {
+			echo sprintf(
+				wp_kses(
+				// translators: %s: URL to the analytics dashboard.
+					__(
+						'Your analytics dashboard is available <a href="%s">here</a>.',
+						'plausible-analytics'
+					),
+					'post'
+				),
+				admin_url( 'index.php?page=plausible_analytics_statistics' )
+			);
+		}
+	}
+
+	/**
 	 * Modifies "Enable proxy enabled" to "Proxy enabled", etc.
 	 *
 	 * @param $message
@@ -63,64 +85,35 @@ class Hooks extends API {
 	}
 
 	/**
-	 * Renders the warning for the Enable Proxy option.
+	 * Display missing Plugin Token warning.
 	 *
-	 * @since  1.3.0
 	 * @output HTML
 	 */
-	public function proxy_warning() {
-		if ( ! empty( Helpers::get_settings()[ 'self_hosted_domain' ] ) ) {
-			$this->option_na_in_ce();
-		} else {
-			echo sprintf(
-				wp_kses(
-					// translators: %s: URL to Plausible contact page.
-					__(
-						'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!',
-						'plausible-analytics'
-					),
-					'post'
+	public function missing_api_token_warning() {
+		echo sprintf(
+			wp_kses(
+				__(
+					'Please <a class="plausible-create-api-token hover:cursor-pointer underline">create a Plugin Token</a> and insert it into the Plugin Token field above.',
+					'plausible-analytics'
 				),
-				'https://plausible.io/contact'
-			);
-		}
-	}
-
-	/**
-	 * Show notice when Plugin Token notice is disabled.
-	 *
-	 * @output HTML
-	 */
-	public function option_na_in_ce() {
-		echo wp_kses(
-			__(
-				'This feature is not available in Plausible Community Edition.',
-				'plausible-analytics'
-			),
-			'post'
+				'post'
+			)
 		);
 	}
 
 	/**
-	 * Renders the analytics dashboard link if the option is enabled.
+	 * Display option disabled by a missing Plugin Token warning.
 	 *
-	 * @since  2.0.0
 	 * @output HTML
 	 */
-	public function enable_analytics_dashboard_notice() {
-		if ( ! empty( Helpers::get_settings()[ 'enable_analytics_dashboard' ] ) ) {
-			echo sprintf(
-				wp_kses(
-					// translators: %s: URL to the analytics dashboard.
-					__(
-						'Your analytics dashboard is available <a href="%s">here</a>.',
-						'plausible-analytics'
-					),
-					'post'
-				),
-				admin_url( 'index.php?page=plausible_analytics_statistics' )
-			);
-		}
+	public function option_disabled_by_missing_api_token() {
+		echo wp_kses(
+			__(
+				'Please <a class="plausible-create-api-token hover:cursor-pointer underline">create a Plugin Token</a> and insert it into the Plugin Token field above to enable this option.',
+				'plausible-analytics'
+			),
+			'post'
+		);
 	}
 
 	/**
@@ -142,34 +135,37 @@ class Hooks extends API {
 	}
 
 	/**
-	 * Display missing Plugin Token warning.
+	 * Show a notice when the Plugin Token notice is disabled.
 	 *
 	 * @output HTML
 	 */
-	public function missing_api_token_warning() {
-		echo sprintf(
-			wp_kses(
-				__(
-					'Please <a class="plausible-create-api-token hover:cursor-pointer underline">create a Plugin Token</a> and insert it into the Plugin Token field above.',
-					'plausible-analytics'
-				),
-				'post'
-			)
+	public function option_na_in_ce() {
+		echo wp_kses(
+			__(
+				'This feature is not available in Plausible Community Edition.',
+				'plausible-analytics'
+			),
+			'post'
 		);
 	}
 
 	/**
-	 * Display option disabled by missing Plugin Token warning.
+	 * Renders the warning for the Enable Proxy option.
 	 *
+	 * @since  1.3.0
 	 * @output HTML
 	 */
-	public function option_disabled_by_missing_api_token() {
-		echo wp_kses(
-			__(
-				'Please <a class="plausible-create-api-token hover:cursor-pointer underline">create a Plugin Token</a> and insert it into the Plugin Token field above to enable this option.',
-				'plausible-analytics'
+	public function proxy_warning() {
+		echo sprintf(
+			wp_kses(
+			// translators: %s: URL to Plausible contact page.
+				__(
+					'After enabling this option, please check your Plausible dashboard to make sure stats are being recorded. Are stats not being recorded? Do <a href="%s" target="_blank">reach out to us</a>. We\'re here to help!',
+					'plausible-analytics'
+				),
+				'post'
 			),
-			'post'
+			'https://plausible.io/contact'
 		);
 	}
 }

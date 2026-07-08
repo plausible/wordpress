@@ -67,16 +67,6 @@ class Page extends API {
 	public $wizard_fields = [];
 
 	/**
-	 * @var ClientFactory $client_factory
-	 */
-	private $client_factory;
-
-	/**
-	 * @var Client $client
-	 */
-	private $client;
-
-	/**
 	 * Constructor.
 	 * @since  1.3.0
 	 * @access public
@@ -86,11 +76,8 @@ class Page extends API {
 	public function __construct() {
 		$this->init();
 
-		$settings = Helpers::get_settings();
-
-		$this->client_factory = new ClientFactory( '', Helpers::get_current_language_domain_key() );
-		$this->client         = $this->client_factory->build();
-		$this->fields         = [
+		$settings     = Helpers::get_settings();
+		$this->fields = [
 			'general'     => [
 				[
 					'label'  => esc_html__( 'Connect your website with Plausible Analytics', 'plausible-analytics' ),
@@ -119,13 +106,14 @@ class Page extends API {
 					'label'  => esc_html__( 'Enhanced measurements', 'plausible-analytics' ),
 					'slug'   => 'enhanced_measurements',
 					'type'   => 'group',
+					'divide' => true,
 					// translators: %1$s replaced with <code>outbound-links</code>.
 					'desc'   => esc_html__(
 						'Enable enhanced measurements that you\'d like to track.',
 						'plausible-analytics'
 					),
 					'fields' => [
-						EnhancedMeasurements::FOUR_O_FOUR             => [
+						EnhancedMeasurements::FOUR_O_FOUR           => [
 							'label' => esc_html__( '404 error pages', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#404-error-pages',
 							'slug'  => 'enhanced_measurements',
@@ -133,7 +121,7 @@ class Page extends API {
 							'value' => EnhancedMeasurements::FOUR_O_FOUR,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::FILE_DOWNLOADS          => [
+						EnhancedMeasurements::FILE_DOWNLOADS        => [
 							'label' => esc_html__( 'File downloads', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#file-downloads',
 							'slug'  => 'enhanced_measurements',
@@ -141,7 +129,7 @@ class Page extends API {
 							'value' => EnhancedMeasurements::FILE_DOWNLOADS,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::OUTBOUND_LINKS          => [
+						EnhancedMeasurements::OUTBOUND_LINKS        => [
 							'label' => esc_html__( 'Outbound links', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#outbound-links',
 							'slug'  => 'enhanced_measurements',
@@ -149,7 +137,7 @@ class Page extends API {
 							'value' => EnhancedMeasurements::OUTBOUND_LINKS,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::PAGEVIEW_PROPS          => [
+						EnhancedMeasurements::PAGEVIEW_PROPS        => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#authors-and-categories',
 							'slug'  => 'enhanced_measurements',
@@ -157,43 +145,22 @@ class Page extends API {
 							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
 							'caps'  => [ Capabilities::PROPS ],
 						],
-						EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => [
-							'label'      => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/wordpress-integration#cloaked-affiliate-links',
-							'slug'       => 'enhanced_measurements',
-							'type'       => 'checkbox',
-							'value'      => EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS,
-							'addtl_opts' => true,
-							'caps'       => [ Capabilities::GOALS ],
-						],
-						'affiliate-links-patterns'                    => [
-							'slug'        => 'affiliate_links',
-							'description' => sprintf(
-							// translators: %s: Example URL to affiliate product.
-								__(
-									'Enter the (partial) URLs you\'d like to track. E.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>.',
-									'plausible-analytics'
-								),
-								get_home_url() . '/recommends/affiliate-product/'
-							),
-							'type'        => 'clonable_text',
-							'value'       => Helpers::get_settings()['affiliate_links'] ?? [],
-							'hidden'      => ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ),
-						],
-						EnhancedMeasurements::ECOMMERCE_REVENUE       => [
-							'label' => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'  => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
-							'slug'  => 'enhanced_measurements',
-							'type'  => 'checkbox',
-							'value' => EnhancedMeasurements::ECOMMERCE_REVENUE,
-							'caps'  => [
+						EnhancedMeasurements::ECOMMERCE_REVENUE     => [
+							'label'            => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
+							'docs'             => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
+							'slug'             => 'enhanced_measurements',
+							'type'             => 'checkbox',
+							'value'            => EnhancedMeasurements::ECOMMERCE_REVENUE,
+							'caps'             => [
 								Capabilities::GOALS,
 								Capabilities::FUNNELS,
 								Capabilities::PROPS,
 								Capabilities::REVENUE,
 							],
+							'disabled'         => ! empty( $settings['self_hosted_domain'] ),
+							'disabled_tooltip' => self::OPTION_NOT_AVAILABLE_IN_CE_HOOK,
 						],
-						EnhancedMeasurements::FORM_COMPLETIONS        => [
+						EnhancedMeasurements::FORM_COMPLETIONS      => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#form-completions',
 							'slug'  => 'enhanced_measurements',
@@ -201,7 +168,7 @@ class Page extends API {
 							'value' => EnhancedMeasurements::FORM_COMPLETIONS,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::LOGGED_IN_USER_STATUS   => [
+						EnhancedMeasurements::LOGGED_IN_USER_STATUS => [
 							'label' => esc_html__( 'Logged-in user status', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#logged-in-user-status',
 							'slug'  => 'enhanced_measurements',
@@ -209,30 +176,7 @@ class Page extends API {
 							'value' => EnhancedMeasurements::LOGGED_IN_USER_STATUS,
 							'caps'  => [ Capabilities::PROPS ],
 						],
-						EnhancedMeasurements::QUERY_PARAMS            => [
-							'label'      => esc_html__( 'Query parameters', 'plausible-analytics' ),
-							'docs'       => 'https://plausible.io/docs/wordpress-integration#query-parameters',
-							'slug'       => 'enhanced_measurements',
-							'type'       => 'checkbox',
-							'value'      => EnhancedMeasurements::QUERY_PARAMS,
-							'addtl_opts' => true,
-							'caps'       => [ Capabilities::PROPS ],
-						],
-						'query-params-patterns'                       => [
-							'slug'        => 'query_params',
-							'description' => sprintf(
-							// translators: %s: Example URL with query parameter.
-								__(
-									'Enter the query parameters you\'d like to track. E.g. enter <strong>lang</strong> if you want to track <code>%s</code>.',
-									'plausible-analytics'
-								),
-								get_home_url() . '?lang=en'
-							),
-							'type'        => 'clonable_text',
-							'value'       => Helpers::get_settings()['query_params'] ?? [],
-							'hidden'      => ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ),
-						],
-						EnhancedMeasurements::SEARCH_QUERIES          => [
+						EnhancedMeasurements::SEARCH_QUERIES        => [
 							'label' => esc_html__( 'Search queries', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#search-queries',
 							'slug'  => 'enhanced_measurements',
@@ -240,13 +184,53 @@ class Page extends API {
 							'value' => EnhancedMeasurements::SEARCH_QUERIES,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::HASH_BASED_ROUTING      => [
+						EnhancedMeasurements::HASH_BASED_ROUTING    => [
 							'label' => esc_html__( 'Hash-based routing', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#hash-based-routing',
 							'slug'  => 'enhanced_measurements',
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::HASH_BASED_ROUTING,
 							'caps'  => [],
+						],
+					],
+				],
+				[
+					'label'  => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
+					'slug'   => 'cloaked_affiliate_links',
+					'type'   => 'group',
+					'desc'   => sprintf(
+					// translators: %s: Example URL to affiliate product.
+						__(
+							'Enter the (partial) URLs you\'d like to track. E.g. enter <strong>/recommends/</strong> if you want to track <code>%s</code>.',
+							'plausible-analytics'
+						),
+						get_home_url() . '/recommends/affiliate-product/'
+					),
+					'fields' => [
+						[
+							'slug'  => 'affiliate_links',
+							'type'  => 'clonable_text',
+							'value' => Helpers::get_settings()['affiliate_links'] ?? [],
+						],
+					],
+				],
+				[
+					'label'  => esc_html__( 'Query parameters', 'plausible-analytics' ),
+					'slug'   => 'query_params',
+					'type'   => 'group',
+					'desc'   => sprintf(
+					// translators: %s: Example URL with query parameter.
+						__(
+							'Enter the query parameters you\'d like to track. E.g., enter <strong>lang</strong> if you want to track <code>%s</code>.',
+							'plausible-analytics'
+						),
+						get_home_url() . '?lang=en'
+					),
+					'fields' => [
+						[
+							'slug'  => 'query_params',
+							'type'  => 'clonable_text',
+							'value' => Helpers::get_settings()['query_params'] ?? [],
 						],
 					],
 				],
@@ -275,11 +259,12 @@ class Page extends API {
 					),
 					'fields' => [
 						[
-							'label'    => esc_html__( 'Enable proxy', 'plausible-analytics' ),
-							'slug'     => 'proxy_enabled',
-							'type'     => 'checkbox',
-							'value'    => 'on',
-							'disabled' => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
+							'label'            => esc_html__( 'Enable proxy', 'plausible-analytics' ),
+							'slug'             => 'proxy_enabled',
+							'type'             => 'checkbox',
+							'value'            => 'on',
+							'disabled'         => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
+							'disabled_tooltip' => self::OPTION_NOT_AVAILABLE_IN_CE_HOOK,
 						],
 					],
 				],
@@ -450,23 +435,12 @@ class Page extends API {
 		];
 
 		/**
-		 * If self-hosted domain setting has a value, add option disabled notice to Ecommerce revenue toggle.
-		 */
-		if ( ! empty( $settings['self_hosted_domain'] ) ) {
-			$fields = $this->fields['general'][1]['fields'];
-
-			array_splice( $fields, 7, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
-
-			$this->fields['general'][1]['fields'] = $fields;
-		}
-
-		/**
 		 * If the proxy is enabled, or the self-hosted domain option has a value, display a warning box.
 		 *
 		 * @see self::proxy_warning()
 		 */
-		if ( Helpers::proxy_enabled() || ! empty( $settings['self_hosted_domain'] ) ) {
-			$this->fields['general'][2]['fields'][] = self::PROXY_WARNING_HOOK;
+		if ( Helpers::proxy_enabled() && ! empty( $settings['self_hosted_domain'] ) ) {
+			$this->fields['general'][4]['fields'][] = self::PROXY_WARNING_HOOK;
 		}
 
 		/**
@@ -482,14 +456,14 @@ class Page extends API {
 		 */
 		if ( empty( Helpers::get_settings()['api_token'][ Helpers::get_current_language_domain_key() ] ) ) {
 			$this->fields['general'][0]['fields'][] = self::API_TOKEN_MISSING_HOOK;
-			$this->fields['general'][3]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
+			$this->fields['general'][5]['fields'][] = self::OPTION_DISABLED_BY_MISSING_API_TOKEN_HOOK;
 		}
 
 		/**
 		 * If View Stats is enabled, display a notice.
 		 */
 		if ( ! empty( Helpers::get_settings()['api_token'][ Helpers::get_current_language_domain_key() ] ) && ! empty( $settings['enable_analytics_dashboard'] ) ) {
-			$this->fields['general'][3]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
+			$this->fields['general'][5]['fields'][] = self::ENABLE_ANALYTICS_DASH_NOTICE;
 		}
 
 		$this->wizard_fields = [
@@ -532,7 +506,7 @@ class Page extends API {
 		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
 
 		/**
-		 * Hooks that run on settings page.
+		 * Hooks that run on the settings page.
 		 */
 		new Hooks();
 	}

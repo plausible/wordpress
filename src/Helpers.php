@@ -425,6 +425,55 @@ class Helpers {
 	}
 
 	/**
+	 * Wrapper to check if the Cloaked Affiliate Links option contains any values.
+	 *
+	 * @param array $settings Allows passing a current settings object.
+	 *
+	 * @return bool
+	 */
+	public static function is_cloaked_affiliate_links_enabled( $settings = [] ) {
+		if ( empty( $settings ) ) {
+			$settings = static::get_settings();
+		}
+
+		return static::setting_has_values( $settings, 'affiliate_links' );
+	}
+
+	/**
+	 * Checks if a given array-type setting, within the given settings array, contains any non-empty values.
+	 * Unlike a "get or default" helper, this never falls back to fetching live settings, so it's safe to
+	 * reuse with partial or intentionally empty settings arrays (e.g., old vs. new option values).
+	 *
+	 * @param array  $settings The settings array to check against.
+	 * @param string $key      The settings key to check.
+	 *
+	 * @return bool
+	 */
+	public static function setting_has_values( array $settings, $key ) {
+		$value = $settings[ $key ] ?? [];
+
+		// Assume it's an empty string.
+		if ( ! is_array( $value ) ) {
+			$value = []; // @codeCoverageIgnore
+		}
+
+		return ! empty( array_filter( $value ) );
+	}
+
+	/**
+	 * Wrapper to check if the Query Params option contains any values.
+	 *
+	 * @return bool
+	 */
+	public static function is_query_params_enabled( $settings = [] ) {
+		if ( empty( $settings ) ) {
+			$settings = static::get_settings();
+		}
+
+		return static::setting_has_values( $settings, 'query_params' );
+	}
+
+	/**
 	 * Checks if the main Plausible Analytics script is registered.
 	 *
 	 * @return bool
@@ -434,8 +483,9 @@ class Helpers {
 	}
 
 	/**
-	 * @param $option_name
-	 * @param $option_value
+	 * @param string           $option_name
+	 * @param array|string|int $option_value
+	 * @param string           $key
 	 *
 	 * @return void
 	 */

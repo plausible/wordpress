@@ -29,29 +29,54 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Removes any action that (partially) matches the given $callback.
-	 *
-	 * @param $hook
-	 * @param $callback
-	 * @param $priority
+	 * Add user capability for testing.
 	 *
 	 * @return void
 	 */
-	public function removeAction( $hook, $callback, $priority = 10 ) {
-		global $wp_filter;
+	public function addUserCap( $cap ) {
+		add_filter(
+			'user_has_cap',
+			function ( $caps ) use ( $cap ) {
+				return array_merge( $caps, [ $cap => true ] );
+			}
+		);
+	}
 
-		if ( ! isset( $wp_filter[ $hook ] ) ) {
-			return;
-		}
-
-		$callbacks = $wp_filter[ $hook ]->callbacks ?? [];
-		$callbacks = $callbacks[ $priority ] ?? [];
-
-		foreach ( $callbacks as $callback_key => $callback_data ) {
-			if ( str_contains( $callback_key, $callback ) ) {
-				unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $callback_key ] );
+	/**
+	 * Checks an array for a (partial) match with $string.
+	 *
+	 * @param $string string Needle.
+	 * @param $array  array Haystack.
+	 *
+	 * @return bool
+	 */
+	public function arrayHasString( $string, $array ) {
+		foreach ( $array as $element ) {
+			if ( str_contains( $element, $string ) ) {
+				return true;
 			}
 		}
+
+		return false;
+	}
+
+	/**
+	 * Dynamically disable the proxy.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function disableProxy( $settings ) {
+		$settings['proxy_enabled'] = '';
+
+		return $settings;
+	}
+
+	public function enableAdministratorTracking( $settings ) {
+		$settings['tracked_user_roles'][] = 'administrator';
+
+		return $settings;
 	}
 
 	/**
@@ -68,14 +93,14 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
+	 * Enable Cloaked Affiliate Links by modifying the settings array.
 	 *
 	 * @param $settings
 	 *
-	 * @return mixed
+	 * @return void
 	 */
-	public function enableRevenue( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::ECOMMERCE_REVENUE ];
+	public function enableCloakedAffiliateLinks( $settings ) {
+		$settings['affiliate_links'] = [ '/recommends/' ];
 
 		return $settings;
 	}
@@ -94,19 +119,6 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enable Cloaked Affiliate Links by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return void
-	 */
-	public function enableCloakedAffiliateLinks( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ];
-
-		return $settings;
-	}
-
-	/**
 	 * Enable the 404 option by modifying the settings array.
 	 *
 	 * @param $settings
@@ -120,27 +132,14 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enable the Query Params option by modifying the settings array.
+	 * Enable Enhanced Measurements > Categories & Authors.
 	 *
 	 * @param $settings
 	 *
 	 * @return mixed
 	 */
-	public function enableQueryParams( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::QUERY_PARAMS ];
-
-		return $settings;
-	}
-
-	/**
-	 * Enable the Search Queries option by modifying the settings array.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enableSearchQueries( $settings ) {
-		$settings['enhanced_measurements'] = [ EnhancedMeasurements::SEARCH_QUERIES ];
+	public function enablePageviewProps( $settings ) {
+		$settings['enhanced_measurements'] = [ 'pageview-props' ];
 
 		return $settings;
 	}
@@ -159,16 +158,68 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Dynamically disable the proxy.
+	 * Enable the Query Params option by modifying the settings array.
 	 *
 	 * @param $settings
 	 *
 	 * @return mixed
 	 */
-	public function disableProxy( $settings ) {
-		$settings['proxy_enabled'] = '';
+	public function enableQueryParams( $settings ) {
+		$settings['query_params'] = [ 'lang' ];
 
 		return $settings;
+	}
+
+	/**
+	 * Enable Enhanced Measurements > Custom Events (Tagged Events)
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableRevenue( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::ECOMMERCE_REVENUE ];
+
+		return $settings;
+	}
+
+	/**
+	 * Enable the Search Queries option by modifying the settings array.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableSearchQueries( $settings ) {
+		$settings['enhanced_measurements'] = [ EnhancedMeasurements::SEARCH_QUERIES ];
+
+		return $settings;
+	}
+
+	/**
+	 * Removes any action that (partially) matches the given $callback.
+	 *
+	 * @param $hook
+	 * @param $callback
+	 * @param $priority
+	 *
+	 * @return void
+	 */
+	public function removeAction( $hook, $callback, $priority = 10 ) {
+		global $wp_filter;
+
+		if ( ! isset( $wp_filter[ $hook ] ) ) {
+			return;
+		}
+
+		$callbacks = $wp_filter[ $hook ]->callbacks ?? [];
+		$callbacks = $callbacks[ $priority ] ?? [];
+
+		foreach ( array_keys( $callbacks ) as $callback_key ) {
+			if ( str_contains( $callback_key, $callback ) ) {
+				unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $callback_key ] );
+			}
+		}
 	}
 
 	/**
@@ -218,19 +269,6 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enable Enhanced Measurements > Categories & Authors.
-	 *
-	 * @param $settings
-	 *
-	 * @return mixed
-	 */
-	public function enablePageviewProps( $settings ) {
-		$settings['enhanced_measurements'] = [ 'pageview-props' ];
-
-		return $settings;
-	}
-
-	/**
 	 * Set some test query params.
 	 *
 	 * @param $settings
@@ -243,43 +281,5 @@ class TestCase extends YoastTestCase {
 		$_REQUEST['test'] = 1;
 
 		return $settings;
-	}
-
-	public function enableAdministratorTracking( $settings ) {
-		$settings['tracked_user_roles'][] = 'administrator';
-
-		return $settings;
-	}
-
-	/**
-	 * Checks an array for a (partial) match with $string.
-	 *
-	 * @param $string string Needle.
-	 * @param $array array Haystack.
-	 *
-	 * @return bool
-	 */
-	public function arrayHasString( $string, $array ) {
-		foreach ( $array as $element ) {
-			if ( str_contains( $element, $string ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Add user capability for testing.
-	 *
-	 * @return void
-	 */
-	public function addUserCap( $cap ) {
-		add_filter(
-			'user_has_cap',
-			function ( $caps ) use ( $cap ) {
-				return array_merge( $caps, [ $cap => true ] );
-			}
-		);
 	}
 }

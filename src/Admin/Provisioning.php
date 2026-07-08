@@ -38,6 +38,14 @@ class Provisioning {
 	];
 
 	/**
+	 * Map Enhanced Measurement keys to their respective setting key.
+	 */
+	private const MEASUREMENT_TO_SETTING_MAP = [
+		EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => 'affiliate_links',
+		EnhancedMeasurements::QUERY_PARAMS            => 'query_params',
+	];
+
+	/**
 	 * @var bool
 	 */
 	private static $is_fresh_install = false;
@@ -117,7 +125,7 @@ class Provisioning {
 	 * @param string $string
 	 * @param array  $haystack
 	 *
-	 * @return false|mixed
+	 * @return false|string|int
 	 *
 	 * @codeCoverageIgnore Because it can't be unit tested.
 	 */
@@ -307,23 +315,24 @@ class Provisioning {
 			return;
 		}
 
-		$enhanced_measurements_old = $old_settings['enhanced_measurements'] ?? [];
+		$enhanced_measurements_old = $this->maybe_add( [
+			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS,
+			EnhancedMeasurements::QUERY_PARAMS,
+		], $old_settings, $old_settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements_old ) ) {
 			$enhanced_measurements_old = [];
 		}
 
 		$enhanced_measurements_old = array_filter( $enhanced_measurements_old );
-
-		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+		$enhanced_measurements     = $this->maybe_add( [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, EnhancedMeasurements::QUERY_PARAMS ], $settings, $settings['enhanced_measurements'] ?? [] );
 
 		if ( ! is_array( $enhanced_measurements ) ) {
 			$enhanced_measurements = [];
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
-
-		$disabled_settings = array_diff( $enhanced_measurements_old, $enhanced_measurements );
+		$disabled_settings     = array_diff( $enhanced_measurements_old, $enhanced_measurements );
 
 		if ( empty( $disabled_settings ) ) {
 			return;
@@ -351,6 +360,27 @@ class Provisioning {
 
 		// Refresh the stored IDs in the DB.
 		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+	}
+
+	/**
+	 * Make sure the key is added to enhanced_measurements if settings are not empty.
+	 *
+	 * @param array $keys
+	 * @param array $settings
+	 * @param array $enhanced_measurements
+	 *
+	 * @return array
+	 */
+	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
+		foreach ( $keys as $key ) {
+			$option_name = self::MEASUREMENT_TO_SETTING_MAP[ $key ] ?? '';
+
+			if ( ! empty( $option_name ) && Helpers::setting_has_values( $settings, $option_name ) ) {
+				$enhanced_measurements[] = $key;
+			}
+		}
+
+		return $enhanced_measurements;
 	}
 
 	/**
@@ -511,6 +541,7 @@ class Provisioning {
 		}
 
 		$enhanced_measurements = array_filter( $enhanced_measurements );
+		$enhanced_measurements = $this->maybe_add( [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, EnhancedMeasurements::QUERY_PARAMS ], $settings, $enhanced_measurements );
 
 		if ( empty( $enhanced_measurements ) ) {
 			return; // @codeCoverageIgnore
@@ -634,10 +665,12 @@ class Provisioning {
 			$enhanced_measurements = [];
 		}
 
+		$query_params = $settings['query_params'] ?? [];
+
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
-		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
+		     empty( $query_params ) ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -663,10 +696,12 @@ class Provisioning {
 		}
 
 		/**
-		 * Create Custom Properties for Query Parameters option.
+		 * Create the Custom Properties for the Query Parameters option.
 		 */
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements ) ) {
-			foreach ( Helpers::get_settings()['query_params'] ?? [] as $query_param ) {
+		if ( is_array( $query_params ) && ! empty( $query_params ) ) {
+			$query_params = array_filter( $query_params );
+
+			foreach ( $query_params as $query_param ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $query_param ] ] );
 			}
 		}

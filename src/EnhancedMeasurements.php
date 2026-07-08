@@ -3,7 +3,7 @@
 namespace Plausible\Analytics\WP;
 
 /**
- * This class behaves like an enum, while we can't really support yet, since WP hasn't dropped support yet for PHP 8.0 and lower.
+ * This class behaves like an enum, which we can't really support until WP drops support for PHP 8.0 and lower.
  *
  * @codeCoverageIgnore
  */
@@ -14,6 +14,7 @@ final class EnhancedMeasurements {
 
 	const OUTBOUND_LINKS = 'outbound-links';
 
+	/** @var string Legacy since v2.6.0 because it moved to its own settings section. */
 	const CLOAKED_AFFILIATE_LINKS = 'affiliate-links';
 
 	const PAGEVIEW_PROPS = 'pageview-props';
@@ -24,6 +25,7 @@ final class EnhancedMeasurements {
 
 	const LOGGED_IN_USER_STATUS = 'user-logged-in';
 
+	/** @var string Legacy since v2.6.0 because it moved to its own settings section. */
 	const QUERY_PARAMS = 'query-params';
 
 	const SEARCH_QUERIES = 'search';

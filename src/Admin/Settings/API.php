@@ -51,17 +51,19 @@ class API {
 	 */
 	public function render_checkbox_field( array $field, $is_list = false ) {
 		ob_start();
-		$value      = ! empty( $field['value'] ) ? $field['value'] : 'on';
-		$settings   = Helpers::get_settings();
-		$slug       = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
-		$id         = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
-		$checked    = ! empty( $field['checked'] ) ? 'checked="checked"' :
+		$value                 = ! empty( $field['value'] ) ? $field['value'] : 'on';
+		$settings              = Helpers::get_settings();
+		$slug                  = ! empty( $settings[ $field['slug'] ] ) ? $settings[ $field['slug'] ] : '';
+		$id                    = $field['slug'] . '_' . str_replace( '-', '_', sanitize_title( $field['label'] ) );
+		$checked               = ! empty( $field['checked'] ) ? 'checked="checked"' :
 			( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
-		$disabled   = ! empty( $field['disabled'] ) ? 'disabled' : '';
-		$caps       = ! empty( $field['caps'] ) ? $field['caps'] : [];
-		$addtl_opts = ! empty( $field['addtl_opts'] );
+		$disabled              = ! empty( $field['disabled'] ) ? 'disabled' : '';
+		$show_disabled_tooltip = $disabled && ! empty( $field['disabled_tooltip'] );
+		$check_when_disabled   = $field['slug'] === 'expand_dashboard_access' && $value === 'administrator';
+		$caps                  = ! empty( $field['caps'] ) ? $field['caps'] : [];
+		$addtl_opts            = ! empty( $field['addtl_opts'] );
 		?>
-		<div class="toggle-container flex items-center mt-4 space-x-3">
+		<div class="toggle-container flex items-center mt-4 space-x-3 relative <?php echo $show_disabled_tooltip ? 'group cursor-not-allowed' : ''; ?>">
 			<button class="plausible-analytics-toggle <?php echo $checked && ! $disabled ? 'bg-indigo-600' : 'bg-gray-200'; ?> dark:bg-gray-700 relative inline-flex flex-shrink-0 h-6 w-11 border-2
 			border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring"
 					id="<?php /** @noinspection PhpUnnecessaryLocalVariableInspection */
@@ -72,9 +74,12 @@ class API {
 			); ?>"<?php endif; ?> data-addtl-opts="<?php echo $addtl_opts; ?>" name="<?php echo esc_attr( $field['slug'] ); ?>" value="<?php echo esc_html(
 				$value
 			); ?>" <?php echo $disabled; ?>>
-				<span class="plausible-analytics-toggle <?php echo $checked ? 'translate-x-5' :
+				<span class="plausible-analytics-toggle <?php echo $checked && ! $disabled || ( $disabled && $check_when_disabled ) ? 'translate-x-5' :
 					'translate-x-0'; ?> inline-block h-5 w-5 rounded-full bg-white dark:bg-gray-800 shadow transform transition-translate ease-in-out duration-200"></span>
 			</button>
+			<?php if ( $show_disabled_tooltip ): ?>
+				<?php echo $this->render_hook_field( reset( $field['disabled_tooltip'] ), $show_disabled_tooltip ); ?>
+			<?php endif; ?>
 			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo esc_html( $field['label'] ); ?></span>
 			<?php if ( isset( $field['docs'] ) ): ?>
 				<a class="leading-none" href="<?php echo esc_url( $field['docs'] ); ?>" rel="noreferrer" target="_blank">
@@ -90,6 +95,67 @@ class API {
 	}
 
 	/**
+	 * Render just the label, and allow insertion of anything using the hook beside it.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $field
+	 * @param bool  $is_tooltip
+	 *
+	 * @return string
+	 */
+	public function render_hook_field( array $field, $is_tooltip = false ) {
+		$hook_type       = $field['hook_type'] ?? 'warning';
+		$box_class       = 'bg-yellow-50 dark:bg-yellow-100';
+		$text_class      = 'text-yellow-700 dark:text-yellow-800';
+		$persist_message = '';
+
+		if ( $hook_type === 'success' ) {
+			$box_class  = 'bg-green-50 dark:bg-green-100';
+			$text_class = 'text-green-700 dark:text-green-800';
+		}
+
+		if ( ! empty( $field['slug'] ) && ( $field['slug'] === 'option_not_available_in_ce' || $field['slug'] === 'option_disabled_by_missing_api_token' ) ) {
+			$persist_message = 'plausible-analytics-persist';
+		}
+
+		ob_start();
+		?>
+		<div id="plausible-analytics-hook-<?php echo esc_attr( $field['slug'] ); ?>"
+			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300 <?php echo $is_tooltip ? 'invisible opacity-0 transition-[opacity,visibility] duration-300 group-hover:visible group-hover:opacity-100 group-hover:delay-0 absolute top-0 left-0 z-auto drop-shadow-md' : ''; ?>">
+			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?>">
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<?php if ( $hook_type === 'success' ) : ?>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+								 class="w-5 h-12 text-green-400">
+								<path fill-rule="evenodd"
+									  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+									  clip-rule="evenodd"/>
+							</svg>
+						<?php else: ?>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+								 class="w-5 h-12 text-yellow-400">
+								<path fill-rule="evenodd"
+									  d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+									  clip-rule="evenodd"/>
+							</svg>
+						<?php endif; ?>
+					</div>
+					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>">
+						<div class="text-sm <?php echo $text_class; ?>">
+							<p><?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+
+		return trim( ob_get_clean() );
+	}
+
+	/**
 	 * Renders a clonable text field.
 	 *
 	 * @param array $group
@@ -101,17 +167,14 @@ class API {
 		$values = $group['value'] ?: [ 0 => '' ];
 		$slug   = $group['slug'] ?? '';
 		?>
-		<div id="<?php echo esc_attr( $slug ); ?>_content" class="plausible-analytics-section <?php echo $group['hidden'] ? 'hidden' : ''; ?> !mt-1 mx-14">
-			<div class="flex justify-between items-center">
-				<div class="text-sm leading-5 !text-gray-500 !dark:text-gray-200"><?php echo wp_kses( $group['description'], 'post' ); ?></div>
-			</div>
+		<div id="<?php echo esc_attr( $slug ); ?>_content" class="plausible-analytics-section !mt-1 mx-0">
 			<ol id="<?php echo esc_attr( $slug ); ?>_list" class="m-0 list-none">
 				<?php foreach ( $values as $key => $value ) : ?>
-					<li class="<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>-field flex justify-between items-end">
-						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => esc_attr( "{$slug}[$key]" ), 'classes' => 'flex-1' ] ); ?>
+					<li class="<?php echo esc_attr( str_replace( '_', '-', $slug ) ); ?>-field flex justify-between items-end mb-2">
+						<?php echo $this->render_text_field( [ 'value' => $value, 'slug' => esc_attr( "{$slug}[$key]" ), 'classes' => 'flex-1 mt-2' ] ); ?>
 						<a onclick="plausibleRemoveField('<?php echo esc_js( "{$slug}[$key]" ); ?>')" class="<?php echo $key === 0 ? 'hidden' :
 							''; ?> ml-2 cursor-pointer text-red-800 hover:text-red-500 dark:text-red-500 dark:hover:text-red-400">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" fill="none" stroke-width="1.5">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 m-auto" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" fill="none" stroke-width="1.5">
 								<path stroke-linecap="round" stroke-linejoin="round"
 									  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
 							</svg>
@@ -150,7 +213,8 @@ class API {
 			<?php endif; ?>
 			<div class="mt-1">
 				<input
-					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2 px-3"
+					class="block w-full !border-gray-300 !dark:border-gray-700 !rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-900 dark:text-gray-300 py-2
+					px-3"
 					id="<?php echo esc_attr( $field['slug'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" autocomplete="off"
 					type="text"
 					name="<?php echo esc_attr( $field['slug'] ); ?>"
@@ -257,66 +321,6 @@ class API {
 			</div>
 			<?php
 		}
-	}
-
-	/**
-	 * Render just the label, and allow insertion of anything using the hook beside it.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array $field
-	 *
-	 * @return string|false
-	 */
-	public function render_hook_field( array $field ) {
-		$hook_type       = $field['hook_type'] ?? 'warning';
-		$box_class       = 'bg-yellow-50 dark:bg-yellow-100';
-		$text_class      = 'text-yellow-700 dark:text-yellow-800';
-		$persist_message = '';
-
-		if ( $hook_type === 'success' ) {
-			$box_class  = 'bg-green-50 dark:bg-green-100';
-			$text_class = 'text-green-700 dark:text-green-800';
-		}
-
-		if ( ! empty( $field['slug'] ) && ( $field['slug'] === 'option_not_available_in_ce' || $field['slug'] === 'option_disabled_by_missing_api_token' ) ) {
-			$persist_message = 'plausible-analytics-persist';
-		}
-
-		ob_start();
-		?>
-		<div id="plausible-analytics-hook-<?php echo esc_attr( $field['slug'] ); ?>"
-			 class="plausible-analytics-hook <?php echo $persist_message; ?> transition-opacity transition-300">
-			<div class="rounded-md p-4 mt-4 relative <?php echo esc_attr( $box_class ); ?> rounded-t-md rounded-b-none">
-				<div class="flex">
-					<div class="flex-shrink-0">
-						<?php if ( $hook_type === 'success' ) : ?>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-								 class="w-5 h-12 text-green-400">
-								<path fill-rule="evenodd"
-									  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-									  clip-rule="evenodd"/>
-							</svg>
-						<?php else: ?>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-								 class="w-5 h-12 text-yellow-400">
-								<path fill-rule="evenodd"
-									  d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-									  clip-rule="evenodd"/>
-							</svg>
-						<?php endif; ?>
-					</div>
-					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>">
-						<div class="text-sm <?php echo $text_class; ?>>">
-							<p><?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
-
-		return trim( ob_get_clean() );
 	}
 
 	/**
@@ -446,14 +450,14 @@ class API {
 								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 							} ?>
 						</div>
-						<div>
+						<div class="lg:ml-4">
 							<?php foreach ( array_slice( $fields, $half ) as $field ) {
 								echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 							} ?>
 						</div>
 					</div>
 				<?php else : ?>
-					<div class="!mt-0">
+					<div class="!mt-0 group relative">
 						<?php foreach ( $fields as $field ) {
 							echo call_user_func( [ $this, "render_{$field['type']}_field" ], $field, $is_list );
 						} ?>
@@ -577,7 +581,7 @@ class API {
 						<div class="mt-4">
 							<div class="space-y-6 mt-4">
 								<?php foreach ( $this->fields[ $current_tab ] as $tab => $field ): ?>
-									<div class="plausible-analytics-section shadow sm:rounded-md sm:overflow-hidden">
+									<div class="plausible-analytics-section shadow sm:rounded-md">
 										<?php
 										/** @var string $type checkbox|group|toggle_group|button|text */
 										$type = $field['type'] ?? '';

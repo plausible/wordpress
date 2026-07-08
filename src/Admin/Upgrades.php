@@ -102,6 +102,10 @@ class Upgrades {
 			$this->upgrade_to_258();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.6.0', '<' ) ) {
+			$this->upgrade_to_260();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -175,7 +179,7 @@ class Upgrades {
 	}
 
 	/**
-	 * Cleans the settings of the old, unneeded sub-arrays for settings.
+	 * Cleans the settings of the old, unneeded subarrays for settings.
 	 *
 	 * @return void
 	 * @codeCoverageIgnore
@@ -193,7 +197,7 @@ class Upgrades {
 				continue;
 			}
 
-			// For toggle lists, we only need to clean out the no longer needed zero values.
+			// For toggle lists, we only need to clean the no longer necessary zero-values.
 			if ( in_array( $option_name, $toggle_lists ) ) {
 				$settings[ $option_name ] = array_filter( $option_value );
 
@@ -215,13 +219,13 @@ class Upgrades {
 		}
 
 		/**
-		 * Migrate the shared link option for self hosters who use it.
+		 * Migrate the shared link option for self-hosters who use it.
 		 */
 		if ( ! empty( $settings['self_hosted_domain'] ) && ! empty( $settings['shared_link'] ) ) {
-			Helpers::update_setting( 'self_hosted_shared_link', $settings['shared_link'] );
-			Helpers::update_setting( 'shared_link', '' );
+			$settings['shared_link'] = '';
 		}
 
+		update_option( 'plausible_analytics_settings', $settings );
 		update_option( 'plausible_analytics_version', '2.0.0' );
 
 		// No longer need this db entry.
@@ -400,9 +404,35 @@ class Upgrades {
 	}
 
 	/**
+	 * Removes the Query Params and Cloaked Affiliate Links from the Enhanced Measurements list.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private function upgrade_to_260() {
+		$settings              = Helpers::get_settings();
+		$enhanced_measurements = $settings['enhanced_measurements'] ?? [];
+
+		if ( ( $key = array_search( EnhancedMeasurements::QUERY_PARAMS, $enhanced_measurements, true ) ) !== false ) {
+			unset( $enhanced_measurements[ $key ] );
+		}
+
+		if ( ( $key = array_search( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $enhanced_measurements, true ) ) !== false ) {
+			unset( $enhanced_measurements[ $key ] );
+		}
+
+		Helpers::update_setting( 'enhanced_measurements', $enhanced_measurements );
+
+		update_option( 'plausible_analytics_version', '2.6.0' );
+	}
+
+	/**
 	 * Display a notice to CE users that haven't entered an API token yet.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function show_ce_api_token_notice() {
 		$url = admin_url( 'options-general.php?page=plausible_analytics' );
@@ -410,7 +440,7 @@ class Upgrades {
 		?>
 		<div class="notice notice-warning">
 			<p><?php // translators: %s: URL to Plausible Analytics settings page.
-			echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
+				echo sprintf( __( 'A plugin token for Plausible is required. Please create one from the <a href="%s">Settings screen</a> and upgrade Plausible CE if necessary.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}
@@ -419,6 +449,8 @@ class Upgrades {
 	 * Display a notice to Cloud users that haven't entered an API token yet.
 	 *
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function show_cloud_api_token_notice() {
 		$url = admin_url( 'options-general.php?page=plausible_analytics' );
@@ -426,7 +458,7 @@ class Upgrades {
 		?>
 		<div class="notice notice-warning">
 			<p><?php // translators: %s: URL to Plausible Analytics settings page.
-			echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
+				echo sprintf( __( 'Almost there! Stats tracking requires a Plausible plugin token. Create one on the <a href="%s">Settings screen</a>, and press Connect to complete setup.', 'plausible-analytics' ), $url ); ?></p>
 		</div>
 		<?php
 	}

@@ -143,6 +143,53 @@ class ProvisioningTest extends TestCase {
 	}
 
 	/**
+	 * Helper to call private/protected methods.
+	 */
+	protected function callMethod( $obj, $name, array $args ) {
+		$class  = new \ReflectionClass( $obj );
+		$method = $class->getMethod( $name );
+		$method->setAccessible( true );
+
+		return $method->invokeArgs( $obj, $args );
+	}
+
+	/**
+	 * @see Provisioning::maybe_add()
+	 * @return void
+	 */
+	public function testMaybeAdd() {
+		$class = new Provisioning( false );
+
+		// Case 1: Setting has no values
+		$keys                  = [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ];
+		$settings              = [ 'affiliate_links' => [] ];
+		$enhanced_measurements = [];
+		$result                = $this->callMethod( $class, 'maybe_add', [ $keys, $settings, $enhanced_measurements ] );
+
+		$this->assertEmpty( $result );
+
+		// Case 2: Setting has values
+		$settings = [ 'affiliate_links' => [ 'https://example.com' ] ];
+		$result   = $this->callMethod( $class, 'maybe_add', [ $keys, $settings, $enhanced_measurements ] );
+
+		$this->assertContains( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $result );
+
+		// Case 3: Mixed keys
+		$keys                  = [ EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, EnhancedMeasurements::QUERY_PARAMS ];
+		$settings              = [
+			'affiliate_links' => [ 'https://example.com' ],
+			'query_params'    => [],
+		];
+		$enhanced_measurements = [ 'other-measurement' ];
+		$result                = $this->callMethod( $class, 'maybe_add', [ $keys, $settings, $enhanced_measurements ] );
+
+		$this->assertContains( 'other-measurement', $result );
+		$this->assertContains( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS, $result );
+		$this->assertNotContains( EnhancedMeasurements::QUERY_PARAMS, $result );
+		$this->assertCount( 2, $result );
+	}
+
+	/**
 	 * @see Provisioning::maybe_enable_customer_user_roles()
 	 * @return void
 	 */
@@ -238,17 +285,6 @@ class ProvisioningTest extends TestCase {
 		$new_format = [ 'default' => [ 123 => 'Goal Name' ], 'fr' => [ 456 => 'Goal FR' ] ];
 		$normalized = $this->callMethod( $provisioning, 'normalize_option', [ $new_format ] );
 		$this->assertEquals( $new_format, $normalized );
-	}
-
-	/**
-	 * Helper to call private/protected methods.
-	 */
-	protected function callMethod( $obj, $name, array $args ) {
-		$class  = new \ReflectionClass( $obj );
-		$method = $class->getMethod( $name );
-		$method->setAccessible( true );
-
-		return $method->invokeArgs( $obj, $args );
 	}
 
 	/**

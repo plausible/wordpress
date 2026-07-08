@@ -29,12 +29,12 @@ class Assets {
 	}
 
 	/**
-	 * Enqueue cloaked affiliate links assets if the option is enabled.
+	 * Enqueue the cloaked affiliate links assets if the option is enabled.
 	 *
 	 * @return void
 	 */
 	public function maybe_enqueue_cloaked_affiliate_links_assets() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS ) && Helpers::main_script_is_registered() ) {
+		if ( Helpers::is_cloaked_affiliate_links_enabled() && Helpers::main_script_is_registered() ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
@@ -50,7 +50,7 @@ class Assets {
 	}
 
 	/**
-	 * Enqueue 404 script if the option is enabled.
+	 * Enqueue the 404 script if the option is enabled.
 	 *
 	 * @return void
 	 */
@@ -143,14 +143,14 @@ class Assets {
 	}
 
 	/**
-	 * Enqueue Query Params script if the option is enabled.
+	 * Enqueue the Query Params script if the option is enabled.
 	 *
 	 * @return void
 	 */
 	public function maybe_enqueue_query_params_script() {
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::QUERY_PARAMS ) && Helpers::main_script_is_registered() ) {
-			$query_params = Helpers::get_settings()['query_params'] ?? [];
+		if ( Helpers::is_query_params_enabled() && Helpers::main_script_is_registered() ) {
 			$props        = [];
+			$query_params = Helpers::get_settings()['query_params'] ?? [];
 
 			foreach ( $query_params as $query_param ) {
 				if ( isset( $_REQUEST[ $query_param ] ) ) {
