@@ -126,6 +126,7 @@ Plausible fits naturally into how WordPress sites are built and managed:
 
 - Works with any WordPress theme
 - Compatible with caching and performance plugins
+- Works with multilingual sites built with WPML, with each language domain on its own dashboard
 - No need to edit theme files or use tag managers
 - Simple setup with no coding required
 - View your stats directly in your WordPress dashboard
