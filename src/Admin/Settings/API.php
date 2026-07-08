@@ -59,7 +59,7 @@ class API {
 			( is_array( $slug ) ? checked( $value, in_array( $value, $slug, false ) ? $value : false, false ) : checked( $value, $slug, false ) );
 		$disabled              = ! empty( $field['disabled'] ) ? 'disabled' : '';
 		$show_disabled_tooltip = $disabled && ! empty( $field['disabled_tooltip'] );
-		$check_when_disabled   = $id === 'expand_dashboard_access_administrator';
+		$check_when_disabled   = $field['slug'] === 'expand_dashboard_access' && $value === 'administrator';
 		$caps                  = ! empty( $field['caps'] ) ? $field['caps'] : [];
 		$addtl_opts            = ! empty( $field['addtl_opts'] );
 		?>
