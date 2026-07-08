@@ -143,7 +143,7 @@ class API {
 						<?php endif; ?>
 					</div>
 					<div class="w-full ml-3 <?php echo esc_attr( str_replace( '_', '-', $field['slug'] ) ); ?>">
-						<div class="text-sm <?php echo $text_class; ?>>">
+						<div class="text-sm <?php echo $text_class; ?>">
 							<p><?php do_action( 'plausible_analytics_settings_' . $field['slug'], $field['slug'] ); ?></p>
 						</div>
 					</div>
