@@ -137,20 +137,6 @@ class Page extends API {
 							'value' => EnhancedMeasurements::OUTBOUND_LINKS,
 							'caps'  => [ Capabilities::GOALS ],
 						],
-						EnhancedMeasurements::ECOMMERCE_REVENUE     => [
-							'label'    => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
-							'docs'     => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
-							'slug'     => 'enhanced_measurements',
-							'type'     => 'checkbox',
-							'value'    => EnhancedMeasurements::ECOMMERCE_REVENUE,
-							'caps'     => [
-								Capabilities::GOALS,
-								Capabilities::FUNNELS,
-								Capabilities::PROPS,
-								Capabilities::REVENUE,
-							],
-							'disabled' => ! empty( $settings['self_hosted_domain'] ),
-						],
 						EnhancedMeasurements::PAGEVIEW_PROPS        => [
 							'label' => esc_html__( 'Authors and categories', 'plausible-analytics' ),
 							'docs'  => 'https://plausible.io/docs/wordpress-integration#authors-and-categories',
@@ -158,6 +144,21 @@ class Page extends API {
 							'type'  => 'checkbox',
 							'value' => EnhancedMeasurements::PAGEVIEW_PROPS,
 							'caps'  => [ Capabilities::PROPS ],
+						],
+						EnhancedMeasurements::ECOMMERCE_REVENUE     => [
+							'label'            => esc_html__( 'Ecommerce revenue', 'plausible-analytics' ),
+							'docs'             => 'https://plausible.io/docs/wordpress-integration#track-ecommerce-revenue',
+							'slug'             => 'enhanced_measurements',
+							'type'             => 'checkbox',
+							'value'            => EnhancedMeasurements::ECOMMERCE_REVENUE,
+							'caps'             => [
+								Capabilities::GOALS,
+								Capabilities::FUNNELS,
+								Capabilities::PROPS,
+								Capabilities::REVENUE,
+							],
+							'disabled'         => ! empty( $settings['self_hosted_domain'] ),
+							'disabled_tooltip' => self::OPTION_NOT_AVAILABLE_IN_CE_HOOK,
 						],
 						EnhancedMeasurements::FORM_COMPLETIONS      => [
 							'label' => esc_html__( 'Form completions', 'plausible-analytics' ),
@@ -258,11 +259,12 @@ class Page extends API {
 					),
 					'fields' => [
 						[
-							'label'    => esc_html__( 'Enable proxy', 'plausible-analytics' ),
-							'slug'     => 'proxy_enabled',
-							'type'     => 'checkbox',
-							'value'    => 'on',
-							'disabled' => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
+							'label'            => esc_html__( 'Enable proxy', 'plausible-analytics' ),
+							'slug'             => 'proxy_enabled',
+							'type'             => 'checkbox',
+							'value'            => 'on',
+							'disabled'         => ! empty( Helpers::get_settings()['self_hosted_domain'] ),
+							'disabled_tooltip' => self::OPTION_NOT_AVAILABLE_IN_CE_HOOK,
 						],
 					],
 				],
@@ -433,22 +435,11 @@ class Page extends API {
 		];
 
 		/**
-		 * If the self-hosted domain setting has a value, add an "option disabled" notice to the Ecommerce Revenue toggle.
-		 */
-		if ( ! empty( $settings['self_hosted_domain'] ) ) {
-			$fields = $this->fields['general'][1]['fields'];
-
-			array_splice( $fields, 4, 0, self::OPTION_NOT_AVAILABLE_IN_CE_HOOK );
-
-			$this->fields['general'][1]['fields'] = $fields;
-		}
-
-		/**
 		 * If the proxy is enabled, or the self-hosted domain option has a value, display a warning box.
 		 *
 		 * @see self::proxy_warning()
 		 */
-		if ( Helpers::proxy_enabled() || ! empty( $settings['self_hosted_domain'] ) ) {
+		if ( Helpers::proxy_enabled() && ! empty( $settings['self_hosted_domain'] ) ) {
 			$this->fields['general'][4]['fields'][] = self::PROXY_WARNING_HOOK;
 		}
 
@@ -515,7 +506,7 @@ class Page extends API {
 		add_action( 'in_admin_header', [ $this, 'add_background_color' ] );
 
 		/**
-		 * Hooks that run on settings page.
+		 * Hooks that run on the settings page.
 		 */
 		new Hooks();
 	}
