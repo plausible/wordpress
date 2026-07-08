@@ -427,6 +427,8 @@ class Helpers {
 	/**
 	 * Wrapper to check if the Cloaked Affiliate Links option contains any values.
 	 *
+	 * @param array $settings Allows passing a current settings object.
+	 *
 	 * @return bool
 	 */
 	public static function is_cloaked_affiliate_links_enabled( $settings = [] ) {
