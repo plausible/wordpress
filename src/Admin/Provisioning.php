@@ -38,6 +38,14 @@ class Provisioning {
 	];
 
 	/**
+	 * Map Enhanced Measurement keys to their respective setting key.
+	 */
+	private const MEASUREMENT_TO_SETTING_MAP = [
+		EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => 'affiliate_links',
+		EnhancedMeasurements::QUERY_PARAMS            => 'query_params',
+	];
+
+	/**
 	 * @var bool
 	 */
 	private static $is_fresh_install = false;
@@ -365,9 +373,9 @@ class Provisioning {
 	 */
 	private function maybe_add( $keys, $settings, $enhanced_measurements ) {
 		foreach ( $keys as $key ) {
-			$option_name = str_replace( '-', '_', $key );
+			$option_name = self::MEASUREMENT_TO_SETTING_MAP[ $key ] ?? '';
 
-			if ( Helpers::setting_has_values( $settings, $option_name ) ) {
+			if ( ! empty( $option_name ) && Helpers::setting_has_values( $settings, $option_name ) ) {
 				$enhanced_measurements[] = $key;
 			}
 		}
