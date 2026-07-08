@@ -215,7 +215,7 @@ class TestCase extends YoastTestCase {
 		$callbacks = $wp_filter[ $hook ]->callbacks ?? [];
 		$callbacks = $callbacks[ $priority ] ?? [];
 
-		foreach ( $callbacks as $callback_key => $callback_data ) {
+		foreach ( array_keys( $callbacks ) as $callback_key ) {
 			if ( str_contains( $callback_key, $callback ) ) {
 				unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $callback_key ] );
 			}
