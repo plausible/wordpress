@@ -5,7 +5,7 @@ Tags: analytics, privacy, google analytics alternative, woocommerce analytics, s
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 2.5.8
+Stable tag: 2.6.0
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -277,6 +277,10 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.6.0 =
+* Added: WPML "domain per language" compatibility.
+* Improved: Cloaked Affiliate Links and Query Params now have their own settings sections. Enhanced Measurements are now displayed in two columns.
 
 = 2.5.8 =
 * Fixed: only load author/category pageview props on posts.
