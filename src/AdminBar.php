@@ -115,7 +115,7 @@ class AdminBar {
 
 				$args[] = [
 					'id'     => 'view-page-analytics',
-					'title'  => esc_html__( 'View Page Analytics', 'plausible-analytics' ),
+					'title'  => esc_html__( 'View page analytics', 'plausible-analytics' ),
 					'href'   => add_query_arg(
 						'page-url',
 						is_home() ? '' : $uri,
