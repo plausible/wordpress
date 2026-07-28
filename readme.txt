@@ -281,6 +281,7 @@ Please make sure you make a backup of your database before updating any version 
 = 2.6.0 =
 * Added: WPML "domain per language" compatibility.
 * Improved: Cloaked Affiliate Links and Query Params now have their own settings sections. Enhanced Measurements are now displayed in two columns.
+* Fixed: if Permalinks > Custom Base was previously modified with WooCommerce enabled, the view-product goal would wrongfully get a second leading slash.
 
 = 2.5.8 =
 * Fixed: only load author/category pageview props on posts.
