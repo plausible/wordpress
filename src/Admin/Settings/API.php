@@ -649,11 +649,12 @@ class API {
 											<?php $multilang_plugin_name = Helpers::get_multilang_plugin_name(); ?>
 											<div class="plausible-analytics-hook success persist mt-4">
 												<?php printf(
+													/* translators: %s: multilingual plugin name. */
 													esc_html__(
 														"You're using %s with different domains per language. You can map your other language domains to Plausible after completing this wizard in the plugin settings.",
 														'plausible-analytics'
 													),
-													$multilang_plugin_name
+													esc_html( $multilang_plugin_name )
 												); ?>
 											</div>
 										<?php endif; ?>
