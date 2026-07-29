@@ -43,6 +43,9 @@ composer.json
 composer.lock
 npm-shrinkwrap.json
 openapitools.json
+/src/Client/.openapi-generator-ignore
+/src/Client/.php-cs-fixer.dist.php
+/src/Client/git_push.sh
 package.json
 package-lock.json
 phpunit.xml
