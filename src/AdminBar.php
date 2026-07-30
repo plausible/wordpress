@@ -101,7 +101,11 @@ class AdminBar {
 
 				$args[] = [
 					'id'     => "view-analytics-$key",
-					'title'  => sprintf( esc_html__( 'View analytics for %s', 'plausible-analytics' ), $language_domain ),
+					/* translators: %s: language domain. */
+					'title' => sprintf(
+						esc_html__( 'View analytics for %s', 'plausible-analytics' ),
+						$language_domain
+					),
 					'href'   => $href,
 					'parent' => 'plausible-analytics',
 				];
