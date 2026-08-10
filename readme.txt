@@ -278,6 +278,9 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 2.6.1 =
+* Fixed: the Getting Started Guide's Next button would stay disabled after entering (or pasting) a Plugin Token.
+
 = 2.6.0 =
 * Added: WPML "domain per language" compatibility.
 * Improved: Cloaked Affiliate Links and Query Params now have their own settings sections. Enhanced Measurements are now displayed in two columns.
