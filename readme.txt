@@ -279,6 +279,8 @@ Please make sure you make a backup of your database before updating any version 
 == Changelog ==
 
 = 2.6.1 =
+* Added: info icons linking to the documentation for Cloaked Affiliate Links, Query Parameters, View Your Stats in Your WordPress Dashboard, Track Analytics for User Roles, Show Stats Dashboard to 
+Additional User Roles and Disable Menu in Toolbar.
 * Fixed: the Getting Started Guide's Next button would stay disabled after entering (or pasting) a Plugin Token.
 
 = 2.6.0 =
