@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		createAPITokenElems: document.getElementsByClassName('plausible-create-api-token'),
 		buttonElems: document.getElementsByClassName('plausible-analytics-button'),
 		stepElems: document.getElementsByClassName('plausible-analytics-wizard-next-step'),
-		credentialsInputs: document.querySelectorAll('.plausible-analytics-credentials input'),
+		/**
+		 * Credentials (Domain Name/Plugin Token) are entered in the settings screen, as well as in the wizard's slides.
+		 */
+		credentialsInputs: document.querySelectorAll('.plausible-analytics-credentials input, .plausible-analytics-wizard-step-section input'),
 		languageDomainPulldown: document.getElementById('language_domain'),
 		connectButtons: document.querySelectorAll('.plausible-analytics-credentials .plausible-analytics-connect-button'),
 
@@ -68,7 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if (this.credentialsInputs.length > 0) {
 				for (let i = 0; i < this.credentialsInputs.length; i++) {
-					this.credentialsInputs[i].addEventListener('keyup', this.disableConnectButton);
+					/**
+					 * We're listening for input (instead of keyup) events, because the value can be changed without
+					 * using the keyboard, e.g. by pasting it using the mouse, or a password manager.
+					 */
+					this.credentialsInputs[i].addEventListener('input', this.disableConnectButton);
 				}
 			}
 
@@ -487,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 
 		/**
-		 * Disable the Connect button if the Domain Name or API Token field is empty.
+		 * Disable the Connect/Next button if the Domain Name or API Token field is empty.
 		 *
 		 * @param e
 		 */
@@ -495,7 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			let target = e.target;
 			let credentials = target.closest('.plausible-analytics-credentials');
 			let button;
-			let buttonIsHref = false;
 
 			if (credentials !== null) {
 				button = credentials.querySelector('.plausible-analytics-connect-button');
@@ -516,32 +522,33 @@ document.addEventListener('DOMContentLoaded', () => {
 				return;
 			}
 
-			let slide_id = document.location.hash;
-			button = document.querySelector(slide_id + ' .plausible-analytics-wizard-next-step');
-			buttonIsHref = true;
+			/**
+			 * The wizard's Next button is an anchor, which can't be disabled, so we're toggling its pointer-events and
+			 * background color instead.
+			 */
+			let step = target.closest('.plausible-analytics-wizard-step-section');
+
+			if (step === null) {
+				return;
+			}
+
+			button = step.querySelector('.plausible-analytics-wizard-next-step');
 
 			if (button === null) {
 				return;
 			}
 
-			if (target.value !== '') {
-				if (!buttonIsHref) {
-					button.disabled = false;
-				} else {
-					button.classList.remove('pointer-events-none');
-					button.classList.replace('bg-gray-200', 'bg-indigo-600');
-				}
+			let allFilled = Array.from(step.querySelectorAll('input')).every(input => input.value.trim() !== '');
+
+			if (allFilled) {
+				button.classList.remove('pointer-events-none');
+				button.classList.replace('bg-gray-200', 'bg-indigo-600');
 
 				return;
 			}
 
-			if (!buttonIsHref) {
-				button.disabled = true;
-				button.textContent = button.textContent.replace('Connected', 'Connect');
-			} else {
-				button.classList += ' pointer-events-none';
-				button.classList.replace('bg-indigo-600', 'bg-gray-200');
-			}
+			button.classList.add('pointer-events-none');
+			button.classList.replace('bg-indigo-600', 'bg-gray-200');
 		},
 
 		/**
