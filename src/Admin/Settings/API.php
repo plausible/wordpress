@@ -96,7 +96,7 @@ class API {
 	 * @access public
 	 *
 	 * @param string $url   URL to the documentation.
-	 * @param string $label Label of the option/section, used in the link's title attribute.
+	 * @param string $label Label of the option/section, used as the link's accessible name.
 	 *
 	 * @return string
 	 */
@@ -109,7 +109,8 @@ class API {
 
 		ob_start();
 		?>
-		<a class="inline-flex items-center leading-none" href="<?php echo esc_url( $url ); ?>" rel="noreferrer" target="_blank" title="<?php echo esc_attr( $title ); ?>">
+		<a class="inline-flex items-center leading-none" href="<?php echo esc_url( $url ); ?>" rel="noreferrer" target="_blank" aria-label="<?php echo esc_attr( $title ); ?>"
+		   title="<?php echo esc_attr( $title ); ?>">
 			<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
 				<path stroke-linecap="round" stroke-linejoin="round"
 					  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
