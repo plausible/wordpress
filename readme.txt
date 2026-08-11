@@ -5,7 +5,7 @@ Tags: analytics, privacy, google analytics alternative, woocommerce analytics, s
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
