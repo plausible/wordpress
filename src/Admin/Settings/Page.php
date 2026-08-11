@@ -198,6 +198,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Cloaked affiliate links', 'plausible-analytics' ),
 					'slug'   => 'cloaked_affiliate_links',
 					'type'   => 'group',
+					'docs'   => 'https://plausible.io/docs/wordpress-integration#cloaked-affiliate-links',
 					'desc'   => sprintf(
 					// translators: %s: Example URL to affiliate product.
 						__(
@@ -218,6 +219,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Query parameters', 'plausible-analytics' ),
 					'slug'   => 'query_params',
 					'type'   => 'group',
+					'docs'   => 'https://plausible.io/docs/wordpress-integration#query-parameters',
 					'desc'   => sprintf(
 					// translators: %s: Example URL with query parameter.
 						__(
@@ -272,6 +274,7 @@ class Page extends API {
 					'label'  => esc_html__( 'View your stats in your WordPress dashboard', 'plausible-analytics' ),
 					'slug'   => 'is_shared_link',
 					'type'   => 'group',
+					'docs'   => 'https://plausible.io/docs/wordpress-integration#view-your-stats-inside-wordpress',
 					'desc'   => esc_html__(
 						'View your site statistics within your WordPress Dashboard.',
 						'plausible-analytics'
@@ -323,6 +326,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Track analytics for user roles', 'plausible-analytics' ),
 					'slug'   => 'tracked_user_roles',
 					'type'   => 'group',
+					'docs'   => 'https://plausible.io/docs/wordpress-integration#exclude-admins-and-other-roles',
 					'desc'   => esc_html__(
 						'By default, visits from logged in users aren\'t tracked. If you want to track visits for certain user roles then please specify them below.',
 						'plausible-analytics'
@@ -334,6 +338,7 @@ class Page extends API {
 					'label'  => esc_html__( 'Show stats dashboard to additional user roles', 'plausible-analytics' ),
 					'slug'   => 'expand_dashboard_access',
 					'type'   => 'group',
+					'docs'   => 'https://plausible.io/docs/wordpress-integration#view-your-stats-inside-wordpress',
 					'desc'   => esc_html__(
 						'By default, the stats dashboard is only available to logged in administrators. If you want the dashboard to be available for other logged in users, then please specify them below.',
 						'plausible-analytics'
@@ -345,6 +350,7 @@ class Page extends API {
 					'label'         => esc_html__( 'Disable menu in toolbar', 'plausible-analytics' ),
 					'slug'          => 'disable_toolbar_menu',
 					'type'          => 'group',
+					'docs'          => 'https://plausible.io/docs/wordpress-integration#disable-the-toolbar-menu',
 					'desc'          => esc_html__(
 						'Check this option if you don\'t want the Plausible Analytics menu item to be added to the toolbar at the top of the screen.',
 						'plausible-analytics'

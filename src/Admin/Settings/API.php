@@ -81,15 +81,41 @@ class API {
 				<?php echo $this->render_hook_field( reset( $field['disabled_tooltip'] ), $show_disabled_tooltip ); ?>
 			<?php endif; ?>
 			<span class="ml-2 dark:text-gray-100 text-lg"><?php echo esc_html( $field['label'] ); ?></span>
-			<?php if ( isset( $field['docs'] ) ): ?>
-				<a class="leading-none" href="<?php echo esc_url( $field['docs'] ); ?>" rel="noreferrer" target="_blank">
-					<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-						<path stroke-linecap="round" stroke-linejoin="round"
-							  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
-					</svg>
-				</a>
+			<?php if ( ! empty( $field['docs'] ) ): ?>
+				<?php echo $this->render_docs_link( $field['docs'], $field['label'] ); ?>
 			<?php endif; ?>
 		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Renders an info icon, linking to the documentation of the option/section it belongs to.
+	 *
+	 * @since  2.6.1
+	 * @access public
+	 *
+	 * @param string $url   URL to the documentation.
+	 * @param string $label Label of the option/section, used as the link's accessible name.
+	 *
+	 * @return string
+	 */
+	public function render_docs_link( $url, $label = '' ) {
+		$title = $label ? sprintf(
+		// translators: %s: Label of the option/section this link belongs to.
+			__( 'Learn more about %s', 'plausible-analytics' ),
+			$label
+		) : __( 'Learn more', 'plausible-analytics' );
+
+		ob_start();
+		?>
+		<a class="inline-flex items-center leading-none" href="<?php echo esc_url( $url ); ?>" rel="noreferrer" target="_blank" aria-label="<?php echo esc_attr( $title ); ?>"
+		   title="<?php echo esc_attr( $title ); ?>">
+			<svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400 w-6 h-6 leading-none" stroke="currentColor" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+				<path stroke-linecap="round" stroke-linejoin="round"
+					  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
+			</svg>
+		</a>
 		<?php
 		return ob_get_clean();
 	}
@@ -398,7 +424,12 @@ class API {
 		<div class="bg-white dark:bg-gray-800<?php echo $hide_header ? '' : ' plausible-analytics-group py-6 px-4 space-y-6 sm:p-6'; ?>">
 			<?php if ( ! $hide_header ) : ?>
 				<header class="relative">
-					<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo esc_attr( $group['slug'] ); ?>"><?php echo esc_html( $group['label'] ); ?></h3>
+					<div class="flex items-start gap-x-2">
+						<h3 class="text-lg mt-0 leading-6 font-medium text-gray-900 dark:text-gray-100" id="<?php echo esc_attr( $group['slug'] ); ?>"><?php echo esc_html( $group['label'] ); ?></h3>
+						<?php if ( ! empty( $group['docs'] ) ): ?>
+							<?php echo $this->render_docs_link( $group['docs'], $group['label'] ); ?>
+						<?php endif; ?>
+					</div>
 					<div class="mt-1 text-sm leading-5 !text-gray-500 !dark:text-gray-200">
 						<?php echo wp_kses_post( $group['desc'] ); ?>
 					</div>
