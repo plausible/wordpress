@@ -126,7 +126,7 @@ Plausible fits naturally into how WordPress sites are built and managed:
 
 - Works with any WordPress theme
 - Compatible with caching and performance plugins
-- Works with multilingual sites built with WPML, with each language domain on its own dashboard
+- Works with multilingual sites built with WPML or TranslatePress, with each language domain on its own dashboard
 - No need to edit theme files or use tag managers
 - Simple setup with no coding required
 - View your stats directly in your WordPress dashboard
@@ -277,6 +277,9 @@ Contact us: https://plausible.io/contact
 Please make sure you make a backup of your database before updating any version to ensure that none of your data is lost.
 
 == Changelog ==
+
+= 2.6.2 =
+* Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
 
 = 2.6.1 =
 * Added: info icons linking to the documentation for Cloaked Affiliate Links, Query Parameters, View Your Stats in Your WordPress Dashboard, Track Analytics for User Roles, Show Stats Dashboard to 
