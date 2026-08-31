@@ -256,9 +256,12 @@ class Compatibility {
 	 * Multilingual plugins, e.g., TranslatePress and WPML, override the REST API URL to include
 	 * the language 'subdirectory', which leads to 404 errors.
 	 *
-	 * This filter forces it back to default behavior.
+	 * This filter strips that subdirectory. In "domain per language" mode it then moves the endpoint to the
+	 * language domain we're currently on, because pointing it at the default domain would make the tracker fire
+	 * cross-origin (CORS) requests.
 	 *
 	 * @filter rest_url
+	 * @since  2.6.2 Keep the endpoint on the current language domain.
 	 *
 	 * @param mixed $url
 	 *
@@ -269,7 +272,7 @@ class Compatibility {
 		$rest_endpoint = Helpers::get_rest_endpoint( false );
 
 		if ( str_contains( $url, $rest_endpoint ) ) {
-			return get_option( 'home' ) . $rest_endpoint;
+			return Helpers::maybe_use_current_language_domain( get_option( 'home' ) . $rest_endpoint );
 		}
 
 		return $url;

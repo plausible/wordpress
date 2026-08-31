@@ -72,6 +72,37 @@ class AjaxTest extends TestCase {
 	}
 
 	/**
+	 * TranslatePress keys its language domains by locale (e.g. nl_NL). The underscore must survive key
+	 * sanitization, otherwise the setting is stored under a key that's never read back.
+	 *
+	 * @see OptionsParser::parse_keyed_options()
+	 */
+	public function testSaveKeyedOptionsKeepsUnderscoreInKey() {
+		$language_domain = 'nl_NL';
+		$options         = [
+			[ 'name' => "domain_name[$language_domain]", 'value' => 'tp-dutch.example.com' ],
+			[ 'name' => "api_token[$language_domain]", 'value' => 'plausible-plugin-dutch-token' ],
+		];
+
+		$_POST['_nonce']  = wp_create_nonce( 'plausible_analytics_toggle_option' );
+		$_POST['options'] = wp_json_encode( $options );
+
+		set_transient( 'plausible_analytics_valid_token', [ 'plausible-plugin-dutch-token' => true ] );
+
+		try {
+			$this->ajax->save_options();
+		} catch ( \Exception $e ) {
+		}
+
+		$settings = Helpers::get_settings();
+
+		$this->assertArrayHasKey( $language_domain, $settings['domain_name'] );
+		$this->assertEquals( 'tp-dutch.example.com', $settings['domain_name'][ $language_domain ] );
+		$this->assertArrayHasKey( $language_domain, $settings['api_token'] );
+		$this->assertEquals( 'plausible-plugin-dutch-token', $settings['api_token'][ $language_domain ] );
+	}
+
+	/**
 	 * Test save_options with invalid JSON.
 	 */
 	public function testSaveOptionsInvalidJson() {

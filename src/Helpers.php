@@ -16,6 +16,13 @@ use Exception;
  */
 class Helpers {
 	/**
+	 * Supported multilingual plugins, as returned by @see Helpers::get_multilang_plugin().
+	 */
+	const MULTILANG_PLUGIN_WPML = 'wpml';
+
+	const MULTILANG_PLUGIN_TRANSLATEPRESS = 'translatepress';
+
+	/**
 	 * Returns the API token.
 	 *
 	 * @return string
@@ -80,9 +87,31 @@ class Helpers {
 	}
 
 	/**
+	 * Returns the active multilingual plugin, so we know which of its APIs to talk to.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return string One of the MULTILANG_PLUGIN_* constants, or an empty string when none is active.
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_multilang_plugin() {
+		$plugin = '';
+
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$plugin = static::MULTILANG_PLUGIN_WPML;
+		} elseif ( defined( 'TRP_PLUGIN_VERSION' ) ) {
+			$plugin = static::MULTILANG_PLUGIN_TRANSLATEPRESS;
+		}
+
+		return (string) apply_filters( 'plausible_analytics_multilang_plugin', $plugin );
+	}
+
+	/**
 	 * Returns the key of the currently used Language Domain.
 	 *
 	 * @since              v2.6.0
+	 * @since              v2.6.2 Added TranslatePress (Multiple Domains) support.
 	 *
 	 * @return string
 	 *
@@ -93,20 +122,32 @@ class Helpers {
 			return 'default';
 		}
 
-		$language_domains = apply_filters( 'wpml_setting', [], 'language_domains' );
-		$current_language = apply_filters( 'wpml_current_language', null );
+		$language_domains = [];
+		$current_language = null;
 
-		if ( $current_language && isset( $language_domains[ $current_language ] ) ) {
-			return (string) apply_filters( 'plausible_analytics_current_language_domain_key', $current_language );
+		switch ( static::get_multilang_plugin() ) {
+			case static::MULTILANG_PLUGIN_WPML:
+				$language_domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+				$current_language = apply_filters( 'wpml_current_language', null );
+				break;
+
+			case static::MULTILANG_PLUGIN_TRANSLATEPRESS:
+				$language_domains = static::get_translatepress_language_domains();
+				$current_language = static::get_translatepress_current_language();
+				break;
 		}
 
-		return (string) apply_filters( 'plausible_analytics_current_language_domain_key', 'default' );
+		$key = $current_language && isset( $language_domains[ $current_language ] ) ? $current_language : 'default';
+
+		return (string) apply_filters( 'plausible_analytics_current_language_domain_key', $key );
 	}
 
 	/**
-	 * Returns true only when WPML is active, its negotiation type is "different domain per language", AND at least one domain is configured.
+	 * Returns true only when a supported multilingual plugin (WPML or TranslatePress) is active, it's configured to serve
+	 * a "different domain per language", AND at least one domain is configured.
 	 *
 	 * @since              v2.6.0
+	 * @since              v2.6.2 Added TranslatePress (Multiple Domains) support.
 	 *
 	 * @return bool
 	 *
@@ -123,16 +164,19 @@ class Helpers {
 			return $is_language_per_domain; // @codeCoverageIgnore
 		}
 
-		/**
-		 * If WPML is not active, we can assume we're not in language per domain mode.
-		 */
-		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
-			return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', false );
-		}
+		$value = false;
 
-		$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
-		$domains          = apply_filters( 'wpml_setting', [], 'language_domains' );
-		$value            = $negotiation_type === 2 && ! empty( $domains );
+		switch ( static::get_multilang_plugin() ) {
+			case static::MULTILANG_PLUGIN_WPML:
+				$negotiation_type = (int) apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
+				$domains          = apply_filters( 'wpml_setting', [], 'language_domains' );
+				$value            = $negotiation_type === 2 && ! empty( $domains );
+				break;
+
+			case static::MULTILANG_PLUGIN_TRANSLATEPRESS:
+				$value = ! empty( static::get_translatepress_language_domains() );
+				break;
+		}
 
 		return $is_language_per_domain = (bool) apply_filters( 'plausible_analytics_language_per_domain_mode', $value );
 	}
@@ -367,7 +411,11 @@ class Helpers {
 		 * If the Avoid Ad Blockers option is enabled, return URL pointing to the local file.
 		 */
 		if ( $local && static::proxy_enabled() ) {
-			return esc_url( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
+			/**
+			 * The cache URL is stored as an absolute URL on the main domain, so it needs to be moved to the
+			 * language domain we're currently on.
+			 */
+			return esc_url( static::maybe_use_current_language_domain( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' ) );
 		}
 
 		return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
@@ -375,16 +423,28 @@ class Helpers {
 
 	/**
 	 * @since              v2.6.0 Provide compatibility with multilang plugins, like WPML.
+	 * @since              v2.6.2 Added TranslatePress (Multiple Domains) support.
 	 *
 	 * @return array
 	 *
 	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function get_language_domains() {
-		$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
-		$main    = wp_parse_url( home_url(), PHP_URL_HOST ) ?: home_url();
+		$domains = [];
 
-		// WPML's language_domains omits the default language; prepend the main WP domain.
+		switch ( static::get_multilang_plugin() ) {
+			case static::MULTILANG_PLUGIN_WPML:
+				$domains = apply_filters( 'wpml_setting', [], 'language_domains' );
+				break;
+
+			case static::MULTILANG_PLUGIN_TRANSLATEPRESS:
+				$domains = static::get_translatepress_language_domains();
+				break;
+		}
+
+		$main = wp_parse_url( home_url(), PHP_URL_HOST ) ?: home_url();
+
+		// WPML/TranslatePress omit the default language; prepend the main WP domain.
 		if ( ! in_array( $main, $domains, true ) ) {
 			$domains = array_merge( [ 'default' => $main ], $domains );
 		}
@@ -393,18 +453,138 @@ class Helpers {
 	}
 
 	/**
+	 * Returns the origin (scheme + host + port) of the language domain that's currently being served, or an empty
+	 * string when we're not running in "domain per language" mode.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_current_language_domain_url() {
+		if ( ! static::is_language_per_domain_mode() ) {
+			return '';
+		}
+
+		$domains = static::get_language_domains();
+		$domain  = $domains[ static::get_current_language_domain_key() ] ?? '';
+
+		if ( empty( $domain ) ) {
+			return '';
+		}
+
+		// Language domains are stored as a bare host (WPML) or as a full URL (TranslatePress).
+		if ( strpos( $domain, '//' ) === false ) {
+			$domain = ( is_ssl() ? 'https://' : 'http://' ) . $domain;
+		}
+
+		$parts = wp_parse_url( $domain );
+
+		if ( empty( $parts['host'] ) ) {
+			return '';
+		}
+
+		$scheme = $parts['scheme'] ?? ( is_ssl() ? 'https' : 'http' );
+		$port   = ! empty( $parts['port'] ) ? ':' . $parts['port'] : '';
+
+		return $scheme . '://' . $parts['host'] . $port;
+	}
+
+	/**
+	 * Moves $url to the language domain that's currently being served, keeping its path and query intact.
+	 *
+	 * Both the proxy endpoint and the locally cached JS file are built from the main WP domain. In "domain per
+	 * language" mode that means the tracker would fire cross-origin requests (CORS) at the default domain, so we
+	 * point them at the domain the visitor is actually on.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @param string $url
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function maybe_use_current_language_domain( $url ) {
+		$origin = static::get_current_language_domain_url();
+
+		if ( empty( $url ) || empty( $origin ) ) {
+			return $url;
+		}
+
+		$parts = wp_parse_url( $url );
+
+		// Already on the right domain, or nothing we can rewrite.
+		if ( empty( $parts['host'] ) || strcasecmp( $parts['host'], (string) wp_parse_url( $origin, PHP_URL_HOST ) ) === 0 ) {
+			return $url;
+		}
+
+		$path  = $parts['path'] ?? '';
+		$query = ! empty( $parts['query'] ) ? '?' . $parts['query'] : '';
+
+		return $origin . $path . $query;
+	}
+
+	/**
+	 * Returns TranslatePress' "Multiple Domains" mappings, keyed by language code (excluding the default language, to
+	 * mirror WPML's language_domains behavior).
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return array
+	 */
+	protected static function get_translatepress_language_domains() {
+		$settings = function_exists( 'get_option' ) ? get_option( 'trp_settings', [] ) : [];
+		$mappings = $settings['trp-multiple-domains'] ?? [];
+		$default  = $settings['default-language'] ?? '';
+		$domains  = [];
+
+		if ( ! is_array( $mappings ) ) {
+			return $domains;
+		}
+
+		foreach ( $mappings as $language_code => $mapping ) {
+			if ( $language_code === $default || empty( $mapping['enabled'] ) || empty( $mapping['domain'] ) ) {
+				continue;
+			}
+
+			$domains[ $language_code ] = $mapping['domain'];
+		}
+
+		return $domains;
+	}
+
+	/**
+	 * Returns the language code TranslatePress is currently serving.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return string|null
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	protected static function get_translatepress_current_language() {
+		global $TRP_LANGUAGE;
+
+		return ! empty( $TRP_LANGUAGE ) ? $TRP_LANGUAGE : null;
+	}
+
+	/**
 	 * Get the name of the active multilang plugin.
+	 *
+	 * @since              v2.6.2 Added TranslatePress support.
 	 *
 	 * @return string
 	 *
 	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	public static function get_multilang_plugin_name() {
-		$name = '';
-
-		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
-			$name = 'WPML';
-		}
+		$names = [
+			static::MULTILANG_PLUGIN_WPML           => 'WPML',
+			static::MULTILANG_PLUGIN_TRANSLATEPRESS => 'TranslatePress',
+		];
+		$name  = $names[ static::get_multilang_plugin() ] ?? '';
 
 		return apply_filters( 'plausible_analytics_multilang_plugin_name', $name );
 	}

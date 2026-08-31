@@ -280,7 +280,7 @@ class API {
 	}
 
 	/**
-	 * Render Domain Map field for WPML multilang domain mode.
+	 * Render Domain Map field for multilang (WPML/TranslatePress) domain-per-language mode.
 	 *
 	 * @param array $field
 	 *

@@ -28,8 +28,14 @@ class OptionsParser {
 				// Allow all keys, but distinguish them.
 				$has_keyed = true;
 
-				// Sanitize key: allow only [A-Za-z0-9.-]
-				$key = preg_replace( '/[^A-Za-z0-9.\-]/', '', $key );
+				/**
+				 * Sanitize key: allow only [A-Za-z0-9._-]
+				 *
+				 * @since v2.6.2 Underscores are allowed, because TranslatePress keys its language domains by
+				 *               locale, e.g. nl_NL. Stripping the underscore would store the setting under a key
+				 *               that's never read back.
+				 */
+				$key = preg_replace( '/[^A-Za-z0-9._\-]/', '', $key );
 
 				if ( ! isset( $posted_values[ $array_name ] ) ) {
 					$posted_values[ $array_name ] = $value;

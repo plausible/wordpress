@@ -344,4 +344,60 @@ class HelpersTest extends TestCase {
 
 		$this->assertTrue( Helpers::get_settings()['test'] );
 	}
+
+	/**
+	 * TranslatePress' "Multiple Domains" mappings should be reduced to [ language_code => domain ], excluding the
+	 * default language and any language that isn't enabled or lacks a domain.
+	 *
+	 * @see Helpers::get_translatepress_language_domains()
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testGetTranslatePressLanguageDomains() {
+		update_option(
+			'trp_settings',
+			[
+				'default-language'     => 'en_US',
+				'trp-multiple-domains' => [
+					// Default language: always excluded, it maps to the main WP domain.
+					'en_US' => [ 'enabled' => '1', 'domain' => 'https://example.com' ],
+					'fr_FR' => [ 'enabled' => '1', 'domain' => 'https://example.fr' ],
+					'de_DE' => [ 'enabled' => '1', 'domain' => 'https://example.de' ],
+					// Not enabled: excluded.
+					'es_ES' => [ 'enabled' => '', 'domain' => 'https://example.es' ],
+					// No domain: excluded.
+					'nl_NL' => [ 'enabled' => '1', 'domain' => '' ],
+				],
+			]
+		);
+
+		$method = new \ReflectionMethod( Helpers::class, 'get_translatepress_language_domains' );
+		$method->setAccessible( true );
+
+		$domains = $method->invoke( null );
+
+		$this->assertEquals(
+			[
+				'fr_FR' => 'https://example.fr',
+				'de_DE' => 'https://example.de',
+			],
+			$domains
+		);
+	}
+
+	/**
+	 * When no "Multiple Domains" mappings are configured, no language domains should be returned.
+	 *
+	 * @see Helpers::get_translatepress_language_domains()
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testGetTranslatePressLanguageDomainsEmpty() {
+		update_option( 'trp_settings', [ 'default-language' => 'en_US', 'trp-multiple-domains' => [] ] );
+
+		$method = new \ReflectionMethod( Helpers::class, 'get_translatepress_language_domains' );
+		$method->setAccessible( true );
+
+		$this->assertEquals( [], $method->invoke( null ) );
+	}
 }
