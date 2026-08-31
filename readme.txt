@@ -3,7 +3,7 @@ Contributors: plausible, DaanvandenBergh
 Donate link: https://plausible.io/
 Tags: analytics, privacy, google analytics alternative, woocommerce analytics, stats
 Requires at least: 5.9
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.2
 Stable tag: 2.6.1
 License: Massachusetts Institute of Technology (MIT) license
@@ -280,6 +280,9 @@ Please make sure you make a backup of your database before updating any version 
 
 = 2.6.2 =
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
+* Fixed: in "domain per language" mode, the proxy endpoint and the locally cached tracker script were loaded from the default domain, which could cause CORS errors on the other language domains.
+* Fixed: Plugin Tokens for language domains whose key contains an underscore (e.g., TranslatePress' nl_NL) were stored under a stripped key, which meant they were never read back.
+* Tested with WP 7.1.
 
 = 2.6.1 =
 * Added: info icons linking to the documentation for Cloaked Affiliate Links, Query Parameters, View Your Stats in Your WordPress Dashboard, Track Analytics for User Roles, Show Stats Dashboard to 
