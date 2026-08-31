@@ -439,6 +439,9 @@ class Upgrades {
 	 * That way, existing installs get the Pageview goals for the languages they serve, e.g. /es/producto*, and the
 	 * currency and language custom properties, without having to save their settings first.
 	 *
+	 * This runs on init (@see Upgrades::__construct()), i.e. after WPML registered its language API on plugin load and
+	 * booted on plugins_loaded, so the languages the Pageview goal paths are built from are available.
+	 *
 	 * @since              v2.6.2
 	 *
 	 * @return void
