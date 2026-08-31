@@ -411,7 +411,11 @@ class Helpers {
 		 * If the Avoid Ad Blockers option is enabled, return URL pointing to the local file.
 		 */
 		if ( $local && static::proxy_enabled() ) {
-			return esc_url( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' );
+			/**
+			 * The cache URL is stored as an absolute URL on the main domain, so it needs to be moved to the
+			 * language domain we're currently on.
+			 */
+			return esc_url( static::maybe_use_current_language_domain( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' ) );
 		}
 
 		return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
@@ -446,6 +450,80 @@ class Helpers {
 		}
 
 		return apply_filters( 'plausible_analytics_language_domains', $domains );
+	}
+
+	/**
+	 * Returns the origin (scheme + host + port) of the language domain that's currently being served, or an empty
+	 * string when we're not running in "domain per language" mode.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function get_current_language_domain_url() {
+		if ( ! static::is_language_per_domain_mode() ) {
+			return '';
+		}
+
+		$domains = static::get_language_domains();
+		$domain  = $domains[ static::get_current_language_domain_key() ] ?? '';
+
+		if ( empty( $domain ) ) {
+			return '';
+		}
+
+		// Language domains are stored as a bare host (WPML) or as a full URL (TranslatePress).
+		if ( strpos( $domain, '//' ) === false ) {
+			$domain = ( is_ssl() ? 'https://' : 'http://' ) . $domain;
+		}
+
+		$parts = wp_parse_url( $domain );
+
+		if ( empty( $parts['host'] ) ) {
+			return '';
+		}
+
+		$scheme = $parts['scheme'] ?? ( is_ssl() ? 'https' : 'http' );
+		$port   = ! empty( $parts['port'] ) ? ':' . $parts['port'] : '';
+
+		return $scheme . '://' . $parts['host'] . $port;
+	}
+
+	/**
+	 * Moves $url to the language domain that's currently being served, keeping its path and query intact.
+	 *
+	 * Both the proxy endpoint and the locally cached JS file are built from the main WP domain. In "domain per
+	 * language" mode that means the tracker would fire cross-origin requests (CORS) at the default domain, so we
+	 * point them at the domain the visitor is actually on.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @param string $url
+	 *
+	 * @return string
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	public static function maybe_use_current_language_domain( $url ) {
+		$origin = static::get_current_language_domain_url();
+
+		if ( empty( $url ) || empty( $origin ) ) {
+			return $url;
+		}
+
+		$parts = wp_parse_url( $url );
+
+		// Already on the right domain, or nothing we can rewrite.
+		if ( empty( $parts['host'] ) || strcasecmp( $parts['host'], (string) wp_parse_url( $origin, PHP_URL_HOST ) ) === 0 ) {
+			return $url;
+		}
+
+		$path  = $parts['path'] ?? '';
+		$query = ! empty( $parts['query'] ) ? '?' . $parts['query'] : '';
+
+		return $origin . $path . $query;
 	}
 
 	/**
