@@ -280,6 +280,13 @@ Please make sure you make a backup of your database before updating any version 
 
 = 2.6.2 =
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
+* Added: WPML Multilingual & Multicurrency for WooCommerce (WooCommerce Multilingual) compatibility.
+* Fixed: the view product goal is now created for the URL each language is served under, e.g. /es/producto*, instead of for the default language's URL only. This covers both the language prefix (/es/)
+ and a translated product base (WooCommerce Multilingual's Store URLs), so product pageviews are no longer missed in any language but the default one. Because a funnel step holds a single goal, the default language's path remains the first step of the purchase funnel, and every other language gets a goal of its own. This applies to WooCommerce as well as Easy Digital Downloads, on WPML as well as TranslatePress.
+* Improved: the WooCommerce add to cart, remove from cart, start checkout, and complete purchase events now contain a currency property. Multicurrency plugins convert all amounts to the currency the 
+visitor is shopping in, which Plausible Analytics would otherwise sum up as if they were all in the same currency. The complete purchase event uses the currency the order was placed in.
+* Improved: on multilingual sites, those same WooCommerce events now contain a language property, because translated products are separate posts, i.e., each language has its own product ID and product
+ name.
 * Fixed: in "domain per language" mode, the proxy endpoint and the locally cached tracker script were loaded from the default domain, which could cause CORS errors on the other language domains.
 * Fixed: Plugin Tokens for language domains whose key contains an underscore (e.g., TranslatePress' nl_NL) were stored under a stripped key, which meant they were never read back.
 * Tested with WP 7.1.

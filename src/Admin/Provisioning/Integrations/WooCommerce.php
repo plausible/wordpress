@@ -59,7 +59,7 @@ class WooCommerce {
 
 		$woocommerce = new Integrations\WooCommerce( false );
 
-		$this->integrations->create_integration_funnel( $woocommerce->event_goals, __( 'Woo Purchase Funnel', 'plausible-analytics' ) );
+		$this->integrations->create_integration_funnel( $woocommerce->event_goals, __( 'Woo Purchase Funnel', 'plausible-analytics' ), $woocommerce->post_type );
 	}
 
 	/**

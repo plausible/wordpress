@@ -106,6 +106,10 @@ class Upgrades {
 			$this->upgrade_to_260();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.6.2', '<' ) ) {
+			$this->upgrade_to_262();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -425,6 +429,49 @@ class Upgrades {
 		Helpers::update_setting( 'enhanced_measurements', $enhanced_measurements );
 
 		update_option( 'plausible_analytics_version', '2.6.0' );
+	}
+
+	/**
+	 * If a supported multilingual plugin (WPML, with or without WPML Multilingual & Multicurrency for WooCommerce, or
+	 * TranslatePress) is active alongside WooCommerce or Easy Digital Downloads, and Ecommerce Revenue is enabled,
+	 * recreate the goals and custom properties after updating the plugin.
+	 *
+	 * That way, existing installs get the Pageview goals for the languages they serve, e.g. /es/producto*, and the
+	 * currency and language custom properties, without having to save their settings first.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
+	 */
+	public function upgrade_to_262() {
+		$is_ecommerce = \Plausible\Analytics\WP\Integrations::is_wc_active() || \Plausible\Analytics\WP\Integrations::is_edd_active();
+
+		if ( Helpers::get_multilang_plugin() && $is_ecommerce &&
+		     EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
+			$provisioning = new Provisioning();
+			$integrations = new Integrations( $provisioning );
+			$settings     = Helpers::get_settings();
+
+			/**
+			 * These routines bail when no Plugin Token is entered yet, and each funnel is only created for the
+			 * ecommerce plugin that's actually active. If no token is entered, the goals are created as soon as one
+			 * is, so there's no need to run this routine again.
+			 *
+			 * @see Provisioning::maybe_provision_on_connect() Creates the goals and custom properties as soon as a
+			 *      Plugin Token is entered.
+			 * @see Provisioning\Integrations\WooCommerce::init() Both funnels are (re)created on
+			 *      update_option_plausible_analytics_settings, i.e. when that token is saved.
+			 * @see Provisioning\Integrations\EDD::init()
+			 */
+			$provisioning->maybe_create_custom_properties( [], $settings );
+
+			( new Provisioning\Integrations\WooCommerce( $integrations ) )->maybe_create_woocommerce_funnel( [], $settings );
+			( new Provisioning\Integrations\EDD( $integrations ) )->maybe_create_edd_funnel( [], $settings );
+		}
+
+		update_option( 'plausible_analytics_version', '2.6.2' );
 	}
 
 	/**
