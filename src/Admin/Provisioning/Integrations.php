@@ -248,8 +248,11 @@ class Integrations {
 	}
 
 	/**
-	 * Adds the view-product goal of every other language to $event_goals, so the goals created for those languages
-	 * are recognized (and deleted) too.
+	 * Adds the view-product goal for every language served on $domain_key's domain to $event_goals, so the Pageview
+	 * goals created for those languages are recognized (and deleted) too.
+	 *
+	 * The names are built in the display-name format Plausible assigns to Pageview goals ("Visit <path>"), not from
+	 * the WP-translated event-goal template, so matching works regardless of the admin's language.
 	 *
 	 * @since 2.6.2
 	 *
@@ -266,11 +269,10 @@ class Integrations {
 			return $event_goals;
 		}
 
-		$event_goal = $event_goals['view-product'];
-		$path       = $this->get_goal_path( $event_goal );
+		$path = $this->get_goal_path( $event_goals['view-product'] );
 
 		foreach ( $this->get_pageview_goal_paths( $path, $domain_key, $post_type ) as $i => $localized_path ) {
-			$event_goals[ "view-product-$i" ] = str_replace( $path, $localized_path, $event_goal );
+			$event_goals[ "view-product-$i" ] = sprintf( 'Visit %s', $localized_path );
 		}
 
 		return $event_goals;

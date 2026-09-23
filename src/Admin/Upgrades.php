@@ -432,17 +432,18 @@ class Upgrades {
 	}
 
 	/**
-	 * If a supported multilingual plugin (WPML, with or without WPML Multilingual & Multicurrency for WooCommerce, or
-	 * TranslatePress) is active alongside WooCommerce or Easy Digital Downloads, and Ecommerce Revenue is enabled,
-	 * recreate the goals and custom properties after updating the plugin.
+	 * After updating to 2.6.2, (re)create the Custom Properties and — for multilingual ecommerce installs — the
+	 * integration goals, so existing installs pick up the currency/language Custom Properties and the per-language
+	 * Pageview goals (e.g. /es/producto*) without having to save their settings first.
 	 *
-	 * That way, existing installs get the Pageview goals for the languages they serve, e.g. /es/producto*, and the
-	 * currency and language custom properties, without having to save their settings first.
+	 * The Custom Properties apply to every WooCommerce/EDD install with Ecommerce Revenue enabled. The localized
+	 * Pageview goals only apply when a multilingual plugin (WPML, with or without WooCommerce Multilingual &
+	 * Multicurrency, or TranslatePress) is active.
 	 *
-	 * This runs on init (@see Upgrades::__construct()), i.e. after WPML/TranslatePress registered its language API on
-	 * plugin load and booted on plugins_loaded, so the languages the Pageview goal paths are built from are typically
-	 * available. As a safeguard for edge cases where they aren't yet, we bail without bumping the version so this
-	 * routine retries on a later request rather than provisioning the default language's path only.
+	 * This runs on init (@see Upgrades::__construct()), i.e. after the multilingual plugin registered its language API
+	 * on plugin load. In the rare case its languages aren't available yet, the funnels are skipped — they're recreated
+	 * on the next settings save anyway (@see Provisioning\Integrations\WooCommerce::init()) — so the upgrade always
+	 * completes in a single pass.
 	 *
 	 * @since              v2.6.2
 	 *
@@ -453,36 +454,36 @@ class Upgrades {
 	public function upgrade_to_262() {
 		$is_ecommerce = \Plausible\Analytics\WP\Integrations::is_wc_active() || \Plausible\Analytics\WP\Integrations::is_edd_active();
 
-		if ( Helpers::get_multilang_plugin() && $is_ecommerce &&
-		     EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
-			/**
-			 * A supported multilingual plugin is active, but its language API returned no languages (yet). Bail
-			 * without bumping the version, so run() retries this on a later request once the languages are available,
-			 * rather than provisioning goals for the default language's path only and marking the upgrade complete.
-			 */
-			if ( empty( Helpers::get_active_languages() ) ) {
-				return;
-			}
-
+		if ( $is_ecommerce && EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
 			$provisioning = new Provisioning();
-			$integrations = new Integrations( $provisioning );
 			$settings     = Helpers::get_settings();
 
 			/**
-			 * These routines bail when no Plugin Token is entered yet, and each funnel is only created for the
-			 * ecommerce plugin that's actually active. If no token is entered, the goals are created as soon as one
-			 * is, so there's no need to run this routine again.
+			 * The currency and language Custom Properties (@see Provisioning::CUSTOM_PROPERTIES) apply to every
+			 * ecommerce install, so (re)create them whether or not a multilingual plugin is active. Bails when no
+			 * Plugin Token is entered yet; the properties are created as soon as one is.
 			 *
 			 * @see Provisioning::maybe_provision_on_connect() Creates the goals and custom properties as soon as a
 			 *      Plugin Token is entered.
-			 * @see Provisioning\Integrations\WooCommerce::init() Both funnels are (re)created on
-			 *      update_option_plausible_analytics_settings, i.e. when that token is saved.
-			 * @see Provisioning\Integrations\EDD::init()
 			 */
 			$provisioning->maybe_create_custom_properties( [], $settings );
 
-			( new Provisioning\Integrations\WooCommerce( $integrations ) )->maybe_create_woocommerce_funnel( [], $settings );
-			( new Provisioning\Integrations\EDD( $integrations ) )->maybe_create_edd_funnel( [], $settings );
+			/**
+			 * The localized Pageview goals only matter when a multilingual plugin is active, and only once its
+			 * language API has booted. If it hasn't returned any languages yet, skip the funnels rather than
+			 * provisioning the default language's path only; they're (re)created with the right paths on the next
+			 * settings save.
+			 *
+			 * @see Provisioning\Integrations\WooCommerce::init() Both funnels are (re)created on
+			 *      update_option_plausible_analytics_settings, i.e. when the Plugin Token is saved.
+			 * @see Provisioning\Integrations\EDD::init()
+			 */
+			if ( Helpers::get_multilang_plugin() && ! empty( Helpers::get_active_languages() ) ) {
+				$integrations = new Integrations( $provisioning );
+
+				( new Provisioning\Integrations\WooCommerce( $integrations ) )->maybe_create_woocommerce_funnel( [], $settings );
+				( new Provisioning\Integrations\EDD( $integrations ) )->maybe_create_edd_funnel( [], $settings );
+			}
 		}
 
 		update_option( 'plausible_analytics_version', '2.6.2' );
