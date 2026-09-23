@@ -56,15 +56,27 @@ class Search {
 	/**
 	 * Retrieves the current page URL to be used as a referrer.
 	 *
-	 * This method constructs the referrer by obtaining the current page URL and ensures
-	 * it is sanitized. If the referrer cannot be determined, an empty string is returned.
+	 * The scheme and host are taken from the configured home_url() so the referrer stays correct behind reverse
+	 * proxies (where is_ssl() can be unreliable). The path and query come straight from the current request
+	 * (add_query_arg( null, null )), which already includes any subdirectory the site is installed in. Passing that
+	 * request URI through home_url() instead would prepend the home path a second time, duplicating the subdirectory
+	 * on subdirectory installs (e.g. https://example.com/dev/dev/...).
 	 *
 	 * @return string The sanitized referrer URL or an empty string if unavailable.
 	 *
 	 * @codeCoverageIgnore because it's parent methods aren't tested either.
 	 */
 	private function get_referrer() {
-		$referrer = esc_url( home_url( add_query_arg( null, null ) ) );
+		$home_parts = wp_parse_url( home_url() );
+		$scheme     = $home_parts['scheme'] ?? ( is_ssl() ? 'https' : 'http' );
+		$host       = $home_parts['host'] ?? ( $_SERVER['HTTP_HOST'] ?? '' );
+		$port       = isset( $home_parts['port'] ) ? ':' . $home_parts['port'] : '';
+
+		if ( ! $host ) {
+			return '';
+		}
+
+		$referrer = esc_url( $scheme . '://' . $host . $port . add_query_arg( null, null ) );
 
 		if ( ! $referrer ) {
 			$referrer = '';
