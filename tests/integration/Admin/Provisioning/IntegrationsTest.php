@@ -46,6 +46,23 @@ class IntegrationsTest extends TestCase {
 	}
 
 	/**
+	 * The goal path is the event goal's URI, i.e. everything after the "Visit " prefix, with a single leading slash.
+	 *
+	 * @see Integrations::get_goal_path()
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testGetGoalPath() {
+		$integrations = ( new \ReflectionClass( Integrations::class ) )->newInstanceWithoutConstructor();
+		$method       = new \ReflectionMethod( Integrations::class, 'get_goal_path' );
+		$method->setAccessible( true );
+
+		$this->assertEquals( '/product*', $method->invoke( $integrations, 'Visit /product*' ) );
+		// A longer base (e.g. a multisite subdirectory install) is kept intact.
+		$this->assertEquals( '/shop/product*', $method->invoke( $integrations, 'Visit /shop/product*' ) );
+	}
+
+	/**
 	 * Every language should get a Pageview goal for the URL it's served under, with the default language first,
 	 * because that's the one that ends up in the funnel.
 	 *

@@ -439,8 +439,10 @@ class Upgrades {
 	 * That way, existing installs get the Pageview goals for the languages they serve, e.g. /es/producto*, and the
 	 * currency and language custom properties, without having to save their settings first.
 	 *
-	 * This runs on init (@see Upgrades::__construct()), i.e. after WPML registered its language API on plugin load and
-	 * booted on plugins_loaded, so the languages the Pageview goal paths are built from are available.
+	 * This runs on init (@see Upgrades::__construct()), i.e. after WPML/TranslatePress registered its language API on
+	 * plugin load and booted on plugins_loaded, so the languages the Pageview goal paths are built from are typically
+	 * available. As a safeguard for edge cases where they aren't yet, we bail without bumping the version so this
+	 * routine retries on a later request rather than provisioning the default language's path only.
 	 *
 	 * @since              v2.6.2
 	 *
@@ -453,6 +455,15 @@ class Upgrades {
 
 		if ( Helpers::get_multilang_plugin() && $is_ecommerce &&
 		     EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE ) ) {
+			/**
+			 * A supported multilingual plugin is active, but its language API returned no languages (yet). Bail
+			 * without bumping the version, so run() retries this on a later request once the languages are available,
+			 * rather than provisioning goals for the default language's path only and marking the upgrade complete.
+			 */
+			if ( empty( Helpers::get_active_languages() ) ) {
+				return;
+			}
+
 			$provisioning = new Provisioning();
 			$integrations = new Integrations( $provisioning );
 			$settings     = Helpers::get_settings();
