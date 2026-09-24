@@ -106,6 +106,10 @@ class Integrations {
 
 			if ( ! empty( $extra_goals ) ) {
 				$all_ids = $this->provisioning->create_goals( $extra_goals, $client, $key, $all_ids );
+
+				// Persist immediately so the localized Pageview goals stay tracked (and thus cleanable) even if the
+				// funnel creation below fails and never gets to save them.
+				update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 			}
 
 			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
