@@ -11,6 +11,7 @@ namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
 use Plausible\Analytics\WP\EnhancedMeasurements;
+use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 use WC_Cart;
@@ -21,6 +22,11 @@ class WooCommerce {
 	 * @var array Custom Event Goals used to track Events in WooCommerce.
 	 */
 	public $event_goals = [];
+
+	/**
+	 * @var string The post type the view-product goal's path is built from.
+	 */
+	public $post_type = 'product';
 
 	/**
 	 * Build class.
@@ -162,15 +168,17 @@ class WooCommerce {
 		$cart          = $this->get_wc_cart();
 		$props         = apply_filters(
 			'plausible_analytics_woocommerce_add_to_cart_custom_properties',
-			[
-				'product_name'     => $product_data['name'],
-				'product_id'       => $added_to_cart['id'],
-				'quantity'         => $added_to_cart['quantity'],
-				'price'            => $product_data['price'],
-				'tax_class'        => $product_data['tax_class'],
-				'cart_total_items' => count( $cart->get_cart_contents() ),
-				'cart_total'       => $cart->get_total( null ),
-			]
+			$this->add_common_props(
+				[
+					'product_name'     => $product_data['name'],
+					'product_id'       => $added_to_cart['id'],
+					'quantity'         => $added_to_cart['quantity'],
+					'price'            => $product_data['price'],
+					'tax_class'        => $product_data['tax_class'],
+					'cart_total_items' => count( $cart->get_cart_contents() ),
+					'cart_total'       => $cart->get_total( null ),
+				]
+			)
 		);
 		$proxy         = new Proxy( false );
 
@@ -205,6 +213,36 @@ class WooCommerce {
 	 */
 	protected function get_wc_cart() {
 		return WC()->cart;
+	}
+
+	/**
+	 * Adds the properties that apply to all events to $props.
+	 *
+	 * The currency is added because multicurrency plugins e.g., WPML Multilingual & Multicurrency for WooCommerce,
+	 * convert all amounts to the currency the visitor is shopping in. Without it, Plausible Analytics would sum up
+	 * amounts in different currencies as if they were the same.
+	 *
+	 * The language is only added on multilingual sites because translated products are separate posts, i.e. they have
+	 * their own product ID and name.
+	 *
+	 * @since              2.6.2
+	 *
+	 * @param array  $props
+	 * @param string $currency Defaults to the currency the visitor is shopping in.
+	 *
+	 * @return array
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	private function add_common_props( $props, $currency = '' ) {
+		$props['currency'] = $currency ?: get_woocommerce_currency();
+		$language          = Helpers::get_current_language();
+
+		if ( ! empty( $language ) ) {
+			$props['language'] = $language;
+		}
+
+		return $props;
 	}
 
 	/**
@@ -244,12 +282,14 @@ class WooCommerce {
 		$props = apply_filters(
 			'plausible_analytics_woocommerce_entered_checkout_custom_properties',
 			[
-				'props' => [
-					'subtotal' => $cart->get_subtotal(),
-					'shipping' => $cart->get_shipping_total(),
-					'tax'      => $cart->get_total_tax(),
-					'total'    => $cart->get_total( null ),
-				],
+				'props' => $this->add_common_props(
+					[
+						'subtotal' => $cart->get_subtotal(),
+						'shipping' => $cart->get_shipping_total(),
+						'tax'      => $cart->get_total_tax(),
+						'total'    => $cart->get_total( null ),
+					]
+				),
 			]
 		);
 		$props = wp_json_encode( $props );
@@ -279,6 +319,8 @@ class WooCommerce {
 					'amount'   => (string) $order->get_total(),
 					'currency' => $order->get_currency(),
 				],
+				// The order's currency can differ from the currency the visitor is browsing in right now.
+				'props'                                 => $this->add_common_props( [], $order->get_currency() ),
 			]
 		);
 		$label = $this->event_goals['purchase'];
@@ -314,14 +356,16 @@ class WooCommerce {
 
 		$props = apply_filters(
 			'plausible_analytics_woocommerce_remove_cart_item_custom_properties',
-			[
-				'product_name'     => $product->get_name(),
-				'product_id'       => $item_removed_from_cart['product_id'],
-				'variation_id'     => $item_removed_from_cart['variation_id'],
-				'quantity'         => $item_removed_from_cart['quantity'],
-				'cart_total_items' => count( $cart_contents ),
-				'cart_total'       => $cart->get_total( null ),
-			]
+			$this->add_common_props(
+				[
+					'product_name'     => $product->get_name(),
+					'product_id'       => $item_removed_from_cart['product_id'],
+					'variation_id'     => $item_removed_from_cart['variation_id'],
+					'quantity'         => $item_removed_from_cart['quantity'],
+					'cart_total_items' => count( $cart_contents ),
+					'cart_total'       => $cart->get_total( null ),
+				]
+			)
 		);
 		$proxy = new Proxy( false );
 

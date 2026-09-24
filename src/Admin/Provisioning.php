@@ -22,7 +22,9 @@ class Provisioning {
 	const CUSTOM_PROPERTIES = [
 		'cart_total',
 		'cart_total_items',
+		'currency',
 		'id',
+		'language',
 		'name',
 		'price',
 		'product_id',

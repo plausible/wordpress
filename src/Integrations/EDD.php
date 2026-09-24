@@ -20,6 +20,11 @@ class EDD {
 	public $event_goals = [];
 
 	/**
+	 * @var string The post type the view-product goal's path is built from.
+	 */
+	public $post_type = 'download';
+
+	/**
 	 * Build class.
 	 *
 	 * @param $init

@@ -58,7 +58,7 @@ class EDD {
 
 		$edd = new Integrations\EDD( false );
 
-		$this->integrations->create_integration_funnel( $edd->event_goals, __( 'EDD Purchase Funnel', 'plausible-analytics' ) );
+		$this->integrations->create_integration_funnel( $edd->event_goals, __( 'EDD Purchase Funnel', 'plausible-analytics' ), $edd->post_type );
 	}
 
 	/**
