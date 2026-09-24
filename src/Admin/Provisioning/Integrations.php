@@ -65,35 +65,6 @@ class Integrations {
 		);
 
 		foreach ( $this->provisioning->get_clients() as $key => $client ) {
-			/**
-			 * Reconcile the stored view-product goals before (re)creating them. Provisioning is otherwise create-only,
-			 * so an install updated from before this compatibility — which stored a non-localized "Visit /product*"
-			 * goal for every domain — or one whose served paths have since changed, would keep those stale Pageview
-			 * goals alongside the current localized ones. View-product goals are the only Pageview ("Visit ") goals we
-			 * create, so delete every stored one that isn't among the paths this domain currently serves.
-			 */
-			if ( ! empty( $event_goals['view-product'] ) ) {
-				$current_view_product = array_map(
-					static function ( $path ) {
-						return sprintf( 'Visit %s', $path );
-					},
-					$this->get_pageview_goal_paths( $this->get_goal_path( $event_goals['view-product'] ), $key, $post_type )
-				);
-				$deleted_stale = false;
-
-				foreach ( $all_ids[ $key ] ?? [] as $id => $name ) {
-					if ( strpos( (string) $name, 'Visit ' ) === 0 && ! in_array( $name, $current_view_product, true ) ) {
-						$client->delete_goal( $id );
-						unset( $all_ids[ $key ][ $id ] );
-						$deleted_stale = true;
-					}
-				}
-
-				if ( $deleted_stale ) {
-					update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
-				}
-			}
-
 			$goals = [];
 			/**
 			 * Goals which shouldn't (or can't) be part of the funnel.
@@ -142,7 +113,67 @@ class Integrations {
 			}
 
 			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
+
+			$all_ids = $this->reconcile_view_product_goals( $event_goals, $key, $client, $post_type, $all_ids );
 		}
+	}
+
+	/**
+	 * Removes stale localized view-product goals for $key's domain: a non-localized "Visit /product*" left by a
+	 * pre-2.6.2 install, or a goal for a path no longer served. Provisioning is otherwise create-only, so those would
+	 * linger alongside the current localized goals.
+	 *
+	 * This runs only after the current goals have been (re)created, and never when the current paths can't be trusted:
+	 * it deletes nothing while a multilingual plugin is active but its language list is empty (the paths would fall
+	 * back to the unlocalized "/product*" and the localized goals would be wrongly deleted), nor unless every current
+	 * goal is already present (so a failed (re)create can't leave the domain without a view-product goal). View-product
+	 * goals are the only Pageview ("Visit ") goals the plugin creates.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param array           $event_goals
+	 * @param string          $key
+	 * @param Client|WP_Error $client
+	 * @param string          $post_type
+	 * @param array           $all_ids
+	 *
+	 * @return array The (possibly pruned) goal-ID map.
+	 *
+	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
+	 */
+	private function reconcile_view_product_goals( $event_goals, $key, $client, $post_type, $all_ids ) {
+		if ( empty( $event_goals['view-product'] ) ||
+		     ( Helpers::get_multilang_plugin() && empty( Helpers::get_active_languages() ) ) ) {
+			return $all_ids;
+		}
+
+		$current_view_product = array_map(
+			static function ( $path ) {
+				return sprintf( 'Visit %s', $path );
+			},
+			$this->get_pageview_goal_paths( $this->get_goal_path( $event_goals['view-product'] ), $key, $post_type )
+		);
+
+		// Only prune once every current goal is present, so a failed (re)create can't leave the domain goalless.
+		if ( array_diff( $current_view_product, (array) ( $all_ids[ $key ] ?? [] ) ) ) {
+			return $all_ids;
+		}
+
+		$deleted_stale = false;
+
+		foreach ( $all_ids[ $key ] ?? [] as $id => $name ) {
+			if ( strpos( (string) $name, 'Visit ' ) === 0 && ! in_array( $name, $current_view_product, true ) ) {
+				$client->delete_goal( $id );
+				unset( $all_ids[ $key ][ $id ] );
+				$deleted_stale = true;
+			}
+		}
+
+		if ( $deleted_stale ) {
+			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+		}
+
+		return $all_ids;
 	}
 
 	/**
