@@ -230,20 +230,19 @@ class Integrations {
 		 * that were active when it was created. Those may since have changed (a language removed), so regenerating the
 		 * name from the current languages no longer matches it, and it would be orphaned. The plugin only ever stores
 		 * its own goals, and the view-product goals are the only Pageview goals it creates, so when this integration
-		 * owns the view-product goal and the other ecommerce integration isn't active, every stored "Visit " goal is
-		 * one of ours and can be removed regardless of the current languages.
+		 * has a view-product goal every stored "Visit " goal is one of ours and can be removed regardless of the
+		 * current languages.
 		 */
-		$delete_stale_view_product = ! empty( $integration->event_goals['view-product'] ) &&
-		                             ! ( \Plausible\Analytics\WP\Integrations::is_wc_active() && \Plausible\Analytics\WP\Integrations::is_edd_active() );
+		$delete_view_product = ! empty( $integration->event_goals['view-product'] );
 
 		foreach ( $this->provisioning->get_clients() as $domain_key => $client ) {
 			$goals       = $all_ids[ $domain_key ] ?? [];
 			$event_goals = $this->add_localized_event_goals( (array) $integration->event_goals, $domain_key, $integration->post_type ?? '' );
 
 			foreach ( $goals as $id => $name ) {
-				$is_stale_view_product = $delete_stale_view_product && strpos( (string) $name, 'Visit ' ) === 0;
+				$is_view_product = $delete_view_product && strpos( (string) $name, 'Visit ' ) === 0;
 
-				if ( $this->provisioning->array_search_contains( $name, $event_goals ) || $is_stale_view_product ) {
+				if ( $this->provisioning->array_search_contains( $name, $event_goals ) || $is_view_product ) {
 					$client->delete_goal( $id );
 					unset( $goals[ $id ] );
 				}
