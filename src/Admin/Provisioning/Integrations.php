@@ -65,6 +65,35 @@ class Integrations {
 		);
 
 		foreach ( $this->provisioning->get_clients() as $key => $client ) {
+			/**
+			 * Reconcile the stored view-product goals before (re)creating them. Provisioning is otherwise create-only,
+			 * so an install updated from before this compatibility — which stored a non-localized "Visit /product*"
+			 * goal for every domain — or one whose served paths have since changed, would keep those stale Pageview
+			 * goals alongside the current localized ones. View-product goals are the only Pageview ("Visit ") goals we
+			 * create, so delete every stored one that isn't among the paths this domain currently serves.
+			 */
+			if ( ! empty( $event_goals['view-product'] ) ) {
+				$current_view_product = array_map(
+					static function ( $path ) {
+						return sprintf( 'Visit %s', $path );
+					},
+					$this->get_pageview_goal_paths( $this->get_goal_path( $event_goals['view-product'] ), $key, $post_type )
+				);
+				$deleted_stale = false;
+
+				foreach ( $all_ids[ $key ] ?? [] as $id => $name ) {
+					if ( strpos( (string) $name, 'Visit ' ) === 0 && ! in_array( $name, $current_view_product, true ) ) {
+						$client->delete_goal( $id );
+						unset( $all_ids[ $key ][ $id ] );
+						$deleted_stale = true;
+					}
+				}
+
+				if ( $deleted_stale ) {
+					update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+				}
+			}
+
 			$goals = [];
 			/**
 			 * Goals which shouldn't (or can't) be part of the funnel.
