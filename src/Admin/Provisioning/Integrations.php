@@ -79,7 +79,7 @@ class Integrations {
 				}
 
 				if ( $event_key === 'purchase' ) {
-					$currency = \Plausible\Analytics\WP\Integrations::is_edd_active() ? edd_get_currency() : get_woocommerce_currency();
+					$currency = Helpers::get_currency_for_language( $key );
 					$goals[]  = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
 
 					continue;

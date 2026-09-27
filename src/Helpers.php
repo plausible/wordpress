@@ -53,6 +53,44 @@ class Helpers {
 	}
 
 	/**
+	 * Returns the currency a Revenue goal should be created in for a given language-domain.
+	 *
+	 * WooCommerce Multilingual & Multicurrency (WCML) lets a store pin a default currency per language
+	 * ("WooCommerce → Multilingual → Currencies"). When one is set, the matching per-language dashboard's
+	 * purchase goal is created in that storeview's own currency—mirroring how its view-product goals are
+	 * already localized. Without WCML (or when multi-currency is off, or no default is set for this
+	 * language) the store's base currency is used, and Plausible converts foreign-currency purchases into
+	 * it automatically.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $domain_key 'default' or a WPML language code (e.g. 'es').
+	 *
+	 * @return string ISO 4217 currency code.
+	 */
+	public static function get_currency_for_language( $domain_key = 'default' ) {
+		$base = Integrations::is_edd_active() ? edd_get_currency() : get_woocommerce_currency();
+
+		// A default currency per language is a WCML (WooCommerce + WPML) concept only.
+		if ( Integrations::is_edd_active() || static::get_multilang_plugin() !== static::MULTILANG_PLUGIN_WPML ) {
+			return $base;
+		}
+
+		$wcml = get_option( '_wcml_settings', [] );
+
+		if ( empty( $wcml['enable_multi_currency'] ) || empty( $wcml['default_currencies'] ) || ! is_array( $wcml['default_currencies'] ) ) {
+			return $base;
+		}
+
+		// The 'default' dashboard tracks WPML's default language.
+		$language = 'default' === $domain_key ? (string) apply_filters( 'wpml_default_language', null ) : $domain_key;
+		$currency = $wcml['default_currencies'][ $language ] ?? false;
+
+		// WCML stores boolean false for languages without a pinned default currency.
+		return is_string( $currency ) && '' !== $currency ? $currency : $base;
+	}
+
+	/**
 	 * Returns the API token.
 	 *
 	 * @return string
