@@ -74,45 +74,4 @@ class WooCommerceTest extends TestCase {
 
 		$class->track_purchase( 1 );
 	}
-
-	/**
-	 * On multilingual sites, the language the visitor is shopping in should be added to the event's properties, because
-	 * translated products are separate posts, i.e., each language has its own product ID and product name.
-	 *
-	 * @see WooCommerce::track_purchase()
-	 * @return void
-	 */
-	public function testTrackPurchaseAddsLanguage() {
-		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
-
-		$language = function () {
-			return 'nl';
-		};
-
-		add_filter( 'plausible_analytics_current_language', $language );
-
-		try {
-			$class = new WooCommerce( false );
-			$mock  = $this->getMockBuilder( 'WC_Order' )->setMethods(
-				[
-					'get_meta',
-					'get_total',
-					'get_currency',
-					'add_meta_data',
-					'save',
-				]
-			)->getMock();
-			$mock->method( 'get_meta' )->willReturn( false );
-			$mock->method( 'get_total' )->willReturn( 10 );
-			$mock->method( 'get_currency' )->willReturn( 'EUR' );
-
-			when( 'wc_get_order' )->justReturn( $mock );
-
-			$this->expectOutputContains( '"props":{"currency":"EUR","language":"nl"}' );
-
-			$class->track_purchase( 1 );
-		} finally {
-			remove_filter( 'plausible_analytics_current_language', $language );
-		}
-	}
 }

@@ -294,31 +294,6 @@ class Helpers {
 	}
 
 	/**
-	 * Returns the language code that's currently being served.
-	 *
-	 * @since              v2.6.2
-	 *
-	 * @return string Empty when no supported multilingual plugin is active.
-	 *
-	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
-	 */
-	public static function get_current_language() {
-		$language = '';
-
-		switch ( static::get_multilang_plugin() ) {
-			case static::MULTILANG_PLUGIN_WPML:
-				$language = apply_filters( 'wpml_current_language', null );
-				break;
-
-			case static::MULTILANG_PLUGIN_TRANSLATEPRESS:
-				$language = static::get_translatepress_current_language();
-				break;
-		}
-
-		return (string) apply_filters( 'plausible_analytics_current_language', (string) $language );
-	}
-
-	/**
 	 * Returns the name of the current Plausible domain.
 	 *
 	 * @since v2.6.0 This is now mapped to language domains to provide compatibility with multilang plugins, like WPML.

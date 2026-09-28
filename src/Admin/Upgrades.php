@@ -433,7 +433,7 @@ class Upgrades {
 
 	/**
 	 * After updating to 2.6.2, (re)create the Custom Properties and — for multilingual ecommerce installs — the
-	 * integration goals, so existing installs pick up the currency/language Custom Properties and the per-language
+	 * integration goals, so existing installs pick up the currency Custom Property and the per-language
 	 * Pageview goals (e.g. /es/producto*) without having to save their settings first.
 	 *
 	 * The Custom Properties apply to every WooCommerce/EDD install with Ecommerce Revenue enabled. The localized
@@ -459,9 +459,9 @@ class Upgrades {
 			$settings     = Helpers::get_settings();
 
 			/**
-			 * The currency and language Custom Properties (@see Provisioning::CUSTOM_PROPERTIES) apply to every
-			 * ecommerce install, so (re)create them whether or not a multilingual plugin is active. Bails when no
-			 * Plugin Token is entered yet; the properties are created as soon as one is.
+			 * The currency Custom Property (@see Provisioning::CUSTOM_PROPERTIES) applies to every ecommerce install,
+			 * so (re)create the Custom Properties whether or not a multilingual plugin is active. Bails when no Plugin
+			 * Token is entered yet; the properties are created as soon as one is.
 			 *
 			 * @see Provisioning::maybe_provision_on_connect() Creates the goals and custom properties as soon as a
 			 *      Plugin Token is entered.

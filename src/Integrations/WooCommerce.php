@@ -11,7 +11,6 @@ namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
 use Plausible\Analytics\WP\EnhancedMeasurements;
-use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 use WC_Cart;
@@ -219,11 +218,8 @@ class WooCommerce {
 	 * Adds the properties that apply to all events to $props.
 	 *
 	 * The currency is added because multicurrency plugins e.g., WPML Multilingual & Multicurrency for WooCommerce,
-	 * convert all amounts to the currency the visitor is shopping in. Without it, Plausible Analytics would sum up
-	 * amounts in different currencies as if they were the same.
-	 *
-	 * The language is only added on multilingual sites because translated products are separate posts, i.e. they have
-	 * their own product ID and name.
+	 * convert all amounts to the currency the visitor is shopping in. It allows breaking down events (e.g. their price
+	 * and cart total) by the currency they were placed in.
 	 *
 	 * @since              2.6.2
 	 *
@@ -236,11 +232,6 @@ class WooCommerce {
 	 */
 	private function add_common_props( $props, $currency = '' ) {
 		$props['currency'] = $currency ?: get_woocommerce_currency();
-		$language          = Helpers::get_current_language();
-
-		if ( ! empty( $language ) ) {
-			$props['language'] = $language;
-		}
 
 		return $props;
 	}

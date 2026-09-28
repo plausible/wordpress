@@ -24,7 +24,6 @@ class Provisioning {
 		'cart_total_items',
 		'currency',
 		'id',
-		'language',
 		'name',
 		'price',
 		'product_id',
