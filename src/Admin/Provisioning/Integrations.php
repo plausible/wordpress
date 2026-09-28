@@ -79,7 +79,7 @@ class Integrations {
 				}
 
 				if ( $event_key === 'purchase' ) {
-					$currency = Helpers::get_currency_for_language( $key );
+					$currency = $this->get_purchase_goal_currency( $event_goal, $key, $client );
 					$goals[]  = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
 
 					continue;
@@ -116,6 +116,36 @@ class Integrations {
 
 			$all_ids = $this->reconcile_view_product_goals( $event_goals, $key, $client, $post_type, $all_ids );
 		}
+	}
+
+	/**
+	 * Returns the currency to create $key's purchase (Revenue) goal in.
+	 *
+	 * A Revenue goal's name is unique per site and its currency can't be changed. So, when $key's dashboard already
+	 * has this goal (e.g. created in the store's base currency before 2.6.2), its currency is kept: requesting another
+	 * currency is rejected (422), which would abort the funnel. Deleting and recreating the goal isn't an option either:
+	 * the existing funnel would lose its purchase step, and funnels can't be updated through the API.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $event_goal The purchase goal's name.
+	 * @param string $key        The Language Domain the goal is created for.
+	 * @param Client $client
+	 *
+	 * @return string ISO 4217 currency code.
+	 *
+	 * @codeCoverageIgnore We don't want to test the API.
+	 */
+	private function get_purchase_goal_currency( $event_goal, $key, $client ) {
+		foreach ( (array) $client->get_goals() as $goal ) {
+			if ( ( $goal['goal_type'] ?? '' ) === 'Goal.Revenue' &&
+			     ( $goal['goal']['event_name'] ?? '' ) === $event_goal &&
+			     ! empty( $goal['goal']['currency'] ) ) {
+				return $goal['goal']['currency'];
+			}
+		}
+
+		return Helpers::get_currency_for_language( $key );
 	}
 
 	/**

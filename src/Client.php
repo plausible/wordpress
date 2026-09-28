@@ -31,6 +31,11 @@ class Client {
 	private $api_instance;
 
 	/**
+	 * @var GuzzleClient $http_client
+	 */
+	private $http_client;
+
+	/**
 	 * @var string $domain_key
 	 */
 	private $domain_key;
@@ -49,7 +54,8 @@ class Client {
 		$config->setUsername( 'WordPress' )
 		       ->setPassword( $token )
 		       ->setHost( Helpers::get_hosted_domain_url() );
-		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] ), $config );
+		$this->http_client  = new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] );
+		$this->api_instance = new DefaultApi( $this->http_client, $config );
 	}
 
 	/**
@@ -220,6 +226,48 @@ class Client {
 			// translators: %s: Error message.
 			$this->send_json_error( $e, __( 'Something went wrong while creating Custom Event Goal: %s', 'plausible-analytics' ) );
 		}
+	}
+
+	/**
+	 * Retrieves all Goals of this Client's site.
+	 *
+	 * The response is decoded as-is, because the generated models deserialize every goal as a Pageview goal, dropping
+	 * e.g. a Revenue goal's event_name and currency.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @return array|false Each goal as ['goal_type' => 'Goal.Revenue', 'goal' => ['id' => 1, 'currency' => 'EUR', ...]],
+	 *                     or false when the Goals couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function get_goals() {
+		$goals = [];
+		$after = null;
+
+		try {
+			do {
+				$request  = $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndexRequest( 100, $after );
+				$response = json_decode( (string) $this->http_client->send( $request )->getBody(), true );
+
+				if ( ! isset( $response['goals'] ) || ! is_array( $response['goals'] ) ) {
+					return false;
+				}
+
+				$goals = array_merge( $goals, $response['goals'] );
+				$after = null;
+
+				if ( ! empty( $response['meta']['pagination']['has_next_page'] ) ) {
+					wp_parse_str( (string) wp_parse_url( $response['meta']['pagination']['links']['next']['url'] ?? '', PHP_URL_QUERY ), $query );
+
+					$after = $query['after'] ?? null;
+				}
+			} while ( $after );
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+
+		return $goals;
 	}
 
 	/**

@@ -82,6 +82,11 @@ class Helpers {
 			return $base;
 		}
 
+		// In "by location" mode the currency follows the visitor's country, so the per-language defaults don't apply.
+		if ( ( $wcml['currency_mode'] ?? '' ) === 'by_location' ) {
+			return $base;
+		}
+
 		// The 'default' dashboard tracks WPML's default language.
 		$language = 'default' === $domain_key ? (string) apply_filters( 'wpml_default_language', null ) : $domain_key;
 		$currency = $wcml['default_currencies'][ $language ] ?? false;
