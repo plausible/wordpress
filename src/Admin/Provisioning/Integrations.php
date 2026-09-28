@@ -65,6 +65,14 @@ class Integrations {
 		);
 
 		foreach ( $this->provisioning->get_clients() as $key => $client ) {
+			$currency = ! empty( $event_goals['purchase'] ) ? $this->get_purchase_goal_currency( $event_goals['purchase'], $key, $client ) : '';
+
+			// The existing goals couldn't be read, so the purchase goal's currency is unknown. Skip this domain rather
+			// than risk a rejected funnel; it's provisioned on the next settings save.
+			if ( $currency === null ) {
+				continue;
+			}
+
 			$goals = [];
 			/**
 			 * Goals which shouldn't (or can't) be part of the funnel.
@@ -79,8 +87,7 @@ class Integrations {
 				}
 
 				if ( $event_key === 'purchase' ) {
-					$currency = $this->get_purchase_goal_currency( $event_goal, $key, $client );
-					$goals[]  = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
+					$goals[] = $this->provisioning->create_goal_request( $event_goal, 'Revenue', $currency );
 
 					continue;
 				}
@@ -132,12 +139,18 @@ class Integrations {
 	 * @param string $key        The Language Domain the goal is created for.
 	 * @param Client $client
 	 *
-	 * @return string ISO 4217 currency code.
+	 * @return string|null ISO 4217 currency code, or null when the existing goals couldn't be retrieved.
 	 *
 	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	private function get_purchase_goal_currency( $event_goal, $key, $client ) {
-		foreach ( (array) $client->get_goals() as $goal ) {
+		$goals = $client->get_goals();
+
+		if ( $goals === false ) {
+			return null;
+		}
+
+		foreach ( $goals as $goal ) {
 			if ( ( $goal['goal_type'] ?? '' ) === 'Goal.Revenue' &&
 			     ( $goal['goal']['event_name'] ?? '' ) === $event_goal &&
 			     ! empty( $goal['goal']['currency'] ) ) {
