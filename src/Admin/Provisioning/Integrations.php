@@ -147,6 +147,9 @@ class Integrations {
 	 * the last one, the purchase (Revenue) goal, whose currency can't be changed. create_funnel() then recreates the
 	 * funnel and its goals. The goals' history is kept, as Plausible computes conversions from the events themselves.
 	 *
+	 * Deleted goals can't be restored, so there's nothing to roll back if recreating the funnel fails: it no longer
+	 * exists then, and the next settings save creates it. A goal that couldn't be deleted keeps its stored ID.
+	 *
 	 * Note: a user-made funnel that shares one of these goals loses that step.
 	 *
 	 * @since 2.6.2
@@ -179,8 +182,7 @@ class Integrations {
 			foreach ( array_slice( $steps, 0, -1 ) as $step ) {
 				$id = $step['goal']['id'] ?? null;
 
-				if ( $id ) {
-					$client->delete_goal( $id );
+				if ( $id && $client->delete_goal( $id ) ) {
 					unset( $all_ids[ $key ][ $id ] );
 				}
 			}
@@ -293,8 +295,8 @@ class Integrations {
 		$deleted_stale = false;
 
 		foreach ( $all_ids[ $key ] ?? [] as $id => $name ) {
-			if ( strpos( (string) $name, 'Visit ' ) === 0 && ! in_array( $name, $current_view_product, true ) ) {
-				$client->delete_goal( $id );
+			if ( strpos( (string) $name, 'Visit ' ) === 0 && ! in_array( $name, $current_view_product, true ) &&
+			     $client->delete_goal( $id ) ) {
 				unset( $all_ids[ $key ][ $id ] );
 				$deleted_stale = true;
 			}
@@ -429,8 +431,8 @@ class Integrations {
 			foreach ( $goals as $id => $name ) {
 				$is_view_product = $delete_view_product && strpos( (string) $name, 'Visit ' ) === 0;
 
-				if ( $is_view_product || $this->provisioning->array_search_contains( $name, $integration->event_goals ) ) {
-					$client->delete_goal( $id );
+				if ( ( $is_view_product || $this->provisioning->array_search_contains( $name, $integration->event_goals ) ) &&
+				     $client->delete_goal( $id ) ) {
 					unset( $goals[ $id ] );
 				}
 			}

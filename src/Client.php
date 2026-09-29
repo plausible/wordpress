@@ -342,7 +342,11 @@ class Client {
 	/**
 	 * Delete a Custom Event Goal by ID.
 	 *
+	 * @since 2.6.2 Returns whether the goal is gone. Deleting a goal that doesn't exist (anymore) succeeds.
+	 *
 	 * @param int $id
+	 *
+	 * @return bool
 	 *
 	 * @codeCoverageIgnore
 	 */
@@ -358,7 +362,11 @@ class Client {
 					'plausible-analytics'
 				)
 			);
+
+			return false;
 		}
+
+		return true;
 	}
 
 	/**

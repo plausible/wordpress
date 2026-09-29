@@ -46,6 +46,44 @@ class IntegrationsTest extends TestCase {
 	}
 
 	/**
+	 * A goal that couldn't be deleted should keep its stored ID, so it can still be cleaned up later.
+	 *
+	 * @see Integrations::delete_integration_goals()
+	 */
+	public function testDeleteIntegrationGoalsKeepsFailedDeletions() {
+		$client = $this->getMockBuilder( Client::class )
+		               ->onlyMethods( [ 'delete_goal' ] )
+		               ->getMock();
+
+		$client->method( 'delete_goal' )->willReturnCallback(
+			function ( $id ) {
+				return $id !== 2;
+			}
+		);
+
+		$provisioning = $this->getMockBuilder( Provisioning::class )
+		                     ->setConstructorArgs( [ $client ] )
+		                     ->onlyMethods( [ 'array_search_contains' ] )
+		                     ->getMock();
+
+		$provisioning->method( 'array_search_contains' )
+		             ->willReturn( 1 );
+
+		try {
+			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', [ 'default' => [ 1 => 'a', 2 => 'b', 3 => 'c' ] ] );
+
+			$integration = new Integrations( $provisioning );
+			$integration->delete_integration_goals( (object) [ 'event_goals' => [ '' ] ] );
+
+			$this->assertEquals( [ 'default' => [ 2 => 'b' ] ], get_option( 'plausible_analytics_enhanced_measurements_goal_ids' ) );
+		} finally {
+			delete_option( 'plausible_analytics_enhanced_measurements_goal_ids' );
+			$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_create_' );
+			$this->removeAction( 'update_option_plausible_analytics_settings', 'maybe_delete_', 11 );
+		}
+	}
+
+	/**
 	 * The goal path is the event goal's URI, i.e. everything after the "Visit " prefix, with a single leading slash.
 	 *
 	 * @see Integrations::get_goal_path()
