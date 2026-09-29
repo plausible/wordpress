@@ -23,7 +23,11 @@ class Helpers {
 	const MULTILANG_PLUGIN_TRANSLATEPRESS = 'translatepress';
 
 	/**
-	 * Returns the language codes of all languages served by the active multilingual plugin.
+	 * Returns the language codes of all languages the active multilingual plugin serves to the public.
+	 *
+	 * Languages that aren't public yet (WPML's hidden languages, TranslatePress' unpublished languages) are left out,
+	 * regardless of who's making the request: WPML only lists hidden languages to users who opted to see them, which
+	 * would make the result depend on whether provisioning runs in an admin's or a visitor's request.
 	 *
 	 * @since              v2.6.2
 	 *
@@ -39,13 +43,14 @@ class Helpers {
 				$active = apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => 0 ] );
 
 				if ( is_array( $active ) ) {
-					$languages = array_keys( $active );
+					$hidden    = (array) apply_filters( 'wpml_setting', [], 'hidden_languages' );
+					$languages = array_diff( array_keys( $active ), $hidden );
 				}
 				break;
 
 			case static::MULTILANG_PLUGIN_TRANSLATEPRESS:
 				$settings  = get_option( 'trp_settings', [] );
-				$languages = $settings['translation-languages'] ?? [];
+				$languages = $settings['publish-languages'] ?? [];
 				break;
 		}
 
@@ -91,8 +96,8 @@ class Helpers {
 		$language = 'default' === $domain_key ? (string) apply_filters( 'wpml_default_language', null ) : $domain_key;
 		$currency = $wcml['default_currencies'][ $language ] ?? false;
 
-		// WCML stores boolean false for languages without a pinned default currency.
-		return is_string( $currency ) && '' !== $currency ? $currency : $base;
+		// Languages without a pinned default currency ("Keep") are stored as false, 0 or '0'.
+		return is_string( $currency ) && preg_match( '/^[A-Z]{3}$/', $currency ) ? $currency : $base;
 	}
 
 	/**
@@ -688,19 +693,28 @@ class Helpers {
 	}
 
 	/**
+	 * Returns the home URL's path without leading/trailing slashes, e.g. 'site' for https://example.com/site/.
+	 *
+	 * @since              v2.6.2
+	 *
+	 * @return string Empty when the site is served from the domain's root.
+	 */
+	public static function get_home_path() {
+		return trim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+	}
+
+	/**
 	 * Returns $url's path, relative to the home URL's path, without leading/trailing slashes.
 	 *
 	 * @since              v2.6.2
 	 *
-	 * @param string $url
+	 * @param string $url A URL or a path.
 	 *
 	 * @return string
-	 *
-	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
-	protected static function get_home_relative_path( $url ) {
+	public static function get_home_relative_path( $url ) {
 		$path = trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' );
-		$home = trim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+		$home = static::get_home_path();
 
 		if ( $home !== '' && ( $path === $home || strpos( $path, "$home/" ) === 0 ) ) {
 			$path = trim( substr( $path, strlen( $home ) ), '/' );

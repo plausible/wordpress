@@ -104,6 +104,35 @@ class IntegrationsTest extends TestCase {
 	}
 
 	/**
+	 * On (multisite) subdirectory installs the site's path should precede the language prefix.
+	 *
+	 * @see Integrations::get_pageview_goal_paths()
+	 * @see Integrations::localize_goal_path()
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testGetPageviewGoalPathsInSubdirectory() {
+		$home_url = function ( $url, $path ) {
+			return 'https://example.com/site/' . ltrim( $path, '/' );
+		};
+
+		add_filter( 'home_url', $home_url, 10, 2 );
+
+		try {
+			$this->withLanguages(
+				function ( $paths ) {
+					$this->assertEquals(
+						[ '/site/product*', '/site/es/producto*', '/site/nl/product*' ],
+						$paths( '/site/product*', 'default' )
+					);
+				}
+			);
+		} finally {
+			remove_filter( 'home_url', $home_url );
+		}
+	}
+
+	/**
 	 * Without a multilingual plugin, the path should be left alone.
 	 *
 	 * @see Integrations::get_pageview_goal_paths()

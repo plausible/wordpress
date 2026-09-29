@@ -9,6 +9,7 @@
 namespace Plausible\Analytics\WP\Admin\Provisioning;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
+use Plausible\Analytics\WP\Client;
 use Plausible\Analytics\WP\Helpers;
 
 class Integrations {
@@ -16,6 +17,12 @@ class Integrations {
 	 * @var Provisioning
 	 */
 	private $provisioning;
+
+	/**
+	 * @var array The goals of each Language Domain's site, keyed by domain key. Retrieved once per request and shared by
+	 *            the WooCommerce and EDD funnels. @see self::get_existing_goals()
+	 */
+	private $existing_goals = [];
 
 	/**
 	 * Build class.
@@ -77,7 +84,8 @@ class Integrations {
 			/**
 			 * Goals which shouldn't (or can't) be part of the funnel.
 			 */
-			$extra_goals = [];
+			$extra_goals        = [];
+			$view_product_paths = [];
 
 			foreach ( $event_goals as $event_key => $event_goal ) {
 				if ( $event_key === 'remove-from-cart' ) {
@@ -93,15 +101,15 @@ class Integrations {
 				}
 
 				if ( $event_key === 'view-product' ) {
-					$paths = $this->get_pageview_goal_paths( $this->get_goal_path( $event_goal ), $key, $post_type );
+					$view_product_paths = $this->get_pageview_goal_paths( $this->get_goal_path( $event_goal ), $key, $post_type );
 
 					/**
 					 * A funnel step holds one goal, so the default language's path is the one that ends up in the
 					 * funnel. The other languages get a goal of their own.
 					 */
-					$goals[] = $this->provisioning->create_goal_request( $event_goal, 'Pageview', null, array_shift( $paths ) );
+					$goals[] = $this->provisioning->create_goal_request( $event_goal, 'Pageview', null, $view_product_paths[0] );
 
-					foreach ( $paths as $path ) {
+					foreach ( array_slice( $view_product_paths, 1 ) as $path ) {
 						$extra_goals[] = $this->provisioning->create_goal_request( $event_goal, 'Pageview', null, $path );
 					}
 
@@ -121,7 +129,7 @@ class Integrations {
 
 			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
 
-			$all_ids = $this->reconcile_view_product_goals( $event_goals, $key, $client, $post_type, $all_ids );
+			$all_ids = $this->reconcile_view_product_goals( $view_product_paths, $key, $client, $all_ids );
 		}
 	}
 
@@ -144,7 +152,7 @@ class Integrations {
 	 * @codeCoverageIgnore We don't want to test the API.
 	 */
 	private function get_purchase_goal_currency( $event_goal, $key, $client ) {
-		$goals = $client->get_goals();
+		$goals = $this->get_existing_goals( $key, $client );
 
 		if ( $goals === false ) {
 			return null;
@@ -162,6 +170,26 @@ class Integrations {
 	}
 
 	/**
+	 * Returns the goals of $key's site, retrieving them only once per request.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $key
+	 * @param Client $client
+	 *
+	 * @return array|false @see Client::get_goals()
+	 *
+	 * @codeCoverageIgnore We don't want to test the API.
+	 */
+	private function get_existing_goals( $key, $client ) {
+		if ( ! isset( $this->existing_goals[ $key ] ) ) {
+			$this->existing_goals[ $key ] = $client->get_goals();
+		}
+
+		return $this->existing_goals[ $key ];
+	}
+
+	/**
 	 * Removes stale localized view-product goals for $key's domain: a non-localized "Visit /product*" left by a
 	 * pre-2.6.2 install, or a goal for a path no longer served. Provisioning is otherwise create-only, so those would
 	 * linger alongside the current localized goals.
@@ -174,18 +202,18 @@ class Integrations {
 	 *
 	 * @since 2.6.2
 	 *
-	 * @param array           $event_goals
-	 * @param string          $key
-	 * @param Client|WP_Error $client
-	 * @param string          $post_type
-	 * @param array           $all_ids
+	 * @param array  $view_product_paths The current view-product goal paths, @see self::get_pageview_goal_paths().
+	 *                                   Empty when the integration has no view-product goal.
+	 * @param string $key
+	 * @param Client $client
+	 * @param array  $all_ids
 	 *
 	 * @return array The (possibly pruned) goal-ID map.
 	 *
 	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
-	private function reconcile_view_product_goals( $event_goals, $key, $client, $post_type, $all_ids ) {
-		if ( empty( $event_goals['view-product'] ) ||
+	private function reconcile_view_product_goals( $view_product_paths, $key, $client, $all_ids ) {
+		if ( empty( $view_product_paths ) ||
 		     ( Helpers::get_multilang_plugin() && empty( Helpers::get_active_languages() ) ) ) {
 			return $all_ids;
 		}
@@ -194,7 +222,7 @@ class Integrations {
 			static function ( $path ) {
 				return sprintf( 'Visit %s', $path );
 			},
-			$this->get_pageview_goal_paths( $this->get_goal_path( $event_goals['view-product'] ), $key, $post_type )
+			$view_product_paths
 		);
 
 		// Only prune once every current goal is present, so a failed (re)create can't leave the domain goalless.
@@ -292,17 +320,10 @@ class Integrations {
 	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
 	 */
 	private function localize_goal_path( $path, $language_code, $post_type ) {
-		$home_path = trim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
-		$relative  = ltrim( $path, '/' );
-
+		$relative = Helpers::get_home_relative_path( $path );
 		// On multisite subdirectory installs the site's path precedes the language prefix.
-		if ( $home_path !== '' && strpos( $relative, "$home_path/" ) === 0 ) {
-			$relative = substr( $relative, strlen( $home_path ) + 1 );
-		} else {
-			$home_path = '';
-		}
-
-		$suffix = '';
+		$home_path = $relative !== trim( $path, '/' ) ? Helpers::get_home_path() : '';
+		$suffix    = '';
 
 		if ( substr( $relative, -1 ) === '*' ) {
 			$suffix   = '*';
@@ -343,13 +364,12 @@ class Integrations {
 		$delete_view_product = ! empty( $integration->event_goals['view-product'] );
 
 		foreach ( $this->provisioning->get_clients() as $domain_key => $client ) {
-			$goals       = $all_ids[ $domain_key ] ?? [];
-			$event_goals = $this->add_localized_event_goals( (array) $integration->event_goals, $domain_key, $integration->post_type ?? '' );
+			$goals = $all_ids[ $domain_key ] ?? [];
 
 			foreach ( $goals as $id => $name ) {
 				$is_view_product = $delete_view_product && strpos( (string) $name, 'Visit ' ) === 0;
 
-				if ( $this->provisioning->array_search_contains( $name, $event_goals ) || $is_view_product ) {
+				if ( $is_view_product || $this->provisioning->array_search_contains( $name, $integration->event_goals ) ) {
 					$client->delete_goal( $id );
 					unset( $goals[ $id ] );
 				}
@@ -363,36 +383,5 @@ class Integrations {
 		}
 
 		update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
-	}
-
-	/**
-	 * Adds the view-product goal for every language served on $domain_key's domain to $event_goals, so the Pageview
-	 * goals created for those languages are recognized (and deleted) too.
-	 *
-	 * The names are built in the display-name format Plausible assigns to Pageview goals ("Visit <path>"), not from
-	 * the WP-translated event-goal template, so matching works regardless of the admin's language.
-	 *
-	 * @since 2.6.2
-	 *
-	 * @param array  $event_goals
-	 * @param string $domain_key
-	 * @param string $post_type
-	 *
-	 * @return array
-	 *
-	 * @codeCoverageIgnore Because it depends on 3rd party plugins.
-	 */
-	private function add_localized_event_goals( $event_goals, $domain_key, $post_type ) {
-		if ( empty( $event_goals['view-product'] ) ) {
-			return $event_goals;
-		}
-
-		$path = $this->get_goal_path( $event_goals['view-product'] );
-
-		foreach ( $this->get_pageview_goal_paths( $path, $domain_key, $post_type ) as $i => $localized_path ) {
-			$event_goals[ "view-product-$i" ] = sprintf( 'Visit %s', $localized_path );
-		}
-
-		return $event_goals;
 	}
 }
