@@ -231,9 +231,6 @@ class Client {
 	/**
 	 * Retrieves all Goals of this Client's site.
 	 *
-	 * The response is decoded as-is, because the generated models deserialize every goal as a Pageview goal, dropping
-	 * e.g. a Revenue goal's event_name and currency.
-	 *
 	 * @since 2.6.2
 	 *
 	 * @return array|false Each goal as ['goal_type' => 'Goal.Revenue', 'goal' => ['id' => 1, 'currency' => 'EUR', ...]],
@@ -242,19 +239,52 @@ class Client {
 	 * @codeCoverageIgnore
 	 */
 	public function get_goals() {
-		$goals = [];
+		return $this->get_all( 'plausibleWebPluginsAPIControllersGoalsIndexRequest', 'goals' );
+	}
+
+	/**
+	 * Retrieves all Funnels of this Client's site.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @return array|false Each funnel as ['funnel' => ['id' => 1, 'name' => '...', 'steps' => [['goal' => [...]], ...]]],
+	 *                     or false when the Funnels couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function get_funnels() {
+		return $this->get_all( 'plausibleWebPluginsAPIControllersFunnelsIndexRequest', 'funnels' );
+	}
+
+	/**
+	 * Retrieves all pages of a paginated index endpoint.
+	 *
+	 * The responses are decoded as-is, because the generated models deserialize every goal as a Pageview goal,
+	 * dropping e.g. a Revenue goal's event_name and currency.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $request_method The DefaultApi method that builds the index request.
+	 * @param string $key            The response's key holding the items, e.g. 'goals'.
+	 *
+	 * @return array|false False when any of the pages couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private function get_all( $request_method, $key ) {
+		$items = [];
 		$after = null;
 
 		try {
 			do {
-				$request  = $this->api_instance->plausibleWebPluginsAPIControllersGoalsIndexRequest( 100, $after );
+				$request  = $this->api_instance->$request_method( 100, $after );
 				$response = json_decode( (string) $this->http_client->send( $request )->getBody(), true );
 
-				if ( ! isset( $response['goals'] ) || ! is_array( $response['goals'] ) ) {
+				if ( ! isset( $response[ $key ] ) || ! is_array( $response[ $key ] ) ) {
 					return false;
 				}
 
-				$goals = array_merge( $goals, $response['goals'] );
+				$items = array_merge( $items, $response[ $key ] );
 				$after = null;
 
 				if ( ! empty( $response['meta']['pagination']['has_next_page'] ) ) {
@@ -267,7 +297,7 @@ class Client {
 			return false;
 		}
 
-		return $goals;
+		return $items;
 	}
 
 	/**

@@ -127,10 +127,70 @@ class Integrations {
 				update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
 			}
 
+			if ( ! empty( $view_product_paths ) ) {
+				$all_ids = $this->maybe_dismantle_outdated_funnel( $funnel_name, $view_product_paths[0], $key, $client, $all_ids );
+			}
+
 			$all_ids = $this->provisioning->create_funnel( $funnel_name, $goals, $client, $key, $all_ids );
 
 			$all_ids = $this->reconcile_view_product_goals( $view_product_paths, $key, $client, $all_ids );
 		}
+	}
+
+	/**
+	 * Makes Plausible remove $key's funnel when its view-product step targets a path that's no longer served there, e.g.
+	 * "Visit /product*" on a domain that serves its products under /producto/, so it's recreated with the current steps.
+	 *
+	 * Funnels are sequential, so such a funnel never gets past its first step. The API can't update or delete a funnel,
+	 * and creating it returns an existing funnel of the same name unchanged. But Plausible removes a funnel once fewer
+	 * than two of its steps remain, which happens when their goals are deleted. So every step's goal is deleted except
+	 * the last one, the purchase (Revenue) goal, whose currency can't be changed. create_funnel() then recreates the
+	 * funnel and its goals. The goals' history is kept, as Plausible computes conversions from the events themselves.
+	 *
+	 * Note: a user-made funnel that shares one of these goals loses that step.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $funnel_name
+	 * @param string $view_product_path The path the funnel's view-product step should target, e.g. /producto*.
+	 * @param string $key
+	 * @param Client $client
+	 * @param array  $all_ids
+	 *
+	 * @return array The (possibly pruned) goal-ID map.
+	 *
+	 * @codeCoverageIgnore We don't want to test the API.
+	 */
+	private function maybe_dismantle_outdated_funnel( $funnel_name, $view_product_path, $key, $client, $all_ids ) {
+		foreach ( (array) $client->get_funnels() as $funnel ) {
+			$steps = $funnel['funnel']['steps'] ?? [];
+
+			if ( ( $funnel['funnel']['name'] ?? '' ) !== $funnel_name || count( $steps ) < 2 ) {
+				continue;
+			}
+
+			$first_step = (string) ( $steps[0]['goal']['display_name'] ?? '' );
+
+			// Only a view-product step is checked: other steps are named after the (translatable) event goals.
+			if ( strpos( $first_step, 'Visit ' ) !== 0 || $first_step === sprintf( 'Visit %s', $view_product_path ) ) {
+				return $all_ids;
+			}
+
+			foreach ( array_slice( $steps, 0, -1 ) as $step ) {
+				$id = $step['goal']['id'] ?? null;
+
+				if ( $id ) {
+					$client->delete_goal( $id );
+					unset( $all_ids[ $key ][ $id ] );
+				}
+			}
+
+			update_option( 'plausible_analytics_enhanced_measurements_goal_ids', $all_ids );
+
+			break;
+		}
+
+		return $all_ids;
 	}
 
 	/**
