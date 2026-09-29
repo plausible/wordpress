@@ -89,12 +89,16 @@ class Provisioning {
 	public function __construct( $client = null ) {
 		$this->client = $client;
 
+		/**
+		 * These names identify the goals in Plausible Analytics and must match the names the events are sent under, so
+		 * they're deliberately not translatable. @see https://github.com/plausible/wordpress/issues/326
+		 */
 		$this->custom_event_goals = [
-			EnhancedMeasurements::FOUR_O_FOUR             => __( '404', 'plausible-analytics' ),
-			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => __( 'Cloaked Link: Click', 'plausible-analytics' ),
-			EnhancedMeasurements::FORM_COMPLETIONS        => __( 'WP Form Completions', 'plausible-analytics' ),
-			EnhancedMeasurements::QUERY_PARAMS            => __( 'WP Query Parameters', 'plausible-analytics' ),
-			EnhancedMeasurements::SEARCH_QUERIES          => __( 'WP Search Queries', 'plausible-analytics' ),
+			EnhancedMeasurements::FOUR_O_FOUR             => '404',
+			EnhancedMeasurements::CLOAKED_AFFILIATE_LINKS => 'Cloaked Link: Click',
+			EnhancedMeasurements::FORM_COMPLETIONS        => 'WP Form Completions',
+			EnhancedMeasurements::QUERY_PARAMS            => 'WP Query Parameters',
+			EnhancedMeasurements::SEARCH_QUERIES          => 'WP Search Queries',
 		];
 
 		$this->init();

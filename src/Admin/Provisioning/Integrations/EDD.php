@@ -58,7 +58,8 @@ class EDD {
 
 		$edd = new Integrations\EDD( false );
 
-		$this->integrations->create_integration_funnel( $edd->event_goals, __( 'EDD Purchase Funnel', 'plausible-analytics' ), $edd->post_type );
+		// Plausible Analytics identifies funnels by name, so it's deliberately not translatable, like the goal names.
+		$this->integrations->create_integration_funnel( $edd->event_goals, 'EDD Purchase Funnel', $edd->post_type );
 	}
 
 	/**

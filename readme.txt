@@ -286,6 +286,7 @@ Please make sure you make a backup of your database before updating any version 
 * Improved: the WooCommerce add-to-cart, remove-from-cart, checkout and purchase events now include a currency property, so they can be broken down by the currency they were placed in. The purchase event uses the currency the order was placed in.
 * Fixed: in "domain per language" mode, the proxy endpoint and the locally cached tracker script were loaded from the default domain, which could cause CORS errors on the other language domains.
 * Fixed: Plugin Tokens for language domains whose key contains an underscore (e.g., TranslatePress' nl_NL) were stored under a stripped key, which meant they were never read back.
+* Fixed: goal, event and funnel names (e.g. "Woo Complete Purchase") were translatable, so a translation update could start sending events under new names, splitting each goal's data and stopping revenue from being recorded. They're now always sent in English. On French sites, where these names were translated in September 2026, events are sent to the original goals again; goals created with the French names can be removed from your Plausible dashboard.
 * Tested with WP 7.1.
 
 = 2.6.1 =

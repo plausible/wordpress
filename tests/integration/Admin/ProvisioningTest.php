@@ -17,6 +17,33 @@ use function Brain\Monkey\Functions\when;
 
 class ProvisioningTest extends TestCase {
 	/**
+	 * The goal names must match the names the events are sent under, so a translation must never change them.
+	 *
+	 * @see https://github.com/plausible/wordpress/issues/326
+	 * @return void
+	 * @throws \ReflectionException
+	 */
+	public function testCustomEventGoalsAreNotTranslated() {
+		$translate = function ( $translation, $text, $domain ) {
+			return $domain === 'plausible-analytics' ? "Traduit : $text" : $translation;
+		};
+
+		add_filter( 'gettext', $translate, 10, 3 );
+
+		try {
+			$goals = new \ReflectionProperty( Provisioning::class, 'custom_event_goals' );
+			$goals->setAccessible( true );
+
+			$this->assertEquals(
+				[ '404', 'Cloaked Link: Click', 'WP Form Completions', 'WP Query Parameters', 'WP Search Queries' ],
+				array_values( $goals->getValue( new Provisioning( false ) ) )
+			);
+		} finally {
+			remove_filter( 'gettext', $translate );
+		}
+	}
+
+	/**
 	 * @see Provisioning::create_goal_request()
 	 * @return void
 	 */
