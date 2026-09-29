@@ -440,10 +440,10 @@ class Upgrades {
 	 * Pageview goals only apply when a multilingual plugin (WPML, with or without WooCommerce Multilingual &
 	 * Multicurrency, or TranslatePress) is active.
 	 *
-	 * This runs on init (@see Upgrades::__construct()), i.e. after the multilingual plugin registered its language API
-	 * on plugin load. In the rare case its languages aren't available yet, the funnels are skipped — they're recreated
-	 * on the next settings save anyway (@see Provisioning\Integrations\WooCommerce::init()) — so the upgrade always
-	 * completes in a single pass.
+	 * This runs on init (@see Upgrades::__construct()), so the multilingual plugin's languages are available: WPML loads
+	 * them on plugins_loaded and TranslatePress stores them in an option. When there are none (e.g. WPML's setup hasn't
+	 * been completed yet), the funnels are skipped — they're recreated on the next settings save anyway
+	 * (@see Provisioning\Integrations\WooCommerce::init()) — so the upgrade always completes in a single pass.
 	 *
 	 * @since              v2.6.2
 	 *
@@ -469,8 +469,8 @@ class Upgrades {
 			$provisioning->maybe_create_custom_properties( [], $settings );
 
 			/**
-			 * The localized Pageview goals only matter when a multilingual plugin is active, and only once its
-			 * language API has booted. If it hasn't returned any languages yet, skip the funnels rather than
+			 * The localized Pageview goals only matter when a multilingual plugin is active and serves languages. When
+			 * it doesn't serve any yet (e.g. WPML's setup hasn't been completed), skip the funnels rather than
 			 * provisioning the default language's path only; they're (re)created with the right paths on the next
 			 * settings save.
 			 *
