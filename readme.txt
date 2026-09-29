@@ -286,6 +286,7 @@ Please make sure you make a backup of your database before updating any version 
 * Improved: the WooCommerce add-to-cart, remove-from-cart, checkout and purchase events now include a currency property, so they can be broken down by the currency they were placed in. The purchase event uses the currency the order was placed in.
 * Fixed: in "domain per language" mode, the proxy endpoint and the locally cached tracker script were loaded from the default domain, which could cause CORS errors on the other language domains.
 * Fixed: Plugin Tokens for language domains whose key contains an underscore (e.g., TranslatePress' nl_NL) were stored under a stripped key, which meant they were never read back.
+* Security: updated the bundled Guzzle HTTP client to 7.15.5, which fixes several security advisories and a deprecation notice on PHP 8.5.
 * Tested with WP 7.1.
 
 = 2.6.1 =
