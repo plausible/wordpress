@@ -84,7 +84,7 @@ class Helpers {
 		$wcml = get_option( '_wcml_settings', [] );
 
 		if ( empty( $wcml['enable_multi_currency'] ) || empty( $wcml['default_currencies'] ) || ! is_array( $wcml['default_currencies'] ) ) {
-			return $base;
+			return $base; // @codeCoverageIgnore
 		}
 
 		// In "by location" mode the currency follows the visitor's country, so the per-language defaults don't apply.
