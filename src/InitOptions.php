@@ -125,10 +125,13 @@ class InitOptions {
 	/**
 	 * This a seam for @see add_query_arg() to be mocked in unit tests.
 	 *
+	 * @since 2.6.2 Uses add_query_arg( [] ) instead of add_query_arg( null, null ): both return the current request URI,
+	 *        but the latter uses null as an array offset, which is deprecated since PHP 8.5.
+	 *
 	 * @codeCoverageIgnore
 	 */
 	protected function get_current_request() {
-		return add_query_arg( null, null );
+		return add_query_arg( [] );
 	}
 
 	/**

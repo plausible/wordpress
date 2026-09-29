@@ -58,9 +58,11 @@ class Search {
 	 *
 	 * The scheme and host are taken from the configured home_url() so the referrer stays correct behind reverse
 	 * proxies (where is_ssl() can be unreliable). The path and query come straight from the current request
-	 * (add_query_arg( null, null )), which already includes any subdirectory the site is installed in. Passing that
-	 * request URI through home_url() instead would prepend the home path a second time, duplicating the subdirectory
-	 * on subdirectory installs (e.g. https://example.com/dev/dev/...).
+	 * (add_query_arg( [] )), which already includes any subdirectory the site is installed in. Passing that request
+	 * URI through home_url() instead would prepend the home path a second time, duplicating the subdirectory on
+	 * subdirectory installs (e.g. https://example.com/dev/dev/...).
+	 *
+	 * add_query_arg( null, null ) returns the same, but uses null as an array offset, which is deprecated since PHP 8.5.
 	 *
 	 * @return string The sanitized referrer URL or an empty string if unavailable.
 	 *
@@ -76,7 +78,7 @@ class Search {
 			return '';
 		}
 
-		$referrer = esc_url( $scheme . '://' . $host . $port . add_query_arg( null, null ) );
+		$referrer = esc_url( $scheme . '://' . $host . $port . add_query_arg( [] ) );
 
 		if ( ! $referrer ) {
 			$referrer = '';
