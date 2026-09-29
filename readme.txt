@@ -279,6 +279,7 @@ Please make sure you make a backup of your database before updating any version 
 == Changelog ==
 
 = 2.6.2 =
+* *Important!* This release rebuilds the WooCommerce (and EDD) purchase funnel for sites using WPML with a translated product base. If you built your own funnels using the same goals, please rebuild them after installing this update.
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
 * Added: WPML Multilingual & Multicurrency for WooCommerce (WooCommerce Multilingual) compatibility.
 * Fixed: the view-product goal now targets the URL each language is served under (e.g. /es/producto*), including a translated product base, so product pageviews are no longer missed in non-default languages. Existing purchase funnels whose first step targets a path that's no longer served are recreated. Works for WooCommerce and Easy Digital Downloads, on WPML and TranslatePress.
