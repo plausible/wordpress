@@ -67,6 +67,10 @@ class Helpers {
 	 * language) the store's base currency is used, and Plausible converts foreign-currency purchases into
 	 * it automatically.
 	 *
+	 * The base currency is read from WooCommerce's setting instead of get_woocommerce_currency(), because multicurrency
+	 * plugins filter the latter to the currency of the current request (e.g. WCML returns the visitor's currency in
+	 * AJAX requests), which would make the goal's currency depend on whichever request happens to provision it.
+	 *
 	 * @since 2.6.2
 	 *
 	 * @param string $domain_key 'default' or a WPML language code (e.g. 'es').
@@ -74,7 +78,7 @@ class Helpers {
 	 * @return string ISO 4217 currency code.
 	 */
 	public static function get_currency_for_language( $domain_key = 'default' ) {
-		$base = Integrations::is_edd_active() ? edd_get_currency() : get_woocommerce_currency();
+		$base = Integrations::is_edd_active() ? edd_get_currency() : (string) get_option( 'woocommerce_currency', 'USD' );
 
 		// A default currency per language is a WCML (WooCommerce + WPML) concept only.
 		if ( Integrations::is_edd_active() || static::get_multilang_plugin() !== static::MULTILANG_PLUGIN_WPML ) {

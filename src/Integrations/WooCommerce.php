@@ -41,13 +41,17 @@ class WooCommerce {
 			$uri = '/' . $uri;
 		}
 
+		/**
+		 * These names identify the goals in Plausible Analytics, so they must never change: they're deliberately not
+		 * translatable, because a translation (update) would start sending events under new names, splitting each
+		 * goal's data and leaving e.g. the Revenue goal behind. @see https://github.com/plausible/wordpress/issues/326
+		 */
 		$this->event_goals = [
-			// translators: %s: Product page URI pattern.
-			'view-product'     => sprintf( __( 'Visit %s*', 'plausible-analytics' ), $uri ),
-			'add-to-cart'      => __( 'Woo Add to Cart', 'plausible-analytics' ),
-			'remove-from-cart' => __( 'Woo Remove from Cart', 'plausible-analytics' ),
-			'checkout'         => __( 'Woo Start Checkout', 'plausible-analytics' ),
-			'purchase'         => __( 'Woo Complete Purchase', 'plausible-analytics' ),
+			'view-product'     => sprintf( 'Visit %s*', $uri ),
+			'add-to-cart'      => 'Woo Add to Cart',
+			'remove-from-cart' => 'Woo Remove from Cart',
+			'checkout'         => 'Woo Start Checkout',
+			'purchase'         => 'Woo Complete Purchase',
 		];
 
 		$this->init( $init );

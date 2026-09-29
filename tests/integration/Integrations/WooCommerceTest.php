@@ -13,6 +13,37 @@ use function Brain\Monkey\Functions\when;
 #[AllowDynamicProperties]
 class WooCommerceTest extends TestCase {
 	/**
+	 * The event names identify the goals in Plausible, so a translation must never change them.
+	 *
+	 * @see https://github.com/plausible/wordpress/issues/326
+	 * @return void
+	 */
+	public function testEventGoalsAreNotTranslated() {
+		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
+
+		$translate = function ( $translation, $text, $domain ) {
+			return $domain === 'plausible-analytics' ? "Traduit : $text" : $translation;
+		};
+
+		add_filter( 'gettext', $translate, 10, 3 );
+
+		try {
+			$this->assertEquals(
+				[
+					'view-product'     => 'Visit /product*',
+					'add-to-cart'      => 'Woo Add to Cart',
+					'remove-from-cart' => 'Woo Remove from Cart',
+					'checkout'         => 'Woo Start Checkout',
+					'purchase'         => 'Woo Complete Purchase',
+				],
+				( new WooCommerce( false ) )->event_goals
+			);
+		} finally {
+			remove_filter( 'gettext', $translate );
+		}
+	}
+
+	/**
 	 * @see WooCommerce::track_entered_checkout()
 	 * @return void
 	 */

@@ -174,7 +174,7 @@ class Integrations {
 
 			$first_step = (string) ( $steps[0]['goal']['display_name'] ?? '' );
 
-			// Only a view-product step is checked: other steps are named after the (translatable) event goals.
+			// Only the view-product step is checked: it's the only step whose goal changes, with the languages served.
 			if ( strpos( $first_step, 'Visit ' ) !== 0 || $first_step === sprintf( 'Visit %s', $view_product_path ) ) {
 				return $all_ids;
 			}

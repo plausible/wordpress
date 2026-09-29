@@ -59,7 +59,8 @@ class WooCommerce {
 
 		$woocommerce = new Integrations\WooCommerce( false );
 
-		$this->integrations->create_integration_funnel( $woocommerce->event_goals, __( 'Woo Purchase Funnel', 'plausible-analytics' ), $woocommerce->post_type );
+		// Plausible Analytics identifies funnels by name, so it's deliberately not translatable, like the goal names.
+		$this->integrations->create_integration_funnel( $woocommerce->event_goals, 'Woo Purchase Funnel', $woocommerce->post_type );
 	}
 
 	/**
