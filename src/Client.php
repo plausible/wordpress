@@ -31,6 +31,11 @@ class Client {
 	private $api_instance;
 
 	/**
+	 * @var GuzzleClient $http_client
+	 */
+	private $http_client;
+
+	/**
 	 * @var string $domain_key
 	 */
 	private $domain_key;
@@ -49,7 +54,8 @@ class Client {
 		$config->setUsername( 'WordPress' )
 		       ->setPassword( $token )
 		       ->setHost( Helpers::get_hosted_domain_url() );
-		$this->api_instance = new DefaultApi( new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] ), $config );
+		$this->http_client  = new GuzzleClient( [ 'timeout' => $timeout, 'connect_timeout' => $connect_timeout ] );
+		$this->api_instance = new DefaultApi( $this->http_client, $config );
 	}
 
 	/**
@@ -223,6 +229,78 @@ class Client {
 	}
 
 	/**
+	 * Retrieves all Goals of this Client's site.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @return array|false Each goal as ['goal_type' => 'Goal.Revenue', 'goal' => ['id' => 1, 'currency' => 'EUR', ...]],
+	 *                     or false when the Goals couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function get_goals() {
+		return $this->get_all( 'plausibleWebPluginsAPIControllersGoalsIndexRequest', 'goals' );
+	}
+
+	/**
+	 * Retrieves all Funnels of this Client's site.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @return array|false Each funnel as ['funnel' => ['id' => 1, 'name' => '...', 'steps' => [['goal' => [...]], ...]]],
+	 *                     or false when the Funnels couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	public function get_funnels() {
+		return $this->get_all( 'plausibleWebPluginsAPIControllersFunnelsIndexRequest', 'funnels' );
+	}
+
+	/**
+	 * Retrieves all pages of a paginated index endpoint.
+	 *
+	 * The responses are decoded as-is, because the generated models deserialize every goal as a Pageview goal,
+	 * dropping e.g. a Revenue goal's event_name and currency.
+	 *
+	 * @since 2.6.2
+	 *
+	 * @param string $request_method The DefaultApi method that builds the index request.
+	 * @param string $key            The response's key holding the items, e.g. 'goals'.
+	 *
+	 * @return array|false False when any of the pages couldn't be retrieved.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private function get_all( $request_method, $key ) {
+		$items = [];
+		$after = null;
+
+		try {
+			do {
+				$request  = $this->api_instance->$request_method( 100, $after );
+				$response = json_decode( (string) $this->http_client->send( $request )->getBody(), true );
+
+				if ( ! isset( $response[ $key ] ) || ! is_array( $response[ $key ] ) ) {
+					return false;
+				}
+
+				$items = array_merge( $items, $response[ $key ] );
+				$after = null;
+
+				if ( ! empty( $response['meta']['pagination']['has_next_page'] ) ) {
+					wp_parse_str( (string) wp_parse_url( $response['meta']['pagination']['links']['next']['url'] ?? '', PHP_URL_QUERY ), $query );
+
+					$after = $query['after'] ?? null;
+				}
+			} while ( $after );
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+
+		return $items;
+	}
+
+	/**
 	 * Create Shared Link in Plausible Dashboard.
 	 *
 	 * @return void
@@ -264,7 +342,11 @@ class Client {
 	/**
 	 * Delete a Custom Event Goal by ID.
 	 *
+	 * @since 2.6.2 Returns whether the goal is gone. Deleting a goal that doesn't exist (anymore) succeeds.
+	 *
 	 * @param int $id
+	 *
+	 * @return bool
 	 *
 	 * @codeCoverageIgnore
 	 */
@@ -280,7 +362,11 @@ class Client {
 					'plausible-analytics'
 				)
 			);
+
+			return false;
 		}
+
+		return true;
 	}
 
 	/**

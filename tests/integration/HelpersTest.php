@@ -9,6 +9,7 @@ use Exception;
 use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Helpers;
+use function Brain\Monkey\Functions\when;
 
 class HelpersTest extends TestCase {
 	/**
@@ -399,5 +400,141 @@ class HelpersTest extends TestCase {
 		$method->setAccessible( true );
 
 		$this->assertEquals( [], $method->invoke( null ) );
+	}
+
+	/**
+	 * WPML's hidden languages should be left out, whether or not WPML lists them for the current user.
+	 *
+	 * @see Helpers::get_active_languages()
+	 * @return void
+	 */
+	public function testGetActiveLanguagesWpmlSkipsHiddenLanguages() {
+		$plugin = function () {
+			return Helpers::MULTILANG_PLUGIN_WPML;
+		};
+		$active = function () {
+			return [ 'en' => [], 'es' => [], 'de' => [] ];
+		};
+		$hidden = function ( $value, $setting ) {
+			return $setting === 'hidden_languages' ? [ 'de' ] : $value;
+		};
+
+		add_filter( 'plausible_analytics_multilang_plugin', $plugin );
+		add_filter( 'wpml_active_languages', $active );
+		add_filter( 'wpml_setting', $hidden, 10, 2 );
+
+		try {
+			$this->assertEquals( [ 'en', 'es' ], Helpers::get_active_languages() );
+		} finally {
+			remove_filter( 'plausible_analytics_multilang_plugin', $plugin );
+			remove_filter( 'wpml_active_languages', $active );
+			remove_filter( 'wpml_setting', $hidden );
+		}
+	}
+
+	/**
+	 * TranslatePress' unpublished languages should be left out.
+	 *
+	 * @see Helpers::get_active_languages()
+	 * @return void
+	 */
+	public function testGetActiveLanguagesTranslatePressSkipsUnpublishedLanguages() {
+		$plugin = function () {
+			return Helpers::MULTILANG_PLUGIN_TRANSLATEPRESS;
+		};
+
+		add_filter( 'plausible_analytics_multilang_plugin', $plugin );
+		update_option(
+			'trp_settings',
+			[
+				'translation-languages' => [ 'en_US', 'es_ES', 'nl_NL' ],
+				'publish-languages'     => [ 'en_US', 'es_ES' ],
+			]
+		);
+
+		try {
+			$this->assertEquals( [ 'en_US', 'es_ES' ], Helpers::get_active_languages() );
+		} finally {
+			remove_filter( 'plausible_analytics_multilang_plugin', $plugin );
+			delete_option( 'trp_settings' );
+		}
+	}
+
+	/**
+	 * A language's pinned WCML default currency should be used; anything else ("Keep", stored as false, 0 or '0')
+	 * should fall back to the store's base currency.
+	 *
+	 * @see Helpers::get_currency_for_language()
+	 * @return void
+	 */
+	public function testGetCurrencyForLanguage() {
+		when( 'get_woocommerce_currency' )->justReturn( 'USD' );
+
+		$plugin  = function () {
+			return Helpers::MULTILANG_PLUGIN_WPML;
+		};
+		$default = function () {
+			return 'en';
+		};
+
+		add_filter( 'plausible_analytics_integrations_edd', '__return_false' );
+		add_filter( 'plausible_analytics_multilang_plugin', $plugin );
+		add_filter( 'wpml_default_language', $default );
+		update_option(
+			'_wcml_settings',
+			[
+				'enable_multi_currency' => 2,
+				'default_currencies'    => [ 'en' => 'GBP', 'es' => 'EUR', 'nl' => '0', 'de' => false, 'fr' => 0 ],
+			]
+		);
+
+		try {
+			$this->assertEquals( 'GBP', Helpers::get_currency_for_language() );
+			$this->assertEquals( 'EUR', Helpers::get_currency_for_language( 'es' ) );
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'nl' ) );
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'de' ) );
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'fr' ) );
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'it' ) );
+
+			// The per-language defaults don't apply when the currency follows the visitor's location.
+			update_option( '_wcml_settings', array_merge( get_option( '_wcml_settings' ), [ 'currency_mode' => 'by_location' ] ) );
+
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'es' ) );
+
+			// A default currency per language is a WCML (i.e. WPML) concept only.
+			remove_filter( 'plausible_analytics_multilang_plugin', $plugin );
+			update_option( '_wcml_settings', array_merge( get_option( '_wcml_settings' ), [ 'currency_mode' => 'by_language' ] ) );
+
+			$this->assertEquals( 'USD', Helpers::get_currency_for_language( 'es' ) );
+		} finally {
+			remove_filter( 'plausible_analytics_integrations_edd', '__return_false' );
+			remove_filter( 'plausible_analytics_multilang_plugin', $plugin );
+			remove_filter( 'wpml_default_language', $default );
+			delete_option( '_wcml_settings' );
+		}
+	}
+
+	/**
+	 * @see Helpers::get_home_relative_path()
+	 * @return void
+	 */
+	public function testGetHomeRelativePath() {
+		$home_url = function ( $url, $path ) {
+			return 'https://example.com/site/' . ltrim( $path, '/' );
+		};
+
+		add_filter( 'home_url', $home_url, 10, 2 );
+
+		try {
+			$this->assertEquals( 'site', Helpers::get_home_path() );
+			$this->assertEquals( 'product*', Helpers::get_home_relative_path( '/site/product*' ) );
+			$this->assertEquals( 'es', Helpers::get_home_relative_path( 'https://example.com/site/es/' ) );
+			$this->assertEquals( '', Helpers::get_home_relative_path( 'https://example.com/site/' ) );
+			// A path outside the site's path is returned as-is.
+			$this->assertEquals( 'product*', Helpers::get_home_relative_path( '/product*' ) );
+			$this->assertEquals( 'sites/product*', Helpers::get_home_relative_path( '/sites/product*' ) );
+		} finally {
+			remove_filter( 'home_url', $home_url );
+		}
 	}
 }

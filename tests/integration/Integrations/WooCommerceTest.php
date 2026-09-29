@@ -20,6 +20,7 @@ class WooCommerceTest extends TestCase {
 		when( 'is_checkout' )->justReturn( true );
 		when( 'is_wc_endpoint_url' )->justReturn( false );
 		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
+		when( 'get_woocommerce_currency' )->justReturn( 'EUR' );
 
 		$cart_mock = $this->getMockBuilder( 'WC_Cart' )->setMethods(
 			[
@@ -41,7 +42,7 @@ class WooCommerceTest extends TestCase {
 		              ->getMock();
 		$class->method( 'get_wc_cart' )->willReturn( $cart_mock );
 
-		$this->expectOutputContains( '{"props":{"subtotal":10,"shipping":5,"tax":1,"total":"16.00"}}' );
+		$this->expectOutputContains( '{"props":{"subtotal":10,"shipping":5,"tax":1,"total":"16.00","currency":"EUR"}}' );
 
 		$class->track_entered_checkout();
 	}
@@ -69,7 +70,7 @@ class WooCommerceTest extends TestCase {
 
 		when( 'wc_get_order' )->justReturn( $mock );
 
-		$this->expectOutputContains( '{"revenue":{"amount":"10","currency":"EUR"}}' );
+		$this->expectOutputContains( '{"revenue":{"amount":"10","currency":"EUR"},"props":{"currency":"EUR"}}' );
 
 		$class->track_purchase( 1 );
 	}
