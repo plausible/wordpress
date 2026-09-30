@@ -278,6 +278,9 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 2.6.3 =
+* Security: updated the bundled Guzzle HTTP client to 7.15.5, which fixes several security advisories and a deprecation notice on PHP 8.5.
+
 = 2.6.2 =
 * *Important!* This release rebuilds the WooCommerce (and EDD) purchase funnel for sites using WPML with a translated product base. If you built your own funnels using the same goals, please rebuild them after installing this update.
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
