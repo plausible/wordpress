@@ -426,36 +426,52 @@ class Helpers {
 	 * @codeCoverageIgnore
 	 */
 	public static function get_proxy_resources() {
-		$stored = &static::$stored_proxy_resources;
-
-		if ( $stored === null ) {
-			$stored = get_option( 'plausible_analytics_proxy_resources', [] );
-
-			// Installs from before 2.6.3 stored the absolute path of the cache directory, of which only the name is kept.
-			if ( empty( $stored['cache_folder'] ) && ! empty( $stored['cache_dir'] ) ) {
-				$stored['cache_folder'] = basename( untrailingslashit( $stored['cache_dir'] ) );
-			}
-
-			if ( empty( $stored['namespace'] ) || empty( $stored['cache_folder'] ) ) {
-				$stored = [
-					'namespace'    => bin2hex( random_bytes( 3 ) ),
-					'base'         => bin2hex( random_bytes( 2 ) ),
-					'endpoint'     => bin2hex( random_bytes( 4 ) ),
-					'cache_folder' => bin2hex( random_bytes( 5 ) ),
-				];
-
-				update_option( 'plausible_analytics_proxy_resources', $stored );
-			}
+		if ( static::$stored_proxy_resources === null ) {
+			static::$stored_proxy_resources = self::get_stored_proxy_resources();
 		}
 
+		$resources  = static::$stored_proxy_resources;
 		$upload_dir = wp_get_upload_dir();
-		$resources  = $stored;
 
-		$resources['cache_dir'] = trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $stored['cache_folder'] );
+		$resources['cache_dir'] = trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $resources['cache_folder'] );
 		// set_url_scheme() matches the URL to the current request, e.g. after switching the site to SSL.
-		$resources['cache_url'] = trailingslashit( set_url_scheme( $upload_dir['baseurl'] ) ) . trailingslashit( $stored['cache_folder'] );
+		$resources['cache_url'] = trailingslashit( set_url_scheme( $upload_dir['baseurl'] ) ) . trailingslashit( $resources['cache_folder'] );
 
 		return $resources;
+	}
+
+	/**
+	 * Returns the proxy resources stored in the DB, generating (and storing) them when there are none yet.
+	 *
+	 * @since 2.6.3
+	 *
+	 * @return array
+	 * @throws Exception
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private static function get_stored_proxy_resources() {
+		$stored = get_option( 'plausible_analytics_proxy_resources', [] );
+
+		// Installs from before 2.6.3 stored the absolute path of the cache directory, of which only the name is kept.
+		if ( empty( $stored['cache_folder'] ) && ! empty( $stored['cache_dir'] ) ) {
+			$stored['cache_folder'] = basename( untrailingslashit( $stored['cache_dir'] ) );
+		}
+
+		if ( ! empty( $stored['namespace'] ) && ! empty( $stored['cache_folder'] ) ) {
+			return $stored;
+		}
+
+		$stored = [
+			'namespace'    => bin2hex( random_bytes( 3 ) ),
+			'base'         => bin2hex( random_bytes( 2 ) ),
+			'endpoint'     => bin2hex( random_bytes( 4 ) ),
+			'cache_folder' => bin2hex( random_bytes( 5 ) ),
+		];
+
+		update_option( 'plausible_analytics_proxy_resources', $stored );
+
+		return $stored;
 	}
 
 	/**
