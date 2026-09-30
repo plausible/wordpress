@@ -8,6 +8,7 @@ namespace Plausible\Analytics\Tests\Integration;
 use Exception;
 use Plausible\Analytics\Tests\TestableHelpers;
 use Plausible\Analytics\Tests\TestCase;
+use Plausible\Analytics\WP\Cron;
 use Plausible\Analytics\WP\Helpers;
 use function Brain\Monkey\Functions\when;
 
@@ -237,11 +238,24 @@ class HelpersTest extends TestCase {
 		try {
 			add_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 
+			$local_file = TestableHelpers::get_js_path();
+
+			// Until the cron has downloaded the local file, the script is loaded from Plausible Analytics.
+			wp_delete_file( $local_file );
+			wp_clear_scheduled_hook( Cron::TASK_NAME );
+
+			$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', TestableHelpers::get_js_url( true ) );
+			$this->assertNotFalse( wp_next_scheduled( Cron::TASK_NAME ) );
+
+			file_put_contents( $local_file, '// test' );
+
 			$url = TestableHelpers::get_js_url( true );
 
 			$this->assertMatchesRegularExpression( '~http://example.org/wp-content/uploads/.*?/.*?.js~', $url );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
+			wp_delete_file( $local_file ?? '' );
+			wp_clear_scheduled_hook( Cron::TASK_NAME );
 		}
 
 		try {
@@ -267,6 +281,44 @@ class HelpersTest extends TestCase {
 		$settings = Helpers::get_settings();
 
 		$this->assertArrayNotHasKey( 'post_test', $settings );
+	}
+
+	/**
+	 * After moving the site to another host, domain or path, the cache directory's path and URL should follow the
+	 * current uploads directory, not the (absolute) ones stored before 2.6.3.
+	 *
+	 * @see Helpers::get_proxy_resources()
+	 * @return void
+	 * @throws Exception
+	 */
+	public function testGetProxyResourcesAfterMovingTheSite() {
+		$stored = new \ReflectionProperty( Helpers::class, 'stored_proxy_resources' );
+		$stored->setAccessible( true );
+		$backup = get_option( 'plausible_analytics_proxy_resources' );
+
+		update_option(
+			'plausible_analytics_proxy_resources',
+			[
+				'namespace' => 'abcdef',
+				'base'      => 'abcd',
+				'endpoint'  => 'abcdefgh',
+				'cache_dir' => '/home/old-host/public_html/wp-content/uploads/0123456789/',
+				'cache_url' => 'https://old-host.example/wp-content/uploads/0123456789/',
+			]
+		);
+		$stored->setValue( null, null );
+
+		try {
+			$upload_dir = wp_get_upload_dir();
+
+			$this->assertEquals( trailingslashit( $upload_dir['basedir'] ) . '0123456789/', Helpers::get_proxy_resource( 'cache_dir' ) );
+			$this->assertEquals( trailingslashit( $upload_dir['baseurl'] ) . '0123456789/', Helpers::get_proxy_resource( 'cache_url' ) );
+			// The REST route stays the same.
+			$this->assertEquals( 'abcdef', Helpers::get_proxy_resource( 'namespace' ) );
+		} finally {
+			update_option( 'plausible_analytics_proxy_resources', $backup );
+			$stored->setValue( null, null );
+		}
 	}
 
 	/**
