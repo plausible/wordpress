@@ -462,13 +462,15 @@ class HelpersTest extends TestCase {
 
 	/**
 	 * A language's pinned WCML default currency should be used; anything else ("Keep", stored as false, 0 or '0')
-	 * should fall back to the store's base currency.
+	 * should fall back to the store's base currency setting, not the (filtered) currency of the current request.
 	 *
 	 * @see Helpers::get_currency_for_language()
 	 * @return void
 	 */
 	public function testGetCurrencyForLanguage() {
-		when( 'get_woocommerce_currency' )->justReturn( 'USD' );
+		// Multicurrency plugins filter this to the currency of the current request.
+		when( 'get_woocommerce_currency' )->justReturn( 'JPY' );
+		update_option( 'woocommerce_currency', 'USD' );
 
 		$plugin  = function () {
 			return Helpers::MULTILANG_PLUGIN_WPML;
@@ -511,6 +513,7 @@ class HelpersTest extends TestCase {
 			remove_filter( 'plausible_analytics_multilang_plugin', $plugin );
 			remove_filter( 'wpml_default_language', $default );
 			delete_option( '_wcml_settings' );
+			delete_option( 'woocommerce_currency' );
 		}
 	}
 

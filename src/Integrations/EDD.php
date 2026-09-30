@@ -38,13 +38,17 @@ class EDD {
 			$uri = '/' . $uri;
 		}
 
+		/**
+		 * These names identify the goals in Plausible Analytics, so they must never change: they're deliberately not
+		 * translatable, because a translation (update) would start sending events under new names, splitting each
+		 * goal's data and leaving e.g. the Revenue goal behind. @see https://github.com/plausible/wordpress/issues/326
+		 */
 		$this->event_goals = [
-			// translators: %s: Product page URI pattern.
-			'view-product'     => sprintf( __( 'Visit %s*', 'plausible-analytics' ), $uri ),
-			'add-to-cart'      => __( 'EDD Add to Cart', 'plausible-analytics' ),
-			'remove-from-cart' => __( 'EDD Remove from Cart', 'plausible-analytics' ),
-			'checkout'         => __( 'EDD Start Checkout', 'plausible-analytics' ),
-			'purchase'         => __( 'EDD Complete Purchase', 'plausible-analytics' ),
+			'view-product'     => sprintf( 'Visit %s*', $uri ),
+			'add-to-cart'      => 'EDD Add to Cart',
+			'remove-from-cart' => 'EDD Remove from Cart',
+			'checkout'         => 'EDD Start Checkout',
+			'purchase'         => 'EDD Complete Purchase',
 		];
 
 		$this->init( $init );

@@ -65,7 +65,8 @@ class FormSubmit {
 		wp_localize_script(
 			'plausible-form-submit-integration',
 			'plausible_analytics_i18n',
-			[ 'form_completions' => __( 'WP Form Completions', 'plausible-analytics' ), ]
+			// The goal's name, which is deliberately not translatable. @see Provisioning::__construct()
+			[ 'form_completions' => 'WP Form Completions', ]
 		);
 
 		wp_enqueue_script( 'plausible-form-submit-integration' );
@@ -109,7 +110,7 @@ class FormSubmit {
 		$proxy = new Proxy( false );
 
 		$proxy->do_request(
-			__( 'WP Form Completions', 'plausible-analytics' ),
+			'WP Form Completions',
 			null,
 			null,
 			[ 'path' => $uri ]
