@@ -5,7 +5,7 @@ Tags: analytics, privacy, google analytics alternative, woocommerce analytics, s
 Requires at least: 5.9
 Tested up to: 7.1
 Requires PHP: 7.2
-Stable tag: 2.6.1
+Stable tag: 2.6.2
 License: Massachusetts Institute of Technology (MIT) license
 License URI: https://opensource.org/licenses/MIT
 
@@ -13,23 +13,23 @@ Simple, lightweight, privacy-friendly Google Analytics alternative for WordPress
 
 == Description ==
 
-Plausible Analytics is a simple, lightweight and privacy-friendly WordPress analytics plugin and a Google Analytics alternative for WordPress.
+Plausible Analytics is a simple, lightweight, and privacy-friendly WordPress analytics plugin and a Google Analytics alternative for WordPress.
 
-Understand your website stats, traffic, content and conversions with a clean analytics dashboard that doesn’t slow down your WordPress site or require complex setup.
+Understand your website stats, traffic, content, and conversions with a clean analytics dashboard that doesn’t slow down your WordPress site or require complex setup.
 
-No cookies. No consent banners. Fully compliant with GDPR, CCPA and PECR.
+No cookies. No consent banners. Fully compliant with GDPR, CCPA, and PECR.
 
 [Live Demo](https://plausible.io/plausible.io).
 
 **You need a subscription to Plausible Analytics to track your stats. There's a free 30-day trial with no credit card required.**
 
-We're completely independent, self-funded, bootstrapped and debt-free. We're not interested in raising funds or taking investment. We choose the subscription business model rather than surveillance capitalism. We're operating a sustainable project funded solely by the fees that our subscribers pay us.
+We're completely independent, self-funded, bootstrapped, and debt-free. We're not interested in raising funds or taking investment. We choose the subscription business model rather than surveillance capitalism. We're operating a sustainable project funded solely by the fees that our subscribers pay us.
 
 [Visit our website](https://plausible.io/) for full details.
 
 ## Why WordPress users choose Plausible
 
-Most analytics tools are complex, slow and difficult to use. Plausible is built to be simple, fast and easy to understand.
+Most analytics tools are complex, slow, and difficult to use. Plausible is built to be simple, fast, and easy to understand.
 
 > “I use Plausible for traffic analytics. Privacy-friendly, no cookie banner needed, lightweight script that doesn’t slow down the page.” — [Joost de Valk, founder of Yoast SEO](https://joost.blog/astro-seo-complete-guide/#9-analytics-and-measurement)
 
@@ -41,7 +41,7 @@ Here are the main reasons that WordPress users love Plausible.
 
 Get all your key metrics in a [single, clear dashboard](https://plausible.io/simple-web-analytics).
 
-See traffic, top pages, referrers and conversions at a glance without digging through multiple reports or menus.
+See traffic, top pages, referrers, and conversions at a glance without digging through multiple reports or menus.
 
 Check your traffic within your WordPress dashboard and get all essential insights on one page in one minute.
 
@@ -75,7 +75,7 @@ Your site data is not used for any other purposes. All visitor data is exclusive
 
 You can track your traffic without showing cookie consent banners.
 
-### Track events, content, marketing campaigns and revenue
+### Track events, content, marketing campaigns, and revenue
 
 Understand how people use your site and what drives results.
 
@@ -90,9 +90,9 @@ Track:
 
 ### Built-in WooCommerce and Easy Digital Downloads analytics
 
-Plausible provides automated WooCommerce and Easy Digital Downloads analytics solutions to track conversions, revenue and attribution.
+Plausible provides automated WooCommerce and Easy Digital Downloads analytics solutions to track conversions, revenue, and attribution.
 
-- Track activities like adding to cart, removing from cart, entering checkout and completing a purchase
+- Track activities like adding to cart, removing from cart, entering checkout, and completing a purchase
 - Track revenue and conversions automatically  
 - View the full purchase funnel from product view to checkout  
 - Measure cart abandonment and drop-off points  
@@ -116,7 +116,7 @@ We’re an independent, bootstrapped company funded by our customers, not by adv
 
 Switching from Google Analytics is simple and you won’t lose the insights that matter.
 
-Plausible gives you all the essential metrics in a clean, easy-to-use dashboard, including real-time traffic, top pages, referrers and campaign performance. No complicated configuration, no learning curve, just clear insights from day one.
+Plausible gives you all the essential metrics in a clean, easy-to-use dashboard, including real-time traffic, top pages, referrers, and campaign performance. No complicated configuration, no learning curve, just clear insights from day one.
 
 [Import your historical stats from Google Analytics](https://plausible.io/docs/google-analytics-import) and learn how to get the most out of [your Plausible experience](https://plausible.io/docs/your-plausible-experience).
 
@@ -165,8 +165,8 @@ Our product is updated several times per week and with our WordPress plugin you 
 
 ### WordPress-specific tracking
 
-- Automatically track post authors, categories and custom taxonomies for deeper content insights  
-- Enable Enhanced Measurements to track file downloads, outbound links, affiliate clicks, form submissions, site searches and 404 error pages automatically  
+- Automatically track post authors, categories, and custom taxonomies for deeper content insights  
+- Enable Enhanced Measurements to track file downloads, outbound links, affiliate clicks, form submissions, site searches, and 404 error pages automatically  
 - Track events without coding using CSS classes directly in the WordPress editor  
 - No JavaScript knowledge required — everything can be configured from the plugin settings  
 - Disable tracking for admin users or selected user roles
@@ -203,9 +203,9 @@ We’re funded by our customers, not by collecting or selling personal data.
 
 = Automatic installation =
 
-Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an automatic install of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New".
+Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an automatic install of Plausible Analytics, log in to your WordPress dashboard, navigate to the Plugins menu, and click "Add New".
 
-In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view details about it such as the point release, rating and description. Most importantly of course, you can install it by simply clicking "Install Now".
+In the search field type "Plausible Analytics" and click Search Plugins. Once you have found the plugin you can view details about it such as the point release, rating, and description. Most importantly of course, you can install it by simply clicking "Install Now".
 
 = Manual installation =
 
@@ -238,7 +238,7 @@ Google Analytics is free because Google has built their company and their wealth
 
 With Plausible, you 100% own and control all of your website data. This data is not being shared with or sold to any third-parties. Since we don't make money from targeted advertisement, we must charge a subscription fee.
 
-Revenue from subscriptions is used to pay our rent, further develop Plausible and allow us to commit to Plausible and open source full time. There's a more elaborate explanation given here: https://plausible.io/paid-analytics-vs-free-ga
+Revenue from subscriptions is used to pay our rent, further develop Plausible, and allow us to commit to Plausible and open source full time. There's a more elaborate explanation given here: https://plausible.io/paid-analytics-vs-free-ga
 
 = Is there a demo available? = 
 
@@ -282,8 +282,8 @@ Please make sure you make a backup of your database before updating any version 
 * *Important!* This release rebuilds the WooCommerce (and EDD) purchase funnel for sites using WPML with a translated product base. If you built your own funnels using the same goals, please rebuild them after installing this update.
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
 * Added: WPML Multilingual & Multicurrency for WooCommerce (WooCommerce Multilingual) compatibility.
-* Fixed: the view-product goal now targets the URL each language is served under (e.g. /es/producto*), including a translated product base, so product pageviews are no longer missed in non-default languages. Existing purchase funnels whose first step targets a path that's no longer served are recreated. Works for WooCommerce and Easy Digital Downloads, on WPML and TranslatePress.
-* Improved: the WooCommerce add-to-cart, remove-from-cart, checkout and purchase events now include a currency property, so they can be broken down by the currency they were placed in. The purchase event uses the currency the order was placed in.
+* Fixed: the view-product goal now targets the URL each language is served under (e.g., /es/producto*), including a translated product base, so product pageviews are no longer missed in non-default languages. Existing purchase funnels whose first step targets a path that's no longer served are recreated. Works for WooCommerce and Easy Digital Downloads, on WPML and TranslatePress.
+* Improved: the WooCommerce add-to-cart, remove-from-cart, checkout, and purchase events now include a currency property, so they can be broken down by the currency they were placed in. The purchase event uses the currency the order was placed in.
 * Fixed: in "domain per language" mode, the proxy endpoint and the locally cached tracker script were loaded from the default domain, which could cause CORS errors on the other language domains.
 * Fixed: Plugin Tokens for language domains whose key contains an underscore (e.g., TranslatePress' nl_NL) were stored under a stripped key, which meant they were never read back.
 * Fixed: goal, event and funnel names (e.g. "Woo Complete Purchase") were translatable, so a translation update could start sending events under new names, splitting each goal's data and stopping revenue from being recorded. They're now always sent in English. On French sites, where these names were translated in September 2026, events are sent to the original goals again; goals created with the French names can be removed from your Plausible dashboard.
@@ -291,7 +291,7 @@ Please make sure you make a backup of your database before updating any version 
 
 = 2.6.1 =
 * Added: info icons linking to the documentation for Cloaked Affiliate Links, Query Parameters, View Your Stats in Your WordPress Dashboard, Track Analytics for User Roles, Show Stats Dashboard to 
-Additional User Roles and Disable Menu in Toolbar.
+Additional User Roles, and Disable Menu in Toolbar.
 * Fixed: the Getting Started Guide's Next button would stay disabled after entering (or pasting) a Plugin Token.
 
 = 2.6.0 =
@@ -354,8 +354,8 @@ Additional User Roles and Disable Menu in Toolbar.
 
 = 2.4.0 | May 21st, 2025 =
 * Added: Cloaked Affiliate Link tracking feature.
-* Improved: Custom Events, Hash based routing and IE compatibility are now grouped under a new Advanced Options section.
-* Improved: Enhanced Measurements 404, File Downloads, Outbound Links, Form Completions and Search Queries are now enabled by default on new installs.
+* Improved: Custom Events, Hash based routing, and IE compatibility are now grouped under a new Advanced Options section.
+* Improved: Enhanced Measurements 404, File Downloads, Outbound Links, Form Completions, and Search Queries are now enabled by default on new installs.
 
 = 2.3.3 | May 5th, 2025 =
 * Added: W3 Total Cache compatibility.
