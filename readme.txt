@@ -281,6 +281,8 @@ Please make sure you make a backup of your database before updating any version 
 = 2.6.3 =
 * Improved: the tracker script now loads asynchronously (like Plausible Analytics' own snippet) instead of deferred, so it can no longer hold up the rest of the page when it can't be reached.
 * Added: Hummingbird compatibility. Its Asset Optimization and Delay JavaScript no longer touch the plugin's scripts, which could cause a "plausible is not a function" error (e.g. on search results pages).
+* Fixed: with the proxy enabled, the locally hosted tracker script kept loading from the site's previous location after moving the site to another host, domain or path. If the old server was offline, pages could hang while waiting for it. The script's location now follows the site automatically.
+* Improved: when the locally hosted tracker script is missing (e.g. after moving the site without its uploads), it's loaded from Plausible Analytics until it's downloaded again, which now happens right away instead of on the next daily run.
 
 = 2.6.2 =
 * *Important!* This release rebuilds the WooCommerce (and EDD) purchase funnel for sites using WPML with a translated product base. If you built your own funnels using the same goals, please rebuild them after installing this update.
