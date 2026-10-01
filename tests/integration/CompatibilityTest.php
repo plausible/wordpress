@@ -25,4 +25,31 @@ class CompatibilityTest extends TestCase {
 		$this->assertStringContainsString( " async data-cfasync='false'", $tag );
 		$this->assertStringNotContainsString( 'defer', $tag );
 	}
+
+	/**
+	 * Hummingbird's Asset Optimization should leave our scripts alone, and only ours.
+	 *
+	 * @see Compatibility::exclude_from_hummingbird_asset_optimization()
+	 * @return void
+	 */
+	public function testExcludeFromHummingbirdAssetOptimization() {
+		$class = new Compatibility();
+
+		$this->assertTrue( $class->exclude_from_hummingbird_asset_optimization( false, 'plausible-analytics', '', 'scripts' ) );
+		$this->assertTrue( $class->exclude_from_hummingbird_asset_optimization( false, 'plausible-form-submit-integration', '', 'scripts' ) );
+		$this->assertFalse( $class->exclude_from_hummingbird_asset_optimization( false, 'jquery-core', '', 'scripts' ) );
+		$this->assertFalse( $class->exclude_from_hummingbird_asset_optimization( false, 'plausible-analytics', '', 'styles' ) );
+		// Another plugin's decision is kept.
+		$this->assertTrue( $class->exclude_from_hummingbird_asset_optimization( true, 'jquery-core', '', 'scripts' ) );
+	}
+
+	/**
+	 * Hummingbird's Delay JavaScript should leave our scripts alone.
+	 *
+	 * @see Compatibility::exclude_from_hummingbird_delay_js()
+	 * @return void
+	 */
+	public function testExcludeFromHummingbirdDelayJs() {
+		$this->assertEquals( [ 'existing', 'plausible' ], ( new Compatibility() )->exclude_from_hummingbird_delay_js( [ 'existing' ] ) );
+	}
 }
