@@ -113,9 +113,15 @@ class Compatibility {
 		}
 
 		/**
+		 * async (like Plausible Analytics' own snippet) instead of defer: a deferred script holds up DOMContentLoaded
+		 * until it has loaded, so a script that can't be reached (e.g. a proxied script on a server that's gone offline)
+		 * stalls everything waiting for that event. The tracker handles loading before or after plausible.init().
+		 *
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
+		 *
+		 * @since 2.6.3 async instead of defer.
 		 */
-		$params = "defer data-cfasync='false'";
+		$params = "async data-cfasync='false'";
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );

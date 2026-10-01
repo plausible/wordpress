@@ -278,6 +278,9 @@ Please make sure you make a backup of your database before updating any version 
 
 == Changelog ==
 
+= 2.6.3 =
+* Improved: the tracker script now loads asynchronously (like Plausible Analytics' own snippet) instead of deferred, so it can no longer hold up the rest of the page when it can't be reached.
+
 = 2.6.2 =
 * *Important!* This release rebuilds the WooCommerce (and EDD) purchase funnel for sites using WPML with a translated product base. If you built your own funnels using the same goals, please rebuild them after installing this update.
 * Added: TranslatePress "different domain per language" (Multiple Domains) compatibility. Each language domain can be mapped to its own Plausible Analytics dashboard, just like WPML.
