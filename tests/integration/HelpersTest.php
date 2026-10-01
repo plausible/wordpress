@@ -243,9 +243,16 @@ class HelpersTest extends TestCase {
 			// Until the cron has downloaded the local file, the script is loaded from Plausible Analytics.
 			wp_delete_file( $local_file );
 			wp_clear_scheduled_hook( Cron::TASK_NAME );
+			delete_transient( 'plausible_analytics_js_download_attempt' );
 
 			$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', TestableHelpers::get_js_url( true ) );
 			$this->assertNotFalse( wp_next_scheduled( Cron::TASK_NAME ) );
+
+			// Once that attempt has run (and failed), no new one is scheduled until the backoff has expired.
+			wp_clear_scheduled_hook( Cron::TASK_NAME );
+
+			$this->assertEquals( 'https://plausible.io/js/pa-test-tracker-id.js', TestableHelpers::get_js_url( true ) );
+			$this->assertFalse( wp_next_scheduled( Cron::TASK_NAME ) );
 
 			file_put_contents( $local_file, '// test' );
 
@@ -256,6 +263,7 @@ class HelpersTest extends TestCase {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableProxy' ] );
 			wp_delete_file( $local_file ?? '' );
 			wp_clear_scheduled_hook( Cron::TASK_NAME );
+			delete_transient( 'plausible_analytics_js_download_attempt' );
 		}
 
 		try {

@@ -570,8 +570,16 @@ class Helpers {
 			 * Load the script from Plausible Analytics until the cron has downloaded it, instead of from a URL that 404s.
 			 */
 			if ( ! file_exists( static::get_proxy_resource( 'cache_dir' ) . $file_name . '.js' ) ) {
-				// Doesn't schedule a duplicate while one is due within 10 minutes.
-				wp_schedule_single_event( time(), Cron::TASK_NAME );
+				/**
+				 * Download it right away, rather than on the next daily run. At most once per 15 minutes: if the
+				 * download keeps failing (e.g. the uploads directory isn't writable), every request would schedule a
+				 * new attempt as soon as the previous one has run. wp_next_scheduled() can't be used for this, as the
+				 * daily event uses the same hook.
+				 */
+				if ( ! get_transient( 'plausible_analytics_js_download_attempt' ) ) {
+					set_transient( 'plausible_analytics_js_download_attempt', 1, 15 * MINUTE_IN_SECONDS );
+					wp_schedule_single_event( time(), Cron::TASK_NAME );
+				}
 
 				return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
 			}
