@@ -23,6 +23,11 @@ class Helpers {
 	const MULTILANG_PLUGIN_TRANSLATEPRESS = 'translatepress';
 
 	/**
+	 * @var array|null The proxy resources as stored in the DB, retrieved once per request. @see self::get_proxy_resources()
+	 */
+	protected static $stored_proxy_resources;
+
+	/**
 	 * Returns the language codes of all languages the active multilingual plugin serves to the public.
 	 *
 	 * Languages that aren't public yet (WPML's hidden languages, TranslatePress' unpublished languages) are left out,
@@ -401,7 +406,7 @@ class Helpers {
 		 * Create the cache directory if it doesn't exist.
 		 */
 		if ( ( $resource_name === 'cache_dir' || $resource_name === 'cache_url' ) && ! is_dir( $resources['cache_dir'] ) ) {
-			wp_mkdir_p( $resources[ $resource_name ] );
+			wp_mkdir_p( $resources['cache_dir'] );
 		}
 
 		return $resources[ $resource_name ] ?? '';
@@ -410,40 +415,63 @@ class Helpers {
 	/**
 	 * Get (and generate/store if non-existent) proxy resources.
 	 *
+	 * @since 2.6.3 Only the cache directory's name is stored: its path and URL are derived from the current uploads
+	 *        directory on every request. They used to be stored as absolute values, so after moving the site to another
+	 *        host, domain or path the local tracker script was still loaded from the old location, which stalls every
+	 *        page (the script is deferred, so DOMContentLoaded waits for it) when the old server is offline.
+	 *
 	 * @return array
 	 * @throws Exception
 	 *
 	 * @codeCoverageIgnore
 	 */
 	public static function get_proxy_resources() {
-		static $resources;
-
-		if ( $resources === null ) {
-			$resources = get_option( 'plausible_analytics_proxy_resources', [] );
+		if ( static::$stored_proxy_resources === null ) {
+			static::$stored_proxy_resources = self::get_stored_proxy_resources();
 		}
 
-		/**
-		 * Force a refresh of our resources if the user recently switched to SSL and we still have non-SSL resources stored.
-		 */
-		if ( ! empty( $resources ) && is_ssl() && isset( $resources['cache_url'] ) && ( strpos( $resources['cache_url'], 'http:' ) !== false ) ) {
-			$resources = [];
-		}
+		$resources  = static::$stored_proxy_resources;
+		$upload_dir = wp_get_upload_dir();
 
-		if ( empty( $resources ) ) {
-			$cache_dir  = bin2hex( random_bytes( 5 ) );
-			$upload_dir = wp_get_upload_dir();
-			$resources  = [
-				'namespace' => bin2hex( random_bytes( 3 ) ),
-				'base'      => bin2hex( random_bytes( 2 ) ),
-				'endpoint'  => bin2hex( random_bytes( 4 ) ),
-				'cache_dir' => trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $cache_dir ),
-				'cache_url' => trailingslashit( $upload_dir['baseurl'] ) . trailingslashit( $cache_dir ),
-			];
-
-			update_option( 'plausible_analytics_proxy_resources', $resources );
-		}
+		$resources['cache_dir'] = trailingslashit( $upload_dir['basedir'] ) . trailingslashit( $resources['cache_folder'] );
+		// set_url_scheme() matches the URL to the current request, e.g. after switching the site to SSL.
+		$resources['cache_url'] = trailingslashit( set_url_scheme( $upload_dir['baseurl'] ) ) . trailingslashit( $resources['cache_folder'] );
 
 		return $resources;
+	}
+
+	/**
+	 * Returns the proxy resources stored in the DB, generating (and storing) them when there are none yet.
+	 *
+	 * @since 2.6.3
+	 *
+	 * @return array
+	 * @throws Exception
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private static function get_stored_proxy_resources() {
+		$stored = get_option( 'plausible_analytics_proxy_resources', [] );
+
+		// Installs from before 2.6.3 stored the absolute path of the cache directory, of which only the name is kept.
+		if ( empty( $stored['cache_folder'] ) && ! empty( $stored['cache_dir'] ) ) {
+			$stored['cache_folder'] = basename( untrailingslashit( $stored['cache_dir'] ) );
+		}
+
+		if ( ! empty( $stored['namespace'] ) && ! empty( $stored['cache_folder'] ) ) {
+			return $stored;
+		}
+
+		$stored = [
+			'namespace'    => bin2hex( random_bytes( 3 ) ),
+			'base'         => bin2hex( random_bytes( 2 ) ),
+			'endpoint'     => bin2hex( random_bytes( 4 ) ),
+			'cache_folder' => bin2hex( random_bytes( 5 ) ),
+		];
+
+		update_option( 'plausible_analytics_proxy_resources', $stored );
+
+		return $stored;
 	}
 
 	/**
@@ -538,8 +566,27 @@ class Helpers {
 		 */
 		if ( $local && static::proxy_enabled() ) {
 			/**
-			 * The cache URL is stored as an absolute URL on the main domain, so it needs to be moved to the
-			 * language domain we're currently on.
+			 * The local file may not exist (yet), e.g. right after moving the site to another host without its uploads.
+			 * Load the script from Plausible Analytics until the cron has downloaded it, instead of from a URL that 404s.
+			 */
+			if ( ! file_exists( static::get_proxy_resource( 'cache_dir' ) . $file_name . '.js' ) ) {
+				/**
+				 * Download it right away, rather than on the next daily run. At most once per 15 minutes: if the
+				 * download keeps failing (e.g. the uploads directory isn't writable), every request would schedule a
+				 * new attempt as soon as the previous one has run. wp_next_scheduled() can't be used for this, as the
+				 * daily event uses the same hook.
+				 */
+				if ( ! get_transient( 'plausible_analytics_js_download_attempt' ) ) {
+					set_transient( 'plausible_analytics_js_download_attempt', 1, 15 * MINUTE_IN_SECONDS );
+					wp_schedule_single_event( time(), Cron::TASK_NAME );
+				}
+
+				return esc_url( static::get_hosted_domain_url() . "/js/$file_name.js" );
+			}
+
+			/**
+			 * The cache URL is built on the main domain, so it needs to be moved to the language domain we're currently
+			 * on.
 			 */
 			return esc_url( static::maybe_use_current_language_domain( static::get_proxy_resource( 'cache_url' ) . $file_name . '.js' ) );
 		}
