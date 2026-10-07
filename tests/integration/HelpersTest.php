@@ -228,6 +228,40 @@ class HelpersTest extends TestCase {
 	}
 
 	/**
+	 * The bundled HTTP client rejects non-ASCII hosts, so internationalized domains should be converted to punycode.
+	 *
+	 * @see Helpers::to_ascii_domain()
+	 * @return void
+	 */
+	public function testToAsciiDomain() {
+		$this->assertEquals( 'plausible.example.com', Helpers::to_ascii_domain( 'plausible.example.com' ) );
+		$this->assertEquals( 'plausible.example.com:8000', Helpers::to_ascii_domain( 'plausible.example.com:8000' ) );
+		$this->assertEquals( 'plausible.xn--mller-kva.de', Helpers::to_ascii_domain( 'plausible.müller.de' ) );
+		$this->assertEquals( 'plausible.xn--mller-kva.de:8000', Helpers::to_ascii_domain( 'plausible.müller.de:8000' ) );
+		$this->assertEquals( 'xn--mller-kva.de/plausible', Helpers::to_ascii_domain( 'müller.de/plausible' ) );
+	}
+
+	/**
+	 * @see Helpers::get_hosted_domain_url()
+	 * @return void
+	 */
+	public function testGetHostedDomainUrlWithInternationalizedDomain() {
+		$settings = function ( $settings ) {
+			$settings['self_hosted_domain'] = 'plausible.müller.de';
+
+			return $settings;
+		};
+
+		add_filter( 'plausible_analytics_settings', $settings );
+
+		try {
+			$this->assertEquals( 'https://plausible.xn--mller-kva.de', Helpers::get_hosted_domain_url() );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', $settings );
+		}
+	}
+
+	/**
 	 * @see Helpers::get_js_url()
 	 */
 	public function testGetJsUrl() {

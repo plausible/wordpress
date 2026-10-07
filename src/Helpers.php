@@ -477,23 +477,66 @@ class Helpers {
 	/**
 	 * Returns the URL of the domain where Plausible Analytics is hosted: self-hosted or cloud.
 	 *
+	 * @since 2.6.3 Internationalized (non-ASCII) self-hosted domains are converted to their ASCII (punycode) form.
+	 *
 	 * @return string
 	 */
 	public static function get_hosted_domain_url() {
 		$settings = static::get_settings();
 
 		if ( defined( 'PLAUSIBLE_SELF_HOSTED_DOMAIN' ) ) {
-			return esc_url( 'https://' . PLAUSIBLE_SELF_HOSTED_DOMAIN ); // @codeCoverageIgnore
+			return esc_url( 'https://' . static::to_ascii_domain( PLAUSIBLE_SELF_HOSTED_DOMAIN ) ); // @codeCoverageIgnore
 		}
 
 		if ( ! empty( $settings['self_hosted_domain'] ) ) {
 			/**
 			 * Until proven otherwise, let's just assume people are all on SSL.
 			 */
-			return esc_url( 'https://' . $settings['self_hosted_domain'] );
+			return esc_url( 'https://' . static::to_ascii_domain( $settings['self_hosted_domain'] ) );
 		}
 
 		return esc_url( 'https://plausible.io' );
+	}
+
+	/**
+	 * Converts an internationalized domain name, e.g. plausible.müller.de, to its ASCII (punycode) form,
+	 * plausible.xn--mller-kva.de. The bundled HTTP client rejects non-ASCII hosts.
+	 *
+	 * Uses ext-intl when available, otherwise the encoder of the Requests library bundled with WordPress.
+	 *
+	 * @since 2.6.3
+	 *
+	 * @param string $domain A domain, optionally followed by a port, e.g. plausible.müller.de:8000.
+	 *
+	 * @return string The domain unchanged if it's ASCII already or can't be converted.
+	 */
+	public static function to_ascii_domain( $domain ) {
+		$domain = (string) $domain;
+
+		if ( ! preg_match( '/[^\x20-\x7e]/', $domain ) ) {
+			return $domain;
+		}
+
+		// Only the host is converted, not a port (or path) that follows it.
+		$host = (string) strtok( $domain, ':/' );
+		$rest = (string) substr( $domain, strlen( $host ) );
+
+		$ascii = false;
+
+		if ( function_exists( 'idn_to_ascii' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
+			$ascii = idn_to_ascii( $host, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+		} elseif ( class_exists( '\WpOrg\Requests\IdnaEncoder' ) || class_exists( '\Requests_IDNAEncoder' ) ) {
+			// WordPress 6.2+ ships Requests 2.x, older versions Requests 1.x.
+			$encoder = class_exists( '\WpOrg\Requests\IdnaEncoder' ) ? '\WpOrg\Requests\IdnaEncoder' : '\Requests_IDNAEncoder';
+
+			try {
+				$ascii = $encoder::encode( $host );
+			} catch ( \Exception $e ) {
+				$ascii = false; // @codeCoverageIgnore
+			}
+		}
+
+		return $ascii ? $ascii . $rest : $domain;
 	}
 
 	/**
