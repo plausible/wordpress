@@ -22,7 +22,8 @@
     "yoast/wp-test-utils": "*",
     "php-parallel-lint/php-parallel-lint": "*",
     "php-parallel-lint/php-console-highlighter": "*",
-    "friendsofphp/php-cs-fixer": "*"
+    "friendsofphp/php-cs-fixer": "*",
+    "symfony/deprecation-contracts": "^2.5"
   },
   "scripts": {
     "post-install-cmd": [
