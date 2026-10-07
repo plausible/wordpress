@@ -33,6 +33,12 @@ class Compatibility {
 		// Global Exclusion from Minification
 		add_filter( 'plausible_analytics_script_params', [ $this, 'exclude_from_minification' ] );
 
+		// Hummingbird
+		if ( defined( 'WPHB_VERSION' ) ) {
+			add_filter( 'wphb_dont_add_handle_to_collection', [ $this, 'exclude_from_hummingbird_asset_optimization' ], 10, 4 );
+			add_filter( 'wphb_delay_js_exclusions', [ $this, 'exclude_from_hummingbird_delay_js' ] );
+		}
+
 		// LiteSpeed Cache
 		if ( defined( 'LSCWP_V' ) ) {
 			add_filter( 'litespeed_optimize_js_excludes', [ $this, 'exclude_plausible_js' ] );
@@ -113,9 +119,15 @@ class Compatibility {
 		}
 
 		/**
+		 * async (like Plausible Analytics' own snippet) instead of defer: a deferred script holds up DOMContentLoaded
+		 * until it has loaded, so a script that can't be reached (e.g. a proxied script on a server that's gone offline)
+		 * stalls everything waiting for that event. The tracker handles loading before or after plausible.init().
+		 *
 		 * the data-cfasync ensures this script isn't processed by CF Rocket Loader @see https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/
+		 *
+		 * @since 2.6.3 async instead of defer.
 		 */
-		$params = "defer data-cfasync='false'";
+		$params = "async data-cfasync='false'";
 		$params = apply_filters( 'plausible_analytics_script_params', $params );
 
 		return str_replace( ' src', " {$params} src", $tag );
@@ -143,6 +155,49 @@ class Compatibility {
 		$params .= ' data-no-minify="true" data-no-optimize="1" data-noptimize="1"';
 
 		return $params;
+	}
+
+	/**
+	 * Dear Hummingbird, leave our scripts alone, please. Its Asset Optimization combines the tracker with other scripts
+	 * and moves (or duplicates) the inline script that initializes it, which can leave calls to plausible() without the
+	 * initialization ("plausible is not a function"), and serves its own copy of the tracker, which goes stale.
+	 *
+	 * Handles that aren't added to the collection are returned to WordPress untouched.
+	 *
+	 * @filter wphb_dont_add_handle_to_collection
+	 * @since  2.6.3
+	 *
+	 * @param bool   $value      Whether to leave the handle alone.
+	 * @param string $handle     Resource handle.
+	 * @param string $source_url Resource URL.
+	 * @param string $type       scripts|styles
+	 *
+	 * @return bool
+	 */
+	public function exclude_from_hummingbird_asset_optimization( $value, $handle, $source_url, $type ) {
+		if ( $type === 'scripts' && strpos( (string) $handle, 'plausible-' ) === 0 ) {
+			return true;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Dear Hummingbird, don't delay our scripts, please. The exclusions are matched against each script tag, including
+	 * its inline code, so this covers our handles (plausible-*), our URLs (plausible.io, /plugins/plausible-analytics/)
+	 * and the inline code calling window.plausible.
+	 *
+	 * @filter wphb_delay_js_exclusions
+	 * @since  2.6.3
+	 *
+	 * @param array $exclusions
+	 *
+	 * @return array
+	 */
+	public function exclude_from_hummingbird_delay_js( $exclusions ) {
+		$exclusions[] = 'plausible';
+
+		return $exclusions;
 	}
 
 	/**
