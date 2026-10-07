@@ -239,6 +239,8 @@ class HelpersTest extends TestCase {
 		$this->assertEquals( 'plausible.xn--mller-kva.de', Helpers::to_ascii_domain( 'plausible.müller.de' ) );
 		$this->assertEquals( 'plausible.xn--mller-kva.de:8000', Helpers::to_ascii_domain( 'plausible.müller.de:8000' ) );
 		$this->assertEquals( 'xn--mller-kva.de/plausible', Helpers::to_ascii_domain( 'müller.de/plausible' ) );
+		// Deviation characters are kept (nontransitional processing): faß.de and fass.de are different domains.
+		$this->assertEquals( 'xn--fa-hia.de', Helpers::to_ascii_domain( 'faß.de' ) );
 	}
 
 	/**

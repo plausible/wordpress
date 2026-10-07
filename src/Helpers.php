@@ -523,8 +523,12 @@ class Helpers {
 
 		$ascii = false;
 
-		if ( function_exists( 'idn_to_ascii' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
-			$ascii = idn_to_ascii( $host, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+		if ( function_exists( 'idn_to_ascii' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ) {
+			/**
+			 * Nontransitional, like browsers and registries: transitional processing (the default in older ICU
+			 * versions) maps deviation characters like ß to ss, i.e. faß.de to fass.de, which is a different domain.
+			 */
+			$ascii = idn_to_ascii( $host, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
 		} elseif ( class_exists( '\WpOrg\Requests\IdnaEncoder' ) || class_exists( '\Requests_IDNAEncoder' ) ) {
 			// WordPress 6.2+ ships Requests 2.x, older versions Requests 1.x.
 			$encoder = class_exists( '\WpOrg\Requests\IdnaEncoder' ) ? '\WpOrg\Requests\IdnaEncoder' : '\Requests_IDNAEncoder';
