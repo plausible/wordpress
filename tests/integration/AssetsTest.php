@@ -11,6 +11,17 @@ use Plausible\Analytics\WP\Integrations\FormSubmit;
 
 class AssetsTest extends TestCase {
 	/**
+	 * These tests act as a visitor that's tracked (logged out), whatever user a previous test left logged in.
+	 *
+	 * @return void
+	 */
+	protected function set_up() {
+		parent::set_up();
+
+		wp_set_current_user( 0 );
+	}
+
+	/**
 	 * @see Assets::maybe_enqueue_cloaked_affiliate_links_assets()
 	 * @return void
 	 * @throws \Exception

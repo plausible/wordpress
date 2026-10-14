@@ -172,6 +172,8 @@ class InitOptionsTest extends TestCase {
 			$this->assertEquals( 'test', $params['customProperties']['user_logged_in'] );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+			// Don't leave the test user logged in for the tests that follow.
+			wp_set_current_user( 0 );
 		}
 	}
 }
