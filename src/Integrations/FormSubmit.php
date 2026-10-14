@@ -107,6 +107,11 @@ class FormSubmit {
 	 * @codeCoverageIgnore because we can't test XHR requests here.
 	 */
 	private function track_submission( $uri ) {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		$proxy = new Proxy( false );
 
 		$proxy->do_request(

@@ -163,6 +163,11 @@ class WooCommerce {
 	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_add_to_cart( $product, $add_to_cart_data ) {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		if ( ! $product ) {
 			return;
 		}
@@ -348,6 +353,11 @@ class WooCommerce {
 	 * @codeCoverageIgnore because we can't test XHR requests here.
 	 */
 	public function track_remove_cart_item( $cart_item_key, $cart ) {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		$cart_contents          = $cart->get_cart_contents();
 		$item_removed_from_cart = $this->clean_data( $cart_contents[ $cart_item_key ] ?? [] );
 		$product                = null;

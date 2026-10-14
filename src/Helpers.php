@@ -827,11 +827,30 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_user_role() {
-		global $current_user;
-
-		$user_roles = $current_user->roles;
+		// wp_get_current_user() makes sure the current user is determined, e.g. in REST API requests.
+		$user_roles = (array) wp_get_current_user()->roles;
 
 		return array_shift( $user_roles );
+	}
+
+	/**
+	 * Checks whether the current visitor should be tracked: logged-out visitors always are, logged-in users only when
+	 * their role is enabled under "Track analytics for user roles".
+	 *
+	 * @since 2.6.4
+	 *
+	 * @return bool
+	 */
+	public static function is_current_user_tracked() {
+		$user_role = static::get_user_role();
+
+		if ( empty( $user_role ) ) {
+			return true;
+		}
+
+		$tracked_user_roles = static::get_settings()['tracked_user_roles'] ?? [];
+
+		return in_array( $user_role, (array) $tracked_user_roles, true );
 	}
 
 	/**

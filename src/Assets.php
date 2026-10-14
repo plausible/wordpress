@@ -88,9 +88,8 @@ class Assets {
 	 * @throws \Exception
 	 */
 	public function maybe_enqueue_main_script() {
-		$settings  = Helpers::get_settings();
-		$user_role = Helpers::get_user_role();
-		$url       = $this->get_js_url( true );
+		$settings = Helpers::get_settings();
+		$url      = $this->get_js_url( true );
 
 		if ( ! $url ) {
 			echo '<!-- ' . __( 'Please enter your plugin token to start using Plausible Analytics.', 'plausible-analytics' ) . " -->\n";
@@ -104,9 +103,9 @@ class Assets {
 		wp_register_script( 'plausible-analytics', $url, [], null, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		/**
-		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or if the current role should not be tracked.
+		 * Bail if the current user's role should not be tracked.
 		 */
-		if ( ( ! empty( $user_role ) && ! isset( $settings['tracked_user_roles'] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings['tracked_user_roles'], true ) ) ) {
+		if ( ! Helpers::is_current_user_tracked() ) {
 			return; // @codeCoverageIgnore
 		}
 
