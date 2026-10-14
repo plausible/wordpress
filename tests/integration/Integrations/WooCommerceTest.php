@@ -48,6 +48,7 @@ class WooCommerceTest extends TestCase {
 	 * @return void
 	 */
 	public function testTrackEnteredCheckout() {
+		$this->enqueueMainScript();
 		when( 'is_checkout' )->justReturn( true );
 		when( 'is_wc_endpoint_url' )->justReturn( false );
 		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
@@ -83,6 +84,7 @@ class WooCommerceTest extends TestCase {
 	 * @return void
 	 */
 	public function testTrackPurchase() {
+		$this->enqueueMainScript();
 		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
 
 		$class = new WooCommerce( false );
@@ -104,5 +106,42 @@ class WooCommerceTest extends TestCase {
 		$this->expectOutputContains( '{"revenue":{"amount":"10","currency":"EUR"},"props":{"currency":"EUR"}}' );
 
 		$class->track_purchase( 1 );
+	}
+
+	/**
+	 * For a user role that isn't tracked, window.plausible isn't initialized, so no purchase should be sent (and the
+	 * order shouldn't be marked as tracked).
+	 *
+	 * @see WooCommerce::track_purchase()
+	 * @return void
+	 */
+	public function testTrackPurchaseSkipsUntrackedRoles() {
+		$this->dequeueMainScript();
+		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
+
+		$class = new WooCommerce( false );
+		$mock  = $this->getMockBuilder( 'WC_Order' )->setMethods( [ 'get_meta', 'add_meta_data', 'save' ] )->getMock();
+		$mock->expects( $this->never() )->method( 'add_meta_data' );
+
+		when( 'wc_get_order' )->justReturn( $mock );
+
+		ob_start();
+		$class->track_purchase( 1 );
+		$this->assertEquals( '', ob_get_clean() );
+	}
+
+	/**
+	 * @see WooCommerce::track_entered_checkout()
+	 * @return void
+	 */
+	public function testTrackEnteredCheckoutSkipsUntrackedRoles() {
+		$this->dequeueMainScript();
+		when( 'is_checkout' )->justReturn( true );
+		when( 'is_wc_endpoint_url' )->justReturn( false );
+		when( 'wc_get_permalink_structure' )->justReturn( [ 'product_base' => 'product' ] );
+
+		ob_start();
+		( new WooCommerce( false ) )->track_entered_checkout();
+		$this->assertEquals( '', ob_get_clean() );
 	}
 }

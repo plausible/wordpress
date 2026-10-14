@@ -43,6 +43,35 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Enqueue and initialize the main script, like Assets::maybe_enqueue_main_script() does for a visitor that's tracked.
+	 *
+	 * @return void
+	 */
+	public function enqueueMainScript() {
+		wp_register_script( 'plausible-analytics', 'https://plausible.test/js/pa-test.js', [], null );
+		wp_enqueue_script( 'plausible-analytics' );
+		wp_add_inline_script( 'plausible-analytics', 'plausible.init({});' );
+	}
+
+	/**
+	 * Leave the main script registered but not enqueued, like Assets::maybe_enqueue_main_script() does for a user role
+	 * that isn't tracked.
+	 *
+	 * @return void
+	 */
+	public function dequeueMainScript() {
+		wp_register_script( 'plausible-analytics', 'https://plausible.test/js/pa-test.js', [], null );
+		wp_dequeue_script( 'plausible-analytics' );
+
+		// A script counts as enqueued while an enqueued script depends on it, e.g. one left behind by another test.
+		foreach ( wp_scripts()->queue as $handle ) {
+			if ( in_array( 'plausible-analytics', (array) ( wp_scripts()->registered[ $handle ]->deps ?? [] ), true ) ) {
+				wp_dequeue_script( $handle );
+			}
+		}
+	}
+
+	/**
 	 * Checks an array for a (partial) match with $string.
 	 *
 	 * @param $string string Needle.

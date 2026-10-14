@@ -34,7 +34,7 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_cloaked_affiliate_links_assets() {
-		if ( Helpers::is_cloaked_affiliate_links_enabled() && Helpers::main_script_is_registered() ) {
+		if ( Helpers::is_cloaked_affiliate_links_enabled() && Helpers::main_script_is_initialized() ) {
 			wp_enqueue_script(
 				'plausible-affiliate-links',
 				PLAUSIBLE_ANALYTICS_PLUGIN_URL . 'assets/dist/js/plausible-affiliate-links.js',
@@ -57,7 +57,7 @@ class Assets {
 	public function maybe_enqueue_four_o_four_script() {
 		$is_404 = apply_filters( 'plausible_analytics_is_404', is_404() );
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && $is_404 && Helpers::main_script_is_registered() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::FOUR_O_FOUR ) && $is_404 && Helpers::main_script_is_initialized() ) {
 			$data = wp_json_encode(
 				[
 					'props' => [
@@ -88,9 +88,8 @@ class Assets {
 	 * @throws \Exception
 	 */
 	public function maybe_enqueue_main_script() {
-		$settings  = Helpers::get_settings();
-		$user_role = Helpers::get_user_role();
-		$url       = $this->get_js_url( true );
+		$settings = Helpers::get_settings();
+		$url      = $this->get_js_url( true );
 
 		if ( ! $url ) {
 			echo '<!-- ' . __( 'Please enter your plugin token to start using Plausible Analytics.', 'plausible-analytics' ) . " -->\n";
@@ -104,9 +103,9 @@ class Assets {
 		wp_register_script( 'plausible-analytics', $url, [], null, apply_filters( 'plausible_load_js_in_footer', false ) );
 
 		/**
-		 * Bail if tracked_user_roles is empty (which means no roles should be tracked) or if the current role should not be tracked.
+		 * Bail if the current user's role should not be tracked.
 		 */
-		if ( ( ! empty( $user_role ) && ! isset( $settings['tracked_user_roles'] ) ) || ( ! empty( $user_role ) && ! in_array( $user_role, $settings['tracked_user_roles'], true ) ) ) {
+		if ( ! Helpers::is_current_user_tracked() ) {
 			return; // @codeCoverageIgnore
 		}
 
@@ -148,7 +147,7 @@ class Assets {
 	 * @return void
 	 */
 	public function maybe_enqueue_query_params_script() {
-		if ( Helpers::is_query_params_enabled() && Helpers::main_script_is_registered() ) {
+		if ( Helpers::is_query_params_enabled() && Helpers::main_script_is_initialized() ) {
 			$props        = [];
 			$query_params = Helpers::get_settings()['query_params'] ?? [];
 
@@ -183,7 +182,7 @@ class Assets {
 	public function maybe_enqueue_search_queries_script() {
 		$is_search = apply_filters( 'plausible_analytics_is_search', is_search() );
 
-		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && $is_search && Helpers::main_script_is_registered() ) {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES ) && $is_search && Helpers::main_script_is_initialized() ) {
 			global $wp_query;
 
 			$search_source = isset( $_REQUEST['search_source'] ) ? sanitize_text_field( $_REQUEST['search_source'] ) : wp_get_referer();

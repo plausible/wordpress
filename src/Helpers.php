@@ -827,11 +827,30 @@ class Helpers {
 	 * @return string
 	 */
 	public static function get_user_role() {
-		global $current_user;
-
-		$user_roles = $current_user->roles;
+		// wp_get_current_user() makes sure the current user is determined, e.g. in REST API requests.
+		$user_roles = (array) wp_get_current_user()->roles;
 
 		return array_shift( $user_roles );
+	}
+
+	/**
+	 * Checks whether the current visitor should be tracked: logged-out visitors always are, logged-in users only when
+	 * their role is enabled under "Track analytics for user roles". A logged-in user without a role on this site (e.g. a
+	 * multisite super admin visiting a subsite) has no role that's enabled, so isn't tracked.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @return bool
+	 */
+	public static function is_current_user_tracked() {
+		if ( ! is_user_logged_in() ) {
+			return true;
+		}
+
+		$user_role          = static::get_user_role();
+		$tracked_user_roles = static::get_settings()['tracked_user_roles'] ?? [];
+
+		return ! empty( $user_role ) && in_array( $user_role, (array) $tracked_user_roles, true );
 	}
 
 	/**
@@ -886,10 +905,36 @@ class Helpers {
 	/**
 	 * Checks if the main Plausible Analytics script is registered.
 	 *
+	 * The script is registered for every visitor, also for user roles that aren't tracked, so to decide whether to add
+	 * tracking code, use @see self::main_script_is_initialized().
+	 *
 	 * @return bool
 	 */
 	public static function main_script_is_registered() {
 		return wp_script_is( 'plausible-analytics', 'registered' );
+	}
+
+	/**
+	 * Checks if the main Plausible Analytics script is enqueued and initialized, i.e. the current visitor is tracked.
+	 *
+	 * Tracking code must only be added when it is: for a user role that isn't tracked, the script is registered but not
+	 * enqueued, and neither is its inline plausible.init() call. A script that depends on it would still pull the tracker
+	 * onto the page, which then leaves window.plausible an object instead of a function, so any call to it throws
+	 * "window.plausible is not a function".
+	 *
+	 * wp_script_is( 'plausible-analytics', 'enqueued' ) isn't enough: it's also true while any enqueued script depends on
+	 * it, e.g. another plugin's. So check that it's in the queue itself and that @see Assets::maybe_enqueue_main_script()
+	 * added the plausible.init() call, which it only does for visitors that are tracked.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @return bool
+	 */
+	public static function main_script_is_initialized() {
+		$scripts = wp_scripts();
+		$after   = (array) $scripts->get_data( 'plausible-analytics', 'after' );
+
+		return in_array( 'plausible-analytics', $scripts->queue, true ) && strpos( implode( "\n", $after ), 'plausible.init(' ) !== false;
 	}
 
 	/**

@@ -15,6 +15,7 @@ class EDDTest extends TestCase {
 	 * @see EDD::track_purchase()
 	 */
 	public function testTrackPurchase() {
+		$this->enqueueMainScript();
 		when( 'edd_is_success_page' )->justReturn( true );
 		when( 'edd_get_purchase_session' )->justReturn( [
 			'purchase_key' => 'test-key'
@@ -33,5 +34,20 @@ class EDDTest extends TestCase {
 
 		$this->assertStringContainsString( $class->event_goals['purchase'], $output );
 		$this->assertStringContainsString( '{"revenue":{"amount":10,"currency":"EUR"}}', $output );
+	}
+
+	/**
+	 * For a user role that isn't tracked, window.plausible isn't initialized, so no purchase should be sent.
+	 *
+	 * @see EDD::track_purchase()
+	 * @return void
+	 */
+	public function testTrackPurchaseSkipsUntrackedRoles() {
+		$this->dequeueMainScript();
+		when( 'edd_is_success_page' )->justReturn( true );
+
+		ob_start();
+		( new EDD( false ) )->track_purchase();
+		$this->assertEquals( '', ob_get_clean() );
 	}
 }

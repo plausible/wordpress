@@ -10,6 +10,7 @@
 namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\EnhancedMeasurements;
+use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 
@@ -84,6 +85,11 @@ class EDD {
 	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_add_to_cart( $download_id, $options, $items ) {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		$download = new \EDD_Download( $download_id );
 
 		if ( $download->ID === 0 ) {
@@ -126,6 +132,11 @@ class EDD {
 	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_remove_cart_item( $key ) {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		$cart_contents          = edd_get_cart_contents();
 		$item_removed_from_cart = $cart_contents[ $key ] ?? [];
 		$product                = null;
@@ -170,6 +181,11 @@ class EDD {
 	 * @codeCoverageIgnore Because we can't test XHR requests here.
 	 */
 	public function track_entered_checkout() {
+		// Not for user roles that aren't tracked. @see Helpers::is_current_user_tracked()
+		if ( ! Helpers::is_current_user_tracked() ) {
+			return;
+		}
+
 		// Just to make sure we're where we're supposed to be.
 		if ( ! edd_is_checkout() ) {
 			return;
@@ -201,6 +217,11 @@ class EDD {
 	public function track_purchase() {
 		if ( ! edd_is_success_page() ) {
 			return; // @codeCoverageIgnore
+		}
+
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_initialized()
+		if ( ! Helpers::main_script_is_initialized() ) {
+			return;
 		}
 
 		$session = edd_get_purchase_session();
