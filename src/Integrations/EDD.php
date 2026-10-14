@@ -10,6 +10,7 @@
 namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\EnhancedMeasurements;
+use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 
@@ -201,6 +202,11 @@ class EDD {
 	public function track_purchase() {
 		if ( ! edd_is_success_page() ) {
 			return; // @codeCoverageIgnore
+		}
+
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_enqueued()
+		if ( ! Helpers::main_script_is_enqueued() ) {
+			return;
 		}
 
 		$session = edd_get_purchase_session();

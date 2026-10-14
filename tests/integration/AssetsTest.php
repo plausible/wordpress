@@ -7,6 +7,7 @@ namespace Plausible\Analytics\Tests\Integration;
 
 use Plausible\Analytics\Tests\TestCase;
 use Plausible\Analytics\WP\Assets;
+use Plausible\Analytics\WP\Integrations\FormSubmit;
 
 class AssetsTest extends TestCase {
 	/**
@@ -173,6 +174,59 @@ class AssetsTest extends TestCase {
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableSearchQueries' ] );
 			remove_filter( 'plausible_analytics_is_search', '__return_true' );
+		}
+	}
+
+	/**
+	 * For a user role that isn't tracked (administrators by default), the tracker is registered but not enqueued, and
+	 * neither is its plausible.init() call. Scripts that depend on it mustn't pull it onto the page anyway: the tracker
+	 * then leaves window.plausible an object, so their calls throw "window.plausible is not a function".
+	 *
+	 * @see Assets::maybe_enqueue_cloaked_affiliate_links_assets()
+	 * @see FormSubmit::add_js()
+	 * @return void
+	 * @throws \Exception
+	 */
+	public function testIntegrationsDontLoadTheTrackerForUntrackedRoles() {
+		$user_id = wp_insert_user( [ 'user_login' => 'pa_untracked_' . wp_generate_password( 6, false ), 'user_pass' => wp_generate_password(), 'role' => 'administrator' ] );
+
+		wp_set_current_user( $user_id );
+		add_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
+		add_filter( 'plausible_analytics_settings', [ $this, 'enableFormCompletions' ] );
+
+		$assets = $this->getMockBuilder( Assets::class )->disableOriginalConstructor()->onlyMethods( [ 'get_js_url' ] )->getMock();
+		$assets->method( 'get_js_url' )->willReturn( 'https://plausible.test/js/plausible.js' );
+		$form_submit = $this->getMockBuilder( FormSubmit::class )->disableOriginalConstructor()->onlyMethods( [] )->getMock();
+
+		try {
+			$this->dequeueMainScript();
+
+			$assets->maybe_enqueue_main_script();
+			$form_submit->add_js();
+			$assets->maybe_enqueue_cloaked_affiliate_links_assets();
+
+			$this->assertTrue( wp_script_is( 'plausible-analytics', 'registered' ) );
+			$this->assertFalse( wp_script_is( 'plausible-analytics', 'enqueued' ) );
+			$this->assertFalse( wp_script_is( 'plausible-form-submit-integration', 'enqueued' ) );
+			$this->assertFalse( wp_script_is( 'plausible-affiliate-links', 'enqueued' ) );
+
+			// Once administrators are tracked, everything is loaded.
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableAdministratorTracking' ] );
+
+			$assets->maybe_enqueue_main_script();
+			$form_submit->add_js();
+			$assets->maybe_enqueue_cloaked_affiliate_links_assets();
+
+			$this->assertTrue( wp_script_is( 'plausible-analytics', 'enqueued' ) );
+			$this->assertTrue( wp_script_is( 'plausible-form-submit-integration', 'enqueued' ) );
+			$this->assertTrue( wp_script_is( 'plausible-affiliate-links', 'enqueued' ) );
+		} finally {
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFormCompletions' ] );
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableAdministratorTracking' ] );
+			$this->dequeueMainScript();
+			wp_set_current_user( 0 );
+			wp_delete_user( $user_id );
 		}
 	}
 }

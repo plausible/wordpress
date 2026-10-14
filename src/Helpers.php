@@ -886,10 +886,29 @@ class Helpers {
 	/**
 	 * Checks if the main Plausible Analytics script is registered.
 	 *
+	 * The script is registered for every visitor, also for user roles that aren't tracked, so to decide whether to add
+	 * tracking code, use @see self::main_script_is_enqueued().
+	 *
 	 * @return bool
 	 */
 	public static function main_script_is_registered() {
 		return wp_script_is( 'plausible-analytics', 'registered' );
+	}
+
+	/**
+	 * Checks if the main Plausible Analytics script is enqueued, i.e. the current visitor is tracked.
+	 *
+	 * Tracking code must only be added when it is: for a user role that isn't tracked, the script is registered but not
+	 * enqueued, and neither is its inline plausible.init() call. A script that depends on it would still pull the tracker
+	 * onto the page, which then leaves window.plausible an object instead of a function, so any call to it throws
+	 * "window.plausible is not a function".
+	 *
+	 * @since 2.6.4
+	 *
+	 * @return bool
+	 */
+	public static function main_script_is_enqueued() {
+		return wp_script_is( 'plausible-analytics', 'enqueued' );
 	}
 
 	/**

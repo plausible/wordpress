@@ -11,6 +11,7 @@ namespace Plausible\Analytics\WP\Integrations;
 
 use Plausible\Analytics\WP\Admin\Provisioning;
 use Plausible\Analytics\WP\EnhancedMeasurements;
+use Plausible\Analytics\WP\Helpers;
 use Plausible\Analytics\WP\Integrations;
 use Plausible\Analytics\WP\Proxy;
 use WC_Cart;
@@ -273,6 +274,11 @@ class WooCommerce {
 			return; // @codeCoverageIgnore
 		}
 
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_enqueued()
+		if ( ! Helpers::main_script_is_enqueued() ) {
+			return;
+		}
+
 		$cart  = $this->get_wc_cart();
 		$props = apply_filters(
 			'plausible_analytics_woocommerce_entered_checkout_custom_properties',
@@ -301,6 +307,11 @@ class WooCommerce {
 	 * @return void
 	 */
 	public function track_purchase( $order_id ) {
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_enqueued()
+		if ( ! Helpers::main_script_is_enqueued() ) {
+			return;
+		}
+
 		$order      = wc_get_order( $order_id );
 		$is_tracked = $order->get_meta( Integrations::PURCHASE_TRACKED_META_KEY );
 
