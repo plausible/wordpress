@@ -86,6 +86,24 @@ class UntrackedRolesTest extends TestCase {
 	}
 
 	/**
+	 * A logged-in user without a role on this site (e.g. a multisite super admin visiting a subsite) isn't a logged-out
+	 * visitor: no role of theirs is enabled, so they aren't tracked.
+	 *
+	 * @see Helpers::is_current_user_tracked()
+	 * @return void
+	 */
+	public function testLoggedInUserWithoutRoleIsNotTracked() {
+		$user = new \WP_User( $this->user_id );
+		$user->set_role( '' );
+
+		wp_set_current_user( $this->user_id );
+
+		$this->assertTrue( is_user_logged_in() );
+		$this->assertEmpty( Helpers::get_user_role() );
+		$this->assertFalse( Helpers::is_current_user_tracked() );
+	}
+
+	/**
 	 * @see WooCommerce::track_add_to_cart()
 	 * @see WooCommerce::track_remove_cart_item()
 	 * @return void

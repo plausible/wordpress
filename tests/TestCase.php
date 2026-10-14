@@ -43,13 +43,14 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
-	 * Enqueue the main script, like Assets::maybe_enqueue_main_script() does for a visitor that's tracked.
+	 * Enqueue and initialize the main script, like Assets::maybe_enqueue_main_script() does for a visitor that's tracked.
 	 *
 	 * @return void
 	 */
 	public function enqueueMainScript() {
 		wp_register_script( 'plausible-analytics', 'https://plausible.test/js/pa-test.js', [], null );
 		wp_enqueue_script( 'plausible-analytics' );
+		wp_add_inline_script( 'plausible-analytics', 'plausible.init({});' );
 	}
 
 	/**

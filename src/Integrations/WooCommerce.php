@@ -279,8 +279,8 @@ class WooCommerce {
 			return; // @codeCoverageIgnore
 		}
 
-		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_enqueued()
-		if ( ! Helpers::main_script_is_enqueued() ) {
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_initialized()
+		if ( ! Helpers::main_script_is_initialized() ) {
 			return;
 		}
 
@@ -312,8 +312,8 @@ class WooCommerce {
 	 * @return void
 	 */
 	public function track_purchase( $order_id ) {
-		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_enqueued()
-		if ( ! Helpers::main_script_is_enqueued() ) {
+		// Not for user roles that aren't tracked: window.plausible isn't initialized for them. @see Helpers::main_script_is_initialized()
+		if ( ! Helpers::main_script_is_initialized() ) {
 			return;
 		}
 

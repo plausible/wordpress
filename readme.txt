@@ -281,6 +281,7 @@ Please make sure you make a backup of your database before updating any version 
 = 2.6.4 =
 * Fixed: for user roles that aren't tracked (administrators by default), some integrations still loaded the tracker without initializing it, which caused a "window.plausible is not a function" error, e.g. on search results, 404 and checkout pages. They no longer load anything for those roles.
 * Fixed: events sent from the server (WooCommerce and Easy Digital Downloads add to cart, remove from cart and EDD checkout, and Contact Form 7 and Gravity Forms submissions) were also sent for user roles that aren't tracked.
+* Changed: logged-in users without a role on the site (e.g. multisite super admins visiting a subsite) are no longer tracked, as none of their roles is enabled under "Track analytics for user roles". Previously they were tracked like logged-out visitors.
 
 = 2.6.3 =
 * Improved: the tracker script now loads asynchronously (like Plausible Analytics' own snippet) instead of deferred, so it can no longer hold up the rest of the page when it can't be reached.

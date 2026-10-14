@@ -50,7 +50,7 @@ class FormSubmit {
 	 * @codeCoverageIgnore because there's nothing to test here.
 	 */
 	public function add_js() {
-		if ( ! Helpers::main_script_is_enqueued() ) {
+		if ( ! Helpers::main_script_is_initialized() ) {
 			return;
 		}
 

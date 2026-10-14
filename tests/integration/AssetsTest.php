@@ -213,11 +213,15 @@ class AssetsTest extends TestCase {
 			$this->dequeueMainScript();
 
 			$assets->maybe_enqueue_main_script();
+
+			// Another plugin's script that depends on the tracker makes WordPress report the tracker as enqueued.
+			wp_enqueue_script( 'pa-test-other-plugin', 'https://example.org/other-plugin.js', [ 'plausible-analytics' ], null );
+
 			$form_submit->add_js();
 			$assets->maybe_enqueue_cloaked_affiliate_links_assets();
 
 			$this->assertTrue( wp_script_is( 'plausible-analytics', 'registered' ) );
-			$this->assertFalse( wp_script_is( 'plausible-analytics', 'enqueued' ) );
+			$this->assertFalse( \Plausible\Analytics\WP\Helpers::main_script_is_initialized() );
 			$this->assertFalse( wp_script_is( 'plausible-form-submit-integration', 'enqueued' ) );
 			$this->assertFalse( wp_script_is( 'plausible-affiliate-links', 'enqueued' ) );
 
@@ -228,13 +232,14 @@ class AssetsTest extends TestCase {
 			$form_submit->add_js();
 			$assets->maybe_enqueue_cloaked_affiliate_links_assets();
 
-			$this->assertTrue( wp_script_is( 'plausible-analytics', 'enqueued' ) );
+			$this->assertTrue( \Plausible\Analytics\WP\Helpers::main_script_is_initialized() );
 			$this->assertTrue( wp_script_is( 'plausible-form-submit-integration', 'enqueued' ) );
 			$this->assertTrue( wp_script_is( 'plausible-affiliate-links', 'enqueued' ) );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableCloakedAffiliateLinks' ] );
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableFormCompletions' ] );
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enableAdministratorTracking' ] );
+			wp_dequeue_script( 'pa-test-other-plugin' );
 			$this->dequeueMainScript();
 			wp_set_current_user( 0 );
 			wp_delete_user( $user_id );
