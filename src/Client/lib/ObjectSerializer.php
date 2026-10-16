@@ -53,6 +53,28 @@ class ObjectSerializer {
 	}
 
 	/**
+	 * JSON-encodes $value, throwing when it can't be encoded, like Guzzle's Utils::jsonEncode().
+	 *
+	 * NOTE: not generated. Guzzle deprecated Utils::jsonEncode() in 7.15 and reports every call through the global
+	 * trigger_deprecation(), which another plugin may have defined in a way that fatals on PHP 7.x. After regenerating
+	 * this client, replace Utils::jsonEncode() in Api/DefaultApi.php with this method again (a test checks for it).
+	 *
+	 * @param mixed $value
+	 *
+	 * @return string
+	 * @throws \InvalidArgumentException if $value can't be encoded.
+	 */
+	public static function jsonEncode( $value ) {
+		$json = \json_encode( $value );
+
+		if ( \JSON_ERROR_NONE !== \json_last_error() ) {
+			throw new \InvalidArgumentException( 'json_encode error: ' . \json_last_error_msg() );
+		}
+
+		return $json;
+	}
+
+	/**
 	 * Serialize data
 	 *
 	 * @param mixed $data the data to serialize
