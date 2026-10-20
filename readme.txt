@@ -279,6 +279,7 @@ Please make sure you make a backup of your database before updating any version 
 == Changelog ==
 
 = 2.6.4 =
+* Improved: the proxy now also forwards the visitor's Accept-Language and User-Agent Client Hints (Sec-CH-UA*) headers to Plausible Analytics, so its bot detection works for proxied requests, too.
 * Fixed: on sites using WPML (or another multilingual plugin) with a directory per language, the Domain Name could be pre-filled with the language directory included (e.g. example.com/fr), which made the Plugin Token show as invalid.
 * Fixed: for user roles that aren't tracked (administrators by default), some integrations still loaded the tracker without initializing it, which caused a "window.plausible is not a function" error, e.g. on search results, 404 and checkout pages. They no longer load anything for those roles.
 * Fixed: events sent from the server (WooCommerce and Easy Digital Downloads add to cart, remove from cart and EDD checkout, and Contact Form 7 and Gravity Forms submissions) were also sent for user roles that aren't tracked.
