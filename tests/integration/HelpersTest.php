@@ -133,6 +133,29 @@ class HelpersTest extends TestCase {
 	 * @see Helpers::get_domain()
 	 * @return void
 	 */
+	public function testGetDomainIgnoresLanguageDirectoryInHomeUrl() {
+		update_option( 'plausible_analytics_settings', [ 'domain_name' => [ 'default' => '' ] ] );
+
+		$filter_home = function ( $url ) {
+			return untrailingslashit( $url ) . '/fr';
+		};
+
+		add_filter( 'home_url', $filter_home );
+
+		try {
+			$expected = preg_replace( '/^http(s?):\/\/(www\.)?/i', '', untrailingslashit( get_option( 'home' ) ) );
+
+			$this->assertStringEndsWith( '/fr', home_url() );
+			$this->assertEquals( $expected, Helpers::get_domain() );
+		} finally {
+			remove_filter( 'home_url', $filter_home );
+		}
+	}
+
+	/**
+	 * @see Helpers::get_domain()
+	 * @return void
+	 */
 	public function testGetDomainWithDefaultOnly() {
 		$settings = [
 			'domain_name' => [

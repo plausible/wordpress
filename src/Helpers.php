@@ -332,7 +332,11 @@ class Helpers {
 			return $settings['domain_name']['default'];
 		}
 
-		$url = home_url();
+		/**
+		 * Multilingual plugins (e.g. WPML in "different languages in directories" mode) filter home_url() to include the
+		 * current language's directory e.g., https://example.com/fr, so use the unfiltered value instead.
+		 */
+		$url = untrailingslashit( get_option( 'home' ) );
 
 		return preg_replace( '/^http(s?):\/\/(www\.)?/i', '', $url );
 	}
