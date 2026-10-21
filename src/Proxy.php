@@ -162,13 +162,48 @@ class Proxy {
 			$url,
 			[
 				'user-agent' => $ua,
-				'headers'    => [
-					'X-Forwarded-For' => $ip,
-					'Content-Type'    => 'application/json',
-				],
+				'headers'    => array_merge(
+					$this->get_forwarded_headers(),
+					[
+						'X-Forwarded-For' => $ip,
+						'Content-Type'    => 'application/json',
+					]
+				),
 				'body'       => wp_kses_no_null( $params ),
 			]
 		);
+	}
+
+	/**
+	 * Returns the visitor's Accept-Language and User-Agent Client Hints (Sec-CH-UA*) headers, so Plausible's bot
+	 * detection can use them for proxied requests, too.
+	 *
+	 * @since v2.6.4
+	 *
+	 * @return array
+	 */
+	public function get_forwarded_headers() {
+		$headers = [];
+
+		foreach ( $_SERVER as $key => $value ) {
+			if ( $key !== 'HTTP_ACCEPT_LANGUAGE' && strpos( $key, 'HTTP_SEC_CH_UA' ) !== 0 ) {
+				continue;
+			}
+
+			$value = trim( wp_kses( wp_unslash( (string) $value ), 'strip' ) );
+
+			if ( $value === '' ) {
+				continue;
+			}
+
+			// e.g. HTTP_SEC_CH_UA_PLATFORM -> Sec-CH-UA-Platform
+			$name = str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', substr( $key, 5 ) ) ) ) );
+			$name = str_replace( 'Sec-Ch-Ua', 'Sec-CH-UA', $name );
+
+			$headers[ $name ] = $value;
+		}
+
+		return $headers;
 	}
 
 	/**
