@@ -350,7 +350,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_disable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_disable_request ) );
 			} else {
 				$httpBody = $custom_prop_disable_request;
 			}
@@ -371,7 +371,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -692,7 +692,7 @@ class DefaultApi {
 		if ( isset( $custom_prop_enable_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $custom_prop_enable_request ) );
 			} else {
 				$httpBody = $custom_prop_enable_request;
 			}
@@ -713,7 +713,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1034,7 +1034,7 @@ class DefaultApi {
 		if ( isset( $funnel_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $funnel_create_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $funnel_create_request ) );
 			} else {
 				$httpBody = $funnel_create_request;
 			}
@@ -1055,7 +1055,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1260,7 +1260,7 @@ class DefaultApi {
 		if ( isset( $goal_delete_bulk_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_delete_bulk_request ) );
 			} else {
 				$httpBody = $goal_delete_bulk_request;
 			}
@@ -1281,7 +1281,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1602,7 +1602,7 @@ class DefaultApi {
 		if ( isset( $goal_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $goal_create_request ) );
 			} else {
 				$httpBody = $goal_create_request;
 			}
@@ -1623,7 +1623,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -1884,7 +1884,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -2236,7 +2236,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -2563,7 +2563,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -2799,7 +2799,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -3151,7 +3151,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -3478,7 +3478,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -3776,7 +3776,7 @@ class DefaultApi {
 		if ( isset( $shared_link_create_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $shared_link_create_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $shared_link_create_request ) );
 			} else {
 				$httpBody = $shared_link_create_request;
 			}
@@ -3797,7 +3797,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -4149,7 +4149,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -4476,7 +4476,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -4760,7 +4760,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );
@@ -5035,7 +5035,7 @@ class DefaultApi {
 		if ( isset( $tracker_script_configuration_update_request ) ) {
 			if ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the body
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( ObjectSerializer::sanitizeForSerialization( $tracker_script_configuration_update_request ) );
+				$httpBody = ObjectSerializer::jsonEncode( ObjectSerializer::sanitizeForSerialization( $tracker_script_configuration_update_request ) );
 			} else {
 				$httpBody = $tracker_script_configuration_update_request;
 			}
@@ -5056,7 +5056,7 @@ class DefaultApi {
 
 			} elseif ( stripos( $headers['Content-Type'], 'application/json' ) !== false ) {
 				# if Content-Type contains "application/json", json_encode the form parameters
-				$httpBody = \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Utils::jsonEncode( $formParams );
+				$httpBody = ObjectSerializer::jsonEncode( $formParams );
 			} else {
 				// for HTTP post (form)
 				$httpBody = ObjectSerializer::buildQuery( $formParams );

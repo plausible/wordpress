@@ -22,7 +22,7 @@ final class BodySummarizer implements BodySummarizerInterface
     public function summarize(MessageInterface $message): ?string
     {
         return $this->truncateAt === null
-            ? \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Message::bodySummary($message)
-            : \Plausible\Analytics\WP\Client\Lib\GuzzleHttp\Psr7\Message::bodySummary($message, $this->truncateAt);
+            ? Psr7\Message::bodySummary($message)
+            : Psr7\Message::bodySummary($message, $this->truncateAt);
     }
 }
