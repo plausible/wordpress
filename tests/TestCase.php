@@ -174,6 +174,19 @@ class TestCase extends YoastTestCase {
 	}
 
 	/**
+	 * Enable Logged-in user status.
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public function enableLoggedInUserStatus( $settings ) {
+		$settings['enhanced_measurements'] = [ 'user-logged-in' ];
+
+		return $settings;
+	}
+
+	/**
 	 * Enable the proxy.
 	 *
 	 * @param $settings

@@ -68,7 +68,6 @@ class Provisioning {
 	private $custom_pageview_properties = [
 		'author',
 		'category',
-		'user_logged_in',
 	];
 	/**
 	 * @var string[] $custom_search_properties
@@ -673,6 +672,7 @@ class Provisioning {
 		$query_params = $settings['query_params'] ?? [];
 
 		if ( ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::PAGEVIEW_PROPS, $enhanced_measurements ) &&
+		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::LOGGED_IN_USER_STATUS, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::ECOMMERCE_REVENUE, $enhanced_measurements ) &&
 		     ! EnhancedMeasurements::is_enabled( EnhancedMeasurements::SEARCH_QUERIES, $enhanced_measurements ) &&
 		     empty( $query_params ) ) {
@@ -689,6 +689,13 @@ class Provisioning {
 			foreach ( $this->custom_pageview_properties as $property ) {
 				$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => $property ] ] );
 			}
+		}
+
+		/**
+		 * Enable the Custom Property for the Logged-in user status option.
+		 */
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::LOGGED_IN_USER_STATUS, $enhanced_measurements ) ) {
+			$properties[] = new Client\Model\CustomProp( [ 'custom_prop' => [ 'key' => 'user_logged_in' ] ] );
 		}
 
 		/**

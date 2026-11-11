@@ -110,6 +110,10 @@ class Upgrades {
 			$this->upgrade_to_262();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.6.5', '<' ) ) {
+			$this->upgrade_to_265();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -491,6 +495,26 @@ class Upgrades {
 		}
 
 		update_option( 'plausible_analytics_version', '2.6.2' );
+	}
+
+	/**
+	 * Upgrade routine for 2.6.5
+	 *
+	 * Until now, the user_logged_in Custom Property was only enabled along with Authors and categories. Enable it for
+	 * sites that have Logged-in user status enabled, now that this option actually controls it.
+	 *
+	 * @since              v2.6.5
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
+	 */
+	public function upgrade_to_265() {
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::LOGGED_IN_USER_STATUS ) ) {
+			( new Provisioning() )->maybe_create_custom_properties( [], Helpers::get_settings() );
+		}
+
+		update_option( 'plausible_analytics_version', '2.6.5' );
 	}
 
 	/**
