@@ -510,6 +510,16 @@ class Upgrades {
 	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
 	 */
 	public function upgrade_to_265() {
+		/**
+		 * Upgrades also run on AJAX requests (e.g. the heartbeat), where a failing API call would send an error response
+		 * in place of the requested handler's. Wait for a regular admin request, where API errors are silent.
+		 *
+		 * @see Client::send_json_error()
+		 */
+		if ( wp_doing_ajax() ) {
+			return;
+		}
+
 		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::LOGGED_IN_USER_STATUS ) ) {
 			( new Provisioning() )->maybe_create_custom_properties( [], Helpers::get_settings() );
 		}
