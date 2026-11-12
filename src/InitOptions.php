@@ -180,10 +180,7 @@ class InitOptions {
 			return $options; // @codeCoverageIgnore
 		}
 
-		/**
-		 * Not translated, as it's a property value: translating it would split it up per language in the dashboard,
-		 * just like the role names it sits next to.
-		 */
+		// Not translated, so the value is the same in every language.
 		$logged_in = 'no';
 
 		if ( is_user_logged_in() ) {

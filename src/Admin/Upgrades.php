@@ -500,8 +500,7 @@ class Upgrades {
 	/**
 	 * Upgrade routine for 2.6.5
 	 *
-	 * Until now, the user_logged_in Custom Property was only enabled along with Authors and categories. Enable it for
-	 * sites that have Logged-in user status enabled, now that this option actually controls it.
+	 * Enables the user_logged_in Custom Property if Logged-in user status is enabled.
 	 *
 	 * @since              v2.6.5
 	 *
@@ -511,8 +510,8 @@ class Upgrades {
 	 */
 	public function upgrade_to_265() {
 		/**
-		 * Upgrades also run on AJAX requests (e.g. the heartbeat), where a failing API call would send an error response
-		 * in place of the requested handler's. Wait for a regular admin request, where API errors are silent.
+		 * Skipped on AJAX requests, where a failing API call replaces the response with an error. Runs on the next regular
+		 * admin request instead.
 		 *
 		 * @see Client::send_json_error()
 		 */
