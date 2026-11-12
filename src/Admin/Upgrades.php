@@ -110,6 +110,10 @@ class Upgrades {
 			$this->upgrade_to_262();
 		}
 
+		if ( version_compare( $plausible_analytics_version, '2.6.5', '<' ) ) {
+			$this->upgrade_to_265();
+		}
+
 		// Add required upgrade routines for future versions here.
 	}
 
@@ -491,6 +495,35 @@ class Upgrades {
 		}
 
 		update_option( 'plausible_analytics_version', '2.6.2' );
+	}
+
+	/**
+	 * Upgrade routine for 2.6.5
+	 *
+	 * Enables the user_logged_in Custom Property if Logged-in user status is enabled.
+	 *
+	 * @since              v2.6.5
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore because all we'd be doing is testing the Plugins API.
+	 */
+	public function upgrade_to_265() {
+		/**
+		 * Skipped on AJAX requests, where a failing API call replaces the response with an error. Runs on the next regular
+		 * admin request instead.
+		 *
+		 * @see Client::send_json_error()
+		 */
+		if ( wp_doing_ajax() ) {
+			return;
+		}
+
+		if ( EnhancedMeasurements::is_enabled( EnhancedMeasurements::LOGGED_IN_USER_STATUS ) ) {
+			( new Provisioning() )->maybe_create_custom_properties( [], Helpers::get_settings() );
+		}
+
+		update_option( 'plausible_analytics_version', '2.6.5' );
 	}
 
 	/**

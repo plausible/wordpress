@@ -147,16 +147,31 @@ class InitOptionsTest extends TestCase {
 	 * @return void
 	 */
 	public function testTrackLoggedInUsers() {
+		// The logged-out value must not be translated, whatever the site's language.
+		$translate = function ( $translation, $text ) {
+			return $text === 'no' ? 'non' : $translation;
+		};
+
 		try {
 			/** @var InitOptions $class */
 			$class = $this->getMockBuilder( InitOptions::class )->disableOriginalConstructor()->onlyMethods( [] )->getMock();
 
+			// Authors and categories doesn't control the user_logged_in property.
 			add_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
 
 			$params = $class->maybe_track_logged_in_users();
 
+			$this->assertArrayNotHasKey( 'customProperties', $params );
+
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+			add_filter( 'plausible_analytics_settings', [ $this, 'enableLoggedInUserStatus' ] );
+
+			add_filter( 'gettext_with_context', $translate, 10, 2 );
+
+			$params = $class->maybe_track_logged_in_users();
+
 			$this->assertArrayHasKey( 'customProperties', $params );
-			$this->assertArrayHasKey( 'user_logged_in', $params['customProperties'] );
+			$this->assertEquals( 'no', $params['customProperties']['user_logged_in'] );
 
 			global $current_user;
 
@@ -172,6 +187,8 @@ class InitOptionsTest extends TestCase {
 			$this->assertEquals( 'test', $params['customProperties']['user_logged_in'] );
 		} finally {
 			remove_filter( 'plausible_analytics_settings', [ $this, 'enablePageviewProps' ] );
+			remove_filter( 'plausible_analytics_settings', [ $this, 'enableLoggedInUserStatus' ] );
+			remove_filter( 'gettext_with_context', $translate );
 			// Don't leave the test user logged in for the tests that follow.
 			wp_set_current_user( 0 );
 		}

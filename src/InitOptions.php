@@ -176,11 +176,12 @@ class InitOptions {
 	public function maybe_track_logged_in_users( $options = [] ) {
 		$settings = Helpers::get_settings();
 
-		if ( ! is_array( $settings['enhanced_measurements'] ) || ! in_array( EnhancedMeasurements::PAGEVIEW_PROPS, $settings['enhanced_measurements'] ) ) {
+		if ( ! is_array( $settings['enhanced_measurements'] ) || ! in_array( EnhancedMeasurements::LOGGED_IN_USER_STATUS, $settings['enhanced_measurements'] ) ) {
 			return $options; // @codeCoverageIgnore
 		}
 
-		$logged_in = _x( 'no', 'Value when user is not logged in.', 'plausible-analytics' );
+		// Not translated, so the value is the same in every language.
+		$logged_in = 'no';
 
 		if ( is_user_logged_in() ) {
 			$user  = wp_get_current_user();
