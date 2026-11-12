@@ -279,8 +279,8 @@ Please make sure you make a backup of your database before updating any version 
 == Changelog ==
 
 = 2.6.5 =
-* Fixed: the "Logged-in user status" option had no effect: the user_logged_in property was sent (and its Custom Property created) when "Authors and categories" was enabled instead. It now follows "Logged-in user status", so sites with only "Authors and categories" enabled no longer send it.
-* Fixed: the user_logged_in value for logged-out visitors was translated (e.g. "non" in French), which split it up per language. It's now always "no".
+* Fixed: the user_logged_in property followed the "Authors and categories" option instead of "Logged-in user status".
+* Fixed: the user_logged_in value for logged-out visitors is no longer translated, so it's always "no".
 
 = 2.6.4 =
 * Improved: the proxy now also forwards the visitor's Accept-Language and User-Agent Client Hints (Sec-CH-UA*) headers to Plausible Analytics, so its bot detection works for proxied requests, too.
