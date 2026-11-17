@@ -110,7 +110,7 @@ class FormSubmit {
 			return '/' . $post->post_name . '/';
 		}
 
-		return (string) wp_parse_url( (string) wp_get_referer(), PHP_URL_PATH );
+		return (string) wp_parse_url( (string) wp_get_raw_referer(), PHP_URL_PATH );
 	}
 
 	/**

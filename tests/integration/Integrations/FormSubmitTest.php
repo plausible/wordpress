@@ -74,10 +74,16 @@ class FormSubmitTest extends TestCase {
 		$_SERVER['HTTP_REFERER']        = home_url( '/about/team/' );
 		$class->maybe_track_submission( $result, [] );
 
+		// Non-AJAX submission, which posts to the page containing the form.
+		$request_uri            = $_SERVER['REQUEST_URI'] ?? null;
+		$_SERVER['REQUEST_URI'] = '/about/team/';
+		$class->maybe_track_submission( $result, [] );
+		$_SERVER['REQUEST_URI'] = $request_uri;
+
 		// No container post and no referer.
 		unset( $_POST['_wpcf7_container_post'], $_SERVER['HTTP_REFERER'] );
 		$class->maybe_track_submission( $result, [] );
 
-		$this->assertEquals( [ '/contact/', '/about/team/' ], $this->sent );
+		$this->assertEquals( [ '/contact/', '/about/team/', '/about/team/' ], $this->sent );
 	}
 }
