@@ -81,20 +81,36 @@ class FormSubmit {
 	 * @param array             $tags   Array of tags associated with the form fields.
 	 *
 	 * @return \WPCF7_Validation
-	 *
-	 * @codeCoverageIgnore because we can't test XHR requests here.
 	 */
 	public function maybe_track_submission( $result, $tags ) {
 		$invalid_fields = $result->get_invalid_fields();
 
 		if ( empty( $invalid_fields ) ) {
-			$post = get_post( $_POST['_wpcf7_container_post'] );
-			$uri  = '/' . $post->post_name . '/';
+			$uri = $this->get_cf7_submission_path();
 
-			$this->track_submission( $uri );
+			if ( $uri ) {
+				$this->track_submission( $uri );
+			}
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Returns the path of the page containing the CF7 form. Falls back to the referer when the form isn't rendered inside
+	 * a post (e.g. in a widget), where CF7 sends 0 as the container post.
+	 *
+	 * @return string Empty if the path can't be determined.
+	 */
+	private function get_cf7_submission_path() {
+		$post_id = absint( $_POST['_wpcf7_container_post'] ?? 0 );
+		$post    = $post_id ? get_post( $post_id ) : null;
+
+		if ( $post ) {
+			return '/' . $post->post_name . '/';
+		}
+
+		return (string) wp_parse_url( (string) wp_get_referer(), PHP_URL_PATH );
 	}
 
 	/**
