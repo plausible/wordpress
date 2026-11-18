@@ -280,7 +280,8 @@ Please make sure you make a backup of your database before updating any version 
 
 = 2.6.5 =
 * Fixed: the user_logged_in property followed the "Authors and categories" option instead of "Logged-in user status".
-* Fixed: the user_logged_in value for logged-out visitors is no longer translated, so it's always "no".
+* Fixed: the user_logged_in value for logged-out visitors is no longer translated.
+* Fixed: PHP warning when a Contact Form 7 form outside the loop (e.g. in a widget) is submitted.
 
 = 2.6.4 =
 * Improved: the proxy now also forwards the visitor's Accept-Language and User-Agent Client Hints (Sec-CH-UA*) headers to Plausible Analytics, so its bot detection works for proxied requests, too.
