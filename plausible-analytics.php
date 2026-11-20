@@ -24,6 +24,7 @@ define( 'PLAUSIBLE_ANALYTICS_PLUGIN_URL', plugin_dir_url( PLAUSIBLE_ANALYTICS_PL
 
 // Automatically loads files used throughout the plugin.
 require_once PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'vendor/autoload.php';
+require_once PLAUSIBLE_ANALYTICS_PLUGIN_DIR . 'src/polyfills.php';
 
 // Initialize the plugin.
 $plugin = new Plugin();
