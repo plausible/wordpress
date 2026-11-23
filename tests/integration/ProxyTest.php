@@ -176,7 +176,15 @@ class ProxyTest extends TestCase {
 			$this->assertNotEmpty( $index['routes'] );
 			$this->assertStringNotContainsString( Helpers::get_proxy_resource( 'namespace' ), (string) wp_json_encode( [ $index['namespaces'], array_keys( $index['routes'] ) ] ) );
 			$this->assertTrue( array_values( $index['namespaces'] ) === $index['namespaces'] );
-			$this->assertEquals( 404, $server->dispatch( new \WP_REST_Request( 'GET', "/$namespace" ) )->get_status() );
+
+			$response = $server->dispatch( new \WP_REST_Request( 'GET', "/$namespace" ) );
+
+			// Older WordPress versions don't convert errors returned by the rest_pre_dispatch filter.
+			if ( is_wp_error( $response ) ) {
+				$response = rest_convert_error_to_response( $response );
+			}
+
+			$this->assertEquals( 404, $response->get_status() );
 
 			// Rejected requests keep their status.
 			$request  = new \WP_REST_Request( 'POST', $route );

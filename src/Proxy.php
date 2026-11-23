@@ -316,8 +316,8 @@ class Proxy {
 	}
 
 	/**
-	 * Checks if the request is an event sent by the tracker on this site. All invalid requests get the same response,
-	 * so it doesn't reveal which check failed.
+	 * Checks if the request is an event sent by the tracker on this site. All requests rejected here get the same
+	 * response, so it doesn't reveal which check failed.
 	 *
 	 * @since v2.6.5
 	 *
@@ -326,7 +326,8 @@ class Proxy {
 	 * @return true|WP_Error
 	 */
 	public function validate_request( $request ) {
-		$body      = (string) $request->get_body();
+		$body = (string) $request->get_body();
+		// Only limits what's forwarded: PHP has already read the body, so limiting request sizes is up to the web server.
 		$max_bytes = (int) apply_filters( 'plausible_analytics_proxy_max_body_bytes', self::MAX_BODY_BYTES );
 
 		if ( strlen( $body ) > $max_bytes ) {
