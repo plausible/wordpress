@@ -352,6 +352,11 @@ class Proxy {
 	 * @return bool
 	 */
 	private function is_valid_event( $event ) {
+		// The 404 event's name is sent as a number.
+		if ( isset( $event['n'] ) && is_int( $event['n'] ) ) {
+			$event['n'] = (string) $event['n'];
+		}
+
 		foreach ( [ 'n', 'd', 'u' ] as $key ) {
 			if ( empty( $event[ $key ] ) || ! is_string( $event[ $key ] ) ) {
 				return false;

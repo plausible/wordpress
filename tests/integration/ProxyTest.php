@@ -113,12 +113,14 @@ class ProxyTest extends TestCase {
 			$this->assertTrue( $this->isValid( [ 'u' => 'https://alias.test/' ] + $event, [ 'origin' => 'https://alias.test:8443' ] ) );
 			$this->assertTrue( $this->isValid( $event, [ 'referer' => 'http://example.org/page' ] ) );
 			$this->assertTrue( $this->isValid( $event, [ 'origin' => 'null', 'referer' => 'http://example.org/page' ] ) );
+			$this->assertTrue( $this->isValid( [ 'n' => 404 ] + $event ) );
 			$this->assertTrue( $this->isValid( [ 'p' => array_fill( 0, 30, str_repeat( 'a', 2000 ) ) ] + $event ) );
 
 			// Invalid events.
 			$this->assertFalse( $this->isValid( [ 'd' => 'evil.test' ] + $event ) );
 			$this->assertFalse( $this->isValid( [ 'd' => [ 'test.dev' ] ] + $event ) );
 			$this->assertFalse( $this->isValid( [ 'n' => '' ] + $event ) );
+			$this->assertFalse( $this->isValid( [ 'n' => [ 'pageview' ] ] + $event ) );
 			$this->assertFalse( $this->isValid( [ 'u' => 'http://evil.test/' ] + $event ) );
 			$this->assertFalse( $this->isValid( [ 'u' => 'http://example.org.evil.test/' ] + $event ) );
 			$this->assertFalse( $this->isValid( [ 'u' => '/page' ] + $event ) );
