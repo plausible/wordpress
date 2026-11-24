@@ -16,6 +16,7 @@ use Exception;
 use WP_Error;
 use WP_HTTP_Response;
 use WP_REST_Request;
+use WP_REST_Response;
 use WP_REST_Server;
 
 class Proxy {
@@ -32,6 +33,11 @@ class Proxy {
 		'REMOTE_ADDR',
 		'HTTP_CLIENT_IP',
 	];
+
+	/**
+	 * Maximum size (in bytes) of an event's body. Leaves room for long URLs and 30 custom properties.
+	 */
+	const MAX_BODY_BYTES = 102400;
 
 	/**
 	 * API namespace
@@ -87,6 +93,8 @@ class Proxy {
 		// No need to continue if Proxy isn't enabled .
 		if ( Helpers::proxy_enabled( $settings ) ) {
 			add_action( 'rest_api_init', [ $this, 'register_route' ] );
+			add_filter( 'rest_index', [ $this, 'hide_from_index' ] );
+			add_filter( 'rest_pre_dispatch', [ $this, 'hide_namespace_index' ], 10, 3 );
 		}
 
 		add_filter( 'rest_post_dispatch', [ $this, 'force_http_response_code' ], null, 3 );
@@ -257,12 +265,184 @@ class Proxy {
 				[
 					'methods'             => 'POST',
 					'callback'            => [ $this, 'send_event' ],
-					// There's no reason not to allow access to this API.
-					'permission_callback' => '__return_true',
+					'permission_callback' => [ $this, 'validate_request' ],
+					'show_in_index'       => false,
 				],
 				'schema' => null,
 			]
 		);
+	}
+
+	/**
+	 * Removes the proxy's namespace from the REST API index (/wp-json/), so the endpoint can't be discovered there.
+	 *
+	 * @since v2.6.5
+	 *
+	 * @param WP_REST_Response $response
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function hide_from_index( $response ) {
+		$data = $response->get_data();
+
+		if ( isset( $data['namespaces'] ) ) {
+			$data['namespaces'] = array_values( array_diff( $data['namespaces'], [ $this->namespace ] ) );
+		}
+
+		unset( $data['routes'][ '/' . $this->namespace ] );
+
+		$response->set_data( $data );
+
+		return $response;
+	}
+
+	/**
+	 * Returns a 404 for the index of the proxy's namespace, because it lists the endpoint.
+	 *
+	 * @since v2.6.5
+	 *
+	 * @param mixed           $result
+	 * @param WP_REST_Server  $server
+	 * @param WP_REST_Request $request
+	 *
+	 * @return mixed
+	 */
+	public function hide_namespace_index( $result, $server, $request ) {
+		if ( strtolower( untrailingslashit( $request->get_route() ) ) !== '/' . $this->namespace ) {
+			return $result;
+		}
+
+		return $this->no_route_error();
+	}
+
+	/**
+	 * Checks if the request is an event sent by the tracker on this site. All requests rejected here get the same
+	 * response, so it doesn't reveal which check failed.
+	 *
+	 * @since v2.6.5
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return true|WP_Error
+	 */
+	public function validate_request( $request ) {
+		$body = (string) $request->get_body();
+		// Only limits what's forwarded: PHP has already read the body, so limiting request sizes is up to the web server.
+		$max_bytes = (int) apply_filters( 'plausible_analytics_proxy_max_body_bytes', self::MAX_BODY_BYTES );
+
+		if ( strlen( $body ) > $max_bytes ) {
+			return $this->no_route_error();
+		}
+
+		// The tracker sends its JSON as text/plain, so the request's JSON params aren't available.
+		$event = json_decode( $body, true );
+
+		if ( ! is_array( $event ) || ! $this->is_valid_event( $event ) || ! $this->is_same_site( $request ) ) {
+			return $this->no_route_error();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks the properties each event should have: a name, (one of) this site's Plausible domain(s) and a URL on this site.
+	 *
+	 * @param array $event
+	 *
+	 * @return bool
+	 */
+	private function is_valid_event( $event ) {
+		// The 404 event's name is sent as a number.
+		if ( isset( $event['n'] ) && is_int( $event['n'] ) ) {
+			$event['n'] = (string) $event['n'];
+		}
+
+		foreach ( [ 'n', 'd', 'u' ] as $key ) {
+			if ( empty( $event[ $key ] ) || ! is_string( $event[ $key ] ) ) {
+				return false;
+			}
+		}
+
+		return in_array( $this->normalize_domain( $event['d'] ), $this->get_allowed_domains(), true ) && $this->is_allowed_host( $event['u'] );
+	}
+
+	/**
+	 * Checks if the Origin header, or the Referer header if there's no (valid) Origin, matches this site.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return bool
+	 */
+	private function is_same_site( $request ) {
+		if ( ! apply_filters( 'plausible_analytics_proxy_require_same_site', true ) ) {
+			return true;
+		}
+
+		return $this->is_allowed_host( (string) $request->get_header( 'origin' ) ) || $this->is_allowed_host( (string) $request->get_header( 'referer' ) );
+	}
+
+	/**
+	 * Returns all Plausible domains configured for this site. The multilingual plugins might not be loaded in proxy
+	 * requests, so the domains of all languages are allowed.
+	 *
+	 * @return array
+	 */
+	private function get_allowed_domains() {
+		$domains   = (array) Helpers::get_settings()['domain_name'];
+		$domains[] = Helpers::get_domain();
+		$domains   = (array) apply_filters( 'plausible_analytics_proxy_allowed_domains', array_values( array_filter( $domains ) ) );
+
+		return array_map( [ $this, 'normalize_domain' ], $domains );
+	}
+
+	/**
+	 * Checks if the host of $url is one this site is served from.
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	private function is_allowed_host( $url ) {
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( ! $host ) {
+			return false;
+		}
+
+		$hosts = [
+			wp_parse_url( get_option( 'home' ), PHP_URL_HOST ),
+			wp_parse_url( get_option( 'siteurl' ), PHP_URL_HOST ),
+			wp_parse_url( 'http://' . ( $_SERVER['HTTP_HOST'] ?? '' ), PHP_URL_HOST ),
+		];
+
+		foreach ( $this->get_allowed_domains() as $domain ) {
+			$hosts[] = wp_parse_url( 'http://' . $domain, PHP_URL_HOST );
+		}
+
+		$hosts = (array) apply_filters( 'plausible_analytics_proxy_allowed_hosts', array_values( array_filter( $hosts ) ) );
+
+		return in_array( $this->normalize_domain( $host ), array_map( [ $this, 'normalize_domain' ], $hosts ), true );
+	}
+
+	/**
+	 * Strips the scheme, www. and trailing slashes/dots, so domains can be compared.
+	 *
+	 * @param string $domain
+	 *
+	 * @return string
+	 */
+	private function normalize_domain( $domain ) {
+		return rtrim( preg_replace( '/^(https?:\/\/)?(www\.)?/', '', strtolower( trim( (string) $domain ) ) ), '/.' );
+	}
+
+	/**
+	 * The same error WordPress returns for routes that don't exist.
+	 *
+	 * @return WP_Error
+	 */
+	private function no_route_error() {
+		// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+		return new WP_Error( 'rest_no_route', __( 'No route was found matching the URL and request method.' ), [ 'status' => 404 ] );
 	}
 
 	/**
@@ -282,7 +462,11 @@ class Proxy {
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $response->get_data() );
-		$response->set_status( $response_code );
+
+		// Errors already have the correct status.
+		if ( $response_code ) {
+			$response->set_status( $response_code );
+		}
 
 		return $response;
 	}
